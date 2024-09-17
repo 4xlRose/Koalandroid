@@ -39,7 +39,7 @@ git commit -m "Your message"
 ## Equipo de desarrollo
 
 | Name | Github | Email |
-
+| --- | --- | --- |
 | Juan Cibrián | [JUANECL314](https://github.com/JUANECL314) | a01198418@tec.mx |
 | Miembro | GitHub | A00000000@tec.mx |
 | María Ramírez | mykrex | A00000000@tec.mx |
