@@ -5,7 +5,7 @@ Useful git commands:
 
 ```bash
 # Clone locally
-git clone https://github.com/Oscar-gg/awak-game.git
+git clone https://github.com/4xlRose/Koalandroid.git
 
 # Bring changes (commits) from github repo to local repo
 git pull
@@ -46,7 +46,6 @@ git commit -m "Your message"
 | Axel Grande         | [@4xlRose](https://github.com/4xlRose)            | a01611811@tec.mx    |
 | Alejandro Negrete   | [@Alekstremo](https://github.com/Alekstremo)      | a01571443@tec.mx    |
 | Victor M. Escalante | [@ElingeMisa](https://github.com/ElingeMisa)      | a01741176@tec.mx    | 
-María Ramírez | [@mykrex](https://github.com/mykrex) | a01753959@tec.mx |
-Hugo Perez| [@uwelOriginal]()| a00835693@tec.mx 
+|María Ramírez | [@mykrex](https://github.com/mykrex) | a01753959@tec.mx |
+|Hugo Perez| [@uwelOriginal]()| a00835693@tec.mx |
 
-| Miembro | GitHub | A00000000@tec.mx |
