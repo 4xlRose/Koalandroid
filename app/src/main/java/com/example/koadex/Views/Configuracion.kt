@@ -11,21 +11,34 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 
 @Composable
-fun InicioSesion(navController: NavHostController, modifier: Modifier = Modifier) {
+fun Configuracion(navController: NavHostController, modifier: Modifier = Modifier) {
     Column(modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text= "Pantalla de Inicio Sesion")
+        Text(text= "Pantalla de configuracion")
         Button(onClick = {
-                navController.navigate("Registro")
-            }) {
-            Text("Registro")
+            navController.navigate("Perfil")
+        }) {
+            Text("Editar")
         }
+
         Button(onClick = {
             navController.navigate("Principal")
         }) {
             Text("Principal")
+        }
+
+        Button(onClick = {
+            navController.navigate("Busqueda")
+        }) {
+            Text("Busqueda")
+        }
+
+        Button(onClick = {
+            navController.navigate("Configuracion")
+        }) {
+            Text("Configuracion")
         }
     }
 }

@@ -6,12 +6,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.koadex.Views.Busqueda
+import com.example.koadex.Views.Configuracion
+import com.example.koadex.Views.FormularioGeneral
 import com.example.koadex.Views.InicioCarga
 import com.example.koadex.Views.InicioSesion
+import com.example.koadex.Views.Koadex
+import com.example.koadex.Views.Perfil
+import com.example.koadex.Views.Principal
+import com.example.koadex.Views.Registro
+import com.example.koadex.Views.SeleccionForm
 
-@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun ControladorNavegador(modifier: Modifier = Modifier) {
+@Preview(showBackground = true, showSystemUi = true)
+fun Navigation(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "InicioCarga") {
         composable("InicioCarga") {
@@ -20,8 +28,30 @@ fun ControladorNavegador(modifier: Modifier = Modifier) {
         composable("InicioSesion") {
             InicioSesion(navController = navController)
         }
-
-
+        composable("Busqueda") {
+            Busqueda(navController = navController)
+        }
+        composable("FormularioGeneral") {
+            FormularioGeneral(navController = navController)
+        }
+        composable("Koadex") {
+            Koadex(navController = navController)
+        }
+        composable("Principal") {
+            Principal(navController = navController)
+        }
+        composable("Registro") {
+            Registro(navController = navController)
+        }
+        composable("SeleccionForm") {
+            SeleccionForm(navController = navController)
+        }
+        composable("Configuracion"){
+            Configuracion(navController = navController)
+        }
+        composable("Perfil"){
+            Perfil(navController = navController)
+        }
 
     }
 }
