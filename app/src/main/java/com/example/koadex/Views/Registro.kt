@@ -140,7 +140,7 @@ fun RegistroContenido(navController: NavHostController, modifier: Modifier = Mod
         )
         Button(
             onClick = {
-                navController.navigate("Principal")
+                navController.navigate("InicioSesion")
             },
 
             modifier = modifier
