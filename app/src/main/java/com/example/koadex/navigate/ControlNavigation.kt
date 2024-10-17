@@ -6,16 +6,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.koadex.Views.Busqueda
+
 import com.example.koadex.Views.Configuracion
 import com.example.koadex.Views.FormularioGeneral
 import com.example.koadex.Views.InicioCarga
 import com.example.koadex.Views.InicioSesion
 import com.example.koadex.Views.Koadex
+import com.example.koadex.Views.OlvidoContrasena
 import com.example.koadex.Views.Perfil
 import com.example.koadex.Views.Principal
 import com.example.koadex.Views.Registro
 import com.example.koadex.Views.SeleccionForm
+import com.example.koadex.Views.Verificacion
 
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
@@ -28,9 +30,7 @@ fun Navigation(modifier: Modifier = Modifier) {
         composable("InicioSesion") {
             InicioSesion(navController = navController)
         }
-        composable("Busqueda") {
-            Busqueda(navController = navController)
-        }
+
         composable("FormularioGeneral") {
             FormularioGeneral(navController = navController)
         }
@@ -52,6 +52,11 @@ fun Navigation(modifier: Modifier = Modifier) {
         composable("Perfil"){
             Perfil(navController = navController)
         }
-
+        composable("OlvidoContrasena"){
+            OlvidoContrasena(navController = navController)
+        }
+        composable("Verificacion"){
+            Verificacion(navController = navController)
+        }
     }
 }

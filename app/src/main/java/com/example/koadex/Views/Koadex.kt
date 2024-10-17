@@ -22,10 +22,5 @@ fun Koadex(navController: NavHostController, modifier: Modifier = Modifier) {
         }) {
             Text("Regresar")
         }
-        Button(onClick = {
-            navController.navigate("Busqueda")
-        }) {
-            Text("Busqueda")
-        }
     }
 }
