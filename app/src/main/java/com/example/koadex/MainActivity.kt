@@ -15,17 +15,9 @@ import com.example.koadex.navigate.ControladorNavegador
 import com.example.koadex.ui.theme.KoadexTheme
 
 
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            KoadexTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    ControladorNavegador(modifier = Modifier.padding(innerPadding))
-                }
-            }
-        }
-    }
+@Composable
+@Preview(showBackground = true, showSystemUi = true)
+fun Navigation(modifier: Modifier = Modifier) {
+    ControladorNavegador()
 }
 

@@ -13,7 +13,7 @@ import com.example.koadex.Views.InicioSesion
 @Composable
 fun ControladorNavegador(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "Inicio") {
+    NavHost(navController = navController, startDestination = "InicioSesion") {
         composable("InicioSesion") {
             InicioSesion(navController = navController)
         }
