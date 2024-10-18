@@ -53,10 +53,10 @@ android {
 dependencies {
     implementation(libs.androidx.foundation.android)
     implementation(libs.androidx.material3.android)
-    val room_version = "2.6.1"
+    //val room_version = "2.6.1"
 
-    implementation("androidx.room:room-runtime:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
+    implementation(libs.androidx.room.runtime)
+    annotationProcessor(libs.androidx.room.compiler)
 
 
     implementation(libs.androidx.core.ktx)
