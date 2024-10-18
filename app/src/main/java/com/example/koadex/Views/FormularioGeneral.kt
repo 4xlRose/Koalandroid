@@ -23,6 +23,7 @@ import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material.icons.rounded.LocationOn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.OutlinedIconToggleButton
@@ -41,12 +42,49 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.koadex.AppViewModelProvider
 import com.example.koadex.R
+import com.example.koadex.ui.form.FormDetails
+import com.example.koadex.ui.form.FormEntryViewModel
+import com.example.koadex.ui.form.FormUiState
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import kotlinx.coroutines.launch
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun FormularioGeneral(navController: NavHostController, modifier: Modifier = Modifier, viewModel: FormEntryViewModel = viewModel(factory = AppViewModelProvider.Factory)) {
+    val coroutineScope = rememberCoroutineScope()
+    FormularioGeneralEntry(
+        navController,
+        formUiState = viewModel.formUiState,
+        onFormValueChange = viewModel::updateUiState,
+        onSaveClick = {
+
+            coroutineScope.launch {
+                viewModel.saveForm()
+            }
+
+        },
+        modifier,
+
+    )
+
+}
 
 @Composable
-fun FormularioGeneral(navController: NavHostController, modifier: Modifier = Modifier) {
+fun FormularioGeneralEntry(
+    navController: NavHostController,
+    formUiState: FormUiState,
+    onFormValueChange: (FormDetails) -> Unit,
+    onSaveClick: () -> Unit,
+    modifier: Modifier,
+
+) {
     Column(
+
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .verticalScroll(rememberScrollState())
@@ -95,100 +133,11 @@ fun FormularioGeneral(navController: NavHostController, modifier: Modifier = Mod
             )
         }
 
-        var nombre by remember { mutableStateOf("") }
-        OutlinedTextField(
-            value = "",
-            label = { Text("Nombre") },
-            onValueChange = { nombre = it },
-            modifier = Modifier
-                .padding(10.dp)
-                .width(320.dp)
-        )
 
-        Row(
+        FormInputForm(
+            formDetails = formUiState.formDetails,
+            onFormValueChange = onFormValueChange,
             modifier = Modifier
-                .padding(10.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-        )
-        {
-            var fecha by remember { mutableStateOf("") }
-            OutlinedTextField(
-                value = "",
-                label = { Text("Fecha") },
-                onValueChange = { fecha = it },
-                modifier = Modifier
-                    .width(180.dp)
-                    .offset(26.dp)
-            )
-            Button(
-                contentPadding = PaddingValues(
-                    horizontal = 3.dp,
-                    vertical = 3.dp
-                ),
-                modifier = Modifier
-                    .offset(x = 40.dp, y = 3.dp)
-                    .size(40.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0),
-                    contentColor = Color(0xFF000000)
-                ),
-                onClick = {}
-            ) {
-                Icon(
-                    Icons.Rounded.DateRange,
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
-        }
-
-        Row(
-            modifier = Modifier
-                .padding(10.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-        )
-        {
-            var localidad by remember { mutableStateOf("") }
-            OutlinedTextField(
-                value = "",
-                label = { Text("Localidad") },
-                onValueChange = { localidad = it },
-                modifier = Modifier
-                    .width(262.dp)
-                    .offset(26.dp)
-            )
-            Button(
-                contentPadding = PaddingValues(
-                    horizontal = 6.dp,
-                    vertical = 6.dp
-                ),
-                shape = RoundedCornerShape(6.dp),
-                modifier = Modifier
-                    .offset(x = 40.dp, y = 3.dp)
-                    .size(40.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF4E7029)
-                ),
-                onClick = {}
-            ) {
-                Icon(
-                    Icons.Rounded.LocationOn,
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
-        }
-
-        var hora by remember { mutableStateOf("") }
-        OutlinedTextField(
-            value = "",
-            label = { Text("Hora") },
-            onValueChange = { hora = it },
-            modifier = Modifier
-                .padding(10.dp)
-                .width(320.dp)
         )
 
         Row(
@@ -351,11 +300,116 @@ fun FormularioGeneral(navController: NavHostController, modifier: Modifier = Mod
                 modifier = Modifier
                     .padding(40.dp)
                     .width(300.dp),
-                onClick = {}
+                onClick = onSaveClick,
+                enabled = formUiState.isEntryValid
             ) {
                 Text("SIGUIENTE", fontWeight = FontWeight.Bold)
             }
         }
 
     }
+}
+
+@Composable
+fun FormInputForm(
+    formDetails: FormDetails,
+    modifier: Modifier,
+    onFormValueChange: (FormDetails) -> Unit = {},
+    enabled: Boolean = true
+) {
+    OutlinedTextField(
+        value = formDetails.name,
+        label = { Text("Nombre") },
+        onValueChange = {  onFormValueChange(formDetails.copy(name = it)) },
+        modifier = Modifier
+            .padding(10.dp)
+            .width(320.dp),
+        enabled = enabled
+    )
+
+    Row(
+        modifier = Modifier
+            .padding(10.dp)
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+    )
+    {
+
+        OutlinedTextField(
+            value = formDetails.date,
+            label = { Text("Fecha") },
+            onValueChange = { onFormValueChange(formDetails.copy(date = it)) },
+            modifier = Modifier
+                .width(180.dp)
+                .offset(26.dp)
+        )
+        Button(
+            contentPadding = PaddingValues(
+                horizontal = 3.dp,
+                vertical = 3.dp
+            ),
+            modifier = Modifier
+                .offset(x = 40.dp, y = 3.dp)
+                .size(40.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0),
+                contentColor = Color(0xFF000000)
+            ),
+            onClick = {}
+        ) {
+            Icon(
+                Icons.Rounded.DateRange,
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+    }
+
+    Row(
+        modifier = Modifier
+            .padding(10.dp)
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+    )
+    {
+
+        OutlinedTextField(
+            value = formDetails.place,
+            label = { Text("Localidad") },
+            onValueChange = { onFormValueChange(formDetails.copy(place = it)) },
+            modifier = Modifier
+                .width(262.dp)
+                .offset(26.dp)
+        )
+        Button(
+            contentPadding = PaddingValues(
+                horizontal = 6.dp,
+                vertical = 6.dp
+            ),
+            shape = RoundedCornerShape(6.dp),
+            modifier = Modifier
+                .offset(x = 40.dp, y = 3.dp)
+                .size(40.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF4E7029)
+            ),
+            onClick = {}
+        ) {
+            Icon(
+                Icons.Rounded.LocationOn,
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+    }
+
+
+    OutlinedTextField(
+        value = formDetails.hour,
+        label = { Text("Hora") },
+        onValueChange = { onFormValueChange(formDetails.copy(hour= it))},
+        modifier = Modifier
+            .padding(10.dp)
+            .width(320.dp)
+    )
 }
