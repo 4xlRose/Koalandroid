@@ -4,11 +4,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+
+import com.example.koadex.localdata.FormRepository
+import com.example.koadex.localdata.FormEntity
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+
+class FormEntryViewModel(private val formRepository: FormRepository) : ViewModel() {
+
 import com.example.koadex.data.FormsRepository
 import com.example.koadex.localdata.FormEntity
 import kotlinx.coroutines.launch
 
 class FormEntryViewModel(private val formRepository: FormsRepository) : ViewModel() {
+
     var formUiState by mutableStateOf(FormUiState())
         private set
 
