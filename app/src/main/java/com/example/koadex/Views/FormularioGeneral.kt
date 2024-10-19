@@ -42,24 +42,29 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+
 import androidx.navigation.NavHostController
-import com.example.koadex.AppViewModelProvider
 import com.example.koadex.R
 import com.example.koadex.ui.form.FormDetails
 import com.example.koadex.ui.form.FormEntryViewModel
 import com.example.koadex.ui.form.FormUiState
+
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.koadex.AppViewModelProvider
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FormularioGeneral(navController: NavHostController, modifier: Modifier = Modifier, viewModel: FormEntryViewModel = viewModel(factory = AppViewModelProvider.Factory)) {
+fun FormularioGeneral(
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
+    /*viewModel: FormEntryViewModel = viewModel(factory = AppViewModelProvider.Factory)*/) {
     val coroutineScope = rememberCoroutineScope()
     FormularioGeneralEntry(
         navController,
-        formUiState = viewModel.formUiState,
+        /*formUiState = viewModel.formUiState,
         onFormValueChange = viewModel::updateUiState,
         onSaveClick = {
 
@@ -67,7 +72,7 @@ fun FormularioGeneral(navController: NavHostController, modifier: Modifier = Mod
                 viewModel.saveForm()
             }
 
-        },
+        }*/
         modifier,
 
     )
@@ -77,9 +82,9 @@ fun FormularioGeneral(navController: NavHostController, modifier: Modifier = Mod
 @Composable
 fun FormularioGeneralEntry(
     navController: NavHostController,
-    formUiState: FormUiState,
+    /*formUiState: FormUiState,
     onFormValueChange: (FormDetails) -> Unit,
-    onSaveClick: () -> Unit,
+    onSaveClick: () -> Unit,*/
     modifier: Modifier,
 
 ) {
@@ -135,8 +140,8 @@ fun FormularioGeneralEntry(
 
 
         FormInputForm(
-            formDetails = formUiState.formDetails,
-            onFormValueChange = onFormValueChange,
+            /*formDetails = formUiState.formDetails,
+            onFormValueChange = onFormValueChange,*/
             modifier = Modifier
         )
 
@@ -300,8 +305,10 @@ fun FormularioGeneralEntry(
                 modifier = Modifier
                     .padding(40.dp)
                     .width(300.dp),
-                onClick = onSaveClick,
-                enabled = formUiState.isEntryValid
+                onClick = {}
+                /*onSaveClick*/
+                /*enabled = formUiState.isEntryValid
+                 */
             ) {
                 Text("SIGUIENTE", fontWeight = FontWeight.Bold)
             }
@@ -312,19 +319,21 @@ fun FormularioGeneralEntry(
 
 @Composable
 fun FormInputForm(
-    formDetails: FormDetails,
     modifier: Modifier,
+
+    /*formDetails: FormDetails,
+
     onFormValueChange: (FormDetails) -> Unit = {},
-    enabled: Boolean = true
+    enabled: Boolean = true*/
 ) {
     OutlinedTextField(
-        value = formDetails.name,
+        value = ""/*formDetails.name*/,
         label = { Text("Nombre") },
-        onValueChange = {  onFormValueChange(formDetails.copy(name = it)) },
+        onValueChange = {  /*onFormValueChange(formDetails.copy(name = it)) */},
         modifier = Modifier
             .padding(10.dp)
             .width(320.dp),
-        enabled = enabled
+        /*enabled = enabled*/
     )
 
     Row(
@@ -336,9 +345,9 @@ fun FormInputForm(
     {
 
         OutlinedTextField(
-            value = formDetails.date,
+            value = ""/*formDetails.date*/,
             label = { Text("Fecha") },
-            onValueChange = { onFormValueChange(formDetails.copy(date = it)) },
+            onValueChange = { /*onFormValueChange(formDetails.copy(date = it)) */},
             modifier = Modifier
                 .width(180.dp)
                 .offset(26.dp)
@@ -374,9 +383,9 @@ fun FormInputForm(
     {
 
         OutlinedTextField(
-            value = formDetails.place,
+            value = ""/*formDetails.place*/,
             label = { Text("Localidad") },
-            onValueChange = { onFormValueChange(formDetails.copy(place = it)) },
+            onValueChange = { /*onFormValueChange(formDetails.copy(place = it))*/ },
             modifier = Modifier
                 .width(262.dp)
                 .offset(26.dp)
@@ -405,9 +414,9 @@ fun FormInputForm(
 
 
     OutlinedTextField(
-        value = formDetails.hour,
+        value = ""/*formDetails.hour*/,
         label = { Text("Hora") },
-        onValueChange = { onFormValueChange(formDetails.copy(hour= it))},
+        onValueChange = { /*onFormValueChange(formDetails.copy(hour= it))*/},
         modifier = Modifier
             .padding(10.dp)
             .width(320.dp)
