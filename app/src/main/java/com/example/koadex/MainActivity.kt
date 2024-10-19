@@ -10,10 +10,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.koadex.Views.Botton_inincio_sesion
+import com.example.koadex.Views.Fondo_vista
+import com.example.koadex.Views.Intro_title
 import com.example.koadex.navigate.Navigation
-
-
 import com.example.koadex.ui.theme.KoadexTheme
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavController
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,8 +27,12 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             KoadexTheme {
+                val navController = rememberNavController()
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Navigation(Modifier.padding(innerPadding))
+                    Navigation(
+                        modifier = Modifier.padding(innerPadding)
+                    )
+
                 }
             }
         }

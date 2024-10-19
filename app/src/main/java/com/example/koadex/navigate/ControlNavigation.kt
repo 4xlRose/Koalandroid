@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 
 import com.example.koadex.Views.Configuracion
+import com.example.koadex.Views.CopiaIntro
 import com.example.koadex.Views.FormularioGeneral
 import com.example.koadex.Views.InicioCarga
 import com.example.koadex.Views.InicioSesion
@@ -19,13 +20,17 @@ import com.example.koadex.Views.Registro
 import com.example.koadex.Views.SeleccionForm
 import com.example.koadex.Views.Verificacion
 
+
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
 fun Navigation(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "InicioCarga") {
+    NavHost(navController = navController, startDestination = "CopiaIntro") {
         composable("InicioCarga") {
             InicioCarga(navController = navController)
+        }
+        composable("CopiaIntro") {
+            CopiaIntro(navController = navController)
         }
         composable("InicioSesion") {
             InicioSesion(navController = navController)

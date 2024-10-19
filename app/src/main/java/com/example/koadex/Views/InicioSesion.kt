@@ -68,7 +68,7 @@ fun IniciarSesionContenido(navController: NavHostController, modifier: Modifier 
     ) {
         IconButton(
             onClick = {
-                navController.navigate("InicioCarga")
+                navController.navigate("CopiaIntro")
             },
 
         ) {
