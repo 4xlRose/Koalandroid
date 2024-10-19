@@ -10,20 +10,12 @@ import com.example.koadex.ui.form.FormEntryViewModel
 
 object AppViewModelProvider {
     val Factory = viewModelFactory {
-
         initializer {
             FormEntryViewModel(formApplication().container.formsRepository)
         }
-
-
-
-
     }
 }
 
-/**
- * Extension function to queries for [Application] object and returns an instance of
- * [InventoryApplication].
- */
+
 fun CreationExtras.formApplication(): FormApplication =
     (this[AndroidViewModelFactory.APPLICATION_KEY] as FormApplication)

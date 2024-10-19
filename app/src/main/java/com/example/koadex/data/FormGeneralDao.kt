@@ -12,13 +12,13 @@ import kotlinx.coroutines.flow.Flow
 interface FormGeneralDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(formGeneral: Formulario)
+    suspend fun insert(form: Formulario)
     @Update
-    suspend fun update(formGeneral: Formulario)
+    suspend fun update(form: Formulario)
     @Delete
-    suspend fun delete(formGeneral: Formulario)
-    @Query("SELECT * from formGeneral WHERE id = :id")
+    suspend fun delete(form: Formulario)
+    @Query("SELECT * from form WHERE id = :id")
     fun getItem(id: Int): Flow<Formulario>
-    @Query("SELECT * from formGeneral ORDER BY name ASC")
+    @Query("SELECT * from form ORDER BY name ASC")
     fun getAllItems(): Flow<List<Formulario>>
 }

@@ -1,10 +1,12 @@
 package com.example.koadex.ui.form
-import com.example.koadex.data.FormsRepository
+
+
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.koadex.data.Formulario
+import com.example.koadex.data.FormsRepository
 
 
 
@@ -16,17 +18,17 @@ class FormEntryViewModel(private val formsRepository: FormsRepository) : ViewMod
         formUiState =
             FormUiState(formDetails = formDetails, isEntryValid = validateInput(formDetails))
     }
-
-    private fun validateInput(uiState: FormDetails = formUiState.formDetails): Boolean {
-        return with(uiState) {
-            name.isNotBlank() && date.isNotBlank() && place.isNotBlank() && hour.isNotBlank()
-        }
-    }
     suspend fun saveForm() {
         if (validateInput()) {
             formsRepository.insertForm(formUiState.formDetails.toFormulario())
         }
     }
+    private fun validateInput(uiState: FormDetails = formUiState.formDetails): Boolean {
+        return with(uiState) {
+            name.isNotBlank() && date.isNotBlank() && place.isNotBlank() && hour.isNotBlank()
+        }
+    }
+
 }
 data class FormUiState(
     val formDetails: FormDetails = FormDetails(),
@@ -51,11 +53,6 @@ fun FormDetails.toFormulario(): Formulario = Formulario(
 
 
 
-
-fun Formulario.toFormUiState(isEntryValid: Boolean = false): FormUiState = FormUiState(
-    formDetails = this.toFormDetails(),
-    isEntryValid = isEntryValid
-)
 
 
 fun Formulario.toFormDetails(): FormDetails = FormDetails(

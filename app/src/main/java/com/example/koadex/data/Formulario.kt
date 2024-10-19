@@ -3,7 +3,7 @@ package com.example.koadex.data
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "formGeneral")
+@Entity(tableName = "form")
 data class Formulario(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
