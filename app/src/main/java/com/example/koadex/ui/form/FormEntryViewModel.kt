@@ -1,64 +1,80 @@
 package com.example.koadex.ui.form
-
-
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.example.koadex.data.Formulario
-import com.example.koadex.data.FormsRepository
+import androidx.lifecycle.viewModelScope
+import com.example.koadex.localdata.FormRepository
+import com.example.koadex.localdata.FormEntity
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
-
-
-class FormEntryViewModel(private val formsRepository: FormsRepository) : ViewModel() {
+class FormEntryViewModel(private val formRepository: FormRepository) : ViewModel() {
     var formUiState by mutableStateOf(FormUiState())
         private set
 
-    fun updateUiState(formDetails: FormDetails) {
-        formUiState =
-            FormUiState(formDetails = formDetails, isEntryValid = validateInput(formDetails))
-    }
-    suspend fun saveForm() {
-        if (validateInput()) {
-            formsRepository.insertForm(formUiState.formDetails.toFormulario())
+    init {
+        viewModelScope.launch {
+            formRepository.getLastFormStream().collect { lastForm ->
+                lastForm?.let {
+                    formUiState = FormUiState(
+                        formDetails = FormDetails(
+                            name = it.name,
+                            date = it.date,
+                            place = it.place,
+                            hour = it.hour,
+                            weather = it.weather,
+                            season = it.season
+                        ),
+                        isEntryValid = true
+                    )
+                }
+            }
         }
     }
+
+    fun updateUiState(formDetails: FormDetails) {
+        formUiState = FormUiState(
+            formDetails = formDetails,
+            isEntryValid = validateInput(formDetails)
+        )
+    }
+
+    suspend fun saveForm() {
+        if (validateInput(formUiState.formDetails)) {
+            formRepository.insertForm(formUiState.formDetails.toEntity())
+        }
+    }
+
     private fun validateInput(uiState: FormDetails = formUiState.formDetails): Boolean {
         return with(uiState) {
             name.isNotBlank() && date.isNotBlank() && place.isNotBlank() && hour.isNotBlank()
         }
     }
-
 }
+
+// 6. Update the data classes
+data class FormDetails(
+    val name: String = "",
+    val date: String = "",
+    val place: String = "",
+    val hour: String = "",
+    val weather: String = "",
+    val season: String = ""
+)
+
 data class FormUiState(
     val formDetails: FormDetails = FormDetails(),
     val isEntryValid: Boolean = false
 )
 
-data class FormDetails(
-    val id: Int = 0,
-    val name: String = "",
-    val date: String = "",
-    val place: String = "",
-    val hour : String = "",
-)
-
-fun FormDetails.toFormulario(): Formulario = Formulario(
-    id = id,
+// Extension function to convert FormDetails to FormEntity
+fun FormDetails.toEntity() = FormEntity(
     name = name,
     date = date,
     place = place,
-    hour = hour
-)
-
-
-
-
-
-fun Formulario.toFormDetails(): FormDetails = FormDetails(
-    id = id,
-    name = name,
-    date = date,
-    place = place,
-    hour = hour
+    hour = hour,
+    weather = weather,
+    season = season
 )
