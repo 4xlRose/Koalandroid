@@ -25,7 +25,7 @@ import com.example.koadex.Views.Verificacion
 @Preview(showBackground = true, showSystemUi = true)
 fun Navigation(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "CopiaIntro") {
+    NavHost(navController = navController, startDestination = "InicioCarga") {
         composable("InicioCarga") {
             InicioCarga(navController = navController)
         }

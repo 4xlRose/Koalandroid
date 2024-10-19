@@ -1,10 +1,8 @@
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-
-
 }
+
 android {
     namespace = "com.example.koadex"
     compileSdk = 34
@@ -52,18 +50,15 @@ android {
 }
 
 dependencies {
-    implementation(libs.room.runtime)
-    implementation(libs.androidx.foundation.android)
-    implementation(libs.androidx.material3.android)
-    implementation(libs.room)
-    implementation(libs.room.runtime)
-    annotationProcessor(libs.room.compiler)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.room.common)
     implementation(libs.androidx.room.ktx)
@@ -75,5 +70,3 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }
-
-
