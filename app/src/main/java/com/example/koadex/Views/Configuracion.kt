@@ -20,7 +20,7 @@ fun Configuracion(navController: NavHostController, modifier: Modifier = Modifie
         Button(onClick = {
             navController.navigate("Perfil")
         }) {
-            Text("Editar")
+            Text("EDITAR")
         }
 
         Button(onClick = {
