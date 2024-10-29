@@ -1,9 +1,7 @@
-package com.example.koadex.localdata
+package com.example.koadex.data
 
 
 import android.content.Context
-import com.example.koadex.localdata.FormDatabase
-import com.example.koadex.localdata.OfflineFormsRepository
 
 /**
  * App container for Dependency injection.
@@ -13,7 +11,6 @@ interface AppContainer {
 }
 
 class AppDataContainer(private val context: Context) : AppContainer {
-
     override val formsRepository: FormRepository by lazy {
         OfflineFormsRepository(FormDatabase.getDatabase(context).formDao())
     }
