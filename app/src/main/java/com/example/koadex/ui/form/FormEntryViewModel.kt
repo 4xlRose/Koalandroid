@@ -11,20 +11,20 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
+
+
+
+
+
+
 class FormEntryViewModel(private val formRepository: FormRepository) : ViewModel() {
-
-import com.example.koadex.data.FormsRepository
-import com.example.koadex.localdata.FormEntity
-import kotlinx.coroutines.launch
-
-class FormEntryViewModel(private val formRepository: FormsRepository) : ViewModel() {
 
     var formUiState by mutableStateOf(FormUiState())
         private set
 
-    init {
+    /*init {
         viewModelScope.launch {
-            formRepository.getLastFormStream().collect { lastForm ->
+            formRepository.getLastFormsStream().collect { lastForm ->
                 lastForm?.let {
                     formUiState = FormUiState(
                         formDetails = FormDetails(
@@ -40,7 +40,7 @@ class FormEntryViewModel(private val formRepository: FormsRepository) : ViewMode
                 }
             }
         }
-    }
+    }*/
 
     fun updateUiState(formDetails: FormDetails) {
         formUiState = FormUiState(
@@ -64,6 +64,7 @@ class FormEntryViewModel(private val formRepository: FormsRepository) : ViewMode
 
 // 6. Update the data classes
 data class FormDetails(
+    val id: Int = 0,
     val name: String = "",
     val date: String = "",
     val place: String = "",
@@ -78,11 +79,24 @@ data class FormUiState(
 )
 
 // Extension function to convert FormDetails to FormEntity
-fun FormDetails.toEntity() = FormEntity(
+fun FormDetails.toEntity(): FormEntity = FormEntity(
     name = name,
     date = date,
     place = place,
     hour = hour,
     weather = weather,
     season = season
+)
+
+fun FormEntity.toFormUiState(isEntryValid: Boolean = false): FormUiState = FormUiState(
+    formDetails = this.toFormDetails(),
+    isEntryValid = isEntryValid
+)
+
+fun FormEntity.toFormDetails(): FormDetails = FormDetails(
+    name = name,
+    date = date,
+    place = place,
+    hour = hour,
+    weather = weather
 )
