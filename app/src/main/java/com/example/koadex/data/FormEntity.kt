@@ -1,4 +1,4 @@
-package com.example.koadex.localdata
+package com.example.koadex.data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

@@ -1,9 +1,9 @@
-package com.example.koadex.localdata
+package com.example.koadex.data
 
 import kotlinx.coroutines.flow.Flow
 
 interface FormRepository {
-    fun getLastFormsStream(): Flow<List<FormEntity>>
+    fun getLastFormsStream(): Flow<FormEntity>
     suspend fun insertForm(form: FormEntity)
     suspend fun updateForm(form: FormEntity)
 }

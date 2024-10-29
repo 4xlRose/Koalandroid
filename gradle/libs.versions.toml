@@ -13,12 +13,14 @@ foundationAndroid = "1.7.4"
 foundationDesktop = "1.7.0"
 material3Android = "1.3.0"
 roomCommon = "2.6.1"
+roomCompiler = "2.5.0"
 roomKtx = "2.6.1"
 room = "2.6.1"
 ksp = "2.0.0-1.0.24"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-room-compiler-v250 = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

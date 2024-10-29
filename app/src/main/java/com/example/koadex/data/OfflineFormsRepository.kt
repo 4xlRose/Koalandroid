@@ -1,10 +1,10 @@
-package com.example.koadex.localdata
+package com.example.koadex.data
 
 import kotlinx.coroutines.flow.Flow
 
-class OfflineFormsRepository(private val formDao : FormDao) : FormRepository{
+class OfflineFormsRepository(private val formDao : FormDao) : FormRepository {
 
-    override fun getLastFormsStream(): Flow<List<FormEntity>> = formDao.getLastForm()
+    override fun getLastFormsStream(): Flow<FormEntity> = formDao.getLastForm()
 
 
 
