@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 
 class OfflineFormsRepository(private val formDao : FormDao) : FormRepository {
 
-    override fun getLastFormsStream(): Flow<FormEntity> = formDao.getLastForm()
+    override fun getLastFormsStream(): Flow<List<FormEntity>> = formDao.getLastForm()
 
 
 
