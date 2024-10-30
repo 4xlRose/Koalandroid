@@ -12,7 +12,7 @@ class OfflineFormsRepository(private val formDao : FormDao) : FormRepository {
 
     override suspend fun insertForm(formGeneral: FormEntity) = formDao.insert(formGeneral)
 
-    /*override suspend fun deleteForm(formGeneral: Formulario) = formGeneralDao.delete(formGeneral)*/
+    override suspend fun deleteForm(formGeneral: FormEntity) = formDao.delete(formGeneral)
 
     override suspend fun updateForm(formGeneral: FormEntity) = formDao.update(formGeneral)
 }

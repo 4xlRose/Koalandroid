@@ -1,6 +1,7 @@
 package com.example.koadex.data
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -17,4 +18,7 @@ interface FormDao {
 
     @Update
     suspend fun update(form: FormEntity)
+
+    @Delete
+    suspend fun delete(form: FormEntity)
 }

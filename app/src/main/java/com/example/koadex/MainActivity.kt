@@ -27,9 +27,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             KoadexTheme {
-                val navController = rememberNavController()
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Navigation(
+                    KoadexApp(
                         modifier = Modifier.padding(innerPadding)
                     )
 
