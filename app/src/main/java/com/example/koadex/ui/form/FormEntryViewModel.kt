@@ -5,10 +5,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 
-import com.example.koadex.localdata.FormRepository
-import com.example.koadex.localdata.FormEntity
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
+import com.example.koadex.data.FormRepository
+import com.example.koadex.data.FormEntity
 import kotlinx.coroutines.launch
 
 
@@ -22,25 +20,6 @@ class FormEntryViewModel(private val formRepository: FormRepository) : ViewModel
     var formUiState by mutableStateOf(FormUiState())
         private set
 
-    /*init {
-        viewModelScope.launch {
-            formRepository.getLastFormsStream().collect { lastForm ->
-                lastForm?.let {
-                    formUiState = FormUiState(
-                        formDetails = FormDetails(
-                            name = it.name,
-                            date = it.date,
-                            place = it.place,
-                            hour = it.hour,
-                            weather = it.weather,
-                            season = it.season
-                        ),
-                        isEntryValid = true
-                    )
-                }
-            }
-        }
-    }*/
 
     fun updateUiState(formDetails: FormDetails) {
         formUiState = FormUiState(
@@ -50,7 +29,7 @@ class FormEntryViewModel(private val formRepository: FormRepository) : ViewModel
     }
 
     suspend fun saveForm() {
-        if (validateInput(formUiState.formDetails)) {
+        if (validateInput()) {
             formRepository.insertForm(formUiState.formDetails.toEntity())
         }
     }
@@ -61,6 +40,10 @@ class FormEntryViewModel(private val formRepository: FormRepository) : ViewModel
         }
     }
 }
+data class FormUiState(
+    val formDetails: FormDetails = FormDetails(),
+    val isEntryValid: Boolean = false
+)
 
 // 6. Update the data classes
 data class FormDetails(
@@ -73,10 +56,7 @@ data class FormDetails(
     val season: String = ""
 )
 
-data class FormUiState(
-    val formDetails: FormDetails = FormDetails(),
-    val isEntryValid: Boolean = false
-)
+
 
 // Extension function to convert FormDetails to FormEntity
 fun FormDetails.toEntity(): FormEntity = FormEntity(

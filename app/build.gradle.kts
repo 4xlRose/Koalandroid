@@ -54,7 +54,7 @@ android {
 }
 
 dependencies{
-    ksp("androidx.room:room-compiler:2.5.0")
+    ksp(libs.androidx.room.compiler.v250)
     implementation(libs.room.runtime)
     implementation(libs.androidx.foundation.android)
     implementation(libs.androidx.material3.android)
