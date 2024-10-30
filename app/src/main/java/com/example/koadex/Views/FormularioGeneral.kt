@@ -104,10 +104,48 @@ fun FormularioGeneralEntry(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .verticalScroll(rememberScrollState())
-            .padding(start = 16.dp, top = 50.dp, end = 16.dp, bottom = 16.dp)
+            .padding(top = 32.dp)
             .background(Color.White)
     ) {
         // ... (keep existing header code)
+        val textModifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp)
+            .height(40.dp)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(67.dp)
+                .background(color = colorResource(R.color.green_100)),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Button(
+                contentPadding = PaddingValues(
+                    horizontal = 3.dp,
+                    vertical = 3.dp
+                ),
+                modifier = Modifier
+                    .offset(x = 5.dp)
+                    .size(40.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0),
+                    contentColor = Color(0xFF000000)
+                ),
+                onClick = {}
+            ) {
+                Icon(
+                    Icons.AutoMirrored.Rounded.ArrowBack,
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+            Text(
+                text = "Formulario",
+                modifier = modifier
+                    .offset(x = 10.dp),
+                fontSize = 25.sp
+            )
+        }
 
         FormInputForm(
             formDetails = formUiState.formDetails,
