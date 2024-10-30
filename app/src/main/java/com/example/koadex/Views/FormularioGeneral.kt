@@ -26,6 +26,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.OutlinedIconToggleButton
 import androidx.compose.material3.OutlinedTextField
@@ -119,20 +120,13 @@ fun FormularioGeneralEntry(
                 .background(color = colorResource(R.color.green_100)),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Button(
-                contentPadding = PaddingValues(
-                    horizontal = 3.dp,
-                    vertical = 3.dp
-                ),
+            IconButton(
                 modifier = Modifier
-                    .offset(x = 5.dp)
-                    .size(40.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0),
-                    contentColor = Color(0xFF000000)
-                ),
-                onClick = {}
-            ) {
+                    .padding(20.dp)
+                    .size(30.dp),
+                onClick = { navController.navigate("Principal") }
+                )
+             {
                 Icon(
                     Icons.AutoMirrored.Rounded.ArrowBack,
                     contentDescription = null,
