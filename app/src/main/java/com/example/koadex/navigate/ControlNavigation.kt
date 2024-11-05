@@ -8,7 +8,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 
 import com.example.koadex.Views.Configuracion
+import com.example.koadex.Views.FormularioCamaraTrampa
 import com.example.koadex.Views.FormularioGeneral
+import com.example.koadex.Views.FormularioSeleccion
 import com.example.koadex.Views.InicioCarga
 import com.example.koadex.Views.InicioSesion
 import com.example.koadex.Views.Koadex
@@ -28,7 +30,12 @@ fun Navigation(modifier: Modifier = Modifier) {
         composable("InicioCarga") {
             InicioCarga(navController = navController)
         }
-
+        composable("TiposForms") {
+            FormularioSeleccion(navController = navController)
+        }
+        composable("CamarasTrampa") {
+            FormularioCamaraTrampa(navController = navController)
+        }
         composable("InicioSesion") {
             InicioSesion(navController = navController)
         }
