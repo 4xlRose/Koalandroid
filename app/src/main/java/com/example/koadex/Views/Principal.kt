@@ -23,11 +23,6 @@ fun Principal(navController: NavHostController, modifier: Modifier = Modifier) {
             Text("Formulario General")
         }
         Button(onClick = {
-            navController.navigate("FormularioEspecies")
-        }) {
-            Text("Formulario Especies")
-        }
-        Button(onClick = {
             navController.navigate("Koadex")
         }) {
             Text("Busqueda")

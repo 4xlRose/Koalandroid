@@ -41,7 +41,7 @@ import com.example.koadex.ui.principal.KoadexViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Koadex(
+fun FormularioCamaraTrampa(
     navController: NavHostController,
     modifier: Modifier = Modifier,
     //viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
@@ -52,7 +52,7 @@ fun Koadex(
             TopAppBar(
                 title = { Text(text = stringResource(id = R.string.formulario)) },
                 navigationIcon = {
-                    IconButton(onClick = { /*finish()*/ }) {
+                    IconButton(onClick = { navController.navigate("TiposForms") }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = stringResource(id = R.string.atras)

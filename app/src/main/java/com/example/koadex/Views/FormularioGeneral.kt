@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -107,6 +108,7 @@ fun FormularioGeneralEntry(
             .verticalScroll(rememberScrollState())
             .padding(top = 32.dp)
             .background(Color.White)
+
     ) {
         // ... (keep existing header code)
         val textModifier = Modifier
@@ -252,7 +254,9 @@ fun FormularioGeneralEntry(
                 modifier = Modifier
                     .padding(40.dp)
                     .width(300.dp),
-                onClick = onSaveClick,
+                onClick = { onSaveClick
+                    ;navController.navigate("TiposForms")
+                     },
                 enabled = formUiState.isEntryValid
             ) {
                 Text("SIGUIENTE", fontWeight = FontWeight.Bold)

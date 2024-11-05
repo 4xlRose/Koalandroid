@@ -117,7 +117,6 @@ fun KoadexContenido(
         verticalAlignment = Alignment.Bottom,
         modifier = Modifier
             .fillMaxWidth()
-            .height(60.dp)
     ) {
         val textSize = 20.sp
         var selected by remember { mutableStateOf("Todos") }
