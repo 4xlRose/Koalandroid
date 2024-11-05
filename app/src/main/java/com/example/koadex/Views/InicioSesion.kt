@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -85,7 +86,7 @@ fun IniciarSesionContenido(navController: NavHostController, modifier: Modifier 
                 .padding(50.dp)
         )
         Text(
-            text = "Bienvenido",
+            text = stringResource(R.string.bienvenida),
             fontSize = 40.sp,
             color = Color.White,
             fontWeight = FontWeight.Bold
@@ -95,12 +96,12 @@ fun IniciarSesionContenido(navController: NavHostController, modifier: Modifier 
                 .padding(55.dp)
         )
         Text(
-            text = "Iniciar Sesión",
+            text = stringResource(R.string.iniciar_sesion2),
             fontSize = 25.sp,
             color = Color.Black,
             fontWeight = FontWeight.Bold
         )
-        var text1 by remember { mutableStateOf("example@gmail.com") }
+        var text1 by remember { mutableStateOf("") }
         OutlinedTextField(
             value = text1,
             onValueChange = { text1 = it },
@@ -110,7 +111,7 @@ fun IniciarSesionContenido(navController: NavHostController, modifier: Modifier 
             modifier = modifier
                 .fillMaxWidth()
         )
-        var text2 by remember { mutableStateOf("example123") }
+        var text2 by remember { mutableStateOf("") }
         OutlinedTextField(
             value = text2,
             onValueChange = {
@@ -118,7 +119,7 @@ fun IniciarSesionContenido(navController: NavHostController, modifier: Modifier 
             },
             label = {
                 Text(
-                    "Contraseña",
+                    stringResource(R.string.contrasena),
                     color = Color.Black)
             },
             modifier = modifier
@@ -131,7 +132,7 @@ fun IniciarSesionContenido(navController: NavHostController, modifier: Modifier 
                 .align(Alignment.End),
 
         ) {
-            Text(text = "Olvidaste la contraseña",
+            Text(text = stringResource(R.string.olvidaste_contrasena),
                 fontSize = 15.sp,
                 color = Color(0xff4e7029),
                 textAlign = TextAlign.End,
@@ -154,7 +155,7 @@ fun IniciarSesionContenido(navController: NavHostController, modifier: Modifier 
             colors = ButtonDefaults.buttonColors(Color( 0xff4e7029)),
         ) {
             Text(
-                text = "Entrar",
+                text = stringResource(R.string.entrar),
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
                 fontSize = 22.sp
@@ -175,7 +176,7 @@ fun IniciarSesionContenido(navController: NavHostController, modifier: Modifier 
             colors = ButtonDefaults.buttonColors(Color( 0xff4e7029))
         ) {
             Text(
-                text = "Registrar",
+                text = stringResource(R.string.registrarse),
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
                 fontSize = 22.sp
