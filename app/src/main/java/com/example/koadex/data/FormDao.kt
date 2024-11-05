@@ -10,8 +10,11 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FormDao {
-    @Query("SELECT * FROM forms ORDER BY id DESC LIMIT 1")
-    fun getLastForm(): Flow<FormEntity>
+    @Query("SELECT * FROM forms ORDER BY id DESC")
+    fun getAllForms(): Flow<List<FormEntity>>
+
+    @Query("SELECT * from forms WHERE id = :id")
+    fun getForm(id: Int): Flow<FormEntity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(form: FormEntity)

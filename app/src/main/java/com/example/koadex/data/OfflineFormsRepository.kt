@@ -4,11 +4,9 @@ import kotlinx.coroutines.flow.Flow
 
 class OfflineFormsRepository(private val formDao : FormDao) : FormRepository {
 
-    override fun getLastFormsStream(): Flow<FormEntity> = formDao.getLastForm()
 
-
-
-    /*override fun getFormStream(id: Int): Flow<Formulario?> = formGeneralDao.getItem(id)*/
+    override fun getAllForms(): Flow<List<FormEntity>> = formDao.getAllForms()
+    override fun getForm(id: Int): Flow<FormEntity?> = formDao.getForm(id)
 
     override suspend fun insertForm(formGeneral: FormEntity) = formDao.insert(formGeneral)
 

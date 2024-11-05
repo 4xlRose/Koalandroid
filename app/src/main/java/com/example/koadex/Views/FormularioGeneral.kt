@@ -26,6 +26,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.OutlinedIconToggleButton
 import androidx.compose.material3.OutlinedTextField
@@ -104,10 +105,41 @@ fun FormularioGeneralEntry(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .verticalScroll(rememberScrollState())
-            .padding(start = 16.dp, top = 50.dp, end = 16.dp, bottom = 16.dp)
+            .padding(top = 32.dp)
             .background(Color.White)
     ) {
         // ... (keep existing header code)
+        val textModifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp)
+            .height(40.dp)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(67.dp)
+                .background(color = colorResource(R.color.green_100)),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(
+                modifier = Modifier
+                    .padding(20.dp)
+                    .size(30.dp),
+                onClick = { navController.navigate("Principal") }
+                )
+             {
+                Icon(
+                    Icons.AutoMirrored.Rounded.ArrowBack,
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+            Text(
+                text = "Formulario",
+                modifier = modifier
+                    .offset(x = 10.dp),
+                fontSize = 25.sp
+            )
+        }
 
         FormInputForm(
             formDetails = formUiState.formDetails,
