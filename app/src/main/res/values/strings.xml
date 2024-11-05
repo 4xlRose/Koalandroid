@@ -1,6 +1,7 @@
+
 <resources>
-    <string name="app_name">Koadex</string>
-    <string name="Titulo_Intro">Awaq-Bio</string>
-    <string name="iniciar_sesion">INICIAR SESIÓN</string>
-    <string name="Crear_cuenta">Crear una cuneta</string>
+    <string name="app_name" translatable="false">Koadex</string>
+    <string name="Titulo_Intro" translatable="false">Awaq-Bio</string>
+    <string name="iniciar_sesion" translatable="false">INICIAR SESIÓN</string>
+    <string name="Crear_cuenta">Crear una cuenta</string>
 </resources>

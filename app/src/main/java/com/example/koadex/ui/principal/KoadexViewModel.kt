@@ -1,3 +1,4 @@
+
 package com.example.koadex.ui.principal
 
 import androidx.lifecycle.ViewModel
@@ -11,7 +12,7 @@ import kotlinx.coroutines.flow.stateIn
 
 class KoadexViewModel(formsRespository: FormRepository) : ViewModel() {
     val koadexUiState: StateFlow<KoadexUiState> =
-        formsRespository.getLastFormsStream().map { KoadexUiState(it) }
+        formsRespository.getAllForms().map { KoadexUiState(it) }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
@@ -21,5 +22,4 @@ class KoadexViewModel(formsRespository: FormRepository) : ViewModel() {
         private const val TIMEOUT_MILLIS = 5_000L
     }
 }
-
 data class KoadexUiState(val koadexList: List<FormEntity> = listOf())
