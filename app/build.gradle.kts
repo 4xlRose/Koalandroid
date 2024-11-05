@@ -18,6 +18,10 @@ android {
         versionCode = 1
         versionName = "1.0"
 
+        manifestPlaceholders.clear()
+        manifestPlaceholders["auth0Domain"] = "@string/com_auth0_domain"
+        manifestPlaceholders["auth0Scheme"] = "https"
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -54,13 +58,17 @@ android {
 }
 
 dependencies{
+    /*Room*/
     ksp(libs.androidx.room.compiler.v250)
     implementation(libs.room.runtime)
     implementation(libs.androidx.foundation.android)
     implementation(libs.androidx.material3.android)
     implementation(libs.room)
+    implementation(libs.androidx.room.common)
+    implementation(libs.androidx.room.ktx)
     implementation(libs.room.runtime)
     annotationProcessor(libs.room.compiler)
+    /*Original*/
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -69,8 +77,7 @@ dependencies{
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.room.common)
-    implementation(libs.androidx.room.ktx)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -78,7 +85,10 @@ dependencies{
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    /*Otro*/
     implementation("androidx.compose.material:material-icons-extended:1.5.1")
+    /*Auth0*/
+    implementation(libs.auth0)
 
 
 }

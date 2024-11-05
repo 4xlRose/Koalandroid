@@ -40,6 +40,7 @@ import com.example.koadex.R
 
 @Composable
 fun InicioSesion(navController: NavHostController, modifier: Modifier = Modifier) {
+
     IniciarSesionFondo(navController, modifier)
 }
 
@@ -48,8 +49,7 @@ fun IniciarSesionFondo(navController: NavHostController, modifier: Modifier = Mo
     val fondo = painterResource(R.drawable.login)
     Box (
         modifier = Modifier
-    )
-    {
+    ) {
         Image (
             painter = fondo,
             contentDescription = null,
