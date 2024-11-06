@@ -1,7 +1,7 @@
 package com.example.koadex.Views
 
+import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,8 +18,10 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,23 +31,32 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.auth0.android.Auth0
+import com.auth0.android.authentication.AuthenticationAPIClient
+import com.auth0.android.authentication.AuthenticationException
+import com.auth0.android.callback.Callback
+import com.auth0.android.result.Credentials
 import com.example.koadex.R
 
 @Composable
-fun InicioSesion(navController: NavHostController, modifier: Modifier = Modifier) {
-
-    IniciarSesionFondo(navController, modifier)
+fun InicioSesion(navController: NavHostController, account: Auth0, modifier: Modifier = Modifier) {
+    IniciarSesionFondo(navController,account, modifier)
 }
 
 @Composable
-fun IniciarSesionFondo(navController: NavHostController, modifier: Modifier = Modifier) {
+fun IniciarSesionFondo(navController: NavHostController,account: Auth0, modifier: Modifier = Modifier) {
+    var loggedIn by remember { mutableStateOf(true) }
+    var credentials by remember { mutableStateOf<Credentials?>(null) }
+
     val fondo = painterResource(R.drawable.login)
     Box (
         modifier = Modifier
@@ -57,12 +68,40 @@ fun IniciarSesionFondo(navController: NavHostController, modifier: Modifier = Mo
             modifier = Modifier
                 .fillMaxSize()
         )
-        IniciarSesionContenido(navController, modifier)
+        if (loggedIn) {
+            IniciarSesionLogOutContenido(
+                navController = navController,
+                onLogout = {
+                    loggedIn = false
+                    credentials = null
+                },
+                modifier = Modifier
+            )
+        } else {
+            IniciarSesionLogInContenido(
+                navController = navController,
+                account = account,
+                onLoginSuccess = {
+                    credentials = it
+                    loggedIn = true
+                },
+                modifier = Modifier)
+        }
+
     }
 }
 
 @Composable
-fun IniciarSesionContenido(navController: NavHostController, modifier: Modifier = Modifier) {
+fun IniciarSesionLogInContenido(
+    navController: NavHostController,
+    account: Auth0,
+    onLoginSuccess: (Credentials) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var username by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf("") }
+
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(start = 16.dp, top = 50.dp, end = 16.dp, bottom = 16.dp)
@@ -78,7 +117,6 @@ fun IniciarSesionContenido(navController: NavHostController, modifier: Modifier 
                 tint = Color.White,
                 modifier = Modifier
                     .size(size = 50.dp)
-
             )
         }
         Spacer(
@@ -101,27 +139,27 @@ fun IniciarSesionContenido(navController: NavHostController, modifier: Modifier 
             color = Color.Black,
             fontWeight = FontWeight.Bold
         )
-        var text1 by remember { mutableStateOf("") }
         OutlinedTextField(
-            value = text1,
-            onValueChange = { text1 = it },
-            label = { Text(
-                "Email",
+            value = username,
+            onValueChange = { username = it},
+            label = { Text( stringResource(R.string.email),
                 color = Color.Black) },
             modifier = modifier
-                .fillMaxWidth()
+                .fillMaxWidth(),
+
         )
-        var text2 by remember { mutableStateOf("") }
+
         OutlinedTextField(
-            value = text2,
+            value = password,
             onValueChange = {
-                text2 = it
+                password = it
             },
             label = {
                 Text(
                     stringResource(R.string.contrasena),
                     color = Color.Black)
             },
+            visualTransformation = PasswordVisualTransformation(),
             modifier = modifier
                 .fillMaxWidth()
         )
@@ -139,50 +177,162 @@ fun IniciarSesionContenido(navController: NavHostController, modifier: Modifier 
                 modifier = modifier
                     .fillMaxWidth())
         }
+        // Mostrar mensaje de error si existe
+        if(errorMessage.isNotEmpty())
+            errorMessage?.let {
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(text = "Error: $it", color = Color.Red)
+                Spacer(
+                    Modifier.padding(30.dp)
+                )
+        } else {
+            Spacer(
+                Modifier.padding(50.dp)
+            )
+        }
 
-        Spacer(
-            Modifier.padding(50.dp)
-        )
+
         Button(
             onClick = {
-                navController.navigate("Principal")
+                loginWithUsernamePassword(account, username, password, onLoginSuccess, onError = { message ->
+                    errorMessage = message // Actualiza el mensaje de error si ocurre un problema
+                })
             },
-
-            modifier = modifier
-                .width(140.dp)
-                .height(70.dp)
-                .align(Alignment.CenterHorizontally),
-            colors = ButtonDefaults.buttonColors(Color( 0xff4e7029)),
+            modifier = Modifier.padding(5.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorResource(id = R.color.verde_1)
+            ),
         ) {
             Text(
                 text = stringResource(R.string.entrar),
                 fontWeight = FontWeight.Bold,
-                color = Color.White,
-                fontSize = 22.sp
+                color = Color.White
             )
         }
-        Spacer(
-            Modifier.padding(10.dp)
-        )
         Button(
             onClick = {
                 navController.navigate("Registro")
             },
 
-            modifier = modifier
-                .width(140.dp)
-                .height(70.dp)
-                .align(Alignment.CenterHorizontally),
-            colors = ButtonDefaults.buttonColors(Color( 0xff4e7029))
+            modifier = Modifier.padding(5.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorResource(id = R.color.verde_1)
+            )
         ) {
             Text(
                 text = stringResource(R.string.registrarse),
                 fontWeight = FontWeight.Bold,
-                color = Color.White,
-                fontSize = 22.sp
+                color = Color.White
             )
         }
 
 
+    }
+}
+
+private fun loginWithUsernamePassword(
+    auth0: Auth0,
+    username: String,
+    password: String,
+    onSuccess: (Credentials) -> Unit,
+    onError: (String) -> Unit
+) {
+
+    val authentication = AuthenticationAPIClient(auth0)
+
+    authentication
+        .login(username, password, "Username-Password-Authentication")
+        .setConnection("Username-Password-Authentication")
+        .validateClaims()
+        .setScope("openid profile email")
+        .start(object : Callback<Credentials, AuthenticationException> {
+            override fun onSuccess(result: Credentials) {
+                onSuccess(result)
+            }
+
+            override fun onFailure(error: AuthenticationException) {
+                // Imprime el error completo en los logs para ver más detalles
+                Log.e("AuthError", "Error de autenticación: ${error.getDescription()}")
+                onError(error.message ?: "Error desconocido")
+            }
+        })
+}
+
+
+@Composable
+fun IniciarSesionLogOutContenido(
+    navController: NavHostController,
+    onLogout: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+   Column(modifier = Modifier
+        .fillMaxSize()
+        .padding(start = 16.dp, top = 50.dp, end = 16.dp, bottom = 16.dp)
+    ) {
+        IconButton (
+            onClick = {
+                navController.navigate("InicioCarga")
+            }
+        ) {
+            Icon(
+                Icons.Filled.KeyboardArrowLeft, contentDescription = "Izquierda",
+                tint = Color.White,
+                modifier = Modifier
+                    .size(size = 50.dp)
+            )
+        }
+        Spacer(
+            modifier = modifier
+                .padding(50.dp)
+        )
+        Text(
+            text = stringResource(R.string.bienvenida),
+            fontSize = 40.sp,
+            color = Color.White,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(
+            modifier = modifier
+                .padding(55.dp)
+        )
+        Text(
+            text = stringResource(R.string.iniciar_sesion2),
+            fontSize = 25.sp,
+            color = Color.Black,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = {
+                navController.navigate("Principal")
+            },
+            modifier = Modifier.padding(5.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorResource(id = R.color.verde_1)
+            )
+        ) {
+            Text (
+                text = stringResource(R.string.iniciar_sesion),
+                fontWeight = FontWeight.Bold,
+                color = Color.White
+            )
+        }
+
+       Button(
+           onClick = {
+               onLogout()
+           },
+           modifier = Modifier.padding(5.dp),
+           colors = ButtonDefaults.buttonColors(
+               containerColor = colorResource(id = R.color.verde_1)
+           )
+       ) {
+           Text (
+               text = stringResource(R.string.salir),
+               fontWeight = FontWeight.Bold,
+               color = Color.White
+           )
+       }
     }
 }
