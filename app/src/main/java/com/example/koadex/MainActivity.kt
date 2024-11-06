@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         account = Auth0.getInstance(
-           "HQjd9ogRdlwoP9eq1S2msaTmM925icR0",
+           "tplWesPliZAjIckkDPfCQETXZ9IDkJ8T",
             "dev-qk6i0qseg2txot3r.us.auth0.com"
         )
 
