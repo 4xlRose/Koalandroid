@@ -2,7 +2,7 @@
     <string name="app_name">Koadex</string>
     <string name="Titulo_Intro">Awaq-Bio</string>
     <string name="iniciar_sesion">INICIAR SESIÓN</string>
-    <string name="Crear_cuenta">Crear una cuneta</string>
+    <string name="Crear_cuenta">Crear una cuenta</string>
     <string name="codigo">Código</string>
     <string name="zona">Zona</string>
     <string name="formulario">Formulario</string>
@@ -38,4 +38,6 @@
     <string name="entrar">Entrar\n</string>
     <string name="registrarse">Registrar</string>
     <string name="olvidaste_contrasena">Olvidaste la contraseña</string>
+    <string name="com_auth0_domain">dev-qk6i0qseg2txot3r.us.auth0.com</string>
+    <string name="com_auth0_client_id">HQjd9ogRdlwoP9eq1S2msaTmM925icR0</string>
 </resources>

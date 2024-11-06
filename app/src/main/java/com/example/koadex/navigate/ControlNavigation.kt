@@ -6,6 +6,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.auth0.android.Auth0
 
 import com.example.koadex.Views.Configuracion
 import com.example.koadex.Views.FormularioCamaraTrampa
@@ -23,8 +24,8 @@ import com.example.koadex.Views.Verificacion
 
 
 @Composable
-@Preview(showBackground = true, showSystemUi = true)
-fun Navigation(modifier: Modifier = Modifier) {
+
+fun Navigation( account: Auth0,modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "InicioCarga") {
         composable("InicioCarga") {
@@ -37,7 +38,7 @@ fun Navigation(modifier: Modifier = Modifier) {
             FormularioCamaraTrampa(navController = navController)
         }
         composable("InicioSesion") {
-            InicioSesion(navController = navController)
+            InicioSesion(navController = navController,account)
         }
 
         composable("FormularioGeneral") {
