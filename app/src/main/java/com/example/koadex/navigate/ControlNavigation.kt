@@ -10,6 +10,7 @@ import com.auth0.android.Auth0
 
 import com.example.koadex.Views.Configuracion
 import com.example.koadex.Views.FormularioCamaraTrampa
+import com.example.koadex.Views.FormularioEspecies
 import com.example.koadex.Views.FormularioGeneral
 import com.example.koadex.Views.FormularioSeleccion
 import com.example.koadex.Views.InicioCarga
@@ -67,6 +68,9 @@ fun Navigation( account: Auth0,modifier: Modifier = Modifier) {
         }
         composable("Verificacion"){
             Verificacion(navController = navController)
+        }
+        composable("FormularioEspecies"){
+            FormularioEspecies(navController = navController)
         }
     }
 }
