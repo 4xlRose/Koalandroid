@@ -1,7 +1,5 @@
 package com.example.koadex.Views
 
-import android.media.Spatializer
-import android.widget.Space
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -26,6 +24,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.koadex.R
 import com.example.koadex.clases.User
 
 @Composable
@@ -41,65 +42,40 @@ fun Principal(
     modifier: Modifier = Modifier,
     user: User = User("Samantha", 5, 3, 2)
 ) {
+    var `intro-base` = stringResource(id = R.string.Intro_homepage)
+    var `formulario-base` = stringResource(id = R.string.Formularios_base)
+
     Box(
         modifier = modifier
             .fillMaxSize()
             .background(color = Color.White)
+            .padding(top = 16.dp)
     ) {
 
         // logo y boton para perfil
+        Spacer(modifier = Modifier.height(48.dp))
         Logo_perfil()
 
         // Contenido principal
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            // La cosa girando
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-            ) {
-
-                // Centered greeting
-                Column(
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .padding(top = 16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = "Hola,\n${user.username}",
-                        fontSize = 32.sp,
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center,
-                        lineHeight = 40.sp
-                    )
-                }
-
-                // Add button at the bottom
-                FloatingActionButton(
-                    onClick = { navController.navigate("FormularioEspecies") },
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .offset(y = 20.dp),
-                    containerColor = Color(0xFF4E7029)
-                ) {
-                    Icon(Icons.Default.Add, "Add", tint = Color.White)
-                }
-            }
+            // 
+            Bienvenida_Agregar_formulario(`intro-base`, user, navController)
 
             // Dashboard title
             Text(
-                text = "Dashboard",
+                text = stringResource(R.string.Dashboard_hompage),
                 modifier = Modifier.padding(start = 16.dp, top = 32.dp),
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold
             )
 
             // Warning message if needed
-            if (user.locallyStoredForms > 1) {
+            if (user.locallyStoredForms > 0) {
                 Advertencia(user)
+            }else{
+                Spacer(modifier = Modifier.height(16.dp))
             }
 
             // Formularios en total
@@ -109,32 +85,68 @@ fun Principal(
                     .fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        text = "${user.totalForms} Forms",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(bottom = 8.dp)
-                    )
-                    Text(text = "En Total", fontSize = 16.sp)
-
-                    CircularProgressIndicator(
-                        user,
-                        modifier = Modifier
-                            .size(200.dp)
-                            .padding(16.dp)
-                    )
-                }
+                Contador_formularios(user, `formulario-base`)
             }
 
             // Bottom navigation
-            La_navegacion()
+            La_navegacion(navController)
         }
     }
 }
+
+@Composable
+private fun Bienvenida_Agregar_formulario(
+    `intro-base`: String,
+    user: User,
+    navController: NavHostController
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp)
+            .padding(top = 40.dp)
+    ) {
+
+        // Mensaje de bienvenida
+
+        Column(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .padding(top = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            Text(
+                text = `intro-base` + " ${user.username}",
+                fontSize = 48.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                lineHeight = 60.sp
+            )
+
+
+        }
+
+        // El boton
+        FloatingActionButton(
+            onClick = { navController.navigate("SeleccionForm") },
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .offset(y = 20.dp),
+            containerColor = Color(0xFF4E7029)
+        ) {
+            Icon(Icons.Default.Add, "Add", tint = Color.White)
+        }
+
+    }
+}
+
+
 // SECCION DE NAVEGACION //
 @Composable
-private fun La_navegacion() {
+private fun La_navegacion(
+    navController: NavHostController = rememberNavController()
+) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
         color = Color.White,
@@ -146,14 +158,23 @@ private fun La_navegacion() {
                 .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            BottomNavItem(Icons.Default.Home, "Inicio", true, navigation = rememberNavController(),destino = "Principal")
-            BottomNavItem(Icons.Default.Search, "Búsqueda", false, navigation = rememberNavController(),destino = "Koadex")
-            BottomNavItem(Icons.Default.Settings, "Configuración", false, navigation = rememberNavController(),destino = "Perfil")
+            BottomNavItem(Icons.Default.Home, "Inicio", true, navigation = navController,destino = "Principal")
+            BottomNavItem(Icons.Default.Search, "Búsqueda", false, navigation = navController,destino = "Koadex")
+            BottomNavItem(Icons.Default.Settings, "Configuración", false, navigation = navController,destino = "Perfil")
         }
     }
 }
 @Composable
-private fun BottomNavItem(icon: ImageVector, label: String, selected: Boolean, destino: String = "", navigation: NavHostController) {
+private fun BottomNavItem(
+    icon: ImageVector,
+    label: String,
+    selected: Boolean,
+    destino: String = "",
+    navigation: NavHostController
+) {
+
+    val verde_1 = colorResource(R.color.verde_1)
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.width(80.dp)
@@ -164,13 +185,13 @@ private fun BottomNavItem(icon: ImageVector, label: String, selected: Boolean, d
             Icon(
                 icon,
                 contentDescription = label,
-                tint = if (selected) Color(0xFF4E7029) else Color.Gray,
+                tint = if (selected) verde_1 else Color.Gray,
                 modifier = Modifier.size(24.dp)
             )
         }
         Text(
             text = label,
-            color = if (selected) Color(0xFF4E7029) else Color.Gray,
+            color = if (selected) verde_1 else Color.Gray,
             fontSize = 12.sp
         )
     }
@@ -180,11 +201,15 @@ private fun BottomNavItem(icon: ImageVector, label: String, selected: Boolean, d
 ////// LA ADVERTENCIA /////
 @Composable
 private fun Advertencia(user: User) {
+
+    val rojo_1 = colorResource(R.color.rojo_1)
+    val rojo_2 = colorResource(R.color.rojo_2)
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFFFE4E4)),
+        colors = CardDefaults.cardColors(containerColor = rojo_2),
         shape = RoundedCornerShape(8.dp)
     ) {
         Row(
@@ -194,18 +219,18 @@ private fun Advertencia(user: User) {
             Icon(
                 Icons.Default.Warning,
                 contentDescription = "Warning",
-                tint = Color(0xFFD32F2F)
+                tint = rojo_1
             )
             Spacer(modifier = Modifier.width(8.dp))
             Column {
                 Text(
-                    text = "Emergencia",
-                    color = Color(0xFFD32F2F),
+                    text = "Advertencia",
+                    color = rojo_1,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
                     text = "Tienes ${user.locallyStoredForms} formularios sin subir a la nube",
-                    color = Color(0xFFD32F2F)
+                    color = rojo_1
                 )
             }
         }
@@ -266,7 +291,41 @@ private fun Logo_perfil() {
 
 ////// CIRCULAR PROGRESS INDICATOR /////
 @Composable
-private fun CircularProgressIndicator(user: User, modifier: Modifier = Modifier) {
+private fun Contador_formularios(
+    user: User,
+    `formulario-base`: String
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .padding(16.dp)
+    ) {
+        Text(
+            text = "${user.totalForms} " + `formulario-base`,
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+
+        CircularProgressIndicator(
+            user,
+            modifier = Modifier
+                .padding(20.dp)
+        )
+    }
+}
+@Composable
+private fun CircularProgressIndicator(
+    user: User,
+    modifier: Modifier = Modifier
+) {
+
+    val verde_1 = colorResource(R.color.verde_1)
+    val verde_oscuro_1 = colorResource(R.color.verde_oscuro_1)
+    val rojo_1 = colorResource(R.color.rojo_1)
+
     Box(modifier = modifier) {
         Canvas(modifier = Modifier.fillMaxSize()) {
             val strokeWidth = 20.dp.toPx()
@@ -276,7 +335,7 @@ private fun CircularProgressIndicator(user: User, modifier: Modifier = Modifier)
 
             // Draw progress arc
             drawArc(
-                color = Color(0xFF4E7029),
+                color = verde_1,
                 startAngle = -90f,
                 sweepAngle = 240f, // Adjust this value based on your needs
                 useCenter = false,
@@ -291,10 +350,10 @@ private fun CircularProgressIndicator(user: User, modifier: Modifier = Modifier)
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text("${user.uploadedForms} Forms", fontWeight = FontWeight.Bold)
-            Text("Subidos", fontSize = 12.sp, color = Color(0xFF4E7029))
+            Text("Subidos", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = verde_1)
             Spacer(modifier = Modifier.height(8.dp))
             Text("${user.locallyStoredForms} Forms", fontWeight = FontWeight.Bold)
-            Text("Guardados", fontSize = 12.sp, color = Color.Red)
+            Text("Guardados", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = rojo_1)
         }
     }
 }

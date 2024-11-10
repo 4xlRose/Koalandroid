@@ -42,4 +42,7 @@
     <string name="com_auth0_domain">dev-qk6i0qseg2txot3r.us.auth0.com</string>
     <string name="com_auth0_client_id">tplWesPliZAjIckkDPfCQETXZ9IDkJ8T</string>
     <string name="email">Email</string>
+    <string name="Intro_homepage">Hola,</string>
+    <string name="Dashboard_hompage">Mis formularios</string>
+    <string name="Formularios_base">Formularios</string>
 </resources>
