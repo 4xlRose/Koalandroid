@@ -54,7 +54,7 @@ fun Principal(
 
         // logo y boton para perfil
         Spacer(modifier = Modifier.height(48.dp))
-        Logo_perfil()
+        Logo_perfil(navController)
 
         // Contenido principal
         Column(
@@ -160,7 +160,7 @@ private fun La_navegacion(
         ) {
             BottomNavItem(Icons.Default.Home, "Inicio", true, navigation = navController,destino = "Principal")
             BottomNavItem(Icons.Default.Search, "Búsqueda", false, navigation = navController,destino = "Koadex")
-            BottomNavItem(Icons.Default.Settings, "Configuración", false, navigation = navController,destino = "Perfil")
+            BottomNavItem(Icons.Default.Settings, "Ajustes", false, navigation = navController,destino = "Perfil")
         }
     }
 }
@@ -240,7 +240,9 @@ private fun Advertencia(user: User) {
 
 ////// LOGO Y PERFIL /////
 @Composable
-private fun Logo_perfil() {
+private fun Logo_perfil(
+    navigation: NavHostController = rememberNavController()
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -269,7 +271,7 @@ private fun Logo_perfil() {
 
                 // Botón de perfil a la derecha
                 IconButton(
-                    onClick = { /* No action */ },
+                    onClick = { navigation.navigate("Perfil") },
                     modifier = Modifier
                         .size(40.dp)
                         .clip(CircleShape)
@@ -302,18 +304,28 @@ private fun Contador_formularios(
             .fillMaxHeight()
             .padding(16.dp)
     ) {
-        Text(
-            text = "${user.totalForms} " + `formulario-base`,
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
+        if (user.totalForms > 0) {
 
-        CircularProgressIndicator(
-            user,
-            modifier = Modifier
-                .padding(20.dp)
-        )
+            Text(
+                text = "${user.totalForms} " + `formulario-base`,
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+
+            CircularProgressIndicator(
+                user,
+                modifier = Modifier
+                    .padding(20.dp)
+            )
+        }else {
+            Text(
+                text = "No hay formularios disponibles",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+        }
     }
 }
 @Composable
@@ -325,10 +337,11 @@ private fun CircularProgressIndicator(
     val verde_1 = colorResource(R.color.verde_1)
     val verde_oscuro_1 = colorResource(R.color.verde_oscuro_1)
     val rojo_1 = colorResource(R.color.rojo_1)
+    val progress = user.uploadedForms.toFloat() / user.totalForms
 
     Box(modifier = modifier) {
         Canvas(modifier = Modifier.fillMaxSize()) {
-            val strokeWidth = 20.dp.toPx()
+            val strokeWidth = 30.dp.toPx()
             val diameter = size.minDimension - strokeWidth
             val radius = diameter / 2
             val center = Offset(size.width / 2, size.height / 2)
@@ -337,7 +350,7 @@ private fun CircularProgressIndicator(
             drawArc(
                 color = verde_1,
                 startAngle = -90f,
-                sweepAngle = 240f, // Adjust this value based on your needs
+                sweepAngle = progress * 360,
                 useCenter = false,
                 topLeft = Offset(center.x - radius, center.y - radius),
                 size = Size(diameter, diameter),
@@ -346,14 +359,25 @@ private fun CircularProgressIndicator(
         }
 
         Column(
-            modifier = Modifier.align(Alignment.Center),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier
+                .align(Alignment.Center)
+                .fillMaxWidth()
+                .fillMaxHeight()
+            ,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+
         ) {
-            Text("${user.uploadedForms} Forms", fontWeight = FontWeight.Bold)
-            Text("Subidos", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = verde_1)
-            Spacer(modifier = Modifier.height(8.dp))
-            Text("${user.locallyStoredForms} Forms", fontWeight = FontWeight.Bold)
-            Text("Guardados", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = rojo_1)
+            if(user.uploadedForms > 0) {
+                Text("${user.uploadedForms} Forms", fontWeight = FontWeight.Bold)
+                Text("Subidos", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = verde_1)
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+
+            if(user.locallyStoredForms > 0) {
+                Text("${user.locallyStoredForms} Forms", fontWeight = FontWeight.Bold)
+                Text("Guardados", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = rojo_1)
+            }
         }
     }
 }

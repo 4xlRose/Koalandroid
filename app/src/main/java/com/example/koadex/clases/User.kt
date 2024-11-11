@@ -5,4 +5,6 @@ data class User(
     val totalForms: Int,
     val uploadedForms: Int,
     val locallyStoredForms: Int
-)
+) {
+
+}
