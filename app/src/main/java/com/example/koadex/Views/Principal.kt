@@ -35,6 +35,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.koadex.R
 import com.example.koadex.clases.User
+import com.example.koadex.navigate.La_navegacion
 
 @Composable
 fun Principal(
@@ -89,7 +90,7 @@ fun Principal(
             }
 
             // Bottom navigation
-            La_navegacion(navController)
+            La_navegacion(navController, true, false, false)
         }
     }
 }
@@ -140,63 +141,6 @@ private fun Bienvenida_Agregar_formulario(
 
     }
 }
-
-
-// SECCION DE NAVEGACION //
-@Composable
-private fun La_navegacion(
-    navController: NavHostController = rememberNavController()
-) {
-    Surface(
-        modifier = Modifier.fillMaxWidth(),
-        color = Color.White,
-        shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            BottomNavItem(Icons.Default.Home, "Inicio", true, navigation = navController,destino = "Principal")
-            BottomNavItem(Icons.Default.Search, "Búsqueda", false, navigation = navController,destino = "Koadex")
-            BottomNavItem(Icons.Default.Settings, "Ajustes", false, navigation = navController,destino = "Perfil")
-        }
-    }
-}
-@Composable
-private fun BottomNavItem(
-    icon: ImageVector,
-    label: String,
-    selected: Boolean,
-    destino: String = "",
-    navigation: NavHostController
-) {
-
-    val verde_1 = colorResource(R.color.verde_1)
-
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.width(80.dp)
-    ) {
-        IconButton(
-            onClick = { navigation.navigate(destino) }
-        ) {
-            Icon(
-                icon,
-                contentDescription = label,
-                tint = if (selected) verde_1 else Color.Gray,
-                modifier = Modifier.size(24.dp)
-            )
-        }
-        Text(
-            text = label,
-            color = if (selected) verde_1 else Color.Gray,
-            fontSize = 12.sp
-        )
-    }
-}
-///////////////////////////
 
 ////// LA ADVERTENCIA /////
 @Composable
