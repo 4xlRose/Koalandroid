@@ -38,7 +38,7 @@ public fun FormularioSeguimiento(navController: NavHostController, modifier: Mod
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFFFFFFF))
-            .padding(16.dp),
+            .padding(0.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         TopAppBar(
@@ -80,12 +80,16 @@ public fun FormularioSeguimiento(navController: NavHostController, modifier: Mod
             value = "", onValueChange = { /* Actualizar estado */ },
             label = { Text("Nombre Común") },
             modifier = Modifier.fillMaxWidth()
+                .padding(horizontal = 8.dp)
+
         )
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
             value = "", onValueChange = { /* Actualizar estado */ },
             label = { Text("Nombre Científico") },
             modifier = Modifier.fillMaxWidth()
+                .padding(horizontal = 8.dp)
+
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -212,7 +216,7 @@ fun TipoAnimalButton(text: String, isSelected: Boolean, iconRes: Int, onClick: (
         painter = painterResource(id = iconRes),
         contentDescription = text,
         modifier = Modifier
-            .size(64.dp) // Tamaño reducido
+            .size(75.dp) // Tamaño reducido
             .background(if (isSelected) Color(0xFF97B96E) else Color.Transparent)
             .padding(4.dp)
             .clickable(onClick = onClick)
