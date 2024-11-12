@@ -62,45 +62,45 @@ fun FormularioSeleccionScreen(
                 icon1 = R.drawable.fauna,
                 icon2 = R.drawable.ruta,
                 text = "Fauna en Transectos",
-                onClick = { navController.navigate("faunaTransectos") }
+                onClick = { navController.navigate("FormularioEspecies") }
             )
 
             OptionButtonTwoIcons(
                 icon1 = R.drawable.fauna,
                 icon2 = R.drawable.aritmetica,
                 text = "Fauna en Punto de Conteo",
-                onClick = { navController.navigate("puntoConteo") }
+                onClick = { navController.navigate("FormularioFaunaPuntoConteo") }
             )
 
             OptionButtonTwoIcons(
                 icon1 = R.drawable.fauna,
                 icon2 = R.drawable.search,
                 text = "Fauna Búsqueda Libre",
-                onClick = { navController.navigate("busquedaLibre") }
+                onClick = { navController.navigate("FormularioFaunaBusquedaLibre") }
             )
 
             OptionButton(
                 icon = R.drawable.cobertura,
                 text = "Validación de Cobertura",
-                onClick = { navController.navigate("validacionCobertura") }
+                onClick = { navController.navigate("FormularioSeguimiento") }
             )
 
             OptionButton(
                 icon = R.drawable.vegetacion,
                 text = "Parcela de Vegetación",
-                onClick = { navController.navigate("parcelaVegetacion") }
+                onClick = { navController.navigate("FormularioCuadrante") }
             )
 
             OptionButton(
                 icon = R.drawable.camara,
                 text = "Cámaras Trampa",
-                onClick = { navController.navigate("MainAcivity") }
+                onClick = { navController.navigate("CamarasTrampa") }
             )
 
             OptionButton(
                 icon = R.drawable.temporada,
                 text = "Variables Climáticas",
-                onClick = { navController.navigate("variablesClimaticas") }
+                onClick = { navController.navigate("FormularioVariablesClimaticas") }
             )
         }
 
