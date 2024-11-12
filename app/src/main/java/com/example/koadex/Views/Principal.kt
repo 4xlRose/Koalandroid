@@ -41,7 +41,7 @@ import com.example.koadex.navigate.La_navegacion
 fun Principal(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    user: User = User("Samantha", 5, 3, 2)
+    user: User = User("Samantha", 5, 3, 0)
 ) {
     var `intro-base` = stringResource(id = R.string.Intro_homepage)
     var `formulario-base` = stringResource(id = R.string.Formularios_base)
@@ -251,7 +251,7 @@ private fun Contador_formularios(
         if (user.totalForms > 0) {
 
             Text(
-                text = "${user.totalForms} " + `formulario-base`,
+                text = "${user.uploadedForms + user.locallyStoredForms} " + `formulario-base`,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 8.dp)
@@ -281,7 +281,7 @@ private fun CircularProgressIndicator(
     val verde_1 = colorResource(R.color.verde_1)
     val verde_oscuro_1 = colorResource(R.color.verde_oscuro_1)
     val rojo_1 = colorResource(R.color.rojo_1)
-    val progress = user.uploadedForms.toFloat() / user.totalForms
+    val progress = user.uploadedForms.toFloat() / (user.uploadedForms + user.locallyStoredForms)
 
     Box(modifier = modifier) {
         Canvas(modifier = Modifier.fillMaxSize()) {
@@ -332,6 +332,6 @@ private fun CircularProgressIndicator(
 fun PreviewPrincipal() {
     Principal(
         navController = rememberNavController(),
-        user = User("Samantha", 5, 3, 2)
+        user = User("Samantha", 5, 4, 6)
     )
 }
