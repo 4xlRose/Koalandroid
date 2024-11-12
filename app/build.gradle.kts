@@ -90,6 +90,12 @@ dependencies{
     implementation("androidx.compose.material:material-icons-extended:1.5.1")
     /*Auth0*/
     implementation(libs.auth0)
-
+    /*Camara*/
+    implementation(libs.androidx.camera.core)
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.video)
+    implementation(libs.androidx.camera.view)
+    implementation(libs.androidx.camera.extensions)
 
 }
