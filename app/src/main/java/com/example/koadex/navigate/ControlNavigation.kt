@@ -36,7 +36,7 @@ import com.example.koadex.Views.Configuracion
 import com.example.koadex.Views.FormularioCamaraTrampa
 import com.example.koadex.Views.FormularioEspecies
 import com.example.koadex.Views.FormularioGeneral
-import com.example.koadex.Views.FormularioSeleccion
+import com.example.koadex.Views.FormularioSeleccionScreen
 import com.example.koadex.Views.InicioCarga
 import com.example.koadex.Views.InicioSesion
 import com.example.koadex.Views.Koadex
@@ -56,7 +56,7 @@ fun Navigation( account: Auth0,modifier: Modifier = Modifier) {
             InicioCarga(navController = navController)
         }
         composable("TiposForms") {
-            FormularioSeleccion(navController = navController)
+            FormularioSeleccionScreen(navController = navController)
         }
         composable("CamarasTrampa") {
             FormularioCamaraTrampa(navController = navController)

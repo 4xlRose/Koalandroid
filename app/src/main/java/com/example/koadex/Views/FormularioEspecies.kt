@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Camera
+import androidx.compose.material.icons.filled.FileOpen
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.getValue
@@ -18,31 +20,36 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.koadex.R
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun Especies_preview(){
-    Text("Hola Mundo")
+    FormularioEspecies(navController = rememberNavController())
 }
 
 @Composable
 fun FormularioEspecies(navController: NavController, modifier: Modifier = Modifier) {
-
+    // Variables para los colores
     val green100 = colorResource(id = R.color.green_100)
     val green700 = colorResource(id = R.color.green_700)
 
-    var transectoNumber by remember { mutableStateOf(TextFieldValue()) }
-    var commonName by remember { mutableStateOf(TextFieldValue()) }
-    var scientificName by remember { mutableStateOf(TextFieldValue()) }
-    var individualsCount by remember { mutableStateOf(1) }
-    var selectedAnimalType by remember { mutableStateOf<String?>(null) }
+    // Variables para los campos -> pasaremos a guardarlas en la base de datos
+    var transectoNumber         by remember { mutableStateOf(TextFieldValue()) }
+    var commonName              by remember { mutableStateOf(TextFieldValue()) }
+    var scientificName          by remember { mutableStateOf(TextFieldValue()) }
+    var individualsCount        by remember { mutableStateOf(1) }
+    var selectedAnimalType      by remember { mutableStateOf<String?>(null) }
     var selectedObservationType by remember { mutableStateOf<String?>(null) }
-    var observations by remember { mutableStateOf(TextFieldValue()) }
+    var observations            by remember { mutableStateOf(TextFieldValue()) }
 
     Column(
         modifier = modifier
@@ -50,8 +57,6 @@ fun FormularioEspecies(navController: NavController, modifier: Modifier = Modifi
             .background(Color.White)
     ) {
         Header_Formulario(green100, navController)
-
-        Spacer(modifier = Modifier.height(16.dp))
 
         Column(
             modifier = modifier
@@ -61,18 +66,22 @@ fun FormularioEspecies(navController: NavController, modifier: Modifier = Modifi
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                    .fillMaxHeight(),
+                verticalArrangement = Arrangement.SpaceEvenly
             ) {
+                /// El numero de transecto
                 OutlinedTextField(
                     value = transectoNumber,
                     onValueChange = { transectoNumber = it },
                     label = { Text("Número de Transecto") },
                     modifier = Modifier.fillMaxWidth()
                 )
+                ////
 
+                /// Tipo de animal
                 Tipo_de_animal(selectedAnimalType = selectedAnimalType, onAnimalTypeSelected = { selectedAnimalType = it }, primaryGreen = green100)
 
+                /// Nombre comun y cientifico
                 OutlinedTextField(
                     value = commonName,
                     onValueChange = { commonName = it },
@@ -89,27 +98,11 @@ fun FormularioEspecies(navController: NavController, modifier: Modifier = Modifi
 
                 Contador_numero_individuos(individualsCount = individualsCount, onCountChange = { individualsCount = it })
 
-                Evidencia_observacion(selectedObservationType = selectedObservationType, onObservationTypeSelected = { selectedObservationType = it }, green100 = green100, green700 = green700)
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Button(
-                        onClick = { /* Handle file selection */ },
-                        modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.buttonColors(containerColor = green700)
-                    ) {
-                        Text("Elige archivo")
-                    }
-                    Button(
-                        onClick = { /* Handle photo capture */ },
-                        modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.buttonColors(containerColor = green700)
-                    ) {
-                        Text("Tomar foto")
-                    }
-                }
+                Tipo_observacion(selectedObservationType = selectedObservationType, onObservationTypeSelected = { selectedObservationType = it }, green100 = green100, green700 = green700)
 
+                Botones_captura(green700)
+
+                // Campo de observaciones
                 OutlinedTextField(
                     value = observations,
                     onValueChange = { observations = it },
@@ -143,6 +136,45 @@ fun FormularioEspecies(navController: NavController, modifier: Modifier = Modifi
         }
     }
 }
+
+//////////////// PARA LOS BOTONES DE CAPTURAR //////////////////
+@Composable
+private fun Botones_captura(green700: Color) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Boton_seleccionar_archivo(green700)
+        Boton_abrir_camara(green700)
+    }
+}
+
+@Composable
+private fun Boton_abrir_camara(green700: Color) {
+    Button(
+        onClick = { /* Handle photo capture */ },
+        colors = ButtonDefaults.buttonColors(containerColor = green700)
+    ) {
+        Icon(Icons.Default.Camera, contentDescription = "Tomar foto")
+        Spacer(modifier = Modifier.width(10.dp))
+        Text("Tomar foto")
+    }
+}
+
+@Composable
+private fun Boton_seleccionar_archivo(green700: Color) {
+    Button(
+        onClick = { /* Handle file selection */ },
+        colors = ButtonDefaults.buttonColors(containerColor = green700)
+    ) {
+        Icon(Icons.Default.FileOpen, contentDescription = "Seleccionar archivo")
+        Spacer(modifier = Modifier.width(10.dp))
+        Text("Elige archivo")
+    }
+}
+////////////////////////////////////////////////////////////////
+
+////////////// PARA EL TIPO DE ANIMAL //////////////////
 data class AnimalType(val name: String, val icon: Int)
 
 val animalTypes = listOf(
@@ -174,9 +206,38 @@ private fun Tipo_de_animal(
         }
     }
 }
-
 @Composable
-private fun Evidencia_observacion(
+fun AnimalTypeButton(
+    text: String,
+    iconRes: Int,
+    selected: String?,
+    selectedColor: Color,
+    onClick: () -> Unit
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .border(
+                width = 1.dp,
+                color = if (selected == text) selectedColor else Color.Gray,
+                shape = RoundedCornerShape(8.dp)
+            )
+            .padding(8.dp)
+            .clickable(onClick = onClick)
+    ) {
+        Image(
+            painter = painterResource(id = iconRes),
+            contentDescription = text,
+            modifier = Modifier.size(40.dp)
+        )
+        Text(text, style = MaterialTheme.typography.bodySmall)
+    }
+}
+///////////////////////////////////////////////////////////
+
+/// PARA LAS OBSERVACIONES
+@Composable
+private fun Tipo_observacion(
     selectedObservationType: String?,
     onObservationTypeSelected: (String) -> Unit,
     green100: Color,
@@ -192,34 +253,6 @@ private fun Evidencia_observacion(
         ObservationTypeButton("Rastro", R.drawable.ic_ave, selectedObservationType, green100) { onObservationTypeSelected("Rastro") }
         ObservationTypeButton("Cacería", R.drawable.ic_reptil, selectedObservationType, green100) { onObservationTypeSelected("Cacería") }
         ObservationTypeButton("Les dijeron", R.drawable.ic_reptil, selectedObservationType, green100) { onObservationTypeSelected("Les dijeron") }
-    }
-}
-
-@Composable
-private fun Contador_numero_individuos(
-    individualsCount: Int,
-    onCountChange: (Int) -> Unit
-) {
-    Text("Número de individuos")
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        IconButton(
-            onClick = { if (individualsCount > 0) onCountChange(individualsCount - 1) }
-        ) {
-            Text("-", style = MaterialTheme.typography.headlineMedium)
-        }
-        Text(
-            text = individualsCount.toString(),
-            style = MaterialTheme.typography.headlineMedium
-        )
-        IconButton(
-            onClick = { onCountChange(individualsCount + 1) }
-        ) {
-            Text("+", style = MaterialTheme.typography.headlineMedium)
-        }
     }
 }
 @Composable
@@ -249,33 +282,38 @@ fun ObservationTypeButton(
         Text(text, style = MaterialTheme.typography.bodySmall)
     }
 }
+////////////////////////////
+
+/// PARA EL CONTADOR DE INDIVIDUOS
 @Composable
-fun AnimalTypeButton(
-    text: String,
-    iconRes: Int,
-    selected: String?,
-    selectedColor: Color,
-    onClick: () -> Unit
+private fun Contador_numero_individuos(
+    individualsCount: Int,
+    onCountChange: (Int) -> Unit
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .border(
-                width = 1.dp,
-                color = if (selected == text) selectedColor else Color.Gray,
-                shape = RoundedCornerShape(8.dp)
-            )
-            .padding(8.dp)
-            .clickable(onClick = onClick)
+    Text("Número de individuos")
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
-            painter = painterResource(id = iconRes),
-            contentDescription = text,
-            modifier = Modifier.size(40.dp)
+        IconButton(
+            onClick = { if (individualsCount > 0) onCountChange(individualsCount - 1) }
+        ) {
+            Text("-", style = MaterialTheme.typography.headlineMedium)
+        }
+        Text(
+            text = individualsCount.toString(),
+            style = MaterialTheme.typography.headlineMedium
         )
-        Text(text, style = MaterialTheme.typography.bodySmall)
+        IconButton(
+            onClick = { onCountChange(individualsCount + 1) }
+        ) {
+            Text("+", style = MaterialTheme.typography.headlineMedium)
+        }
     }
 }
+////////////////////////////
+
 
 @Composable
 private fun Header_Formulario(
@@ -286,7 +324,7 @@ private fun Header_Formulario(
         modifier = Modifier
             .fillMaxWidth()
             .background(green100)
-            .padding(top = 48.dp, bottom = 32.dp)
+            .padding(top = 24.dp, bottom = 18.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically
@@ -299,9 +337,11 @@ private fun Header_Formulario(
                 )
             }
             Text(
-                text = "Formulario",
-                style = MaterialTheme.typography.headlineMedium,
-                color = Color.Black,
+                text = "Especie en Transecto",
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                lineHeight = 35.sp
             )
         }
     }
