@@ -44,7 +44,7 @@ import com.example.koadex.ui.principal.KoadexViewModel
 fun FormularioCamaraTrampa(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    //viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
