@@ -36,7 +36,7 @@ import com.example.koadex.Views.Configuracion
 import com.example.koadex.Views.FormularioCamaraTrampa
 import com.example.koadex.Views.FormularioEspecies
 import com.example.koadex.Views.FormularioGeneral
-import com.example.koadex.Views.FormularioSeleccion
+import com.example.koadex.Views.FormularioSeleccionScreen
 import com.example.koadex.Views.InicioCarga
 import com.example.koadex.Views.InicioSesion
 import com.example.koadex.Views.Koadex
@@ -46,17 +46,19 @@ import com.example.koadex.Views.Principal
 import com.example.koadex.Views.Registro
 import com.example.koadex.Views.SeleccionForm
 import com.example.koadex.Views.Verificacion
+import com.example.koadex.Views.FormularioSeguimiento
+
 
 
 @Composable
-fun Navigation( account: Auth0,modifier: Modifier = Modifier) {
+fun Navigation( account: Auth0, modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "InicioCarga") {
         composable("InicioCarga") {
             InicioCarga(navController = navController)
         }
         composable("TiposForms") {
-            FormularioSeleccion(navController = navController)
+            FormularioSeleccionScreen(navController = navController)
         }
         composable("CamarasTrampa") {
             FormularioCamaraTrampa(navController = navController)
@@ -94,6 +96,9 @@ fun Navigation( account: Auth0,modifier: Modifier = Modifier) {
         }
         composable("FormularioEspecies"){
             FormularioEspecies(navController = navController)
+        }
+        composable("FormularioSeguimiento"){
+            FormularioSeguimiento(navController = navController)
         }
     }
 }
