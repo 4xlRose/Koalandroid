@@ -52,6 +52,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -59,6 +60,7 @@ import androidx.navigation.NavHostController
 import com.example.koadex.AppViewModelProvider
 import com.example.koadex.R
 import com.example.koadex.data.FormEntity
+import com.example.koadex.navigate.La_navegacion
 import com.example.koadex.ui.principal.KoadexViewModel
 import com.example.koadex.ui.theme.Gray300
 import com.example.koadex.ui.theme.Green100
@@ -77,7 +79,7 @@ fun Koadex(
             TopNavBar(navController)
         },
         bottomBar = {
-            BottomNavBar()
+            La_navegacion(navController)
         }
 
     ) {
@@ -337,121 +339,6 @@ fun KoadexContenido(
                     contentDescription = "More",
                     modifier = Modifier.fillMaxSize()
                 )
-            }
-        }
-    }
-
-    @Composable
-    fun BottomNavBar() {
-        var navBarSelect by remember { mutableStateOf("Búsqueda") }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(140.dp)
-                .background(Green100),
-            verticalAlignment = Alignment.Top,
-        ) {
-            Row(
-                modifier = Modifier
-                    .padding(15.dp)
-                    .fillMaxSize(),
-                horizontalArrangement = Arrangement.SpaceAround
-            ) {
-                val buttonSize = 40.dp
-                val textSize = 15.sp
-
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .width(100.dp)
-                        .clip(RoundedCornerShape(20.dp, 20.dp))
-                ) {
-                    val text = "Inicio"
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = if (navBarSelect == text)
-                            Modifier
-                                .background(Color.White)
-                                .fillMaxWidth()
-                        else
-                            Modifier.background(Color.Transparent)
-                    ) {
-                        IconToggleButton(
-                            modifier = Modifier.size(buttonSize),
-                            checked = false,
-                            onCheckedChange = { navBarSelect = text }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Outlined.Home,
-                                contentDescription = text,
-                                modifier = Modifier.fillMaxSize()
-                            )
-                        }
-                    }
-                    Text(text = text, fontSize = textSize)
-                }
-
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .width(100.dp)
-                        .clip(RoundedCornerShape(20.dp, 20.dp))
-                ) {
-                    val text = "Búsqueda"
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = if (navBarSelect == text)
-                            Modifier
-                                .background(Color(0xB4D68F))
-                                .fillMaxWidth()
-                        else
-                            Modifier.background(Color.Transparent)
-                    ) {
-                        IconToggleButton(
-                            modifier = Modifier.size(buttonSize),
-                            checked = false,
-                            onCheckedChange = { navBarSelect = text }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Outlined.Search,
-                                contentDescription = text,
-                                modifier = Modifier.fillMaxSize()
-                            )
-                        }
-                    }
-                    Text(text = text, fontSize = textSize)
-                }
-
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .width(100.dp)
-                        .clip(RoundedCornerShape(20.dp, 20.dp))
-                ) {
-                    val text = "Configuración"
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = if (navBarSelect == text)
-                            Modifier
-                                .background(Color.White)
-                                .fillMaxWidth()
-                        else
-                            Modifier.background(Color.Transparent)
-                    ) {
-                        IconToggleButton(
-                            modifier = Modifier.size(buttonSize),
-                            checked = false,
-                            onCheckedChange = { navBarSelect = text }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Outlined.Settings,
-                                contentDescription = text,
-                                modifier = Modifier.fillMaxSize()
-                            )
-                        }
-                    }
-                    Text(text = text, fontSize = textSize)
-                }
             }
         }
     }

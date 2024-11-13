@@ -1,6 +1,8 @@
 package com.example.koadex.Views
 
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -22,8 +24,10 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.koadex.R
+import com.example.koadex.ViewModels.FormularioEspeciesViewModel
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
@@ -31,9 +35,12 @@ fun Especies_preview(){
     Text("Hola Mundo")
 }
 
-@Composable
-fun FormularioEspecies(navController: NavController, modifier: Modifier = Modifier) {
 
+@Composable
+fun FormularioEspecies(
+    formEspecieViewModel: FormularioEspeciesViewModel = viewModel(),
+    navController: NavController, modifier: Modifier = Modifier) {
+    val formUi by formEspecieViewModel.uiState.collectAsState()
     val green100 = colorResource(id = R.color.green_100)
     val green700 = colorResource(id = R.color.green_700)
 
@@ -41,7 +48,7 @@ fun FormularioEspecies(navController: NavController, modifier: Modifier = Modifi
     var commonName by remember { mutableStateOf(TextFieldValue()) }
     var scientificName by remember { mutableStateOf(TextFieldValue()) }
     //var individualsCount by remember { mutableStateOf(1) }
-    var individualsCount by remember { mutableStateOf<Int?>(1) }
+    var individualsCount by remember { formUi.entero }
     var selectedAnimalType by remember { mutableStateOf<String?>(null) }
     var selectedObservationType by remember { mutableStateOf<String?>(null) }
     var observations by remember { mutableStateOf(TextFieldValue()) }
@@ -89,7 +96,7 @@ fun FormularioEspecies(navController: NavController, modifier: Modifier = Modifi
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                individualsCount?.let { Contador_numero_individuos(individualsCount = it, onCountChange = { individualsCount = it }) }
+                individualsCount?.let { Contador_numero_individuos(formEspecieViewModel) }
 
                 Evidencia_observacion(selectedObservationType = selectedObservationType, onObservationTypeSelected = { selectedObservationType = it }, green100 = green100, green700 = green700)
                 Row(
@@ -145,6 +152,8 @@ fun FormularioEspecies(navController: NavController, modifier: Modifier = Modifi
         }
     }
 }
+
+
 data class AnimalType(val name: String, val icon: Int)
 
 val animalTypes = listOf(
@@ -199,8 +208,7 @@ private fun Evidencia_observacion(
 
 @Composable
 private fun Contador_numero_individuos(
-    individualsCount: Int,
-    onCountChange: (Int) -> Unit
+    formUi: FormularioEspeciesViewModel
 ) {
     Text("Número de individuos")
     Row(
@@ -209,24 +217,16 @@ private fun Contador_numero_individuos(
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(
-            onClick = { if (individualsCount > 0) onCountChange(individualsCount - 1) }
+            onClick = { formUi.enteroMenosUno() }
         ) {
             Text("-", style = MaterialTheme.typography.headlineMedium)
         }
 
         OutlinedTextField(
-            value = verificacion_contador(individualsCount).toString(),
+            value = formUi.entero.toString(),
             label = {},
             onValueChange = {
-                if (it.isEmpty()) {
-                    onCountChange(1)
-                }
-                else if (it.toIntOrNull() == null) {
-                    onCountChange(1)
-                }
-                else if (it.toIntOrNull() != null) {
-                    onCountChange(it.toInt())
-                }
+                formUi.updateEnteroInput(it.toIntOrNull() ?: 1)
             },
             modifier = Modifier.width(120.dp),
             textStyle = MaterialTheme.typography.headlineMedium
@@ -237,20 +237,11 @@ private fun Contador_numero_individuos(
             style = MaterialTheme.typography.headlineMedium
         )*/
         IconButton(
-            onClick = { onCountChange(individualsCount + 1) }
+            onClick = { formUi.enteroMasUno() }
         ) {
             Text("+", style = MaterialTheme.typography.headlineMedium)
         }
     }
-}
-
-private fun verificacion_contador(individualsCount: Int): Int {
-    if (individualsCount < 0)
-        return individualsCount*-1
-    else if (individualsCount == 0)
-        return 1
-    else
-        return individualsCount
 }
 
 @Composable

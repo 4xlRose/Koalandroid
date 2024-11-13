@@ -131,7 +131,7 @@ fun FormularioGeneralEntry(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .verticalScroll(rememberScrollState())
-            .padding(16.dp,top=52.dp)
+            .padding(16.dp,top=82.dp)
             .fillMaxSize()
             .background(Color.White)
 
@@ -295,7 +295,7 @@ fun FormInputForm(
             onValueChange = { onFormValueChange(formDetails.copy(date = it)) },
             modifier = Modifier
                 .width(180.dp)
-                .offset(26.dp)
+
         )
 
     }
@@ -312,7 +312,7 @@ fun FormInputForm(
             onValueChange = { onFormValueChange(formDetails.copy(place = it)) },
             modifier = Modifier
                 .width(262.dp)
-                .offset(26.dp)
+
         )
 
     }
@@ -328,7 +328,7 @@ fun FormInputForm(
             label = { Text("Hora") },
             onValueChange = { onFormValueChange(formDetails.copy(hour = it)) },
             modifier = Modifier
-                .offset(26.dp)
+
                 .width(320.dp)
         )
     }
