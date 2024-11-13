@@ -5,8 +5,6 @@ plugins {
     alias(libs.plugins.compose.compiler)
 }
 
-
-
 android {
     namespace = "com.example.koadex"
     compileSdk = 34
@@ -58,6 +56,8 @@ android {
 }
 
 dependencies{
+    implementation(libs.junit.junit)
+    implementation(libs.androidx.core.testing)
     /*Room*/
     ksp(libs.androidx.room.compiler.v250)
     implementation(libs.room.runtime)
@@ -91,5 +91,31 @@ dependencies{
     /*Auth0*/
     implementation(libs.auth0)
 
+    // Dependencia para pruebas con coroutines
+    testImplementation (libs.kotlinx.coroutines.test)
+
+    // Otras dependencias de prueba necesarias
+    androidTestImplementation (libs.mockk.android.v1123)
+
+    testImplementation(libs.mockk.v1135)
+
+
+    testImplementation (libs.junit) // Versión actual de JUnit 4
+    androidTestImplementation (libs.androidx.junit.v113) // JUnit para pruebas de Android
+    androidTestImplementation (libs.androidx.espresso.core.v340)
+
+    // Para pruebas de coroutines, si usas coroutines en tu ViewModel
+    testImplementation (libs.kotlinx.coroutines.test) // Actualiza según tu versión
+
+    testImplementation (libs.androidx.core.testing.v220)
+
+    testImplementation (libs.kotlinx.coroutines.test.v170) // Para coroutines en pruebas
+    testImplementation (libs.mockk.jvm) // Dependencia para soporte JVM (si es necesario)
+
+    testImplementation(libs.mockk.android)
+
+
 
 }
+
+
