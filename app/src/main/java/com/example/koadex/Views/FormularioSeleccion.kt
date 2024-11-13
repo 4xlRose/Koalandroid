@@ -127,6 +127,7 @@ fun FormularioSeleccionScreen(
                 text = "Variables Climáticas",
                 onClick = { navController.navigate("") },
                 modifier = Modifier.fillMaxWidth()
+
             )
         }
 
