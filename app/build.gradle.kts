@@ -91,5 +91,10 @@ dependencies{
     /*Auth0*/
     implementation(libs.auth0)
 
+    // Prueba unitaria
+    implementation (platform("androidx.compose:compose-bom:2023.08.00"))
+    androidTestImplementation(platform("androidx.compose:compose-bom:2023.06.01"))
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+    testImplementation("junit:junit:4.13.2")
 
 }

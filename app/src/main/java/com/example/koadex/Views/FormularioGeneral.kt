@@ -57,6 +57,7 @@ import com.example.koadex.ui.form.FormEntryViewModel
 
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
@@ -88,6 +89,9 @@ fun FormularioGeneral(
                 navController.navigate("Principal")
             }
         },
+        onDateChange = { newDate ->
+            viewModel.updateUiState(viewModel.formUiState.formDetails.copy(date = newDate))
+        },
         modifier = modifier
     )
 }
@@ -97,6 +101,7 @@ fun FormularioGeneralEntry(
     navController: NavHostController,
     formUiState: FormUiState,
     onFormValueChange: (FormDetails) -> Unit,
+    onDateChange: (String) -> Unit,
     onSaveClick: () -> Unit,
     modifier: Modifier
 ) {
@@ -148,6 +153,9 @@ fun FormularioGeneralEntry(
         FormInputForm(
             formDetails = formUiState.formDetails,
             onFormValueChange = onFormValueChange,
+            onDateChange = { newDate ->
+                onFormValueChange(formUiState.formDetails.copy(date = newDate))
+            },
             modifier = Modifier
         )
 
@@ -271,9 +279,24 @@ fun FormularioGeneralEntry(
 fun FormInputForm(
     formDetails: FormDetails,
     onFormValueChange: (FormDetails) -> Unit,
+    onDateChange: (String) -> Unit,
     modifier: Modifier,
     enabled: Boolean = true
 ) {
+    var dateText by remember { mutableStateOf(formDetails.date) }
+
+    // Formatear la fecha a dd/mm/aa
+    fun formatFecha(input: String): String {
+        if (input.length == 6) {
+            val dia = input.substring(0, 2)
+            val mes = input.substring(2, 4)
+            val anio = input.substring(4, 6)
+            return "$dia/$mes/$anio"
+        }
+        return input
+    }
+
+
     OutlinedTextField(
         value = formDetails.name,
         label = { Text("Nombre") },
@@ -291,9 +314,14 @@ fun FormInputForm(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         OutlinedTextField(
-            value = formDetails.date,
-            label = { Text("Fecha") },
-            onValueChange = { onFormValueChange(formDetails.copy(date = it)) },
+            value = dateText,
+            onValueChange = {
+                if (it.length <= 6) {
+                    dateText = formatFecha(it)
+                    onDateChange(dateText)
+                }
+            },
+            label = { Text(stringResource(R.string.fecha)) },
             modifier = Modifier
                 .width(180.dp)
                 .offset(26.dp)
