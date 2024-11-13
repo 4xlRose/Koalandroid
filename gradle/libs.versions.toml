@@ -1,8 +1,10 @@
 [versions]
 agp = "8.6.0"
 androidxJunit = "1.1.3"
+core = "1.6.1"
 coreTestingVersion = "2.2.0"
 espressoCoreVersion = "3.4.0"
+jetbrainsKotlinxCoroutinesTest = "1.9.0"
 kotlin = "2.0.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -21,6 +23,8 @@ mockk = "1.13.0"
 mockkAndroid = "1.13.5"
 mockkAndroidVersion = "1.12.3"
 mockkJvm = "1.13.5"
+mockkMockk = "1.13.13"
+mockkMockkAndroid = "1.13.13"
 mockkVersion = "1.13.5"
 navigationCompose = "2.8.2"
 foundationAndroid = "1.7.4"
@@ -38,6 +42,7 @@ coreTesting = "2.1.0"
 
 
 [libraries]
+androidx-core = { module = "androidx.test:core", version.ref = "core" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-core-testing-v220 = { module = "androidx.arch.core:core-testing", version.ref = "coreTestingVersion" }
 androidx-espresso-core-v340 = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCoreVersion" }
@@ -59,6 +64,7 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version.ref = "foundationAndroid" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 kotlinx-coroutines-test-v170 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTestVersion" }
+kotlinx-coroutines-test-v190 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "jetbrainsKotlinxCoroutinesTest" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
 mockito-core-v481 = { module = "org.mockito:mockito-core", version.ref = "mockitoCoreVersion" }
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
@@ -66,7 +72,9 @@ mockito-kotlin-v410 = { module = "org.mockito.kotlin:mockito-kotlin", version.re
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockkAndroid" }
 mockk-android-v1123 = { module = "io.mockk:mockk-android", version.ref = "mockkAndroidVersion" }
+mockk-android-v11313 = { module = "io.mockk:mockk-android", version.ref = "mockkMockkAndroid" }
 mockk-jvm = { module = "io.mockk:mockk-jvm", version.ref = "mockkJvm" }
+mockk-v11313 = { module = "io.mockk:mockk", version.ref = "mockkMockk" }
 mockk-v1135 = { module = "io.mockk:mockk", version.ref = "mockkVersion" }
 room = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }

@@ -91,28 +91,20 @@ dependencies{
     /*Auth0*/
     implementation(libs.auth0)
 
-    // Dependencia para pruebas con coroutines
-    testImplementation (libs.kotlinx.coroutines.test)
-
     // Otras dependencias de prueba necesarias
+    //testImplementation(libs.mockk.v11313)
+    androidTestImplementation(libs.androidx.core)
     androidTestImplementation (libs.mockk.android.v1123)
+    //androidTestImplementation (libs.mockk.android.v11313)
 
-    testImplementation(libs.mockk.v1135)
 
-
-    testImplementation (libs.junit) // Versión actual de JUnit 4
-    androidTestImplementation (libs.androidx.junit.v113) // JUnit para pruebas de Android
+    testImplementation (libs.junit)
+    androidTestImplementation (libs.androidx.junit.v113)
     androidTestImplementation (libs.androidx.espresso.core.v340)
+    //testImplementation (libs.androidx.core.testing.v220)
 
-    // Para pruebas de coroutines, si usas coroutines en tu ViewModel
-    testImplementation (libs.kotlinx.coroutines.test) // Actualiza según tu versión
+    testImplementation (libs.kotlinx.coroutines.test.v190)
 
-    testImplementation (libs.androidx.core.testing.v220)
-
-    testImplementation (libs.kotlinx.coroutines.test.v170) // Para coroutines en pruebas
-    testImplementation (libs.mockk.jvm) // Dependencia para soporte JVM (si es necesario)
-
-    testImplementation(libs.mockk.android)
 
 
 
