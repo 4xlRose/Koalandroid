@@ -5,8 +5,6 @@ plugins {
     alias(libs.plugins.compose.compiler)
 }
 
-
-
 android {
     namespace = "com.example.koadex"
     compileSdk = 34
@@ -58,6 +56,8 @@ android {
 }
 
 dependencies{
+    implementation(libs.junit.junit)
+    implementation(libs.androidx.core.testing)
     /*Room*/
     ksp(libs.androidx.room.compiler.v250)
     implementation(libs.room.runtime)
@@ -91,5 +91,28 @@ dependencies{
     /*Auth0*/
     implementation(libs.auth0)
 
+    // Otras dependencias de prueba necesarias
+    //testImplementation(libs.mockk.v11313)
+    androidTestImplementation(libs.androidx.core)
+    androidTestImplementation (libs.mockk.android.v1123)
+    //androidTestImplementation (libs.mockk.android.v11313)
+
+
+    testImplementation (libs.junit)
+    androidTestImplementation (libs.androidx.junit.v113)
+    androidTestImplementation (libs.androidx.espresso.core.v340)
+    //testImplementation (libs.androidx.core.testing.v220)
+
+    testImplementation (libs.kotlinx.coroutines.test.v190)
+
+    /*Camara*/
+    implementation(libs.androidx.camera.core)
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.video)
+    implementation(libs.androidx.camera.view)
+    implementation(libs.androidx.camera.extensions)
 
 }
+
+

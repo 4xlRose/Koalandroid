@@ -21,11 +21,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.koadex.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FormularioScreen() {
+public fun FormularioSeguimiento(navController: NavHostController, modifier: Modifier = Modifier) {
     var numIndividuos by remember { mutableStateOf(1) }
     var alturaObservacion by remember { mutableStateOf("") }
     var tipoAnimalSeleccionado by remember { mutableStateOf("") }
@@ -42,7 +44,7 @@ fun FormularioScreen() {
         TopAppBar(
             title = { Text("Formulario", color = Color.Black) },
             navigationIcon = {
-                IconButton(onClick = { /* Acción para regresar */ }) {
+                IconButton(onClick = { navController.navigate("TiposForms") }) {
                     Icon(Icons.Filled.ArrowBack, contentDescription = "Atrás")
                 }
             },
@@ -239,5 +241,5 @@ fun TipoObservacionButton(text: String, isSelected: Boolean, iconRes: Int, onCli
 @Preview(showBackground = true)
 @Composable
 fun PreviewFormularioScreen() {
-    FormularioScreen()
+    FormularioSeguimiento(navController = rememberNavController(), modifier = Modifier)
 }

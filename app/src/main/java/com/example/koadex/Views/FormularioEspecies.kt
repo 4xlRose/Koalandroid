@@ -41,13 +41,12 @@ fun FormularioEspecies(navController: NavController, modifier: Modifier = Modifi
     // Variables para los colores
     val green100 = colorResource(id = R.color.green_100)
     val green700 = colorResource(id = R.color.green_700)
-
-    // Variables para los campos -> pasaremos a guardarlas en la base de datos
-    var transectoNumber         by remember { mutableStateOf(TextFieldValue()) }
-    var commonName              by remember { mutableStateOf(TextFieldValue()) }
-    var scientificName          by remember { mutableStateOf(TextFieldValue()) }
-    var individualsCount        by remember { mutableStateOf(1) }
-    var selectedAnimalType      by remember { mutableStateOf<String?>(null) }
+    var transectoNumber by remember { mutableStateOf(TextFieldValue()) }
+    var commonName by remember { mutableStateOf(TextFieldValue()) }
+    var scientificName by remember { mutableStateOf(TextFieldValue()) }
+    //var individualsCount by remember { mutableStateOf(1) }
+    var individualsCount by remember { mutableStateOf<Int?>(1) }
+    var selectedAnimalType by remember { mutableStateOf<String?>(null) }
     var selectedObservationType by remember { mutableStateOf<String?>(null) }
     var observations            by remember { mutableStateOf(TextFieldValue()) }
 
@@ -96,7 +95,7 @@ fun FormularioEspecies(navController: NavController, modifier: Modifier = Modifi
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                Contador_numero_individuos(individualsCount = individualsCount, onCountChange = { individualsCount = it })
+                individualsCount?.let { Contador_numero_individuos(individualsCount = it, onCountChange = { individualsCount = it }) }
 
                 Tipo_observacion(selectedObservationType = selectedObservationType, onObservationTypeSelected = { selectedObservationType = it }, green100 = green100, green700 = green700)
 
@@ -207,7 +206,64 @@ private fun Tipo_de_animal(
     }
 }
 @Composable
-fun AnimalTypeButton(
+
+private fun Contador_numero_individuos(
+    individualsCount: Int,
+    onCountChange: (Int) -> Unit
+) {
+    Text("Número de individuos")
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        IconButton(
+            onClick = { if (individualsCount > 0) onCountChange(individualsCount - 1) }
+        ) {
+            Text("-", style = MaterialTheme.typography.headlineMedium)
+        }
+
+        OutlinedTextField(
+            value = verificacion_contador(individualsCount).toString(),
+            label = {},
+            onValueChange = {
+                if (it.isEmpty()) {
+                    onCountChange(1)
+                }
+                else if (it.toIntOrNull() == null) {
+                    onCountChange(1)
+                }
+                else if (it.toIntOrNull() != null) {
+                    onCountChange(it.toInt())
+                }
+            },
+            modifier = Modifier.width(120.dp),
+            textStyle = MaterialTheme.typography.headlineMedium
+        )
+
+       /* Text(
+            text = if(individualsCount <= 0) "1" else individualsCount.toString(),
+            style = MaterialTheme.typography.headlineMedium
+        )*/
+        IconButton(
+            onClick = { onCountChange(individualsCount + 1) }
+        ) {
+            Text("+", style = MaterialTheme.typography.headlineMedium)
+        }
+    }
+}
+
+private fun verificacion_contador(individualsCount: Int): Int {
+    if (individualsCount < 0)
+        return individualsCount*-1
+    else if (individualsCount == 0)
+        return 1
+    else
+        return individualsCount
+}
+
+@Composable
+fun ObservationTypeButton(
     text: String,
     iconRes: Int,
     selected: String?,
@@ -329,7 +385,7 @@ private fun Header_Formulario(
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = { navController.navigate("Principal") }) {
+            IconButton(onClick = { navController.navigate("TiposForms") }) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = "Back",

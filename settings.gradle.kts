@@ -1,6 +1,5 @@
 pluginManagement {
     repositories {
-
         google {
             content {
                 includeGroupByRegex("com\\.android.*")
@@ -10,6 +9,7 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
+        jcenter()
     }
 }
 dependencyResolutionManagement {
@@ -19,6 +19,8 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
+
+
 
 rootProject.name = "Koadex"
 include(":app")

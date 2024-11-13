@@ -130,7 +130,7 @@ private fun Bienvenida_Agregar_formulario(
 
         // El boton
         FloatingActionButton(
-            onClick = { navController.navigate("SeleccionForm") },
+            onClick = { navController.navigate("FormularioGeneral") },
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .offset(y = 20.dp),
