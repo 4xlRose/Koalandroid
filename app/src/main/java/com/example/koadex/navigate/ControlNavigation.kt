@@ -64,8 +64,6 @@ fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modi
         composable("InicioCarga") {
             InicioCarga(navController = navController)
         }
-
-
         composable("InicioSesion") {
             InicioSesion(navController = navController,account)
         }
