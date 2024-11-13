@@ -1,6 +1,5 @@
 package com.example.koadex.Views
 
-
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -62,10 +61,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.koadex.AppViewModelProvider
-import com.example.koadex.ui.form.FormDetails
-
-
-import com.example.koadex.ui.form.FormUiState
 
 
 import kotlinx.coroutines.launch
@@ -95,8 +90,8 @@ fun FormularioGeneral(
 @Composable
 fun FormularioGeneralEntry(
     navController: NavHostController,
-    formUiState: FormUiState,
-    onFormValueChange: (FormDetails) -> Unit,
+    formUiState: FormEntryViewModel.FormUiState,
+    onFormValueChange: (FormEntryViewModel.FormDetails) -> Unit,
     onSaveClick: () -> Unit,
     modifier: Modifier
 ) {
@@ -269,13 +264,13 @@ fun FormularioGeneralEntry(
 
 @Composable
 fun FormInputForm(
-    formDetails: FormDetails,
-    onFormValueChange: (FormDetails) -> Unit,
+    formDetails: FormEntryViewModel.FormDetails,
+    onFormValueChange: (FormEntryViewModel.FormDetails) -> Unit,
     modifier: Modifier,
     enabled: Boolean = true
 ) {
     OutlinedTextField(
-        value = formDetails.name,
+        value = formDetails.idUser,
         label = { Text("Nombre") },
         onValueChange = { onFormValueChange(formDetails.copy(name = it)) },
         modifier = Modifier

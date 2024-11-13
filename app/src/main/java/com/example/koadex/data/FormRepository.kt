@@ -5,13 +5,14 @@ import kotlinx.coroutines.flow.Flow
 
 interface FormRepository {
 
-    fun getAllForms(): Flow<List<FormEntity>>
+    fun getAllForms(): Flow<List<GeneralFormEntity>>
+    fun getForm(id: Int): Flow<GeneralFormEntity?>
 
-    fun getForm(id: Int): Flow<FormEntity?>
+    suspend fun insertForm(formGeneral: GeneralFormEntity)
+    suspend fun updateForm(formGeneral: GeneralFormEntity)
+    suspend fun deleteForm(formGeneral: GeneralFormEntity)
 
-    suspend fun insertForm(form: FormEntity)
-    suspend fun updateForm(form: FormEntity)
-    suspend fun deleteForm(form: FormEntity)
+    fun getAllUsers(): Flow<List<UserEntity>>
 }
 
 
