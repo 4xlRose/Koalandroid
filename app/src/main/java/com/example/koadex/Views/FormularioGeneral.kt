@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material.icons.rounded.LocationOn
 import androidx.compose.material3.Button
@@ -31,7 +32,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.OutlinedIconToggleButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -57,6 +61,7 @@ import com.example.koadex.ui.form.FormEntryViewModel
 
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
@@ -78,18 +83,39 @@ fun FormularioGeneral(
     viewModel: FormEntryViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
-    FormularioGeneralEntry(
-        navController = navController,
-        formUiState = viewModel.formUiState,
-        onFormValueChange = viewModel::updateUiState,
-        onSaveClick = {
-            coroutineScope.launch {
-                viewModel.saveForm()
-                navController.navigate("Principal")
-            }
-        },
-        modifier = modifier
-    )
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            TopAppBar(
+                title = { Text(text = stringResource(id = R.string.formulario)) },
+                navigationIcon = {
+                    IconButton(onClick = { navController.navigate("TiposForms") }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = stringResource(id = R.string.atras)
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color(0xFFB4D68F)
+                )
+            )
+        }
+    ) { paddingValues ->
+        FormularioGeneralEntry(
+            navController = navController,
+            formUiState = viewModel.formUiState,
+            onFormValueChange = viewModel::updateUiState,
+            onSaveClick = {
+                coroutineScope.launch {
+                    viewModel.saveForm()
+                    navController.navigate("TiposForms")
+                }
+            },
+            modifier = modifier.padding(paddingValues)
+        )
+    }
+
 }
 
 @Composable
@@ -100,15 +126,13 @@ fun FormularioGeneralEntry(
     onSaveClick: () -> Unit,
     modifier: Modifier
 ) {
-    val textModifier = Modifier // Define it here
-        .fillMaxWidth()
-        .padding(10.dp)
-        .height(40.dp)
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .verticalScroll(rememberScrollState())
-            .padding(top = 32.dp)
+            .padding(16.dp,top=52.dp)
+            .fillMaxSize()
             .background(Color.White)
 
     ) {
@@ -117,34 +141,6 @@ fun FormularioGeneralEntry(
             .fillMaxWidth()
             .padding(10.dp)
             .height(40.dp)
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(67.dp)
-                .background(color = colorResource(R.color.green_100)),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(
-                modifier = Modifier
-                    .padding(20.dp)
-                    .size(30.dp),
-                onClick = { navController.navigate("Principal") }
-                )
-             {
-                Icon(
-                    Icons.AutoMirrored.Rounded.ArrowBack,
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
-            Text(
-                text = "Formulario",
-                modifier = modifier
-                    .offset(x = 10.dp),
-                fontSize = 25.sp
-            )
-        }
-
         FormInputForm(
             formDetails = formUiState.formDetails,
             onFormValueChange = onFormValueChange,
@@ -256,8 +252,7 @@ fun FormularioGeneralEntry(
                 modifier = Modifier
                     .padding(40.dp)
                     .width(300.dp),
-                onClick = { onSaveClick
-                    ;navController.navigate("TiposForms")
+                onClick = { onSaveClick()
                      },
                 enabled = formUiState.isEntryValid
             ) {
@@ -274,21 +269,25 @@ fun FormInputForm(
     modifier: Modifier,
     enabled: Boolean = true
 ) {
-    OutlinedTextField(
-        value = formDetails.name,
-        label = { Text("Nombre") },
-        onValueChange = { onFormValueChange(formDetails.copy(name = it)) },
+    Row(
         modifier = Modifier
             .padding(10.dp)
-            .width(320.dp),
-        enabled = enabled
-    )
+            .fillMaxWidth(),
+    ) {
+        OutlinedTextField(
+            value = formDetails.name,
+            label = { Text("Nombre") },
+            onValueChange = { onFormValueChange(formDetails.copy(name = it)) },
+            modifier = Modifier
+                .width(320.dp),
+            enabled = enabled
+        )
+    }
 
     Row(
         modifier = Modifier
             .padding(10.dp)
             .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
     ) {
         OutlinedTextField(
             value = formDetails.date,
@@ -298,14 +297,14 @@ fun FormInputForm(
                 .width(180.dp)
                 .offset(26.dp)
         )
-        // ... (keep date picker button)
+
     }
 
     Row(
         modifier = Modifier
             .padding(10.dp)
             .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
+
     ) {
         OutlinedTextField(
             value = formDetails.place,
@@ -315,17 +314,24 @@ fun FormInputForm(
                 .width(262.dp)
                 .offset(26.dp)
         )
-        // ... (keep location button)
+
     }
 
-    OutlinedTextField(
-        value = formDetails.hour,
-        label = { Text("Hora") },
-        onValueChange = { onFormValueChange(formDetails.copy(hour = it)) },
+    Row(
         modifier = Modifier
             .padding(10.dp)
-            .width(320.dp)
-    )
+            .fillMaxWidth(),
+        //verticalAlignment = Alignment.CenterVertically,
+    ) {
+        OutlinedTextField(
+            value = formDetails.hour,
+            label = { Text("Hora") },
+            onValueChange = { onFormValueChange(formDetails.copy(hour = it)) },
+            modifier = Modifier
+                .offset(26.dp)
+                .width(320.dp)
+        )
+    }
 }
 
 @Composable

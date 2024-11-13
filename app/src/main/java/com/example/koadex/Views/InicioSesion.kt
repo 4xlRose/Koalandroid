@@ -54,7 +54,7 @@ fun InicioSesion(navController: NavHostController, account: Auth0, modifier: Mod
 
 @Composable
 fun IniciarSesionFondo(navController: NavHostController,account: Auth0, modifier: Modifier = Modifier) {
-    var loggedIn by remember { mutableStateOf(true) }
+    var loggedIn by remember { mutableStateOf(false) }
     var credentials by remember { mutableStateOf<Credentials?>(null) }
 
     val fondo = painterResource(R.drawable.login)
@@ -69,14 +69,7 @@ fun IniciarSesionFondo(navController: NavHostController,account: Auth0, modifier
                 .fillMaxSize()
         )
         if (loggedIn) {
-            IniciarSesionLogOutContenido(
-                navController = navController,
-                onLogout = {
-                    loggedIn = false
-                    credentials = null
-                },
-                modifier = Modifier
-            )
+            Principal(navController)
         } else {
             IniciarSesionLogInContenido(
                 navController = navController,
@@ -259,80 +252,3 @@ private fun loginWithUsernamePassword(
 }
 
 
-@Composable
-fun IniciarSesionLogOutContenido(
-    navController: NavHostController,
-    onLogout: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-   Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(start = 16.dp, top = 50.dp, end = 16.dp, bottom = 16.dp)
-    ) {
-        IconButton (
-            onClick = {
-                navController.navigate("InicioCarga")
-            }
-        ) {
-            Icon(
-                Icons.Filled.KeyboardArrowLeft, contentDescription = "Izquierda",
-                tint = Color.White,
-                modifier = Modifier
-                    .size(size = 50.dp)
-            )
-        }
-        Spacer(
-            modifier = modifier
-                .padding(50.dp)
-        )
-        Text(
-            text = stringResource(R.string.bienvenida),
-            fontSize = 40.sp,
-            color = Color.White,
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(
-            modifier = modifier
-                .padding(55.dp)
-        )
-        Text(
-            text = stringResource(R.string.iniciar_sesion2),
-            fontSize = 25.sp,
-            color = Color.Black,
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(
-            onClick = {
-                navController.navigate("Principal")
-            },
-            modifier = Modifier.padding(5.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = colorResource(id = R.color.verde_1)
-            )
-        ) {
-            Text (
-                text = stringResource(R.string.iniciar_sesion),
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
-        }
-
-       Button(
-           onClick = {
-               onLogout()
-           },
-           modifier = Modifier.padding(5.dp),
-           colors = ButtonDefaults.buttonColors(
-               containerColor = colorResource(id = R.color.verde_1)
-           )
-       ) {
-           Text (
-               text = stringResource(R.string.salir),
-               fontWeight = FontWeight.Bold,
-               color = Color.White
-           )
-       }
-    }
-}

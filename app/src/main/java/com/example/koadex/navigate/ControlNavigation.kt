@@ -1,5 +1,7 @@
 package com.example.koadex.navigate
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,11 +32,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.auth0.android.Auth0
+import com.example.koadex.MainActivity
 import com.example.koadex.R
 
 import com.example.koadex.Views.Configuracion
 import com.example.koadex.Views.FormularioCamaraTrampa
+import com.example.koadex.Views.FormularioCuadrante
 import com.example.koadex.Views.FormularioEspecies
+import com.example.koadex.Views.FormularioFaunaBusquedaLibre
+import com.example.koadex.Views.FormularioFaunaPuntoConteo
 import com.example.koadex.Views.FormularioGeneral
 import com.example.koadex.Views.FormularioSeleccionScreen
 import com.example.koadex.Views.InicioCarga
@@ -47,29 +53,23 @@ import com.example.koadex.Views.Registro
 import com.example.koadex.Views.SeleccionForm
 import com.example.koadex.Views.Verificacion
 import com.example.koadex.Views.FormularioSeguimiento
+import com.example.koadex.Views.FormularioVariablesClimaticas
 
 
-
+@RequiresApi(Build.VERSION_CODES.P)
 @Composable
-fun Navigation( account: Auth0, modifier: Modifier = Modifier) {
+fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "InicioCarga") {
         composable("InicioCarga") {
             InicioCarga(navController = navController)
         }
-        composable("TiposForms") {
-            FormularioSeleccionScreen(navController = navController)
-        }
-        composable("CamarasTrampa") {
-            FormularioCamaraTrampa(navController = navController)
-        }
+
+
         composable("InicioSesion") {
             InicioSesion(navController = navController,account)
         }
 
-        composable("FormularioGeneral") {
-            FormularioGeneral(navController = navController)
-        }
         composable("Koadex") {
             Koadex(navController = navController)
         }
@@ -79,9 +79,9 @@ fun Navigation( account: Auth0, modifier: Modifier = Modifier) {
         composable("Registro") {
             Registro(navController = navController)
         }
-        composable("SeleccionForm") {
+        /*composable("SeleccionForm") {
             SeleccionForm(navController = navController)
-        }
+        }*/
         composable("Configuracion"){
             Configuracion(navController = navController)
         }
@@ -94,14 +94,37 @@ fun Navigation( account: Auth0, modifier: Modifier = Modifier) {
         composable("Verificacion"){
             Verificacion(navController = navController)
         }
+        //Tipos de formulario
+        composable("FormularioGeneral") {
+            FormularioGeneral(navController = navController)
+        }
+        composable("TiposForms") {
+            FormularioSeleccionScreen(navController = navController)
+        }
         composable("FormularioEspecies"){
             FormularioEspecies(navController = navController)
+        }
+        composable("FormularioFaunaPuntoConteo"){
+            FormularioFaunaPuntoConteo(activity,navController = navController)
+        }
+        composable("FormularioFaunaBusquedaLibre"){
+            FormularioFaunaBusquedaLibre(activity,navController = navController)
+        }
+        composable("FormularioCuadrante"){
+            FormularioCuadrante(activity,navController = navController)
         }
         composable("FormularioSeguimiento"){
             FormularioSeguimiento(navController = navController)
         }
+        composable("CamarasTrampa") {
+            FormularioCamaraTrampa(activity,navController = navController)
+        }
+        composable("FormularioVariablesClimaticas") {
+            FormularioVariablesClimaticas(activity,navController = navController)
+        }
     }
 }
+
 // SECCION DE NAVEGACION //
 @Composable
 fun La_navegacion(
