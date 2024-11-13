@@ -122,6 +122,7 @@ fun FormularioGeneralEntry(
             .fillMaxWidth()
             .padding(10.dp)
             .height(40.dp)
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -264,8 +265,9 @@ fun FormularioGeneralEntry(
                 modifier = Modifier
                     .padding(40.dp)
                     .width(300.dp),
-                onClick = { onSaveClick
-                    ;navController.navigate("TiposForms")
+                onClick = {
+                    onSaveClick()
+                    navController.navigate("TiposForms")
                      },
                 enabled = formUiState.isEntryValid
             ) {
