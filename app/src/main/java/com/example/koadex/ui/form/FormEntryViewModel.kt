@@ -1,37 +1,38 @@
 package com.example.koadex.ui.form
 
 
-import androidx.compose.foundation.Image
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Apps
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
-import com.example.koadex.R
-import com.example.koadex.clases.User
 import com.example.koadex.data.AnimalTypeEntity
+import com.example.koadex.data.CameraEntity
+import com.example.koadex.data.CheckEntity
+import com.example.koadex.data.CheckListEntity
 import com.example.koadex.data.CoverageEntity
 import com.example.koadex.data.DisturbanceEntity
 import com.example.koadex.data.FollowUpFormEntity
-import com.example.koadex.data.FormDao
 import com.example.koadex.data.FormRepository
 import com.example.koadex.data.GeneralFormEntity
+import com.example.koadex.data.HabitatEntity
 import com.example.koadex.data.HeightTypeEntity
+import com.example.koadex.data.MidQuadrantEntity
 import com.example.koadex.data.ObservTypeEntity
+import com.example.koadex.data.QuadrantFormEntity
+import com.example.koadex.data.RouteFormEntity
 import com.example.koadex.data.SeasonEntity
 import com.example.koadex.data.SpecieFormEntity
+import com.example.koadex.data.SubQuadrantEntity
+import com.example.koadex.data.SuperQuadrantEntity
 import com.example.koadex.data.UserEntity
 import com.example.koadex.data.WeatherEntity
+import com.example.koadex.data.WeatherFormEntity
 import com.example.koadex.data.ZoneEntity
 import com.example.koadex.data.ZoneTypeEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import java.sql.Date
 import java.sql.Time
 import javax.inject.Inject
@@ -122,6 +123,92 @@ class FormEntryViewModel @Inject constructor(private val formRepository: FormRep
                     cropType.isNotEmpty() &&
                     idDisturbance >= 0 &&
                     evidences != Icons.Filled.Apps
+        }
+    }
+
+    // Quadrant Form
+    var quadrantFormUiState by mutableStateOf(QuadrantFormUiState())
+    fun quadrantFormUpdateUiState(formDetails: QuadrantFormDetails) {
+        quadrantFormUiState = QuadrantFormUiState(
+            formDetails = formDetails,
+            isEntryValid = validateQuadrantFormInput(formDetails)
+        )
+    }
+    suspend fun saveQuadrantForm() {
+        if (validateQuadrantFormInput()) {
+            formRepository.insertQuadrantForm(quadrantFormUiState.formDetails.toEntity())
+        }
+    }
+    private fun validateQuadrantFormInput(uiState: QuadrantFormDetails = quadrantFormUiState.formDetails): Boolean {
+        return with(uiState) {
+            idGeneralForm >= 0 &&
+                    idSuperQuadrant >= 0 &&
+                    idMidQuadrant >= 0 &&
+                    idSubQuadrant >= 0 &&
+                    specieName.isNotEmpty() &&
+                    scientificName.isNotEmpty() &&
+                    idHabitat >= 0 &&
+                    circumference >= 0 &&
+                    biomonitorMtSize >= 0 &&
+                    distanceMt >= 0 &&
+                    observations.isNotEmpty() &&
+                    heightMt >= 0 &&
+                    evidences != Icons.Filled.Apps
+        }
+    }
+
+    // Route Form
+    var routeFormUiState by mutableStateOf(RouteFormUiState())
+    fun routeFormUpdateUiState(formDetails: RouteFormDetails) {
+        routeFormUiState = RouteFormUiState(
+            formDetails = formDetails,
+            isEntryValid = validateRouteFormInput(formDetails)
+        )
+    }
+    suspend fun saveRouteForm() {
+        if (validateRouteFormInput()) {
+            formRepository.insertRouteForm(routeFormUiState.formDetails.toEntity())
+        }
+    }
+    private fun validateRouteFormInput(uiState: RouteFormDetails = routeFormUiState.formDetails): Boolean {
+        return with(uiState) {
+            idGeneralForm >= 0 &&
+                    idZoneType >= 0 &&
+                    idCamera >= 0 &&
+                    guayaPlate >= 0 &&
+                    routeWidth >= 0 &&
+                    targetDistance >= 0 &&
+                    lensHeight >= 0 &&
+                    idCheckList >= 0 &&
+                    evidences != Icons.Filled.Apps &&
+                    observations.isNotEmpty()
+        }
+    }
+
+
+    // Weather Form
+    var weatherFormUiState by mutableStateOf(WeatherFormUiState())
+    fun weatherFormUpdateUiState(formDetails: WeatherFormDetails) {
+        weatherFormUiState = WeatherFormUiState(
+            formDetails = formDetails,
+            isEntryValid = validateWeatherFormInput(formDetails)
+        )
+    }
+    suspend fun saveWeatherForm() {
+        if (validateWeatherFormInput()) {
+            formRepository.insertWeatherForm(weatherFormUiState.formDetails.toEntity())
+        }
+    }
+    private fun validateWeatherFormInput(uiState: WeatherFormDetails = weatherFormUiState.formDetails): Boolean {
+        return with(uiState) {
+            id >= 0 &&
+                    idGeneralForm >= 0 &&
+                    idZoneType >= 0 &&
+                    rainfall >= 0 &&
+                    maxTemperature >= 0 &&
+                    maxHumidity >= 0 &&
+                    minTemperature >= 0 &&
+                    streamMtLevel >= 0
         }
     }
 }
@@ -470,4 +557,304 @@ fun DisturbanceDetails.toEntity(): DisturbanceEntity = DisturbanceEntity(
 fun DisturbanceEntity.toFormDetails(): DisturbanceDetails = DisturbanceDetails(
     id = id,
     disturbance = disturbance
+)
+
+
+
+data class QuadrantFormUiState(
+    val formDetails: QuadrantFormDetails = QuadrantFormDetails(
+        id = 0,
+        idGeneralForm = 0, // Foreign Key
+        idSuperQuadrant = 0, // Foreign Key
+        idMidQuadrant = 0, // Foreign Key
+        idSubQuadrant = 0, // Foreign Key
+        specieName = "",
+        scientificName = "",
+        idHabitat = 0, // Foreign Key
+        circumference = 0, // decimal(2)
+        biomonitorMtSize = 0, // decimal(2)
+        distanceMt = 0, // decimal(2)
+        observations = "",
+        heightMt = 0, // decimal(2)
+        evidences = Icons.Filled.Apps
+    ),
+    val isEntryValid: Boolean = false
+)
+data class QuadrantFormDetails(
+    val id: Int = 0,
+    val idGeneralForm: Int, // Foreign Key
+    val idSuperQuadrant: Int, // Foreign Key
+    val idMidQuadrant: Int, // Foreign Key
+    val idSubQuadrant: Int, // Foreign Key
+    val specieName: String = "",
+    val scientificName: String = "",
+    val idHabitat: Int, // Foreign Key
+    val circumference: Int = 0, // decimal(2)
+    val biomonitorMtSize: Int = 0, // decimal(2)
+    val distanceMt: Int = 0, // decimal(2)
+    val observations: String = "",
+    val heightMt: Int = 0, // decimal(2)
+    val evidences: ImageVector
+)
+fun QuadrantFormDetails.toEntity(): QuadrantFormEntity = QuadrantFormEntity(
+    id = 0,
+    idGeneralForm = 0, // Foreign Key
+    idSuperQuadrant = 0, // Foreign Key
+    idMidQuadrant = 0, // Foreign Key
+    idSubQuadrant = 0, // Foreign Key
+    specieName = "",
+    scientificName = "",
+    idHabitat = 0, // Foreign Key
+    circumference = 0, // decimal(2)
+    biomonitorMtSize = 0, // decimal(2)
+    distanceMt = 0, // decimal(2)
+    observations = "",
+    heightMt = 0, // decimal(2)
+    evidences = Icons.Filled.Apps
+)
+fun QuadrantFormEntity.toFormDetails(): QuadrantFormDetails = QuadrantFormDetails(
+    id = 0,
+    idGeneralForm = 0, // Foreign Key
+    idSuperQuadrant = 0, // Foreign Key
+    idMidQuadrant = 0, // Foreign Key
+    idSubQuadrant = 0, // Foreign Key
+    specieName = "",
+    scientificName = "",
+    idHabitat = 0, // Foreign Key
+    circumference = 0, // decimal(2)
+    biomonitorMtSize = 0, // decimal(2)
+    distanceMt = 0, // decimal(2)
+    observations = "",
+    heightMt = 0, // decimal(2)
+    evidences = Icons.Filled.Apps
+)
+fun QuadrantFormEntity.toFormUiState(isEntryValid: Boolean = false): QuadrantFormUiState = QuadrantFormUiState(
+    formDetails = this.toFormDetails(),
+    isEntryValid = isEntryValid
+)
+
+
+
+data class SuperQuadrantDetails(
+    val id: Int = 0,
+    val quadrant: Char = ' '
+)
+fun SuperQuadrantDetails.toEntity(): SuperQuadrantEntity = SuperQuadrantEntity(
+    id = id,
+    quadrant = quadrant
+)
+fun SuperQuadrantEntity.toFormDetails(): SuperQuadrantDetails = SuperQuadrantDetails(
+    id = id,
+    quadrant = quadrant
+)
+
+
+
+data class MidQuadrantDetails(
+    val id: Int = 0,
+    val quadrant: Char = ' '
+)
+fun MidQuadrantDetails.toEntity(): MidQuadrantEntity = MidQuadrantEntity(
+    id = id,
+    quadrant = quadrant
+)
+fun MidQuadrantEntity.toFormDetails(): MidQuadrantDetails = MidQuadrantDetails(
+    id = id,
+    quadrant = quadrant
+)
+
+
+
+data class SubQuadrantDetails(
+    val id: Int = 0,
+    val subQuadrant: Char = ' '
+)
+fun SubQuadrantDetails.toEntity(): SubQuadrantEntity = SubQuadrantEntity(
+    id = id,
+    subQuadrant = subQuadrant
+)
+fun SubQuadrantEntity.toFormDetails(): SubQuadrantDetails = SubQuadrantDetails(
+    id = id,
+    subQuadrant = subQuadrant
+)
+
+
+
+data class HabitatDetails(
+    val id: Int = 0,
+    val habitatType: String = ""
+)
+fun HabitatDetails.toEntity(): HabitatEntity = HabitatEntity(
+    id = id,
+    habitatType = habitatType
+)
+fun HabitatEntity.toFormDetails(): HabitatDetails = HabitatDetails(
+    id = id,
+    habitatType = habitatType
+)
+
+
+
+data class RouteFormUiState(
+    val formDetails: RouteFormDetails = RouteFormDetails(
+        id = 0,
+        idGeneralForm = 0, // Foreign Key
+        idZoneType = 0, // Foreign Key
+        idCamera = 0, // Foreign Key
+        guayaPlate = 0,
+        routeWidth = 0, // decimal(2)
+        targetDistance = 0, // decimal(2)
+        lensHeight = 0, // decimal(2)
+        idCheckList = 0, // Foreign Key
+        evidences = Icons.Filled.Apps,
+        observations = ""
+    ),
+    val isEntryValid: Boolean = false
+)
+data class RouteFormDetails(
+    val id: Int = 0,
+    val idGeneralForm: Int, // Foreign Key
+    val idZoneType: Int, // Foreign Key
+    val idCamera: Int, // Foreign Key
+    val guayaPlate: Int = 0,
+    val routeWidth: Int = 0, // decimal(2)
+    val targetDistance: Int = 0, // decimal(2)
+    val lensHeight: Int = 0, // decimal(2)
+    val idCheckList: Int, // Foreign Key
+    val evidences: ImageVector,
+    val observations: String = ""
+)
+fun RouteFormDetails.toEntity(): RouteFormEntity = RouteFormEntity(
+    id = 0,
+    idGeneralForm = 0, // Foreign Key
+    idZoneType = 0, // Foreign Key
+    idCamera = 0, // Foreign Key
+    guayaPlate = 0,
+    routeWidth = 0, // decimal(2)
+    targetDistance = 0, // decimal(2)
+    lensHeight = 0, // decimal(2)
+    idCheckList = 0, // Foreign Key
+    evidences = Icons.Filled.Apps,
+    observations = ""
+)
+fun RouteFormEntity.toFormDetails(): RouteFormDetails = RouteFormDetails(
+    id = 0,
+    idGeneralForm = 0, // Foreign Key
+    idZoneType = 0, // Foreign Key
+    idCamera = 0, // Foreign Key
+    guayaPlate = 0,
+    routeWidth = 0, // decimal(2)
+    targetDistance = 0, // decimal(2)
+    lensHeight = 0, // decimal(2)
+    idCheckList = 0, // Foreign Key
+    evidences = Icons.Filled.Apps,
+    observations = ""
+)
+fun RouteFormEntity.toFormUiState(isEntryValid: Boolean = false): RouteFormUiState = RouteFormUiState(
+    formDetails = this.toFormDetails(),
+    isEntryValid = isEntryValid
+)
+
+
+
+data class CameraDetails(
+    val id: Int = 0,
+    val name: String = "",
+    val plate: Int = 0,
+    val instalationDate: Date = Date(20241111)
+)
+fun CameraDetails.toEntity(): CameraEntity = CameraEntity(
+    id = id,
+    name = name,
+    plate = plate,
+    instalationDate = instalationDate
+)
+fun CameraEntity.toFormDetails(): CameraDetails = CameraDetails(
+    id = id,
+    name = name,
+    plate = plate,
+    instalationDate = instalationDate
+)
+
+
+
+data class CheckListDetails(
+    val id: Int = 0,
+    val idCheck: Int, // Foreign Key
+)
+fun CheckListDetails.toEntity(): CheckListEntity = CheckListEntity(
+    id = id,
+    idCheck = idCheck
+)
+fun CheckListEntity.toFormDetails(): CheckListDetails = CheckListDetails(
+    id = id,
+    idCheck = idCheck
+)
+
+
+
+data class CheckDetails(
+    val id: Int = 0,
+    val name: String = "",
+    val state: Boolean = false
+)
+fun CheckDetails.toEntity(): CheckEntity = CheckEntity(
+    id = id,
+    name = name,
+    state = state
+)
+fun CheckEntity.toFormDetails(): CheckDetails = CheckDetails(
+    id = id,
+    name = name,
+    state = state
+)
+
+
+
+data class WeatherFormUiState(
+    val formDetails: WeatherFormDetails = WeatherFormDetails(
+        id = 0,
+        idGeneralForm = 0, // Foreign Key
+        idZoneType = 0, // Foreign Key
+        rainfall = 0, // decimal(2)
+        maxTemperature = 0, // decimal(2)
+        maxHumidity = 0, // decimal(2)
+        minTemperature = 0, // decimal(2)
+        streamMtLevel = 0
+    ),
+    val isEntryValid: Boolean = false
+)
+data class WeatherFormDetails(
+    val id: Int = 0,
+    val idGeneralForm: Int, // Foreign Key
+    val idZoneType: Int, // Foreign Key
+    val rainfall: Int = 0, // decimal(2)
+    val maxTemperature: Int = 0, // decimal(2)
+    val maxHumidity: Int = 0, // decimal(2)
+    val minTemperature: Int = 0, // decimal(2)
+    val streamMtLevel: Int = 0 // decimal(2)
+)
+fun WeatherFormDetails.toEntity(): WeatherFormEntity = WeatherFormEntity(
+    id = 0,
+    idGeneralForm = 0, // Foreign Key
+    idZoneType = 0, // Foreign Key
+    rainfall = 0, // decimal(2)
+    maxTemperature = 0, // decimal(2)
+    maxHumidity = 0, // decimal(2)
+    minTemperature = 0, // decimal(2)
+    streamMtLevel = 0
+)
+fun WeatherFormEntity.toFormDetails(): WeatherFormDetails = WeatherFormDetails(
+    id = 0,
+    idGeneralForm = 0, // Foreign Key
+    idZoneType = 0, // Foreign Key
+    rainfall = 0, // decimal(2)
+    maxTemperature = 0, // decimal(2)
+    maxHumidity = 0, // decimal(2)
+    minTemperature = 0, // decimal(2)
+    streamMtLevel = 0
+)
+fun WeatherFormEntity.toFormUiState(isEntryValid: Boolean = false): WeatherFormUiState = WeatherFormUiState(
+    formDetails = this.toFormDetails(),
+    isEntryValid = isEntryValid
 )

@@ -16,21 +16,32 @@ interface FormDao {
     // añadir un form para un usuario y cambiar su estado entre subido y guardado
     //
 
-    // Métodos de Formulario General
-    @Query("SELECT * FROM general_form ORDER BY id DESC")
-    fun getAllForms(): Flow<List<GeneralFormEntity>>
+    // Métodos de Lista de Formularios
+    @Query("SELECT * FROM list_forms")
+    fun getFullDatabase(): Flow<ListFormsEntity>
 
+    @Query("SELECT * FROM list_forms WHERE state = 1")
+    fun getAllUploadedForms(): Flow<ListFormsEntity>
+
+    @Query("SELECT * FROM list_forms WHERE state = 0")
+    fun getAllLocalForms(): Flow<ListFormsEntity>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertIntoListForms(listForms: ListFormsEntity)
+
+
+    // Métodos de Formulario General
     @Query("SELECT * from general_form WHERE id = :id")
-    fun getForm(id: Int): Flow<GeneralFormEntity>
+    fun getFormById(id: Int): Flow<GeneralFormEntity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertGeneralForm(form: GeneralFormEntity)
 
-    @Update
-    suspend fun updateGeneralForm(form: GeneralFormEntity)
-
     @Delete
     suspend fun deleteGeneralForm(form: GeneralFormEntity)
+
+    @Update
+    suspend fun updateGeneralForm(form: GeneralFormEntity)
 
 
 
@@ -38,32 +49,29 @@ interface FormDao {
     @Insert
     fun insertUser(user: UserEntity)
 
-    @Query("SELECT * FROM user WHERE email = :email AND password = :password")
-    fun getUser(email: String, password: String): UserEntity?
-
-    @Query("SELECT * FROM user WHERE id = :id")
-    fun getUserById(id: Int): UserEntity?
-
     @Update
     fun updateUser(user: UserEntity)
 
     @Delete
     fun deleteUser(user: UserEntity)
 
+    @Query("SELECT * FROM user WHERE id = :id")
+    fun getUserById(id: Int): Flow<UserEntity?>
+
     @Query("SELECT * FROM user")
     fun getAllUsers(): Flow<List<UserEntity>>
 
     @Query("SELECT * FROM user WHERE name = :name")
-    fun getUserByName(name: String): UserEntity?
+    fun getUserByName(name: String): Flow<UserEntity?>
 
     @Query("SELECT * FROM user WHERE name LIKE :name")
-    fun getUsersByName(name: String): List<UserEntity>
+    fun getAllAccountsByName(name: String): Flow<List<UserEntity>>
 
     @Query("SELECT * FROM user WHERE email = :email")
-    fun getUserByEmail(email: String): UserEntity?
+    fun getUserByEmail(email: String): Flow<UserEntity?>
 
     @Query("SELECT * FROM user WHERE email LIKE :email")
-    fun getUsersByEmail(email: String): List<UserEntity>
+    fun getAllAccountsByEmail(email: String): Flow<List<UserEntity>>
 
 
 
@@ -71,11 +79,11 @@ interface FormDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertSpecieForm(form: SpecieFormEntity)
 
-    @Update
-    suspend fun updateSpecieForm(form: SpecieFormEntity)
-
     @Delete
     suspend fun deleteSpecieForm(form: SpecieFormEntity)
+
+    @Update
+    suspend fun updateSpecieForm(form: SpecieFormEntity)
 
 
 
@@ -83,9 +91,45 @@ interface FormDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertFollowUpForm(form: FollowUpFormEntity)
 
+    @Delete
+    suspend fun deleteFollowUpForm(form: FollowUpFormEntity)
+
     @Update
     suspend fun updateFollowUpForm(form: FollowUpFormEntity)
 
+
+
+    // Métodos de Formulario Cuadrantes
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertQuadrantForm(form: QuadrantFormEntity)
+
     @Delete
-    suspend fun deleteFollowUpForm(form: FollowUpFormEntity)
+    suspend fun deleteQuadrantForm(form: QuadrantFormEntity)
+
+    @Update
+    suspend fun updateQuadrantForm(form: QuadrantFormEntity)
+
+
+
+    // Métodos de Formulario Ruta
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertRouteForm(form: RouteFormEntity)
+
+    @Delete
+    suspend fun deleteRouteForm(form: RouteFormEntity)
+
+    @Update
+    suspend fun updateRouteForm(form: RouteFormEntity)
+
+
+
+    // Métodos de Formulario Clima
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertWeatherForm(form: WeatherFormEntity)
+
+    @Delete
+    suspend fun deleteWeatherForm(form: WeatherFormEntity)
+
+    @Update
+    suspend fun updateWeatherForm(form: WeatherFormEntity)
 }
