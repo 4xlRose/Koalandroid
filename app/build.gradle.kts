@@ -5,8 +5,6 @@ plugins {
     alias(libs.plugins.compose.compiler)
 }
 
-
-
 android {
     namespace = "com.example.koadex"
     compileSdk = 34
@@ -58,6 +56,8 @@ android {
 }
 
 dependencies{
+    implementation(libs.junit.junit)
+    implementation(libs.androidx.core.testing)
     /*Room*/
     ksp(libs.androidx.room.compiler.v250)
     implementation(libs.room.runtime)
@@ -88,15 +88,9 @@ dependencies{
     debugImplementation(libs.androidx.ui.test.manifest)
     /*Otro*/
     implementation("androidx.compose.material:material-icons-extended:1.5.1")
-    implementation("androidx.hilt:hilt-navigation-fragment:1.0.0")
     /*Auth0*/
     implementation(libs.auth0)
 
-    // Prueba unitaria
-    implementation (platform("androidx.compose:compose-bom:2023.08.00"))
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.06.01"))
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
-    testImplementation("junit:junit:4.13.2")
     // Otras dependencias de prueba necesarias
     //testImplementation(libs.mockk.v11313)
     androidTestImplementation(libs.androidx.core)
@@ -122,3 +116,5 @@ dependencies{
     implementation(libs.androidx.camera.extensions)
 
 }
+
+

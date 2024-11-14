@@ -52,7 +52,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -60,13 +59,10 @@ import androidx.navigation.NavHostController
 import com.example.koadex.AppViewModelProvider
 import com.example.koadex.R
 import com.example.koadex.data.FormEntity
-import com.example.koadex.navigate.La_navegacion
-import com.example.koadex.data.GeneralFormEntity
 import com.example.koadex.ui.principal.KoadexViewModel
 import com.example.koadex.ui.theme.Gray300
 import com.example.koadex.ui.theme.Green100
 import com.example.koadex.ui.theme.Green700
-
 
 @Composable
 fun Koadex(
@@ -81,7 +77,7 @@ fun Koadex(
             TopNavBar(navController)
         },
         bottomBar = {
-            La_navegacion(navController)
+            BottomNavBar()
         }
 
     ) {
@@ -114,7 +110,7 @@ fun KoadexPantalla(modifier: Modifier,
 
 @Composable
 fun KoadexContenido(
-    formList: List<GeneralFormEntity>,
+    formList: List<FormEntity>,
     modifier: Modifier = Modifier) {
     Row(
         horizontalArrangement = Arrangement.SpaceAround,
@@ -208,7 +204,7 @@ fun KoadexContenido(
 
 @Composable
  fun FormList(
-    formList: List<GeneralFormEntity>,
+    formList: List<FormEntity>,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier = modifier) {
@@ -223,7 +219,7 @@ fun KoadexContenido(
 
 @Composable
  private fun FormInfo(
-    form: GeneralFormEntity,
+    form: FormEntity,
     modifier: Modifier = Modifier) {
     Card(
         modifier = modifier
@@ -247,7 +243,7 @@ fun KoadexContenido(
 
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Nombre: " + form.idUser
+                        text = "Nombre: " + form.name
                     )
                 }
 
@@ -266,7 +262,7 @@ fun KoadexContenido(
 
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Lugar: " + form.serialCode
+                        text = "Lugar: " + form.place
                     )
                 }
 
@@ -406,7 +402,7 @@ fun KoadexContenido(
                         horizontalArrangement = Arrangement.Center,
                         modifier = if (navBarSelect == text)
                             Modifier
-                                .background(Color.White)
+                                .background(Color(0xB4D68F))
                                 .fillMaxWidth()
                         else
                             Modifier.background(Color.Transparent)
@@ -459,3 +455,4 @@ fun KoadexContenido(
             }
         }
     }
+

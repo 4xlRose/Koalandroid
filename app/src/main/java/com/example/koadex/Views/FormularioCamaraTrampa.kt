@@ -135,17 +135,6 @@ fun FormularioScreen(
     val evidencias = remember { mutableStateListOf<String>() }
     val context = LocalContext.current
 
-    // Formato de la fecha
-    fun formatFecha(input: String): String {
-        if (input.length == 6) {
-            val dia = input.substring(0, 2)
-            val mes = input.substring(2, 4)
-            val anio = input.substring(4, 6)
-            return "$dia/$mes/$anio"
-        }
-        return input
-    }
-
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -309,11 +298,7 @@ fun FormularioScreen(
         ) {
             OutlinedTextField(
                 value = fecha,
-                onValueChange = {
-                    if (it.length <= 6) {
-                        fecha = formatFecha(it)
-                    }
-                },
+                onValueChange = { fecha = it },
                 label = { Text(stringResource(R.string.fecha)) },
                 modifier = Modifier.weight(1f)
             )
