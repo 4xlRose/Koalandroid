@@ -1,18 +1,13 @@
-package com.example.koadex.Views
+package com.example.koadex.ui.test
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.auth0.android.Auth0
 import com.auth0.android.authentication.AuthenticationAPIClient
 import com.auth0.android.authentication.AuthenticationException
 import com.auth0.android.result.Credentials
 import io.mockk.*
 import junit.framework.TestCase.assertEquals
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import kotlin.test.assertEquals
 import com.auth0.android.callback.Callback
 import com.example.koadex.Views.AuthViewModel
 import junit.framework.TestCase.assertTrue

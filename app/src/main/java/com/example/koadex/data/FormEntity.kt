@@ -7,6 +7,18 @@ import androidx.room.PrimaryKey
 import java.sql.Date
 import java.sql.Time
 
+@Entity(tableName = "forms")
+data class FormEntity(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+    val name: String = "",
+    val date: String = "",
+    val place: String = "",
+    val hour: String = "",
+    val weather: String = "",
+    val season: String = ""
+)
+/*
 @Entity(tableName = "list_forms",
     foreignKeys = [
         ForeignKey(
@@ -424,3 +436,4 @@ data class WeatherFormEntity(
     val minTemperature: Int = 0, // decimal(2)
     val streamMtLevel: Int = 0 // decimal(2)
 )
+*/
