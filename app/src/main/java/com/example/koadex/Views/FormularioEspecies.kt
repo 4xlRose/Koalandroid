@@ -228,8 +228,11 @@ private fun Contador_numero_individuos(
             onValueChange = {
                 formUi.updateEnteroInput(it.toIntOrNull() ?: 1)
             },
-            modifier = Modifier.width(120.dp),
-            textStyle = MaterialTheme.typography.headlineMedium
+            modifier = Modifier.width(120.dp)
+                .align(Alignment.CenterVertically)
+                .border(1.dp, Color(R.color.green_700)),
+            textStyle = MaterialTheme.typography.headlineMedium.copy(textAlign = TextAlign.Center),
+
         )
 
        /* Text(
