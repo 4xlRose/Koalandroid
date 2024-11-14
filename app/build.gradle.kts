@@ -53,7 +53,16 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+    testOptions {
+        unitTests.all {
+            it.jvmArgs!! += "-noverify"
+            it.jvmArgs!! += "-Xmx1024m"
+
+        }
+    }
 }
+
 
 dependencies{
     implementation(libs.junit.junit)
@@ -96,7 +105,11 @@ dependencies{
     androidTestImplementation(libs.androidx.core)
     androidTestImplementation (libs.mockk.android.v1123)
     //androidTestImplementation (libs.mockk.android.v11313)
-
+    testImplementation (libs.androidx.core.testing.v220)
+    testImplementation (libs.mockito.android)
+    testImplementation (libs.mockito.core.v481)
+    testImplementation (libs.mockito.mockito.inline.v400)
+    testImplementation (libs.mockito.kotlin.v410)
 
     testImplementation (libs.junit)
     androidTestImplementation (libs.androidx.junit.v113)
@@ -104,6 +117,7 @@ dependencies{
     //testImplementation (libs.androidx.core.testing.v220)
 
     testImplementation (libs.kotlinx.coroutines.test.v190)
+
 
 
 
