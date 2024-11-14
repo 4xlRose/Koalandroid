@@ -88,6 +88,7 @@ dependencies{
     debugImplementation(libs.androidx.ui.test.manifest)
     /*Otro*/
     implementation("androidx.compose.material:material-icons-extended:1.5.1")
+    implementation("androidx.hilt:hilt-navigation-fragment:1.0.0")
     /*Auth0*/
     implementation(libs.auth0)
 

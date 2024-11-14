@@ -1,5 +1,6 @@
 package com.example.koadex.navigate
 
+import PerfilScreen
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
@@ -86,7 +87,7 @@ fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modi
             Configuracion(navController = navController)
         }
         composable("Perfil"){
-            Perfil(navController = navController)
+            PerfilScreen(navController = navController)
         }
         composable("OlvidoContrasena"){
             OlvidoContrasena(navController = navController)
@@ -94,6 +95,7 @@ fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modi
         composable("Verificacion"){
             Verificacion(navController = navController)
         }
+
         //Tipos de formulario
         composable("FormularioGeneral") {
             FormularioGeneral(navController = navController)

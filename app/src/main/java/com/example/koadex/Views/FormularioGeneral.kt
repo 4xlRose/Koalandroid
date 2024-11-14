@@ -57,15 +57,17 @@ import com.example.koadex.ui.form.FormEntryViewModel
 
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.koadex.AppViewModelProvider
 import com.example.koadex.ui.form.FormDetails
-
 import com.example.koadex.ui.form.FormUiState
+import com.example.koadex.ui.form.GeneralFormDetails
+import com.example.koadex.ui.form.GeneralFormUiState
+import com.example.koadex.ui.form.SeasonDetails
+import com.example.koadex.ui.form.WeatherDetails
 
 // TEST
 import com.example.koadex.utils.DateValidator
@@ -83,16 +85,13 @@ fun FormularioGeneral(
     val coroutineScope = rememberCoroutineScope()
     FormularioGeneralEntry(
         navController = navController,
-        formUiState = viewModel.formUiState,
-        onFormValueChange = viewModel::updateUiState,
+        formUiState = viewModel.generalFormUiState,
+        onFormValueChange = viewModel::generalFormUpdateUiState,
         onSaveClick = {
             coroutineScope.launch {
-                viewModel.saveForm()
+                viewModel
                 navController.navigate("Principal")
             }
-        },
-        onDateChange = { newDate ->
-            viewModel.updateUiState(viewModel.formUiState.formDetails.copy(date = newDate))
         },
         modifier = modifier
     )
@@ -102,9 +101,8 @@ fun FormularioGeneral(
 @Composable
 fun FormularioGeneralEntry(
     navController: NavHostController,
-    formUiState: FormUiState,
-    onFormValueChange: (FormDetails) -> Unit,
-    onDateChange: (String) -> Unit,
+    formUiState: GeneralFormUiState,
+    onFormValueChange: (GeneralFormDetails) -> Unit,
     onSaveClick: () -> Unit,
     modifier: Modifier
 ) {
@@ -116,7 +114,8 @@ fun FormularioGeneralEntry(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .verticalScroll(rememberScrollState())
-            .padding(top = 32.dp)
+            .padding(16.dp,top=82.dp)
+            .fillMaxSize()
             .background(Color.White)
 
     ) {
@@ -125,7 +124,6 @@ fun FormularioGeneralEntry(
             .fillMaxWidth()
             .padding(10.dp)
             .height(40.dp)
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -157,9 +155,6 @@ fun FormularioGeneralEntry(
         FormInputForm(
             formDetails = formUiState.formDetails,
             onFormValueChange = onFormValueChange,
-            onDateChange = { newDate ->
-                onFormValueChange(formUiState.formDetails.copy(date = newDate))
-            },
             modifier = Modifier
         )
 
@@ -179,7 +174,7 @@ fun FormularioGeneralEntry(
             horizontalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier.fillMaxWidth()
         ) {
-            var weather by remember { mutableStateOf(formUiState.formDetails.weather) }
+            var weather by remember { mutableStateOf(WeatherDetails().weather) }
             val buttonSize = 80.dp
 
             // Weather buttons
@@ -188,7 +183,7 @@ fun FormularioGeneralEntry(
                 currentWeather = weather,
                 onWeatherChange = {
                     weather = it
-                    onFormValueChange(formUiState.formDetails.copy(weather = it))
+                    onFormValueChange(formUiState.formDetails.copy(serialCode = it)) // serial code es temporal
                 },
                 buttonSize = buttonSize
             )
@@ -198,7 +193,7 @@ fun FormularioGeneralEntry(
                 currentWeather = weather,
                 onWeatherChange = {
                     weather = it
-                    onFormValueChange(formUiState.formDetails.copy(weather = it))
+                    onFormValueChange(formUiState.formDetails.copy(serialCode = it))
                 },
                 buttonSize = buttonSize
             )
@@ -208,7 +203,7 @@ fun FormularioGeneralEntry(
                 currentWeather = weather,
                 onWeatherChange = {
                     weather = it
-                    onFormValueChange(formUiState.formDetails.copy(weather = it))
+                    onFormValueChange(formUiState.formDetails.copy(serialCode = it))
                 },
                 buttonSize = buttonSize
             )
@@ -230,7 +225,7 @@ fun FormularioGeneralEntry(
             horizontalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier.fillMaxWidth()
         ) {
-            var season by remember { mutableStateOf(formUiState.formDetails.season) }
+            var season by remember { mutableStateOf(SeasonDetails().season) }
             val buttonSize = 80.dp
 
             // Season buttons
@@ -239,7 +234,7 @@ fun FormularioGeneralEntry(
                 currentSeason = season,
                 onSeasonChange = {
                     season = it
-                    onFormValueChange(formUiState.formDetails.copy(season = it))
+                    onFormValueChange(formUiState.formDetails.copy(serialCode = it))
                 },
                 buttonSize = buttonSize
             )
@@ -249,7 +244,7 @@ fun FormularioGeneralEntry(
                 currentSeason = season,
                 onSeasonChange = {
                     season = it
-                    onFormValueChange(formUiState.formDetails.copy(season = it))
+                    onFormValueChange(formUiState.formDetails.copy(serialCode = it))
                 },
                 buttonSize = buttonSize
             )
@@ -268,9 +263,8 @@ fun FormularioGeneralEntry(
                 modifier = Modifier
                     .padding(40.dp)
                     .width(300.dp),
-                onClick = {
-                    onSaveClick()
-                    navController.navigate("TiposForms")
+                onClick = { onSaveClick
+                    ;navController.navigate("TiposForms")
                      },
                 enabled = formUiState.isEntryValid
             ) {
@@ -306,10 +300,14 @@ fun FormInputForm(
         return input
     }*/
 
+) {
     OutlinedTextField(
         value = formDetails.name,
         label = { Text("Nombre") },
-        onValueChange = { onFormValueChange(formDetails.copy(name = it)) },
+        onValueChange = {
+            val it = 0
+            onFormValueChange(formDetails.copy(idUser = it))
+        },
         modifier = Modifier
             .padding(10.dp)
             .width(320.dp),
@@ -374,7 +372,7 @@ fun FormInputForm(
             onValueChange = { onFormValueChange(formDetails.copy(place = it)) },
             modifier = Modifier
                 .width(262.dp)
-                .offset(26.dp)
+
         )
         // ... (keep location button)
     }
@@ -385,8 +383,19 @@ fun FormInputForm(
         onValueChange = { onFormValueChange(formDetails.copy(hour = it)) },
         modifier = Modifier
             .padding(10.dp)
-            .width(320.dp)
-    )
+            .fillMaxWidth(),
+        //verticalAlignment = Alignment.CenterVertically,
+    ) {
+        OutlinedTextField(
+            value = formDetails.hour,
+            label = { Text("Hora") },
+            onValueChange = { onFormValueChange(formDetails.copy(hour = it)) },
+            modifier = Modifier
+
+                .width(320.dp)
+        )
+    }
+            
 }
 
 @Composable

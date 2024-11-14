@@ -59,6 +59,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.koadex.AppViewModelProvider
 import com.example.koadex.R
+import com.example.koadex.data.FormEntity
+import com.example.koadex.navigate.La_navegacion
 import com.example.koadex.data.GeneralFormEntity
 import com.example.koadex.ui.principal.KoadexViewModel
 import com.example.koadex.ui.theme.Gray300
@@ -79,7 +81,7 @@ fun Koadex(
             TopNavBar(navController)
         },
         bottomBar = {
-            BottomNavBar()
+            La_navegacion(navController)
         }
 
     ) {
@@ -457,4 +459,3 @@ fun KoadexContenido(
             }
         }
     }
-

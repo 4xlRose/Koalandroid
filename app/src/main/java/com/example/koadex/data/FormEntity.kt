@@ -1,20 +1,11 @@
 package com.example.koadex.data
 
-import android.health.connect.datatypes.units.Temperature
-import android.icu.text.DateFormat
-import android.media.Image
-import android.provider.ContactsContract
-import android.provider.ContactsContract.CommonDataKinds.Email
-import android.widget.DatePicker
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import androidx.room.util.TableInfo
 import java.sql.Date
 import java.sql.Time
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 @Entity(tableName = "list_forms",
     foreignKeys = [
@@ -399,7 +390,7 @@ data class CheckListEntity(
     val idCheck: Int, // Foreign Key
 )
 
-@Entity(tableName = "check")
+@Entity(tableName = "checks")
 data class CheckEntity(
     val id: Int = 0,
     val name: String = "",

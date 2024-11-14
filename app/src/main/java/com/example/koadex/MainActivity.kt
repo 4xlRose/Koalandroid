@@ -1,8 +1,11 @@
 package com.example.koadex
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -21,11 +24,15 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.NavController
 import androidx.compose.material3.MaterialTheme
 import com.auth0.android.Auth0
+import com.example.koadex.ui.form.FormEntryViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private lateinit var account: Auth0
+    private val formViewModel: FormEntryViewModel by viewModels()
+
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -39,10 +46,10 @@ class MainActivity : ComponentActivity() {
             KoadexTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     KoadexApp(
+                        activity = this,
                         modifier = Modifier.padding(innerPadding),
-                        account
+                        account = account
                     )
-
                 }
             }
         }
