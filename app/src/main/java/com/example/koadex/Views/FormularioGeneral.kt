@@ -107,7 +107,8 @@ fun FormularioGeneralEntry(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .verticalScroll(rememberScrollState())
-            .padding(top = 32.dp)
+            .padding(16.dp,top=82.dp)
+            .fillMaxSize()
             .background(Color.White)
 
     ) {
@@ -273,7 +274,6 @@ fun FormInputForm(
     modifier: Modifier,
     enabled: Boolean = true
 ) {
-    /*
     OutlinedTextField(
         value = formDetails.idUser,
         label = { Text("Nombre") },
@@ -299,7 +299,7 @@ fun FormInputForm(
             onValueChange = { onFormValueChange(formDetails.copy(date = it)) },
             modifier = Modifier
                 .width(180.dp)
-                .offset(26.dp)
+
         )
         // ... (keep date picker button)
     }
@@ -316,7 +316,7 @@ fun FormInputForm(
             onValueChange = { onFormValueChange(formDetails.copy(place = it)) },
             modifier = Modifier
                 .width(262.dp)
-                .offset(26.dp)
+
         )
         // ... (keep location button)
     }
@@ -327,8 +327,19 @@ fun FormInputForm(
         onValueChange = { onFormValueChange(formDetails.copy(hour = it)) },
         modifier = Modifier
             .padding(10.dp)
-            .width(320.dp)
-    )*/
+            .fillMaxWidth(),
+        //verticalAlignment = Alignment.CenterVertically,
+    ) {
+        OutlinedTextField(
+            value = formDetails.hour,
+            label = { Text("Hora") },
+            onValueChange = { onFormValueChange(formDetails.copy(hour = it)) },
+            modifier = Modifier
+
+                .width(320.dp)
+        )
+    }
+            
 }
 
 @Composable
