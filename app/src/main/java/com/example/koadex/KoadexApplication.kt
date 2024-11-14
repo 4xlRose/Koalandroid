@@ -11,6 +11,7 @@ import com.example.koadex.data.OfflineFormsRepository
 import com.example.koadex.ui.form.FormEntryViewModel
 import com.example.koadex.data.FormDatabase
 import com.example.koadex.ui.principal.KoadexViewModel
+import dagger.hilt.android.HiltAndroidApp
 
 
 object AppViewModelProvider {

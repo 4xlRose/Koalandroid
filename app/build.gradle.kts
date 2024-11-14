@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.compose.compiler)
 }
 
+
+
 android {
     namespace = "com.example.koadex"
     compileSdk = 34
@@ -65,8 +67,7 @@ android {
 
 
 dependencies{
-    implementation(libs.junit.junit)
-    implementation(libs.androidx.core.testing)
+    implementation(libs.hilt.android)
     /*Room*/
     ksp(libs.androidx.room.compiler.v250)
     implementation(libs.room.runtime)
@@ -119,9 +120,10 @@ dependencies{
     testImplementation (libs.kotlinx.coroutines.test.v190)
 
 
-
+    // Prueba unitaria
+    implementation (platform("androidx.compose:compose-bom:2023.08.00"))
+    androidTestImplementation(platform("androidx.compose:compose-bom:2023.06.01"))
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
 
 
 }
-
-

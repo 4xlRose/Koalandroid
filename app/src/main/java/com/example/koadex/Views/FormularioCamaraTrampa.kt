@@ -1,7 +1,11 @@
 package com.example.koadex.Views
 
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -35,17 +39,41 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.cameraexample.ViewModels.CameraViewModel
 import com.example.koadex.AppViewModelProvider
+import com.example.koadex.MainActivity
 import com.example.koadex.R
 import com.example.koadex.ui.principal.KoadexViewModel
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.camera.core.Camera
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageCapture
+import androidx.camera.view.CameraController
+import androidx.camera.view.LifecycleCameraController
+import androidx.camera.view.PreviewView
+import androidx.compose.foundation.background
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.Camera
+import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.SwitchCamera
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.viewinterop.AndroidView
 
+@RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormularioCamaraTrampa(
+    activity: MainActivity,
     navController: NavHostController,
     modifier: Modifier = Modifier,
     viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -66,15 +94,22 @@ fun FormularioCamaraTrampa(
         }
     ) { paddingValues ->
         FormularioScreen(
+            activity = activity,
             modifier = Modifier.padding(paddingValues)
         )
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun FormularioScreen(
+    activity: MainActivity,
     modifier: Modifier = Modifier
 ) {
+    var CameraPermision by remember { mutableStateOf(false) }
+    if (CameraPermision) {
+        CameraWindow(activity)
+    } else {
     var codigo by remember { mutableStateOf("") }
     var selectedZona by remember { mutableStateOf<String?>(null) }
     var nombreCamara by remember { mutableStateOf("") }
@@ -99,6 +134,17 @@ fun FormularioScreen(
 
     val evidencias = remember { mutableStateListOf<String>() }
     val context = LocalContext.current
+
+    // Formato de la fecha
+    fun formatFecha(input: String): String {
+        if (input.length == 6) {
+            val dia = input.substring(0, 2)
+            val mes = input.substring(2, 4)
+            val anio = input.substring(4, 6)
+            return "$dia/$mes/$anio"
+        }
+        return input
+    }
 
     Column(
         modifier = modifier
@@ -135,7 +181,7 @@ fun FormularioScreen(
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.clickable { selectedZona = "bosque"}
+                modifier = Modifier.clickable { selectedZona = "bosque" }
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.bosque),
@@ -154,7 +200,7 @@ fun FormularioScreen(
 
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.clickable { selectedZona = "agroforestal"}
+                modifier = Modifier.clickable { selectedZona = "agroforestal" }
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.arreglo_agroforestal),
@@ -174,7 +220,7 @@ fun FormularioScreen(
 
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.clickable { selectedZona = "transitorios"}
+                modifier = Modifier.clickable { selectedZona = "transitorios" }
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.cultivos_transitorios),
@@ -194,7 +240,7 @@ fun FormularioScreen(
 
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.clickable { selectedZona = "permanentes"}
+                modifier = Modifier.clickable { selectedZona = "permanentes" }
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.cultivos_permanentes),
@@ -263,7 +309,11 @@ fun FormularioScreen(
         ) {
             OutlinedTextField(
                 value = fecha,
-                onValueChange = { fecha = it },
+                onValueChange = {
+                    if (it.length <= 6) {
+                        fecha = formatFecha(it)
+                    }
+                },
                 label = { Text(stringResource(R.string.fecha)) },
                 modifier = Modifier.weight(1f)
             )
@@ -347,26 +397,32 @@ fun FormularioScreen(
                             containerColor = Color(0xFF4E7029),
                             contentColor = Color.White
                         ),
-                        modifier = Modifier.weight(1f)) {
+                        modifier = Modifier.weight(1f)
+                    ) {
                         Text(stringResource(R.string.elegir_archivo))
                     }
                     Button(
-                        onClick = { Toast.makeText(context, "Funcionalidad de camara aun no disponible", Toast.LENGTH_SHORT).show() },
+                        onClick = {
+                            CameraPermision = true
+                        },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color(0xFF4E7029),
                             contentColor = Color.White
                         ),
-                        modifier = Modifier.weight(1f)) {
+                        modifier = Modifier.weight(1f)
+                    ) {
                         Text(stringResource(R.string.tomar_foto))
                     }
                 }
 
                 evidencias.forEach { evidencia ->
-                    EvidenciaItem(nombreArchivo = evidencia, onDelete = { evidencias.remove(evidencia) })
+                    EvidenciaItem(
+                        nombreArchivo = evidencia,
+                        onDelete = { evidencias.remove(evidencia) })
                 }
             }
         }
-
+    }
 
         // Observaciones
         Spacer(modifier = Modifier.height(12.dp))
@@ -431,3 +487,6 @@ fun EvidenciaItem(
         }
     }
 }
+
+
+

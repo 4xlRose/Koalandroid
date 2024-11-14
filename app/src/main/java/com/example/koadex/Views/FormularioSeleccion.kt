@@ -41,72 +41,99 @@ fun FormularioSeleccionScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 32.dp)
-            .padding(top = 100.dp, bottom = 24.dp),
+            .padding(top = 140.dp, bottom = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(24.dp) // Espacio entre items
+        verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         Text(
             text = "Tipo de Registro",
-            style = MaterialTheme.typography.headlineSmall,
+            style = MaterialTheme.typography.headlineLarge,
             color = Color.Black
         )
-        // Container for buttons with max width of 800dp
+
+        Spacer(modifier = Modifier.weight(0.1f))
+
+        // Grid contenedor de los botones
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .width(800.dp)
                 .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            OptionButtonTwoIcons(
-                icon1 = R.drawable.fauna,
-                icon2 = R.drawable.ruta,
-                text = "Fauna en Transectos",
-                onClick = { navController.navigate("faunaTransectos") }
-            )
+            // Primera fila
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                OptionButtonTwoIcons(
+                    icon1 = R.drawable.fauna,
+                    icon2 = R.drawable.ruta,
+                    text = "Fauna en Transectos",
+                    onClick = { navController.navigate("FormularioEspecies") },
+                    modifier = Modifier.weight(1f)
+                )
+                OptionButtonTwoIcons(
+                    icon1 = R.drawable.fauna,
+                    icon2 = R.drawable.aritmetica,
+                    text = "Fauna en Punto de Conteo",
+                    onClick = { navController.navigate("FormularioSeguimiento") },
+                    modifier = Modifier.weight(1f)
+                )
+            }
 
-            OptionButtonTwoIcons(
-                icon1 = R.drawable.fauna,
-                icon2 = R.drawable.aritmetica,
-                text = "Fauna en Punto de Conteo",
-                onClick = { navController.navigate("puntoConteo") }
-            )
+            // Segunda fila
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                OptionButtonTwoIcons(
+                    icon1 = R.drawable.fauna,
+                    icon2 = R.drawable.search,
+                    text = "Fauna Búsqueda Libre",
+                    onClick = { navController.navigate("FormularioSeguimiento") },
+                    modifier = Modifier.weight(1f)
+                )
+                OptionButton(
+                    icon = R.drawable.cobertura,
+                    text = "Validación de Cobertura",
+                    onClick = { navController.navigate("") },
+                    modifier = Modifier.weight(1f)
+                )
+            }
 
-            OptionButtonTwoIcons(
-                icon1 = R.drawable.fauna,
-                icon2 = R.drawable.search,
-                text = "Fauna Búsqueda Libre",
-                onClick = { navController.navigate("busquedaLibre") }
-            )
+            // Tercera fila
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                OptionButton(
+                    icon = R.drawable.vegetacion,
+                    text = "Parcela de Vegetación",
+                    onClick = { navController.navigate("") },
+                    modifier = Modifier.weight(1f)
+                )
+                OptionButton(
+                    icon = R.drawable.camara,
+                    text = "Cámaras Trampa",
+                    onClick = { navController.navigate("CamarasTrampa") },
+                    modifier = Modifier.weight(1f)
+                )
+            }
 
-            OptionButton(
-                icon = R.drawable.cobertura,
-                text = "Validación de Cobertura",
-                onClick = { navController.navigate("validacionCobertura") }
-            )
-
-            OptionButton(
-                icon = R.drawable.vegetacion,
-                text = "Parcela de Vegetación",
-                onClick = { navController.navigate("parcelaVegetacion") }
-            )
-
-            OptionButton(
-                icon = R.drawable.camara,
-                text = "Cámaras Trampa",
-                onClick = { navController.navigate("MainAcivity") }
-            )
-
+            // Este ultimo boton queda fuera del grid para que no se vea tan asimetrico
             OptionButton(
                 icon = R.drawable.temporada,
                 text = "Variables Climáticas",
-                onClick = { navController.navigate("variablesClimaticas") }
+                onClick = { navController.navigate("") },
+                modifier = Modifier.fillMaxWidth()
+
             )
         }
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Button(
+        /*Button(
             onClick = { navController.navigate("siguiente") },
             modifier = Modifier
                 .width(800.dp)
@@ -119,23 +146,24 @@ fun FormularioSeleccionScreen(
         ) {
             Text(
                 "SIGUIENTE",
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.headlineLarge
             )
-        }
+        }*/
     }
 }
 
 @Composable
-fun OptionButton(
+fun OptionButton( //Configuracion de los botones con una imagen
     icon: Int,
     text: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     OutlinedButton(
         onClick = onClick,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(80.dp), // Increased height
+        modifier = modifier
+            .height(160.dp)
+            .padding(vertical = 16.dp),
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.outlinedButtonColors(
             containerColor = Color.White
@@ -144,37 +172,39 @@ fun OptionButton(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 24.dp),
+                .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
                 painter = painterResource(id = icon),
                 contentDescription = null,
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(50.dp)
             )
-            Spacer(modifier = Modifier.width(24.dp))
+            Spacer(modifier = Modifier.width(16.dp))
             Text(
                 text = text,
                 color = Color.Black,
                 style = MaterialTheme.typography.titleLarge
             )
         }
+        Spacer(modifier = Modifier.weight(0.1f))
     }
 }
 
 @Composable
-fun OptionButtonTwoIcons(
+fun OptionButtonTwoIcons( //Botones con 2 iconos
     icon1: Int,
     icon2: Int,
     text: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     OutlinedButton(
         onClick = onClick,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(80.dp),
+        modifier = modifier
+            .height(160.dp)
+            .padding(vertical = 16.dp),
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.outlinedButtonColors(
             containerColor = Color.White
@@ -183,31 +213,28 @@ fun OptionButtonTwoIcons(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 24.dp),
+                .padding(horizontal = 1.dp),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Contenedor para los dos iconos
             Box(
                 modifier = Modifier
-                    .width(100.dp) // Espacio entre los iconos
-                    .height(64.dp),
+                    .width(88.dp)
+                    .height(70.dp),
                 contentAlignment = Alignment.CenterStart
             ) {
-                // Primer icono
                 Image(
                     painter = painterResource(id = icon1),
                     contentDescription = null,
                     modifier = Modifier
-                        .size(40.dp)
+                        .size(44.dp)
                         .align(Alignment.CenterStart)
                 )
-                // Segundo icono
                 Image(
                     painter = painterResource(id = icon2),
                     contentDescription = null,
                     modifier = Modifier
-                        .size(40.dp)
+                        .size(44.dp)
                         .align(Alignment.CenterEnd)
                 )
             }
@@ -215,8 +242,9 @@ fun OptionButtonTwoIcons(
                 text = text,
                 color = Color.Black,
                 style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(start = 20.dp)
+                modifier = Modifier.padding(start = 8.dp)
             )
         }
+        Spacer(modifier = Modifier.weight(0.1f))
     }
 }
