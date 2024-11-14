@@ -1,7 +1,9 @@
 package com.example.koadex.Views
 
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -38,7 +40,9 @@ import androidx.navigation.NavHostController
 import com.example.koadex.AppViewModelProvider
 import com.example.koadex.R
 import com.example.koadex.ui.principal.KoadexViewModel
+import com.example.koadex.utils.DateValidator
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormularioCamaraTrampa(
@@ -71,6 +75,7 @@ fun FormularioCamaraTrampa(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun FormularioScreen(
     modifier: Modifier = Modifier
@@ -100,7 +105,7 @@ fun FormularioScreen(
     val evidencias = remember { mutableStateListOf<String>() }
     val context = LocalContext.current
 
-    // Formato de la fecha
+    /*// Formato de la fecha
     fun formatFecha(input: String): String {
         if (input.length == 6) {
             val dia = input.substring(0, 2)
@@ -109,7 +114,11 @@ fun FormularioScreen(
             return "$dia/$mes/$anio"
         }
         return input
-    }
+    }*/
+
+    // Variables para el TEST
+    val dateValidator = remember { DateValidator() }
+    var dateError by remember { mutableStateOf<String?>(null) }
 
     Column(
         modifier = modifier
@@ -274,13 +283,37 @@ fun FormularioScreen(
         ) {
             OutlinedTextField(
                 value = fecha,
-                onValueChange = {
-                    if (it.length <= 6) {
-                        fecha = formatFecha(it)
+                onValueChange = { input ->
+                    if (input.length <= 8) { // Considerando los '/'
+                        val formattedInput = if (input.replace("/", "").length <= 6) {
+                            dateValidator.formatDate(input.replace("/", ""))
+                        } else {
+                            input
+                        }
+
+                        fecha = formattedInput
+
+                        // Validar solo si el campo está completo
+                        if (formattedInput.length == 8) { // dd/mm/yy
+                            if (dateValidator.isValidDate(formattedInput)) {
+                                dateError = null
+                            } else {
+                                dateError = "Fecha inválida"
+                            }
+                        }
                     }
                 },
                 label = { Text(stringResource(R.string.fecha)) },
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                isError = dateError != null,
+                supportingText = {
+                    dateError?.let {
+                        Text(
+                            text = it,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+                }
             )
             OutlinedTextField(
                 value = distanciaObjetivo,

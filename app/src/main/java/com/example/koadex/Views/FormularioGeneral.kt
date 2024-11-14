@@ -1,6 +1,8 @@
 package com.example.koadex.Views
 
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -29,6 +31,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedIconToggleButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -50,10 +53,7 @@ import androidx.navigation.NavHostController
 
 import com.example.koadex.R
 
-
-
 import com.example.koadex.ui.form.FormEntryViewModel
-
 
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
@@ -65,12 +65,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.koadex.AppViewModelProvider
 import com.example.koadex.ui.form.FormDetails
 
-
 import com.example.koadex.ui.form.FormUiState
 
+// TEST
+import com.example.koadex.utils.DateValidator
 
 import kotlinx.coroutines.launch
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormularioGeneral(
@@ -96,6 +98,7 @@ fun FormularioGeneral(
     )
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun FormularioGeneralEntry(
     navController: NavHostController,
@@ -277,6 +280,7 @@ fun FormularioGeneralEntry(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun FormInputForm(
     formDetails: FormDetails,
@@ -287,7 +291,11 @@ fun FormInputForm(
 ) {
     var dateText by remember { mutableStateOf(formDetails.date) }
 
-    // Formatear la fecha a dd/mm/aa
+    // Variables para el TEST
+    val dateValidator = remember { DateValidator() }
+    var dateError by remember { mutableStateOf<String?>(null) }
+
+    /* Formatear la fecha a dd/mm/aa
     fun formatFecha(input: String): String {
         if (input.length == 6) {
             val dia = input.substring(0, 2)
@@ -296,8 +304,7 @@ fun FormInputForm(
             return "$dia/$mes/$anio"
         }
         return input
-    }
-
+    }*/
 
     OutlinedTextField(
         value = formDetails.name,
@@ -317,16 +324,40 @@ fun FormInputForm(
     ) {
         OutlinedTextField(
             value = dateText,
-            onValueChange = {
-                if (it.length <= 6) {
-                    dateText = formatFecha(it)
-                    onDateChange(dateText)
+            onValueChange = { input ->
+                if (input.length <= 8) { // Considerando los '/'
+                    val formattedInput = if (input.replace("/", "").length <= 6) {
+                        dateValidator.formatDate(input.replace("/", ""))
+                    } else {
+                        input
+                    }
+
+                    dateText = formattedInput
+
+                    // Validar solo si el campo esta completo
+                    if (formattedInput.length == 8) { // dd/mm/yy
+                        if (dateValidator.isValidDate(formattedInput)) {
+                            dateError = null
+                            onDateChange(formattedInput)
+                        } else {
+                            dateError = "Fecha inválida"
+                        }
+                    }
                 }
             },
             label = { Text(stringResource(R.string.fecha)) },
             modifier = Modifier
                 .width(180.dp)
-                .offset(26.dp)
+                .offset(26.dp),
+            isError = dateError != null,
+            supportingText = {
+                dateError?.let {
+                    Text(
+                        text = it,
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+            }
         )
         // ... (keep date picker button)
     }
