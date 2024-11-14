@@ -54,7 +54,7 @@ fun InicioSesion(navController: NavHostController, account: Auth0, modifier: Mod
 
 @Composable
 fun IniciarSesionFondo(navController: NavHostController,account: Auth0, modifier: Modifier = Modifier) {
-    var loggedIn by remember { mutableStateOf(false) }
+    var loggedIn by remember { mutableStateOf(true) }
     var credentials by remember { mutableStateOf<Credentials?>(null) }
 
     val fondo = painterResource(R.drawable.login)

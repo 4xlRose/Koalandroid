@@ -4,7 +4,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [FormEntity::class], version = 1, exportSchema = false)
+@Database(entities = [GeneralFormEntity::class], version = 2, exportSchema = false)
 abstract class FormDatabase : RoomDatabase() {
     abstract fun formDao(): FormDao
 
