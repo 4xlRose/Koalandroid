@@ -1,27 +1,32 @@
 package com.example.koadex.ui.form
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+
+
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-
+import com.example.koadex.clases.User
+import com.example.koadex.data.FormDao
+import com.example.koadex.data.FormDao_Impl
+import com.example.koadex.data.FormDatabase
 import com.example.koadex.data.FormRepository
-import com.example.koadex.data.FormEntity
+import com.example.koadex.data.GeneralFormEntity
+import com.example.koadex.data.UserEntity
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import java.sql.Date
+import java.sql.Time
 
+@HiltViewModel
+class FormEntryViewModel(private val formRepository: FormRepository,
+                         private val formDao: FormDao) : ViewModel()
+{
+    val formData: Flow<List<GeneralFormEntity>> = formDao.getAllForms()
+    val userData: Flow<List<UserEntity>> = formDao.getAllUsers()
 
-
-
-
-
-
-class FormEntryViewModel(private val formRepository: FormRepository) : ViewModel() {
-
+    /*
     var formUiState by mutableStateOf(FormUiState())
         private set
 
-
-    fun updateUiState(formDetails: FormDetails) {
+    fun updateUiState(formDetails: GeneralFormDetails) {
         formUiState = FormUiState(
             formDetails = formDetails,
             isEntryValid = validateInput(formDetails)
@@ -36,47 +41,77 @@ class FormEntryViewModel(private val formRepository: FormRepository) : ViewModel
 
     private fun validateInput(uiState: FormDetails = formUiState.formDetails): Boolean {
         return with(uiState) {
-            name.isNotBlank() && date.isNotBlank() && place.isNotBlank() && hour.isNotBlank()
+            false // Debe verificar condiciones, faltante
         }
-    }
+    }*/
 }
+/*
 data class FormUiState(
-    val formDetails: FormDetails = FormDetails(),
+    val generalFormDetails: GeneralFormDetails = GeneralFormDetails(
+        id = 0,
+        date = Date(20241111),
+        hour = Time(451),
+        serialCode = "",
+        idUser = 0, // Foreign Key
+        idWeather = 0, // Foreign Key
+        idSeason = 0, // Foreign Key
+        idSpecieForm = 0, // Foreign Key
+        idFollowUpForm = 0, // Foreign Key
+        idQuadrantForm = 0, // Foreign Key
+        idRouteForm = 0, // Foreign Key
+        idWeatherForm = 0 // Foreign Key
+    ),
     val isEntryValid: Boolean = false
 )
 
-// 6. Update the data classes
-data class FormDetails(
+
+
+// Update the data classes
+data class GeneralFormDetails(
     val id: Int = 0,
-    val name: String = "",
-    val date: String = "",
-    val place: String = "",
-    val hour: String = "",
-    val weather: String = "",
-    val season: String = ""
+    val date: Date = Date(20241111),
+    val hour: Time = Time(451),
+    val serialCode: String = "",
+    val idUser: Int, // Foreign Key
+    val idWeather: Int, // Foreign Key
+    val idSeason: Int, // Foreign Key
+    val idSpecieForm: Int, // Foreign Key
+    val idFollowUpForm: Int, // Foreign Key
+    val idQuadrantForm: Int, // Foreign Key
+    val idRouteForm: Int, // Foreign Key
+    val idWeatherForm: Int, // Foreign Key
 )
-
-
-
-// Extension function to convert FormDetails to FormEntity
-fun FormDetails.toEntity(): FormEntity = FormEntity(
-    name = name,
+// Extension functions to convert FormDetails to FormEntity
+fun GeneralFormDetails.toEntity(): GeneralFormEntity = GeneralFormEntity(
+    id = id,
     date = date,
-    place = place,
     hour = hour,
-    weather = weather,
-    season = season
+    serialCode = serialCode,
+    idUser = idUser, // Foreign Key
+    idWeather = idWeather, // Foreign Key
+    idSeason = idSeason, // Foreign Key
+    idSpecieForm = idSpecieForm, // Foreign Key
+    idFollowUpForm = idFollowUpForm, // Foreign Key
+    idQuadrantForm = idQuadrantForm, // Foreign Key
+    idRouteForm = idRouteForm, // Foreign Key
+    idWeatherForm = idWeatherForm // Foreign Key
 )
-
-fun FormEntity.toFormUiState(isEntryValid: Boolean = false): FormUiState = FormUiState(
-    formDetails = this.toFormDetails(),
+fun GeneralFormEntity.toFormUiState(isEntryValid: Boolean = false): FormUiState = FormUiState(
+    generalFormDetails = this.toFormDetails(),
     isEntryValid = isEntryValid
 )
-
-fun FormEntity.toFormDetails(): FormDetails = FormDetails(
-    name = name,
+fun GeneralFormEntity.toFormDetails(): GeneralFormDetails = GeneralFormDetails(
+    id = id,
     date = date,
-    place = place,
     hour = hour,
-    weather = weather
+    serialCode = serialCode,
+    idUser = idUser, // Foreign Key
+    idWeather = idWeather, // Foreign Key
+    idSeason = idSeason, // Foreign Key
+    idSpecieForm = idSpecieForm, // Foreign Key
+    idFollowUpForm = idFollowUpForm, // Foreign Key
+    idQuadrantForm = idQuadrantForm, // Foreign Key
+    idRouteForm = idRouteForm, // Foreign Key
+    idWeatherForm = idWeatherForm // Foreign Key
 )
+*/

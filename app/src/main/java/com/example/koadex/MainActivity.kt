@@ -21,7 +21,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.NavController
 import androidx.compose.material3.MaterialTheme
 import com.auth0.android.Auth0
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private lateinit var account: Auth0
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,6 +47,4 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
-
 }

@@ -44,7 +44,7 @@ public fun FormularioSeguimiento(navController: NavHostController, modifier: Mod
         TopAppBar(
             title = { Text("Formulario", color = Color.Black) },
             navigationIcon = {
-                IconButton(onClick = { navController.navigate("FormularioSeleccionScreen") }) {
+                IconButton(onClick = { navController.navigate("TiposForms") }) {
                     Icon(Icons.Filled.ArrowBack, contentDescription = "Atrás")
                 }
             },

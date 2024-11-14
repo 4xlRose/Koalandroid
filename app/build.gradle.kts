@@ -58,7 +58,6 @@ android {
 }
 
 dependencies{
-    implementation(libs.junit.junit)
     /*Room*/
     ksp(libs.androidx.room.compiler.v250)
     implementation(libs.room.runtime)
