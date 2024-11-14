@@ -12,7 +12,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -38,7 +37,7 @@ fun PerfilScreen(
             TopAppBar(
                 title = { Text("") },
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigate("Principal") }) {
+                    IconButton(onClick = { /* Acción de retroceso */ }) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Atrás")
                     }
                 },
@@ -74,7 +73,6 @@ fun ProfileHeader() {
                 brush = Brush.verticalGradient(
                     colors = listOf(Color(0xFF97B96E), Color(0xFF4E7029))
                 )
-
             ),
         contentAlignment = Alignment.Center
     ) {
@@ -91,7 +89,6 @@ fun ProfileHeader() {
                     .background(Color.White, CircleShape) // Fondo blanco circular
                     .border(2.dp, Color.Gray, CircleShape) // Borde gris alrededor de la imagen
                     .padding(2.dp) // Espaciado interno de la imagen (para que no se toque el borde)
-                    .clip(CircleShape) // Recorta la imagen a un círculo
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
