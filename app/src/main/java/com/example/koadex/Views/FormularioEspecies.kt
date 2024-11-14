@@ -111,27 +111,35 @@ fun FormularioEspecies(navController: NavController, modifier: Modifier = Modifi
                         .height(100.dp)
                 )
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Button(
-                        onClick = { navController.popBackStack() },
-                        modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.buttonColors(containerColor = green700)
-                    ) {
-                        Text("ATRAS")
-                    }
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Button(
-                        onClick = { /* Handle form submission */ },
-                        modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.buttonColors(containerColor = green700)
-                    ) {
-                        Text("ENVIAR")
-                    }
-                }
+                Atras_enviar(navController, green700)
             }
+        }
+    }
+}
+
+@Composable
+private fun Atras_enviar(
+    navController: NavController,
+    green700: Color
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Button(
+            onClick = { navController.popBackStack() },
+            modifier = Modifier.weight(1f),
+            colors = ButtonDefaults.buttonColors(containerColor = green700)
+        ) {
+            Text("ATRAS")
+        }
+        Spacer(modifier = Modifier.width(8.dp))
+        Button(
+            onClick = { /* Handle form submission */ },
+            modifier = Modifier.weight(1f),
+            colors = ButtonDefaults.buttonColors(containerColor = green700)
+        ) {
+            Text("ENVIAR")
         }
     }
 }
@@ -205,65 +213,9 @@ private fun Tipo_de_animal(
         }
     }
 }
-@Composable
-
-private fun Contador_numero_individuos(
-    individualsCount: Int,
-    onCountChange: (Int) -> Unit
-) {
-    Text("Número de individuos")
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        IconButton(
-            onClick = { if (individualsCount > 0) onCountChange(individualsCount - 1) }
-        ) {
-            Text("-", style = MaterialTheme.typography.headlineMedium)
-        }
-
-        OutlinedTextField(
-            value = verificacion_contador(individualsCount).toString(),
-            label = {},
-            onValueChange = {
-                if (it.isEmpty()) {
-                    onCountChange(1)
-                }
-                else if (it.toIntOrNull() == null) {
-                    onCountChange(1)
-                }
-                else if (it.toIntOrNull() != null) {
-                    onCountChange(it.toInt())
-                }
-            },
-            modifier = Modifier.width(120.dp),
-            textStyle = MaterialTheme.typography.headlineMedium
-        )
-
-       /* Text(
-            text = if(individualsCount <= 0) "1" else individualsCount.toString(),
-            style = MaterialTheme.typography.headlineMedium
-        )*/
-        IconButton(
-            onClick = { onCountChange(individualsCount + 1) }
-        ) {
-            Text("+", style = MaterialTheme.typography.headlineMedium)
-        }
-    }
-}
-
-private fun verificacion_contador(individualsCount: Int): Int {
-    if (individualsCount < 0)
-        return individualsCount*-1
-    else if (individualsCount == 0)
-        return 1
-    else
-        return individualsCount
-}
 
 @Composable
-fun ObservationTypeButton(
+fun AnimalTypeButton(
     text: String,
     iconRes: Int,
     selected: String?,
@@ -341,6 +293,33 @@ fun ObservationTypeButton(
 ////////////////////////////
 
 /// PARA EL CONTADOR DE INDIVIDUOS
+//@Composable
+//private fun Contador_numero_individuos(
+//    individualsCount: Int,
+//    onCountChange: (Int) -> Unit
+//) {
+//    Text("Número de individuos")
+//    Row(
+//        modifier = Modifier.fillMaxWidth(),
+//        horizontalArrangement = Arrangement.SpaceBetween,
+//        verticalAlignment = Alignment.CenterVertically
+//    ) {
+//        IconButton(
+//            onClick = { if (individualsCount > 0) onCountChange(individualsCount - 1) }
+//        ) {
+//            Text("-", style = MaterialTheme.typography.headlineMedium)
+//        }
+//        Text(
+//            text = individualsCount.toString(),
+//            style = MaterialTheme.typography.headlineMedium
+//        )
+//        IconButton(
+//            onClick = { onCountChange(individualsCount + 1) }
+//        ) {
+//            Text("+", style = MaterialTheme.typography.headlineMedium)
+//        }
+//    }
+//}
 @Composable
 private fun Contador_numero_individuos(
     individualsCount: Int,
@@ -357,16 +336,44 @@ private fun Contador_numero_individuos(
         ) {
             Text("-", style = MaterialTheme.typography.headlineMedium)
         }
-        Text(
-            text = individualsCount.toString(),
-            style = MaterialTheme.typography.headlineMedium
+
+        OutlinedTextField(
+            value = verificacion_contador(individualsCount).toString(),
+            label = {},
+            onValueChange = {
+                if (it.isEmpty()) {
+                    onCountChange(1)
+                }
+                else if (it.toIntOrNull() == null) {
+                    onCountChange(1)
+                }
+                else if (it.toIntOrNull() != null) {
+                    onCountChange(it.toInt())
+                }
+            },
+            modifier = Modifier.width(120.dp),
+            textStyle = MaterialTheme.typography.headlineMedium
         )
+
+        /* Text(
+             text = if(individualsCount <= 0) "1" else individualsCount.toString(),
+             style = MaterialTheme.typography.headlineMedium
+         )*/
         IconButton(
             onClick = { onCountChange(individualsCount + 1) }
         ) {
             Text("+", style = MaterialTheme.typography.headlineMedium)
         }
     }
+}
+
+private fun verificacion_contador(individualsCount: Int): Int {
+    if (individualsCount < 0)
+        return individualsCount*-1
+    else if (individualsCount == 0)
+        return 1
+    else
+        return individualsCount
 }
 ////////////////////////////
 

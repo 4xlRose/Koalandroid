@@ -96,6 +96,8 @@ dependencies{
     androidTestImplementation(libs.androidx.core)
     androidTestImplementation (libs.mockk.android.v1123)
     //androidTestImplementation (libs.mockk.android.v11313)
+    // mas test implementation
+    // Testing dependencies
 
 
     testImplementation (libs.junit)
