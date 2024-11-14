@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.compose.compiler)
 }
 
+
+
 android {
     namespace = "com.example.koadex"
     compileSdk = 34
@@ -56,8 +58,7 @@ android {
 }
 
 dependencies{
-    implementation(libs.junit.junit)
-    implementation(libs.androidx.core.testing)
+    implementation(libs.hilt.android)
     /*Room*/
     ksp(libs.androidx.room.compiler.v250)
     implementation(libs.room.runtime)
@@ -88,31 +89,14 @@ dependencies{
     debugImplementation(libs.androidx.ui.test.manifest)
     /*Otro*/
     implementation("androidx.compose.material:material-icons-extended:1.5.1")
+    implementation("androidx.hilt:hilt-navigation-fragment:1.0.0")
     /*Auth0*/
     implementation(libs.auth0)
 
-    // Otras dependencias de prueba necesarias
-    //testImplementation(libs.mockk.v11313)
-    androidTestImplementation(libs.androidx.core)
-    androidTestImplementation (libs.mockk.android.v1123)
-    //androidTestImplementation (libs.mockk.android.v11313)
-
-
-    testImplementation (libs.junit)
-    androidTestImplementation (libs.androidx.junit.v113)
-    androidTestImplementation (libs.androidx.espresso.core.v340)
-    //testImplementation (libs.androidx.core.testing.v220)
-
-    testImplementation (libs.kotlinx.coroutines.test.v190)
-
-    /*Camara*/
-    implementation(libs.androidx.camera.core)
-    implementation(libs.androidx.camera.camera2)
-    implementation(libs.androidx.camera.lifecycle)
-    implementation(libs.androidx.camera.video)
-    implementation(libs.androidx.camera.view)
-    implementation(libs.androidx.camera.extensions)
+    // Prueba unitaria
+    implementation (platform("androidx.compose:compose-bom:2023.08.00"))
+    androidTestImplementation(platform("androidx.compose:compose-bom:2023.06.01"))
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+    testImplementation("junit:junit:4.13.2")
 
 }
-
-

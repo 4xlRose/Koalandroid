@@ -95,6 +95,7 @@ fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modi
         composable("Verificacion"){
             Verificacion(navController = navController)
         }
+
         //Tipos de formulario
         composable("FormularioGeneral") {
             FormularioGeneral(navController = navController)
