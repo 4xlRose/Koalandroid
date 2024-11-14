@@ -55,7 +55,16 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+    testOptions {
+        unitTests.all {
+            it.jvmArgs!! += "-noverify"
+            it.jvmArgs!! += "-Xmx1024m"
+
+        }
+    }
 }
+
 
 dependencies{
     implementation(libs.hilt.android)
@@ -92,10 +101,29 @@ dependencies{
     /*Auth0*/
     implementation(libs.auth0)
 
+    // Otras dependencias de prueba necesarias
+    //testImplementation(libs.mockk.v11313)
+    androidTestImplementation(libs.androidx.core)
+    androidTestImplementation (libs.mockk.android.v1123)
+    //androidTestImplementation (libs.mockk.android.v11313)
+    testImplementation (libs.androidx.core.testing.v220)
+    testImplementation (libs.mockito.android)
+    testImplementation (libs.mockito.core.v481)
+    testImplementation (libs.mockito.mockito.inline.v400)
+    testImplementation (libs.mockito.kotlin.v410)
+
+    testImplementation (libs.junit)
+    androidTestImplementation (libs.androidx.junit.v113)
+    androidTestImplementation (libs.androidx.espresso.core.v340)
+    //testImplementation (libs.androidx.core.testing.v220)
+
+    testImplementation (libs.kotlinx.coroutines.test.v190)
+
+
     // Prueba unitaria
     implementation (platform("androidx.compose:compose-bom:2023.08.00"))
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.06.01"))
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
-    testImplementation("junit:junit:4.13.2")
+
 
 }
