@@ -12,11 +12,11 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object DatabaseModule {
+object HiltModule {
 
     @Provides
     @Singleton
-    fun provideAppDatabase(@ApplicationContext appContext: Context): FormDatabase {
+    fun provideFormDatabase(@ApplicationContext appContext: Context): FormDatabase {
         return Room.databaseBuilder(
             appContext,
             FormDatabase::class.java,
@@ -25,7 +25,7 @@ object DatabaseModule {
     }
 
     @Provides
-    fun provideMyDao(appDatabase: FormDatabase): FormDao {
+    fun provideFormDao(appDatabase: FormDatabase): FormDao {
         return appDatabase.formDao()
     }
 }
