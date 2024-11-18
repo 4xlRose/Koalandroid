@@ -57,6 +57,7 @@ import com.example.koadex.ui.form.FormEntryViewModel
 
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
@@ -64,16 +65,400 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.koadex.AppViewModelProvider
 import com.example.koadex.ui.form.FormDetails
 import com.example.koadex.ui.form.FormUiState
+/*
 import com.example.koadex.ui.form.GeneralFormDetails
 import com.example.koadex.ui.form.GeneralFormUiState
 import com.example.koadex.ui.form.SeasonDetails
 import com.example.koadex.ui.form.WeatherDetails
-
+*/
 // TEST
 import com.example.koadex.utils.DateValidator
 
 import kotlinx.coroutines.launch
 
+@RequiresApi(Build.VERSION_CODES.O)
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun FormularioGeneral(
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
+    viewModel: FormEntryViewModel = viewModel(factory = AppViewModelProvider.Factory)
+) {
+    val coroutineScope = rememberCoroutineScope()
+    FormularioGeneralEntry(
+        navController = navController,
+        formUiState = viewModel.formUiState,
+        onFormValueChange = viewModel::updateUiState,
+        onSaveClick = {
+            coroutineScope.launch {
+                viewModel.saveForm()
+                navController.navigate("TiposForms")
+            }
+        },
+        onDateChange = { newDate ->
+            viewModel.updateUiState(viewModel.formUiState.formDetails.copy(date = newDate))
+        },
+        modifier = modifier
+    )
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun FormularioGeneralEntry(
+    navController: NavHostController,
+    formUiState: FormUiState,
+    onFormValueChange: (FormDetails) -> Unit,
+    onDateChange: (String) -> Unit,
+    onSaveClick: () -> Unit,
+    modifier: Modifier
+) {
+    val textModifier = Modifier // Define it here
+        .fillMaxWidth()
+        .padding(10.dp)
+        .height(40.dp)
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .verticalScroll(rememberScrollState())
+            .padding(top = 32.dp)
+            .background(Color.White)
+
+    ) {
+        // ... (keep existing header code)
+        val textModifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp)
+            .height(40.dp)
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(67.dp)
+                .background(color = colorResource(R.color.green_100)),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(
+                modifier = Modifier
+                    .padding(20.dp)
+                    .size(30.dp),
+                onClick = { navController.navigate("Principal") }
+            )
+            {
+                Icon(
+                    Icons.AutoMirrored.Rounded.ArrowBack,
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+            Text(
+                text = "Formulario",
+                modifier = modifier
+                    .offset(x = 10.dp),
+                fontSize = 25.sp
+            )
+        }
+
+        FormInputForm(
+            formDetails = formUiState.formDetails,
+            onFormValueChange = onFormValueChange,
+            onDateChange = { newDate ->
+                onFormValueChange(formUiState.formDetails.copy(date = newDate))
+            },
+            modifier = Modifier
+        )
+
+        // Weather section
+        Row(
+            modifier = textModifier,
+            verticalAlignment = Alignment.Bottom
+        ) {
+            Text(
+                text = "Estado del Tiempo",
+                modifier = modifier.offset(x = 30.dp),
+                fontSize = 18.sp
+            )
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            var weather by remember { mutableStateOf(formUiState.formDetails.weather) }
+            val buttonSize = 80.dp
+
+            // Weather buttons
+            WeatherButton(
+                type = "soleado",
+                currentWeather = weather,
+                onWeatherChange = {
+                    weather = it
+                    onFormValueChange(formUiState.formDetails.copy(weather = it))
+                },
+                buttonSize = buttonSize
+            )
+
+            WeatherButton(
+                type = "nublado",
+                currentWeather = weather,
+                onWeatherChange = {
+                    weather = it
+                    onFormValueChange(formUiState.formDetails.copy(weather = it))
+                },
+                buttonSize = buttonSize
+            )
+
+            WeatherButton(
+                type = "lluvioso",
+                currentWeather = weather,
+                onWeatherChange = {
+                    weather = it
+                    onFormValueChange(formUiState.formDetails.copy(weather = it))
+                },
+                buttonSize = buttonSize
+            )
+        }
+
+        // Season section
+        Row(
+            modifier = textModifier,
+            verticalAlignment = Alignment.Bottom
+        ) {
+            Text(
+                text = "Época",
+                modifier = modifier.offset(x = 30.dp),
+                fontSize = 18.sp
+            )
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            var season by remember { mutableStateOf(formUiState.formDetails.season) }
+            val buttonSize = 80.dp
+
+            // Season buttons
+            SeasonButton(
+                type = "verano",
+                currentSeason = season,
+                onSeasonChange = {
+                    season = it
+                    onFormValueChange(formUiState.formDetails.copy(season = it))
+                },
+                buttonSize = buttonSize
+            )
+
+            SeasonButton(
+                type = "invierno",
+                currentSeason = season,
+                onSeasonChange = {
+                    season = it
+                    onFormValueChange(formUiState.formDetails.copy(season = it))
+                },
+                buttonSize = buttonSize
+            )
+        }
+
+        // Submit button
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Button(
+                shape = RoundedCornerShape(6.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF4E7029)
+                ),
+                modifier = Modifier
+                    .padding(40.dp)
+                    .width(300.dp),
+                onClick = {
+                    onSaveClick()
+
+                },
+                enabled = formUiState.isEntryValid
+            ) {
+                Text("SIGUIENTE", fontWeight = FontWeight.Bold)
+            }
+        }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun FormInputForm(
+    formDetails: FormDetails,
+    onFormValueChange: (FormDetails) -> Unit,
+    onDateChange: (String) -> Unit,
+    modifier: Modifier,
+    enabled: Boolean = true
+) {
+    var dateText by remember { mutableStateOf(formDetails.date) }
+
+    // Variables para el TEST
+    val dateValidator = remember { DateValidator() }
+    var dateError by remember { mutableStateOf<String?>(null) }
+
+    /* Formatear la fecha a dd/mm/aa
+    fun formatFecha(input: String): String {
+        if (input.length == 6) {
+            val dia = input.substring(0, 2)
+            val mes = input.substring(2, 4)
+            val anio = input.substring(4, 6)
+            return "$dia/$mes/$anio"
+        }
+        return input
+    }*/
+
+    OutlinedTextField(
+        value = formDetails.name,
+        label = { Text("Nombre") },
+        onValueChange = { onFormValueChange(formDetails.copy(name = it)) },
+        modifier = Modifier
+            .padding(10.dp)
+            .width(320.dp),
+        enabled = enabled
+    )
+
+    Row(
+        modifier = Modifier
+            .padding(10.dp)
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        OutlinedTextField(
+            value = dateText,
+            onValueChange = { input ->
+                if (input.length <= 8) { // Considerando los '/'
+                    val formattedInput = if (input.replace("/", "").length <= 6) {
+                        dateValidator.formatDate(input.replace("/", ""))
+                    } else {
+                        input
+                    }
+
+                    dateText = formattedInput
+
+                    // Validar solo si el campo está completo
+                    if (formattedInput.length == 8) { // dd/mm/yy
+                        if (dateValidator.isValidDate(formattedInput)) {
+                            dateError = null
+                            onDateChange(formattedInput)
+                        } else {
+                            dateError = "Fecha inválida"
+                        }
+                    }
+                }
+            },
+            label = { Text(stringResource(R.string.fecha)) },
+            modifier = Modifier
+                .width(180.dp)
+                .offset(26.dp),
+            isError = dateError != null,
+            supportingText = {
+                dateError?.let {
+                    Text(
+                        text = it,
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+            }
+        )
+        // ... (keep date picker button)
+    }
+
+    Row(
+        modifier = Modifier
+            .padding(10.dp)
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        OutlinedTextField(
+            value = formDetails.place,
+            label = { Text("Localidad") },
+            onValueChange = { onFormValueChange(formDetails.copy(place = it)) },
+            modifier = Modifier
+                .width(262.dp)
+                .offset(26.dp)
+        )
+        // ... (keep location button)
+    }
+
+    OutlinedTextField(
+        value = formDetails.hour,
+        label = { Text("Hora") },
+        onValueChange = { onFormValueChange(formDetails.copy(hour = it)) },
+        modifier = Modifier
+            .padding(10.dp)
+            .width(320.dp)
+    )
+}
+
+@Composable
+fun WeatherButton(
+    type: String,
+    currentWeather: String,
+    onWeatherChange: (String) -> Unit,
+    buttonSize: Dp
+) {
+    OutlinedIconToggleButton(
+        checked = currentWeather == type,
+        onCheckedChange = { onWeatherChange(type) },
+        shape = RoundedCornerShape(12.dp),
+        colors = IconButtonDefaults.iconToggleButtonColors(
+            containerColor = if (currentWeather == type) Color(0xFFCDE4B4) else Color.White
+        ),
+        border = BorderStroke(
+            width = 1.dp,
+            color = if (currentWeather == type) Color(0xFF4E7029) else Color.Black
+        ),
+        modifier = Modifier.size(buttonSize)
+    ) {
+        Image(
+            painter = painterResource(
+                when (type) {
+                    "soleado" -> R.drawable.soleado
+                    "nublado" -> R.drawable.nublado
+                    else -> R.drawable.lluvioso
+                }
+            ),
+            contentDescription = null
+        )
+    }
+}
+
+@Composable
+fun SeasonButton(
+    type: String,
+    currentSeason: String,
+    onSeasonChange: (String) -> Unit,
+    buttonSize: Dp
+) {
+    OutlinedIconToggleButton(
+        checked = currentSeason == type,
+        onCheckedChange = { onSeasonChange(type) },
+        shape = RoundedCornerShape(12.dp),
+        colors = IconButtonDefaults.iconToggleButtonColors(
+            containerColor = if (currentSeason == type) Color(0xFFCDE4B4) else Color.White
+        ),
+        border = BorderStroke(
+            width = 1.dp,
+            color = if (currentSeason == type) Color(0xFF4E7029) else Color.Black
+        ),
+        modifier = Modifier.size(buttonSize)
+    ) {
+        Image(
+            painter = painterResource(
+                when (type) {
+                    "verano" -> R.drawable.verano
+                    else -> R.drawable.invierno
+                }
+            ),
+            contentDescription = null
+        )
+    }
+}
+
+/*
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -300,7 +685,7 @@ fun FormInputForm(
         return input
     }*/
 
-) {
+
     OutlinedTextField(
         value = formDetails.name,
         label = { Text("Nombre") },
@@ -462,3 +847,4 @@ fun SeasonButton(
         )
     }
 }
+*/

@@ -8,14 +8,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.ViewModel
+import com.example.koadex.data.FormEntity
+/*
 import com.example.koadex.data.AnimalTypeEntity
 import com.example.koadex.data.CameraEntity
 import com.example.koadex.data.CheckEntity
 import com.example.koadex.data.CheckListEntity
 import com.example.koadex.data.CoverageEntity
 import com.example.koadex.data.DisturbanceEntity
-import com.example.koadex.data.FollowUpFormEntity
+import com.example.koadex.data.FollowUpFormEntity*/
 import com.example.koadex.data.FormRepository
+/*
 import com.example.koadex.data.GeneralFormEntity
 import com.example.koadex.data.HabitatEntity
 import com.example.koadex.data.HeightTypeEntity
@@ -31,12 +34,79 @@ import com.example.koadex.data.UserEntity
 import com.example.koadex.data.WeatherEntity
 import com.example.koadex.data.WeatherFormEntity
 import com.example.koadex.data.ZoneEntity
-import com.example.koadex.data.ZoneTypeEntity
+import com.example.koadex.data.ZoneTypeEntity*/
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.sql.Date
 import java.sql.Time
 import javax.inject.Inject
 
+
+class FormEntryViewModel(private val formRepository: FormRepository) : ViewModel() {
+
+    var formUiState by mutableStateOf(FormUiState())
+        private set
+
+
+    fun updateUiState(formDetails: FormDetails) {
+        formUiState = FormUiState(
+            formDetails = formDetails,
+            isEntryValid = validateInput(formDetails)
+        )
+    }
+
+    suspend fun saveForm() {
+        if (validateInput()) {
+            formRepository.insertForm(formUiState.formDetails.toEntity())
+        }
+    }
+
+    private fun validateInput(uiState: FormDetails = formUiState.formDetails): Boolean {
+        return with(uiState) {
+            name.isNotBlank() && date.isNotBlank() && place.isNotBlank() && hour.isNotBlank()
+        }
+    }
+}
+data class FormUiState(
+    val formDetails: FormDetails = FormDetails(),
+    val isEntryValid: Boolean = false
+)
+
+// 6. Update the data classes
+data class FormDetails(
+    val id: Int = 0,
+    val name: String = "",
+    val date: String = "",
+    val place: String = "",
+    val hour: String = "",
+    val weather: String = "",
+    val season: String = ""
+)
+
+
+
+// Extension function to convert FormDetails to FormEntity
+fun FormDetails.toEntity(): FormEntity = FormEntity(
+    name = name,
+    date = date,
+    place = place,
+    hour = hour,
+    weather = weather,
+    season = season
+)
+
+fun FormEntity.toFormUiState(isEntryValid: Boolean = false): FormUiState = FormUiState(
+    formDetails = this.toFormDetails(),
+    isEntryValid = isEntryValid
+)
+
+fun FormEntity.toFormDetails(): FormDetails = FormDetails(
+    name = name,
+    date = date,
+    place = place,
+    hour = hour,
+    weather = weather
+)
+/*
 @HiltViewModel
 class FormEntryViewModel @Inject constructor(private val formRepository: FormRepository) : ViewModel()
 {
@@ -857,4 +927,4 @@ fun WeatherFormEntity.toFormDetails(): WeatherFormDetails = WeatherFormDetails(
 fun WeatherFormEntity.toFormUiState(isEntryValid: Boolean = false): WeatherFormUiState = WeatherFormUiState(
     formDetails = this.toFormDetails(),
     isEntryValid = isEntryValid
-)
+)*/

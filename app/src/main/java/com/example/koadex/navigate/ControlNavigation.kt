@@ -51,7 +51,6 @@ import com.example.koadex.Views.OlvidoContrasena
 import com.example.koadex.Views.Perfil
 import com.example.koadex.Views.Principal
 import com.example.koadex.Views.Registro
-import com.example.koadex.Views.SeleccionForm
 import com.example.koadex.Views.Verificacion
 import com.example.koadex.Views.FormularioSeguimiento
 import com.example.koadex.Views.FormularioVariablesClimaticas
