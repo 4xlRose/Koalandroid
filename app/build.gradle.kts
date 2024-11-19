@@ -98,7 +98,6 @@ dependencies{
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
     testImplementation("junit:junit:4.13.2")
 
-
     //Camara
     implementation(libs.androidx.camera.core)
     implementation(libs.androidx.camera.camera2)

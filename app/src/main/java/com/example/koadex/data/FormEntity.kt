@@ -1,11 +1,7 @@
 package com.example.koadex.data
 
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.room.Entity
-import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import java.sql.Date
-import java.sql.Time
 
 @Entity(tableName = "forms")
 data class FormEntity(
@@ -117,16 +113,11 @@ data class UserEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val name: String = "",
-    val email: String = "",
-    val password: String = "",
-    val startDate: Date = Date(20241111),
-    val idZone: Int, // Foreign Key
-)
-
-@Entity(tableName = "weather")
-data class WeatherEntity(
-    val id: Int = 0,
+    val date: String = "",
+    val place: String = "",
+    val hour: String = "",
     val weather: String = "",
+    val season: String = ""
 )
 
 @Entity(tableName = "season")
