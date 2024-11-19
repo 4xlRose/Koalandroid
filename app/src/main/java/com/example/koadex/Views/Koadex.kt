@@ -52,7 +52,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -60,13 +59,10 @@ import androidx.navigation.NavHostController
 import com.example.koadex.AppViewModelProvider
 import com.example.koadex.R
 import com.example.koadex.data.FormEntity
-import com.example.koadex.navigate.La_navegacion
-import com.example.koadex.data.GeneralFormEntity
 import com.example.koadex.ui.principal.KoadexViewModel
 import com.example.koadex.ui.theme.Gray300
 import com.example.koadex.ui.theme.Green100
 import com.example.koadex.ui.theme.Green700
-
 
 @Composable
 fun Koadex(
@@ -81,11 +77,11 @@ fun Koadex(
             TopNavBar(navController)
         },
         bottomBar = {
-            La_navegacion(navController)
+            BottomNavBar()
         }
 
     ) {
-        innerPadding ->
+            innerPadding ->
         KoadexPantalla(
             modifier = Modifier
                 .padding(innerPadding)
@@ -99,7 +95,7 @@ fun Koadex(
 @Composable
 fun KoadexPantalla(modifier: Modifier,
                    viewModel: KoadexViewModel,
-                   ) {
+) {
     val koadexUiState by viewModel.koadexUiState.collectAsState()
     Column(modifier = Modifier.fillMaxSize()
         .padding(top = 64.dp, bottom = 150.dp),
@@ -114,7 +110,7 @@ fun KoadexPantalla(modifier: Modifier,
 
 @Composable
 fun KoadexContenido(
-    formList: List<GeneralFormEntity>,
+    formList: List<FormEntity>,
     modifier: Modifier = Modifier) {
     Row(
         horizontalArrangement = Arrangement.SpaceAround,
@@ -193,7 +189,7 @@ fun KoadexContenido(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
 
-    ) {
+        ) {
 
         if (formList.isEmpty()) {
             Text(
@@ -207,8 +203,8 @@ fun KoadexContenido(
 }
 
 @Composable
- fun FormList(
-    formList: List<GeneralFormEntity>,
+fun FormList(
+    formList: List<FormEntity>,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier = modifier) {
@@ -222,16 +218,16 @@ fun KoadexContenido(
 }
 
 @Composable
- private fun FormInfo(
-    form: GeneralFormEntity,
+private fun FormInfo(
+    form: FormEntity,
     modifier: Modifier = Modifier) {
     Card(
         modifier = modifier
             .padding(20.dp),
         shape = RoundedCornerShape(10.dp),
-       colors = CardDefaults.cardColors(
-           containerColor = Green100
-       )
+        colors = CardDefaults.cardColors(
+            containerColor = Green100
+        )
     ) {
         Column(
             modifier = modifier.fillMaxWidth()
@@ -247,7 +243,7 @@ fun KoadexContenido(
 
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Nombre: " + form.idUser
+                        text = "Nombre: " + form.name
                     )
                 }
 
@@ -266,7 +262,7 @@ fun KoadexContenido(
 
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Lugar: " + form.serialCode
+                        text = "Lugar: " + form.place
                     )
                 }
 
@@ -283,179 +279,180 @@ fun KoadexContenido(
 }
 
 
-    @Composable
-    fun TopNavBar(navController: NavHostController) {
-        val context = LocalContext.current.applicationContext
+@Composable
+fun TopNavBar(navController: NavHostController) {
+    val context = LocalContext.current.applicationContext
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(80.dp)
+            .background(Green100),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        IconButton(
+            modifier = Modifier
+                .padding(20.dp)
+                .size(30.dp),
+            onClick = { navController.navigate("Principal") }
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = "Back",
+                modifier = Modifier.fillMaxSize()
+            )
+        }
 
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(80.dp)
-                .background(Green100),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceAround,
+            modifier = Modifier
+                .width(170.dp)
         ) {
-            IconButton(
-                modifier = Modifier
-                    .padding(20.dp)
-                    .size(30.dp),
-                onClick = { navController.navigate("Principal") }
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceAround,
-                modifier = Modifier
-                    .width(170.dp)
-            ) {
-                Button(
-                    modifier = Modifier.size(50.dp),
-                    contentPadding = PaddingValues(
-                        horizontal = 0.dp,
-                        vertical = 0.dp
-                    ),
-                    onClick = { Toast.makeText(context, "Koadex", Toast.LENGTH_SHORT).show() }
-                ) {
-                    Image(
-                        painter = painterResource(R.drawable.koadex),
-                        contentDescription = "Koadex Logo"
-                    )
-                }
-
-                Text(text = "Koadex", fontSize = 30.sp, fontWeight = FontWeight.Medium)
-            }
-            IconButton(
-                modifier = Modifier
-                    .padding(20.dp)
-                    .size(30.dp),
+            Button(
+                modifier = Modifier.size(50.dp),
+                contentPadding = PaddingValues(
+                    horizontal = 0.dp,
+                    vertical = 0.dp
+                ),
                 onClick = { Toast.makeText(context, "Koadex", Toast.LENGTH_SHORT).show() }
             ) {
-                Icon(
-                    imageVector = Icons.Filled.MoreVert,
-                    contentDescription = "More",
-                    modifier = Modifier.fillMaxSize()
+                Image(
+                    painter = painterResource(R.drawable.koadex),
+                    contentDescription = "Koadex Logo"
                 )
             }
+
+            Text(text = "Koadex", fontSize = 30.sp, fontWeight = FontWeight.Medium)
+        }
+        IconButton(
+            modifier = Modifier
+                .padding(20.dp)
+                .size(30.dp),
+            onClick = { Toast.makeText(context, "Koadex", Toast.LENGTH_SHORT).show() }
+        ) {
+            Icon(
+                imageVector = Icons.Filled.MoreVert,
+                contentDescription = "More",
+                modifier = Modifier.fillMaxSize()
+            )
         }
     }
+}
 
-    @Composable
-    fun BottomNavBar() {
-        var navBarSelect by remember { mutableStateOf("Búsqueda") }
+@Composable
+fun BottomNavBar() {
+    var navBarSelect by remember { mutableStateOf("Búsqueda") }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(140.dp)
+            .background(Green100),
+        verticalAlignment = Alignment.Top,
+    ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(140.dp)
-                .background(Green100),
-            verticalAlignment = Alignment.Top,
+                .padding(15.dp)
+                .fillMaxSize(),
+            horizontalArrangement = Arrangement.SpaceAround
         ) {
-            Row(
+            val buttonSize = 40.dp
+            val textSize = 15.sp
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .padding(15.dp)
-                    .fillMaxSize(),
-                horizontalArrangement = Arrangement.SpaceAround
+                    .width(100.dp)
+                    .clip(RoundedCornerShape(20.dp, 20.dp))
             ) {
-                val buttonSize = 40.dp
-                val textSize = 15.sp
-
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .width(100.dp)
-                        .clip(RoundedCornerShape(20.dp, 20.dp))
+                val text = "Inicio"
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = if (navBarSelect == text)
+                        Modifier
+                            .background(Color.White)
+                            .fillMaxWidth()
+                    else
+                        Modifier.background(Color.Transparent)
                 ) {
-                    val text = "Inicio"
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = if (navBarSelect == text)
-                            Modifier
-                                .background(Color.White)
-                                .fillMaxWidth()
-                        else
-                            Modifier.background(Color.Transparent)
+                    IconToggleButton(
+                        modifier = Modifier.size(buttonSize),
+                        checked = false,
+                        onCheckedChange = { navBarSelect = text }
                     ) {
-                        IconToggleButton(
-                            modifier = Modifier.size(buttonSize),
-                            checked = false,
-                            onCheckedChange = { navBarSelect = text }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Outlined.Home,
-                                contentDescription = text,
-                                modifier = Modifier.fillMaxSize()
-                            )
-                        }
+                        Icon(
+                            imageVector = Icons.Outlined.Home,
+                            contentDescription = text,
+                            modifier = Modifier.fillMaxSize()
+                        )
                     }
-                    Text(text = text, fontSize = textSize)
                 }
+                Text(text = text, fontSize = textSize)
+            }
 
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .width(100.dp)
-                        .clip(RoundedCornerShape(20.dp, 20.dp))
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .width(100.dp)
+                    .clip(RoundedCornerShape(20.dp, 20.dp))
+            ) {
+                val text = "Búsqueda"
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = if (navBarSelect == text)
+                        Modifier
+                            .background(Color(0xB4D68F))
+                            .fillMaxWidth()
+                    else
+                        Modifier.background(Color.Transparent)
                 ) {
-                    val text = "Búsqueda"
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = if (navBarSelect == text)
-                            Modifier
-                                .background(Color.White)
-                                .fillMaxWidth()
-                        else
-                            Modifier.background(Color.Transparent)
+                    IconToggleButton(
+                        modifier = Modifier.size(buttonSize),
+                        checked = false,
+                        onCheckedChange = { navBarSelect = text }
                     ) {
-                        IconToggleButton(
-                            modifier = Modifier.size(buttonSize),
-                            checked = false,
-                            onCheckedChange = { navBarSelect = text }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Outlined.Search,
-                                contentDescription = text,
-                                modifier = Modifier.fillMaxSize()
-                            )
-                        }
+                        Icon(
+                            imageVector = Icons.Outlined.Search,
+                            contentDescription = text,
+                            modifier = Modifier.fillMaxSize()
+                        )
                     }
-                    Text(text = text, fontSize = textSize)
                 }
+                Text(text = text, fontSize = textSize)
+            }
 
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .width(100.dp)
-                        .clip(RoundedCornerShape(20.dp, 20.dp))
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .width(100.dp)
+                    .clip(RoundedCornerShape(20.dp, 20.dp))
+            ) {
+                val text = "Configuración"
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = if (navBarSelect == text)
+                        Modifier
+                            .background(Color.White)
+                            .fillMaxWidth()
+                    else
+                        Modifier.background(Color.Transparent)
                 ) {
-                    val text = "Configuración"
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = if (navBarSelect == text)
-                            Modifier
-                                .background(Color.White)
-                                .fillMaxWidth()
-                        else
-                            Modifier.background(Color.Transparent)
+                    IconToggleButton(
+                        modifier = Modifier.size(buttonSize),
+                        checked = false,
+                        onCheckedChange = { navBarSelect = text }
                     ) {
-                        IconToggleButton(
-                            modifier = Modifier.size(buttonSize),
-                            checked = false,
-                            onCheckedChange = { navBarSelect = text }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Outlined.Settings,
-                                contentDescription = text,
-                                modifier = Modifier.fillMaxSize()
-                            )
-                        }
+                        Icon(
+                            imageVector = Icons.Outlined.Settings,
+                            contentDescription = text,
+                            modifier = Modifier.fillMaxSize()
+                        )
                     }
-                    Text(text = text, fontSize = textSize)
                 }
+                Text(text = text, fontSize = textSize)
             }
         }
     }
+}
+
