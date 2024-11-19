@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("com.google.devtools.ksp")
     alias(libs.plugins.compose.compiler)
+    id("kotlin-kapt")
+
 }
 
 android {
@@ -79,6 +81,7 @@ dependencies{
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.dagger)
 
 
     testImplementation(libs.junit)
@@ -124,7 +127,12 @@ dependencies{
     implementation(libs.androidx.camera.video)
     implementation(libs.androidx.camera.view)
     implementation(libs.androidx.camera.extensions)
+    implementation(libs.hilt.android)
+    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
 
 }
 
+kapt {
+    correctErrorTypes = true
+}
 

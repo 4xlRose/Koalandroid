@@ -49,8 +49,6 @@ import com.example.koadex.Views.EditProfileScreen
 import com.example.koadex.clases.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 
-
-@HiltViewModel
 class PerfilScreenViewModel: ViewModel() {
 
     @Composable
