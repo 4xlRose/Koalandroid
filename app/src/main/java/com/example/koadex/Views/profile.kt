@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -24,14 +25,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.koadex.R // Asegúrate de que los recursos de tu proyecto están correctamente referenciados
+import com.example.koadex.R
+import com.example.koadex.clases.User
 import com.example.koadex.navigate.La_navegacion
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PerfilScreen(
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    user: User
 ) {
     Scaffold(
         topBar = {
@@ -56,17 +59,26 @@ fun PerfilScreen(
                 .background(Color.White),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ProfileHeader()
+            ProfileHeader(user)
             Spacer(modifier = Modifier.height(32.dp))
             ProfileInfo()
             Spacer(modifier = Modifier.height(32.dp))
-            EditButton()
+            Button(
+                onClick = { navController.navigate("EditProfileScreen")},
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4E7029)),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .height(48.dp)
+            ) {
+                Text("EDITAR", color = Color.White, fontSize = 16.sp)
+            }
         }
     }
 }
 
 @Composable
-fun ProfileHeader() {
+fun ProfileHeader(user: User) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -82,20 +94,22 @@ fun ProfileHeader() {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.padding(16.dp)
         ) {
-            // Imagen con borde circular
             Image(
-                painter = painterResource(id = R.drawable.profilepicture), // Reemplaza con tu imagen de recurso
+                painter = painterResource(id = user.profilePicture),
                 contentDescription = "Foto de perfil",
                 modifier = Modifier
-                    .size(100.dp) // Tamaño de la imagen
-                    .background(Color.White, CircleShape) // Fondo blanco circular
-                    .border(2.dp, Color.Gray, CircleShape) // Borde gris alrededor de la imagen
-                    .padding(2.dp) // Espaciado interno de la imagen (para que no se toque el borde)
-                    .clip(CircleShape) // Recorta la imagen a un círculo
+                    .size(120.dp)
+                    .background(Color.White, CircleShape)
+                    .border(2.dp, Color.Gray, CircleShape)
+                    .padding(2.dp)
+                    .clip(CircleShape)
+                    .fillMaxSize(),
+                contentScale = ContentScale.Crop
+
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Samantha Smith",
+                text = user.username,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
@@ -108,6 +122,7 @@ fun ProfileHeader() {
         }
     }
 }
+
 @Composable
 fun ProfileInfo() {
     Column(
@@ -143,22 +158,20 @@ fun ProfileInfoRow(icon: ImageVector, infoText: String) {
     }
 }
 
-@Composable
-fun EditButton() {
-    Button(
-        onClick = { /* Acción de editar */ },
-        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF97B96E)),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .height(48.dp)
-    ) {
-        Text("EDITAR", color = Color.White, fontSize = 16.sp)
-    }
-}
-
 @Preview(showBackground = true)
 @Composable
 fun ProfileScreenPreview() {
-    PerfilScreen(navController = rememberNavController())
+    val sampleUser = User(
+        username = "Samantha Smith",
+        totalForms = 10,
+        uploadedForms = 7,
+        locallyStoredForms = 3,
+        posts = 15,
+        following = 200,
+        followers = 150,
+        isloggedIn = true,
+        profilePicture = R.drawable.profilepicture // Recurso de imagen predeterminado
+    )
+
+    PerfilScreen(navController = rememberNavController(), user = sampleUser)
 }

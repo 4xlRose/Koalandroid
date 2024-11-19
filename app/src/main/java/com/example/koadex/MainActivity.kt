@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         account = Auth0.getInstance(
-           "tplWesPliZAjIckkDPfCQETXZ9IDkJ8T",
+            "tplWesPliZAjIckkDPfCQETXZ9IDkJ8T",
             "dev-qk6i0qseg2txot3r.us.auth0.com"
         )
 
@@ -56,7 +56,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-
     }
     fun arePermissionsGranted(): Boolean {
         return CAMERA_PERMISSION.all { perssion ->
