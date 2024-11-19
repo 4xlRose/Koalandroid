@@ -52,7 +52,7 @@ fun EditProfileScreen(
     ) {
         // Botón de regreso
         IconButton(
-            onClick = { /* Acción al presionar volver */ },
+            onClick = { navController.navigate("PerfilScreen") },
             modifier = Modifier.align(Alignment.Start)
         ) {
             Icon(Icons.Default.ArrowBack, contentDescription = "Back")
@@ -96,7 +96,7 @@ fun EditProfileScreen(
 
         // Botón Guardar
         Button(
-            onClick = { /* Acción para guardar */ },
+            onClick = {navController.navigate("PerfilScreen") },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4E7029)),
             modifier = Modifier.fillMaxWidth()
         ) {

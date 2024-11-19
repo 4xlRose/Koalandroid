@@ -63,7 +63,16 @@ fun PerfilScreen(
             Spacer(modifier = Modifier.height(32.dp))
             ProfileInfo()
             Spacer(modifier = Modifier.height(32.dp))
-            EditButton()
+            Button(
+                onClick = { navController.navigate("EditProfileScreen")},
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4E7029)),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .height(48.dp)
+            ) {
+                Text("EDITAR", color = Color.White, fontSize = 16.sp)
+            }
         }
     }
 }
@@ -146,20 +155,6 @@ fun ProfileInfoRow(icon: ImageVector, infoText: String) {
         )
         Spacer(modifier = Modifier.width(16.dp))
         Text(text = infoText, fontSize = 16.sp, color = Color.Black)
-    }
-}
-
-@Composable
-fun EditButton() {
-    Button(
-        onClick = { /* Acción de editar */ },
-        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4E7029)),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .height(48.dp)
-    ) {
-        Text("EDITAR", color = Color.White, fontSize = 16.sp)
     }
 }
 

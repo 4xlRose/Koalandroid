@@ -54,6 +54,8 @@ import com.example.koadex.Views.Registro
 import com.example.koadex.Views.Verificacion
 import com.example.koadex.Views.FormularioSeguimiento
 import com.example.koadex.Views.FormularioVariablesClimaticas
+import com.example.koadex.Views.EditProfileScreen
+import com.example.koadex.clases.User
 
 
 @RequiresApi(Build.VERSION_CODES.P)
@@ -86,13 +88,21 @@ fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modi
             Configuracion(navController = navController)
         }
         composable("Perfil"){
-            PerfilScreen(navController = navController)
+            Perfil(navController = navController)
         }
         composable("OlvidoContrasena"){
             OlvidoContrasena(navController = navController)
         }
         composable("Verificacion"){
             Verificacion(navController = navController)
+        }
+
+        //Perfiles
+        composable("PerfilScreen") {
+            PerfilScreen(navController = navController, user = sampleUser)
+        }
+        composable("EditProfileScreen") {
+            EditProfileScreen(navController = navController, user = sampleUser)
         }
 
         //Tipos de formulario
@@ -184,4 +194,15 @@ fun BottomNavItem(
     }
 }
 ///////////////////////////
-
+val sampleUser = User(
+    username = "Samantha Smith",
+    totalForms = 10,
+    uploadedForms = 7,
+    locallyStoredForms = 3,
+    posts = 15,
+    following = 200,
+    followers = 150,
+    isloggedIn = true,
+    profilePicture = R.drawable.profilepicture // Recurso de imagen predeterminado
+)
+///////////////////
