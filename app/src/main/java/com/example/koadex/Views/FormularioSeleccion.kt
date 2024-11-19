@@ -1,5 +1,7 @@
 package com.example.koadex.Views
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,11 +15,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,8 +39,48 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.koadex.AppViewModelProvider
+import com.example.koadex.MainActivity
 import com.example.koadex.R
+import com.example.koadex.ui.principal.KoadexViewModel
+
+@RequiresApi(Build.VERSION_CODES.P)
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun FormularioSeleccion(
+    activity: MainActivity,
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
+    viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
+) {
+    Scaffold(
+        modifier = Modifier
+            .fillMaxSize(),
+        topBar = {
+            TopAppBar(
+                title = { Text(text = stringResource(id = R.string.formulario)) },
+                navigationIcon = {
+                    IconButton(onClick = { navController.navigateUp() }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = stringResource(id = R.string.atras)
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color(0xFFB4D68F)
+                )
+            )
+        }
+    ) { paddingValues ->
+        FormularioSeleccionScreen(
+            navController = navController,
+            modifier = Modifier.padding(paddingValues)
+        )
+    }
+}
 
 @Composable
 fun FormularioSeleccionScreen(
@@ -77,7 +127,7 @@ fun FormularioSeleccionScreen(
                     icon1 = R.drawable.fauna,
                     icon2 = R.drawable.aritmetica,
                     text = "Fauna en Punto de Conteo",
-                    onClick = { navController.navigate("FormularioSeguimiento") },
+                    onClick = { navController.navigate("FormularioFaunaPuntoConteo") },
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -91,13 +141,13 @@ fun FormularioSeleccionScreen(
                     icon1 = R.drawable.fauna,
                     icon2 = R.drawable.search,
                     text = "Fauna Búsqueda Libre",
-                    onClick = { navController.navigate("FormularioSeguimiento") },
+                    onClick = { navController.navigate("FormularioFaunaBusquedaLibre") },
                     modifier = Modifier.weight(1f)
                 )
                 OptionButton(
                     icon = R.drawable.cobertura,
                     text = "Validación de Cobertura",
-                    onClick = { navController.navigate("") },
+                    onClick = { navController.navigate("FormularioSeguimiento") },
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -110,7 +160,7 @@ fun FormularioSeleccionScreen(
                 OptionButton(
                     icon = R.drawable.vegetacion,
                     text = "Parcela de Vegetación",
-                    onClick = { navController.navigate("") },
+                    onClick = { navController.navigate("FormularioCuadrante") },
                     modifier = Modifier.weight(1f)
                 )
                 OptionButton(
@@ -125,7 +175,7 @@ fun FormularioSeleccionScreen(
             OptionButton(
                 icon = R.drawable.temporada,
                 text = "Variables Climáticas",
-                onClick = { navController.navigate("") },
+                onClick = { navController.navigate("FormularioVariablesClimaticas") },
                 modifier = Modifier.fillMaxWidth()
 
             )

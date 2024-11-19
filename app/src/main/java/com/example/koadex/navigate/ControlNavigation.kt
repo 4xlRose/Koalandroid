@@ -53,6 +53,7 @@ import com.example.koadex.Views.Principal
 import com.example.koadex.Views.Registro
 import com.example.koadex.Views.Verificacion
 import com.example.koadex.Views.FormularioSeguimiento
+import com.example.koadex.Views.FormularioSeleccion
 import com.example.koadex.Views.FormularioVariablesClimaticas
 
 
@@ -100,7 +101,7 @@ fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modi
             FormularioGeneral(navController = navController)
         }
         composable("TiposForms") {
-            FormularioSeleccionScreen(navController = navController)
+            FormularioSeleccion(activity, navController = navController)
         }
         composable("FormularioEspecies"){
             FormularioEspecies(navController = navController)
@@ -109,13 +110,13 @@ fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modi
             FormularioFaunaPuntoConteo(activity,navController = navController)
         }
         composable("FormularioFaunaBusquedaLibre"){
-            FormularioFaunaBusquedaLibre(activity,navController = navController)
+            FormularioFaunaBusquedaLibre(navController = navController)
         }
         composable("FormularioCuadrante"){
             FormularioCuadrante(activity,navController = navController)
         }
         composable("FormularioSeguimiento"){
-            FormularioSeguimiento(navController = navController)
+            FormularioSeguimiento(activity,navController = navController)
         }
         composable("CamarasTrampa") {
             FormularioCamaraTrampa(activity,navController = navController)
