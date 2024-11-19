@@ -34,7 +34,7 @@ import com.example.koadex.navigate.La_navegacion
 fun PerfilScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    user: User
+    user: User = User("Samantha", 5, 3, 2)
 ) {
     Scaffold(
         topBar = {

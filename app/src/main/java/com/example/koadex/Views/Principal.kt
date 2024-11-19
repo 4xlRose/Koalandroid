@@ -46,6 +46,7 @@ fun Principal(
     var `intro-base` = stringResource(id = R.string.Intro_homepage)
     var `formulario-base` = stringResource(id = R.string.Formularios_base)
 
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -215,7 +216,7 @@ private fun Logo_perfil(
 
                 // Botón de perfil a la derecha
                 IconButton(
-                    onClick = { navigation.navigate("Perfil") },
+                    onClick = { navigation.navigate("Profile") },
                     modifier = Modifier
                         .size(40.dp)
                         .clip(CircleShape)
