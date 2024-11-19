@@ -97,7 +97,7 @@ fun FormularioSeleccionScreen(
                 OptionButton(
                     icon = R.drawable.cobertura,
                     text = "Validación de Cobertura",
-                    onClick = { navController.navigate("") },
+                    onClick = { navController.navigate("FormularioSeguimiento") },
                     modifier = Modifier.weight(1f)
                 )
             }
