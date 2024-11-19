@@ -125,7 +125,7 @@ fun FormularioSeleccionScreen(
             OptionButton(
                 icon = R.drawable.temporada,
                 text = "Variables Climáticas",
-                onClick = { navController.navigate("") },
+                onClick = { navController.navigate("FormularioVariablesClimaticas") },
                 modifier = Modifier.fillMaxWidth()
 
             )

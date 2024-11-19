@@ -58,6 +58,7 @@ android {
 }
 
 dependencies{
+    implementation(libs.androidx.storage)
     /*Room*/
     ksp(libs.androidx.room.compiler.v250)
     implementation(libs.room.runtime)

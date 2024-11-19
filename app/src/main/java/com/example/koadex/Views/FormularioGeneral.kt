@@ -276,7 +276,7 @@ fun FormularioGeneralEntry(
                     onSaveClick()
 
                 },
-                enabled = formUiState.isEntryValid
+                // enabled = formUiState.isEntryValid
             ) {
                 Text("SIGUIENTE", fontWeight = FontWeight.Bold)
             }
