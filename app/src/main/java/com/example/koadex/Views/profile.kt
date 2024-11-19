@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.koadex.R // Asegúrate de que los recursos de tu proyecto están correctamente referenciados
+import com.example.koadex.R
 import com.example.koadex.navigate.La_navegacion
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -82,16 +82,16 @@ fun ProfileHeader() {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.padding(16.dp)
         ) {
-            // Imagen con borde circular
             Image(
-                painter = painterResource(id = R.drawable.profilepicture), // Reemplaza con tu imagen de recurso
+                painter = painterResource(id = R.drawable.profilepicture),
                 contentDescription = "Foto de perfil",
                 modifier = Modifier
-                    .size(100.dp) // Tamaño de la imagen
-                    .background(Color.White, CircleShape) // Fondo blanco circular
-                    .border(2.dp, Color.Gray, CircleShape) // Borde gris alrededor de la imagen
-                    .padding(2.dp) // Espaciado interno de la imagen (para que no se toque el borde)
-                    .clip(CircleShape) // Recorta la imagen a un círculo
+                    .size(120.dp)
+                    .background(Color.White, CircleShape)
+                    .border(2.dp, Color.Gray, CircleShape)
+                    .padding(2.dp)
+                    .clip(CircleShape)
+                    .fillMaxSize()
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
@@ -108,6 +108,7 @@ fun ProfileHeader() {
         }
     }
 }
+
 @Composable
 fun ProfileInfo() {
     Column(
@@ -147,7 +148,7 @@ fun ProfileInfoRow(icon: ImageVector, infoText: String) {
 fun EditButton() {
     Button(
         onClick = { /* Acción de editar */ },
-        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF97B96E)),
+        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4E7029)),
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
