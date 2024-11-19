@@ -91,22 +91,25 @@ fun FormularioSeleccionScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 32.dp)
-            .padding(top = 100.dp, bottom = 24.dp),
+            .padding(top = 140.dp, bottom = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(24.dp) // Espacio entre items
+        verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         Text(
             text = "Tipo de Registro",
-            style = MaterialTheme.typography.headlineSmall,
+            style = MaterialTheme.typography.headlineLarge,
             color = Color.Black
         )
-        // Container for buttons with max width of 800dp
+
+        Spacer(modifier = Modifier.weight(0.1f))
+
+        // Grid contenedor de los botones
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .width(800.dp)
                 .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             // Primera fila
             Row(
@@ -167,6 +170,8 @@ fun FormularioSeleccionScreen(
                     modifier = Modifier.weight(1f)
                 )
             }
+
+            // Este ultimo boton queda fuera del grid para que no se vea tan asimetrico
             OptionButton(
                 icon = R.drawable.temporada,
                 text = "Variables Climáticas",
@@ -178,7 +183,7 @@ fun FormularioSeleccionScreen(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Button(
+        /*Button(
             onClick = { navController.navigate("siguiente") },
             modifier = Modifier
                 .width(800.dp)
@@ -191,23 +196,24 @@ fun FormularioSeleccionScreen(
         ) {
             Text(
                 "SIGUIENTE",
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.headlineLarge
             )
-        }
+        }*/
     }
 }
 
 @Composable
-fun OptionButton(
+fun OptionButton( //Configuracion de los botones con una imagen
     icon: Int,
     text: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     OutlinedButton(
         onClick = onClick,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(80.dp), // Increased height
+        modifier = modifier
+            .height(160.dp)
+            .padding(vertical = 16.dp),
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.outlinedButtonColors(
             containerColor = Color.White
@@ -216,37 +222,39 @@ fun OptionButton(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 24.dp),
+                .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
                 painter = painterResource(id = icon),
                 contentDescription = null,
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(50.dp)
             )
-            Spacer(modifier = Modifier.width(24.dp))
+            Spacer(modifier = Modifier.width(16.dp))
             Text(
                 text = text,
                 color = Color.Black,
                 style = MaterialTheme.typography.titleLarge
             )
         }
+        Spacer(modifier = Modifier.weight(0.1f))
     }
 }
 
 @Composable
-fun OptionButtonTwoIcons(
+fun OptionButtonTwoIcons( //Botones con 2 iconos
     icon1: Int,
     icon2: Int,
     text: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     OutlinedButton(
         onClick = onClick,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(80.dp),
+        modifier = modifier
+            .height(160.dp)
+            .padding(vertical = 16.dp),
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.outlinedButtonColors(
             containerColor = Color.White
@@ -255,31 +263,28 @@ fun OptionButtonTwoIcons(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 24.dp),
+                .padding(horizontal = 1.dp),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Contenedor para los dos iconos
             Box(
                 modifier = Modifier
-                    .width(100.dp) // Espacio entre los iconos
-                    .height(64.dp),
+                    .width(88.dp)
+                    .height(70.dp),
                 contentAlignment = Alignment.CenterStart
             ) {
-                // Primer icono
                 Image(
                     painter = painterResource(id = icon1),
                     contentDescription = null,
                     modifier = Modifier
-                        .size(40.dp)
+                        .size(44.dp)
                         .align(Alignment.CenterStart)
                 )
-                // Segundo icono
                 Image(
                     painter = painterResource(id = icon2),
                     contentDescription = null,
                     modifier = Modifier
-                        .size(40.dp)
+                        .size(44.dp)
                         .align(Alignment.CenterEnd)
                 )
             }
@@ -287,8 +292,9 @@ fun OptionButtonTwoIcons(
                 text = text,
                 color = Color.Black,
                 style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(start = 20.dp)
+                modifier = Modifier.padding(start = 8.dp)
             )
         }
+        Spacer(modifier = Modifier.weight(0.1f))
     }
 }
