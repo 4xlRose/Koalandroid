@@ -41,7 +41,7 @@ import com.example.koadex.navigate.La_navegacion
 fun Principal(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    user: User = User("Samantha", 5, 3, 0)
+    user: User = User("Samantha", 5, 3, 2)
 ) {
     var `intro-base` = stringResource(id = R.string.Intro_homepage)
     var `formulario-base` = stringResource(id = R.string.Formularios_base)

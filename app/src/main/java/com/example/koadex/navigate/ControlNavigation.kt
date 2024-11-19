@@ -1,6 +1,5 @@
 package com.example.koadex.navigate
 
-import PerfilScreen
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
@@ -67,8 +66,6 @@ fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modi
         composable("InicioCarga") {
             InicioCarga(navController = navController)
         }
-
-
         composable("InicioSesion") {
             InicioSesion(navController = navController,account)
         }

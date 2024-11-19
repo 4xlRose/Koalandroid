@@ -9,7 +9,6 @@ import com.example.koadex.data.FormRepository
 import com.example.koadex.data.FormEntity
 import kotlinx.coroutines.launch
 
-
 class FormEntryViewModel(private val formRepository: FormRepository) : ViewModel() {
 
     var formUiState by mutableStateOf(FormUiState())

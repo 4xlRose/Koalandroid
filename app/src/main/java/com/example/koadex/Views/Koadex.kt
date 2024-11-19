@@ -804,10 +804,16 @@ fun BottomNavBar() {
                     else
                         Modifier.background(Color.Transparent)
                 ) {
-                    IconToggleButton(
-                        modifier = Modifier.size(buttonSize),
-                        checked = false,
-                        onCheckedChange = { navBarSelect = text }
+
+                    val text = "Búsqueda"
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = if (navBarSelect == text)
+                            Modifier
+                                .background(Color(0xB4D68F))
+                                .fillMaxWidth()
+                        else
+                            Modifier.background(Color.Transparent)
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.Search,
@@ -853,6 +859,4 @@ fun BottomNavBar() {
 
     }
 }
-
-
  */

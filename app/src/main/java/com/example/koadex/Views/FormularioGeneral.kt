@@ -1,8 +1,6 @@
 package com.example.koadex.Views
 
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material.icons.rounded.LocationOn
 import androidx.compose.material3.Button
@@ -31,10 +30,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedIconToggleButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -53,7 +54,10 @@ import androidx.navigation.NavHostController
 
 import com.example.koadex.R
 
+
+
 import com.example.koadex.ui.form.FormEntryViewModel
+
 
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
@@ -78,7 +82,6 @@ import com.example.koadex.utils.DateValidator
 
 import kotlinx.coroutines.launch
 
-@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormularioGeneral(
@@ -104,25 +107,23 @@ fun FormularioGeneral(
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun FormularioGeneralEntry(
     navController: NavHostController,
     formUiState: FormUiState,
     onFormValueChange: (FormDetails) -> Unit,
     onDateChange: (String) -> Unit,
+
     onSaveClick: () -> Unit,
     modifier: Modifier
 ) {
-    val textModifier = Modifier // Define it here
-        .fillMaxWidth()
-        .padding(10.dp)
-        .height(40.dp)
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .verticalScroll(rememberScrollState())
-            .padding(top = 32.dp)
+            .padding(16.dp,top=52.dp)
+            .fillMaxSize()
             .background(Color.White)
 
     ) {
@@ -131,7 +132,6 @@ fun FormularioGeneralEntry(
             .fillMaxWidth()
             .padding(10.dp)
             .height(40.dp)
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -279,6 +279,7 @@ fun FormularioGeneralEntry(
 
                 },
                 // enabled = formUiState.isEntryValid
+
             ) {
                 Text("SIGUIENTE", fontWeight = FontWeight.Bold)
             }
@@ -286,12 +287,10 @@ fun FormularioGeneralEntry(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun FormInputForm(
     formDetails: FormDetails,
     onFormValueChange: (FormDetails) -> Unit,
-    onDateChange: (String) -> Unit,
     modifier: Modifier,
     enabled: Boolean = true
 ) {
@@ -326,7 +325,6 @@ fun FormInputForm(
         modifier = Modifier
             .padding(10.dp)
             .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
     ) {
         OutlinedTextField(
             value = dateText,
@@ -353,26 +351,32 @@ fun FormInputForm(
             },
             label = { Text(stringResource(R.string.fecha)) },
             modifier = Modifier
-                .width(180.dp)
-                .offset(26.dp),
-            isError = dateError != null,
-            supportingText = {
-                dateError?.let {
-                    Text(
-                        text = it,
-                        color = MaterialTheme.colorScheme.error
-                    )
-                }
-            }
+                .width(320.dp),
+            enabled = enabled
         )
-        // ... (keep date picker button)
     }
 
     Row(
         modifier = Modifier
             .padding(10.dp)
             .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        OutlinedTextField(
+            value = formDetails.date,
+            label = { Text("Fecha") },
+            onValueChange = { onFormValueChange(formDetails.copy(date = it)) },
+            modifier = Modifier
+                .width(180.dp)
+                .offset(26.dp)
+        )
+
+    }
+
+    Row(
+        modifier = Modifier
+            .padding(10.dp)
+            .fillMaxWidth(),
+
     ) {
         OutlinedTextField(
             value = formDetails.place,
@@ -382,17 +386,24 @@ fun FormInputForm(
                 .width(262.dp)
                 .offset(26.dp)
         )
-        // ... (keep location button)
+
     }
 
-    OutlinedTextField(
-        value = formDetails.hour,
-        label = { Text("Hora") },
-        onValueChange = { onFormValueChange(formDetails.copy(hour = it)) },
+    Row(
         modifier = Modifier
             .padding(10.dp)
-            .width(320.dp)
-    )
+            .fillMaxWidth(),
+        //verticalAlignment = Alignment.CenterVertically,
+    ) {
+        OutlinedTextField(
+            value = formDetails.hour,
+            label = { Text("Hora") },
+            onValueChange = { onFormValueChange(formDetails.copy(hour = it)) },
+            modifier = Modifier
+                .offset(26.dp)
+                .width(320.dp)
+        )
+    }
 }
 
 @Composable
