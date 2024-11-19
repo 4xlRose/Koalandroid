@@ -22,3 +22,22 @@ abstract class FormDatabase : RoomDatabase() {
         }
     }
 }
+/*
+@Da tabase(entities = [GeneralFormEntity::class], version = 2, exportSchema = false)
+abstract class FormDatabase : RoomDatabase() {
+    abstract fun formDao(): FormDao
+
+    companion object {
+        @Volatile
+        private var Instance: FormDatabase? = null
+
+        fun getDatabase(context: Context): FormDatabase {
+            return Instance ?: synchronized(this) {
+                Room.databaseBuilder(context, FormDatabase::class.java, "form_database")
+                    .fallbackToDestructiveMigration()
+                    .build()
+                    .also { Instance = it }
+            }
+        }
+    }
+}*/

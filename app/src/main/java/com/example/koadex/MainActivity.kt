@@ -56,6 +56,21 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
+    }
+    fun arePermissionsGranted(): Boolean {
+        return CAMERA_PERMISSION.all { perssion ->
+            ContextCompat.checkSelfPermission(
+                applicationContext,
+                perssion
+            ) == PackageManager.PERMISSION_GRANTED
+        }
+    }
+
+    companion object {
+        val CAMERA_PERMISSION = arrayOf(
+            Manifest.permission.CAMERA
+        )
     }
     fun arePermissionsGranted(): Boolean {
         return CAMERA_PERMISSION.all { perssion ->
