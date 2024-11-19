@@ -40,7 +40,7 @@ fun FormularioFaunaBusquedaLibre(navController: NavHostController, modifier: Mod
     val actionButtonColors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4E7029))
 
 
-    // Estado de scroll
+    //Estado de scroll
     val scrollState = rememberScrollState()
 
     Column(
