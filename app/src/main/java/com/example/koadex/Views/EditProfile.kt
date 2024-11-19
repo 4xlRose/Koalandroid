@@ -23,6 +23,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -34,12 +35,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.koadex.R
+import com.example.koadex.clases.User
 
 
 @Composable
 fun EditProfileScreen(
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    user: User
 ) {
     Column(
         modifier = Modifier
@@ -57,15 +60,15 @@ fun EditProfileScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Imagen de perfil con botón
         Box(contentAlignment = Alignment.BottomEnd) {
             Image(
-                painter = painterResource(id = R.drawable.profilepicture),
+                painter = painterResource(id = user.profilePicture),
                 contentDescription = "Profile Image",
                 modifier = Modifier
                     .size(120.dp)
                     .clip(CircleShape)
-                    .border(2.dp, Color.Gray, CircleShape)
+                    .border(2.dp, Color.Gray, CircleShape),
+                contentScale = ContentScale.Crop
             )
             IconButton(
                 onClick = { /* Acción para cambiar imagen */ },
@@ -84,10 +87,10 @@ fun EditProfileScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         // Campos de entrada
-        ProfileTextField("Nombre", "Samantha Smith")
-        ProfileTextField("Email", "samanthasmith@gmail.com")
-        ProfileTextField("Contraseña", "Samantha Smith", isPassword = true)
-        ProfileTextField("Teléfono", "+57 312 345 6789")
+        ProfileTextField("Nombre", user.username)
+        ProfileTextField("Email", "samanthasmith@gmail.com") // Puedes añadir un campo de email en `User`
+        ProfileTextField("Contraseña", "********", isPassword = true)
+        ProfileTextField("Teléfono", "+57 312 345 6789") // Puedes añadir teléfono a `User`
 
         Spacer(modifier = Modifier.height(32.dp))
 
@@ -130,6 +133,19 @@ fun ProfileTextField(label: String, value: String, isPassword: Boolean = false) 
 @Preview(showBackground = true)
 @Composable
 fun EditProfileScreenPreview() {
-    EditProfileScreen(navController = rememberNavController())
+    val sampleUser = User(
+        username = "Samantha Smith",
+        totalForms = 10,
+        uploadedForms = 7,
+        locallyStoredForms = 3,
+        posts = 15,
+        following = 200,
+        followers = 150,
+        isloggedIn = true,
+        profilePicture = R.drawable.profilepicture // Recurso de imagen predeterminado
+    )
+
+    EditProfileScreen(navController = rememberNavController(), user = sampleUser)
 }
+
 

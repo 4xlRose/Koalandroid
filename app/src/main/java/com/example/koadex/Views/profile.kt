@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -25,13 +26,15 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.koadex.R
+import com.example.koadex.clases.User
 import com.example.koadex.navigate.La_navegacion
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PerfilScreen(
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    user: User
 ) {
     Scaffold(
         topBar = {
@@ -56,7 +59,7 @@ fun PerfilScreen(
                 .background(Color.White),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ProfileHeader()
+            ProfileHeader(user)
             Spacer(modifier = Modifier.height(32.dp))
             ProfileInfo()
             Spacer(modifier = Modifier.height(32.dp))
@@ -66,7 +69,7 @@ fun PerfilScreen(
 }
 
 @Composable
-fun ProfileHeader() {
+fun ProfileHeader(user: User) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -83,7 +86,7 @@ fun ProfileHeader() {
             modifier = Modifier.padding(16.dp)
         ) {
             Image(
-                painter = painterResource(id = R.drawable.profilepicture),
+                painter = painterResource(id = user.profilePicture),
                 contentDescription = "Foto de perfil",
                 modifier = Modifier
                     .size(120.dp)
@@ -91,11 +94,13 @@ fun ProfileHeader() {
                     .border(2.dp, Color.Gray, CircleShape)
                     .padding(2.dp)
                     .clip(CircleShape)
-                    .fillMaxSize()
+                    .fillMaxSize(),
+                contentScale = ContentScale.Crop
+
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Samantha Smith",
+                text = user.username,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
@@ -161,5 +166,17 @@ fun EditButton() {
 @Preview(showBackground = true)
 @Composable
 fun ProfileScreenPreview() {
-    PerfilScreen(navController = rememberNavController())
+    val sampleUser = User(
+        username = "Samantha Smith",
+        totalForms = 10,
+        uploadedForms = 7,
+        locallyStoredForms = 3,
+        posts = 15,
+        following = 200,
+        followers = 150,
+        isloggedIn = true,
+        profilePicture = R.drawable.profilepicture // Recurso de imagen predeterminado
+    )
+
+    PerfilScreen(navController = rememberNavController(), user = sampleUser)
 }
