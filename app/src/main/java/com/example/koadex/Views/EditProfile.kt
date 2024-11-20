@@ -8,34 +8,23 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CameraAlt
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.koadex.R
 import com.example.koadex.clases.User
+import com.example.koadex.ViewModels.PerfilScreenViewModel
 
 
 @Composable
@@ -44,6 +33,9 @@ fun EditProfileScreen(
     modifier: Modifier = Modifier,
     user: User
 ) {
+
+    val EditProfileViewModel = PerfilScreenViewModel()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -87,10 +79,10 @@ fun EditProfileScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         // Campos de entrada
-        ProfileTextField("Nombre", user.username)
-        ProfileTextField("Email", "samanthasmith@gmail.com") // Puedes añadir un campo de email en `User`
-        ProfileTextField("Contraseña", "********", isPassword = true)
-        ProfileTextField("Teléfono", "+57 312 345 6789") // Puedes añadir teléfono a `User`
+        EditProfileViewModel.ProfileTextField("Nombre", user.username)
+        EditProfileViewModel.ProfileTextField("Email", "samanthasmith@gmail.com") // Puedes añadir un campo de email en `User`
+        EditProfileViewModel.ProfileTextField("Contraseña", "********", isPassword = true)
+        EditProfileViewModel.ProfileTextField("Teléfono", "+57 312 345 6789") // Puedes añadir teléfono a `User`
 
         Spacer(modifier = Modifier.height(32.dp))
 
@@ -110,26 +102,6 @@ fun EditProfileScreen(
     }
 }
 
-@Composable
-fun ProfileTextField(label: String, value: String, isPassword: Boolean = false) {
-    var text by remember { mutableStateOf(value) }
-
-    OutlinedTextField(
-        value = text,
-        onValueChange = { text = it },
-        label = { Text(
-            text = label,
-            color = Color(0xFF4E7029),
-            style = TextStyle(fontWeight = FontWeight.Bold))
-        },
-        singleLine = true,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 3.dp),
-        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None
-    )
-}
-
 @Preview(showBackground = true)
 @Composable
 fun EditProfileScreenPreview() {
@@ -147,5 +119,6 @@ fun EditProfileScreenPreview() {
 
     EditProfileScreen(navController = rememberNavController(), user = sampleUser)
 }
+
 
 
