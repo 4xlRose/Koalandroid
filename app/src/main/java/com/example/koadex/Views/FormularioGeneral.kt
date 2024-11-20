@@ -100,6 +100,7 @@ import com.example.koadex.ui.form.GeneralFormUiState
 import com.example.koadex.ui.form.GeneralFormsDetails
 
 
+
 // TEST
 import com.example.koadex.utils.DateValidator
 
@@ -339,6 +340,25 @@ fun FormInputForm(
         }
         return input
     }*/
+
+    Row(
+        modifier = Modifier
+            .padding(10.dp)
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+    ){
+        OutlinedTextField(
+            value = formDetails.name,
+            label = { Text("Nombre") },
+            onValueChange = { onFormValueChange(formDetails.copy(name = it)) },
+            modifier = Modifier
+                .padding(10.dp)
+                .fillMaxWidth()
+            ,
+            enabled = enabled
+        )
+    }
+
     Row(
         modifier = Modifier
             .padding(10.dp)
@@ -354,6 +374,7 @@ fun FormInputForm(
                 .fillMaxWidth()
             ,
             enabled = enabled
+
         )
     }
 
@@ -364,9 +385,153 @@ fun FormInputForm(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         OutlinedTextField(
-            value = formDetails.date,
-            label = { Text(stringResource(R.string.fecha)) },
-            onValueChange = { onFormValueChange(formDetails.copy(date = it)) },
+            value = formDetails.place,
+            label = { Text("Localidad") },
+            onValueChange = { onFormValueChange(formDetails.copy(place = it)) },
+            modifier = Modifier
+                .padding(10.dp)
+                .fillMaxWidth()
+        )
+        // ... (keep location button)
+    }
+    Row(
+        modifier = Modifier
+            .padding(10.dp)
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+    ){
+        OutlinedTextField(
+            value = formDetails.hour,
+            label = { Text("Hora") },
+            onValueChange = { onFormValueChange(formDetails.copy(hour = it)) },
+            modifier = Modifier
+                .padding(10.dp)
+                .fillMaxWidth()
+        )
+    }
+
+
+    //Spacer(modifier = Modifier.weight(1f))
+
+}
+
+@Composable
+fun WeatherButton(
+    type: String,
+    currentWeather: String,
+    onWeatherChange: (String) -> Unit,
+    buttonSize: Dp
+) {
+    OutlinedIconToggleButton(
+        checked = currentWeather == type,
+        onCheckedChange = { onWeatherChange(type) },
+        shape = RoundedCornerShape(12.dp),
+        colors = IconButtonDefaults.iconToggleButtonColors(
+            containerColor = if (currentWeather == type) Color(0xFFCDE4B4) else Color.White
+        ),
+        border = BorderStroke(
+            width = 1.dp,
+            color = if (currentWeather == type) Color(0xFF4E7029) else Color.Black
+        ),
+        modifier = Modifier.size(buttonSize)
+    ) {
+        Image(
+            painter = painterResource(
+                when (type) {
+                    "soleado" -> R.drawable.soleado
+                    "nublado" -> R.drawable.nublado
+                    else -> R.drawable.lluvioso
+                }
+            ),
+            contentDescription = null
+        )
+    }
+}
+
+@Composable
+fun SeasonButton(
+    type: String,
+    currentSeason: String,
+    onSeasonChange: (String) -> Unit,
+    buttonSize: Dp
+) {
+    OutlinedIconToggleButton(
+        checked = currentSeason == type,
+        onCheckedChange = { onSeasonChange(type) },
+        shape = RoundedCornerShape(12.dp),
+        colors = IconButtonDefaults.iconToggleButtonColors(
+            containerColor = if (currentSeason == type) Color(0xFFCDE4B4) else Color.White
+        ),
+        border = BorderStroke(
+            width = 1.dp,
+            color = if (currentSeason == type) Color(0xFF4E7029) else Color.Black
+        ),
+        modifier = Modifier.size(buttonSize)
+    ) {
+        Image(
+            painter = painterResource(
+                when (type) {
+                    "verano" -> R.drawable.verano
+                    else -> R.drawable.invierno
+                }
+            ),
+            contentDescription = null
+        )
+    }
+}
+
+/*
+@RequiresApi(Build.VERSION_CODES.O)
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun FormularioGeneral(
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
+    viewModel: FormEntryViewModel = viewModel(factory = AppViewModelProvider.Factory)
+) {
+    val coroutineScope = rememberCoroutineScope()
+    FormularioGeneralEntry(
+        navController = navController,
+        formUiState = viewModel.generalFormUiState,
+        onFormValueChange = viewModel::generalFormUpdateUiState,
+        onSaveClick = {
+            coroutineScope.launch {
+                viewModel
+                navController.navigate("Principal")
+            }
+        },
+        modifier = modifier
+    )
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun FormularioGeneralEntry(
+    navController: NavHostController,
+    formUiState: GeneralFormUiState,
+    onFormValueChange: (GeneralFormDetails) -> Unit,
+    onSaveClick: () -> Unit,
+    modifier: Modifier
+) {
+    val textModifier = Modifier // Define it here
+        .fillMaxWidth()
+        .padding(10.dp)
+        .height(40.dp)
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .verticalScroll(rememberScrollState())
+            .padding(16.dp,top=82.dp)
+            .fillMaxSize()
+            .background(Color.White)
+
+    ) {
+        // ... (keep existing header code)
+        val textModifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp)
+            .height(40.dp)
+        Row(
             modifier = Modifier
                 .padding(10.dp)
                 .fillMaxWidth()

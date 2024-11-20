@@ -68,7 +68,11 @@ import com.example.koadex.ui.theme.Green700
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun KoadexPreview() {
-    Koadex(navController = rememberNavController(), modifier = Modifier, viewModel = viewModel(factory = AppViewModelProvider.Factory))
+    Koadex(
+        navController = rememberNavController(),
+        modifier = Modifier,
+        viewModel = viewModel(factory = AppViewModelProvider.Factory)
+    )
 }
 
 @Composable
@@ -109,11 +113,10 @@ fun KoadexPantalla(modifier: Modifier,
     val koadexUiState by viewModel.koadexUiState.collectAsState()
     Column(modifier = Modifier
         .fillMaxSize()
-        .padding(top = 90.dp)
         .background(Color.White)
         ,
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        //verticalArrangement = Arrangement.Center
     ) {
 
         KoadexContenido(formList = koadexUiState.koadexList)
@@ -152,57 +155,105 @@ fun KoadexContenido(
                         TextDecoration.None,
                     color = if (selected == text) Green700 else Gray300
                 )
+    formList: List<FormEntity>,
+    modifier: Modifier = Modifier
+)
+{
+    Column (
+        //modifier = Modifier
 
+    ){
+        Spacer(modifier = Modifier.height(90.dp))
+
+        Row(
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.Bottom,
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            val textSize = 20.sp
+            var selected by remember { mutableStateOf("Todos") }
+
+            Column {
+                val text = "Todos"
+                Button(
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Transparent
+                    ),
+                    onClick = { selected = text }
+                ) {
+                    Text(
+                        text = text,
+                        fontSize = textSize,
+                        fontWeight = FontWeight.Bold,
+                        textDecoration = if (selected == text)
+                            TextDecoration.Underline
+                        else
+                            TextDecoration.None,
+                        color = if (selected == text) Green700 else Gray300
+                    )
+                }
+            }
+
+            Column {
+                val text = "Guardados"
+                Button(
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Transparent
+                    ),
+                    onClick = { selected = text }
+                ) {
+                    Text(
+                        text = text,
+                        fontSize = textSize,
+                        fontWeight = FontWeight.Bold,
+                        textDecoration = if (selected == text)
+                            TextDecoration.Underline
+                        else
+                            TextDecoration.None,
+                        color = if (selected == text) Green700 else Gray300
+                    )
+                }
+            }
+
+            Column {
+                val text = "Subidos"
+                Button(
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Transparent
+                    ),
+                    onClick = { selected = text }
+                ) {
+                    Text(
+                        text = text,
+                        fontSize = textSize,
+                        fontWeight = FontWeight.Bold,
+                        textDecoration = if (selected == text)
+                            TextDecoration.Underline
+                        else
+                            TextDecoration.None,
+                        color = if (selected == text) Green700 else Gray300
+                    )
+                }
             }
         }
 
-        Column {
-            val text = "Guardados"
-            Button(
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent
-                ),
-                onClick = { selected = text }
-            ) {
-                Text(
-                    text = text,
-                    fontSize = textSize,
-                    fontWeight = FontWeight.Bold,
-                    textDecoration = if (selected == text)
-                        TextDecoration.Underline
-                    else
-                        TextDecoration.None,
-                    color = if (selected == text) Green700 else Gray300
-                )
-            }
-        }
+        Column(
+            modifier = modifier,
+            horizontalAlignment = Alignment.CenterHorizontally,
 
-        Column {
-            val text = "Subidos"
-            Button(
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent
-                ),
-                onClick = { selected = text }
             ) {
+
+            if (formList.isEmpty()) {
                 Text(
-                    text = text,
-                    fontSize = textSize,
-                    fontWeight = FontWeight.Bold,
-                    textDecoration = if (selected == text)
-                        TextDecoration.Underline
-                    else
-                        TextDecoration.None,
-                    color = if (selected == text) Green700 else Gray300
+                    text = "No hay formularios guardados",
+                    modifier = Modifier.fillMaxSize()
                 )
+            } else {
+                FormList(formList)
             }
         }
     }
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-
-        ) {
 
         if (formList != null) {
             if (formList.isEmpty()) {
@@ -215,6 +266,7 @@ fun KoadexContenido(
             }
         }
     }
+
 }
 
 @Composable
@@ -241,7 +293,7 @@ private fun FormInfo(
             .padding(20.dp),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Green100
+            containerColor = colorResource(R.color.verde_1)
         )
     ) {
         Column(
@@ -249,41 +301,56 @@ private fun FormInfo(
                 .padding(16.dp)
         ) {
             Text(
-                text = "ID: " + form.id.toString()
+                text = "ID: " + form.id.toString(),
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
+
             )
             Row(
-                modifier = Modifier,
-                horizontalArrangement = Arrangement.SpaceEvenly
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
 
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Nombre: " + form.idUser
+
+                        text = "Nombre: " + form.idUser,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
                     )
                 }
 
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Fecha: " + form.date
+                        text = "Fecha: " + form.date,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
                     )
                 }
 
             }
 
             Row(
-                modifier = Modifier,
-                horizontalArrangement = Arrangement.SpaceEvenly
+                modifier = Modifier
+                    .fillMaxWidth()
+                ,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
 
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Lugar: " + form.place
+                        text = "Lugar: " + form.place,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
                     )
                 }
 
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Hora: " + form.hour
+                        text = "Hora: " + form.hour,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
                     )
                 }
 
@@ -305,13 +372,12 @@ fun TopNavBar(navController: NavHostController) {
             .fillMaxWidth()
             .height(90.dp)
             .background(verde_1)
+
         ,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
 
     ){
-
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
