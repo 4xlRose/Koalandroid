@@ -113,11 +113,10 @@ fun KoadexPantalla(modifier: Modifier,
     val koadexUiState by viewModel.koadexUiState.collectAsState()
     Column(modifier = Modifier
         .fillMaxSize()
-        .padding(top = 90.dp)
         .background(Color.White)
         ,
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        //verticalArrangement = Arrangement.Center
     ) {
 
         KoadexContenido(formList = koadexUiState.koadexList)
@@ -128,95 +127,106 @@ fun KoadexPantalla(modifier: Modifier,
 @Composable
 fun KoadexContenido(
     formList: List<FormEntity>,
-    modifier: Modifier = Modifier) {
-    Row(
-        horizontalArrangement = Arrangement.SpaceAround,
-        verticalAlignment = Alignment.Bottom,
-        modifier = Modifier
-            .fillMaxWidth()
-    ) {
-        val textSize = 20.sp
-        var selected by remember { mutableStateOf("Todos") }
+    modifier: Modifier = Modifier
+)
+{
+    Column (
+        //modifier = Modifier
 
-        Column {
-            val text = "Todos"
-            Button(
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent
-                ),
-                onClick = { selected = text }
-            ) {
-                Text(
-                    text = text,
-                    fontSize = textSize,
-                    fontWeight = FontWeight.Bold,
-                    textDecoration = if (selected == text)
-                        TextDecoration.Underline
-                    else
-                        TextDecoration.None,
-                    color = if (selected == text) Green700 else Gray300
-                )
+    ){
+        Spacer(modifier = Modifier.height(90.dp))
 
-            }
-        }
-
-        Column {
-            val text = "Guardados"
-            Button(
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent
-                ),
-                onClick = { selected = text }
-            ) {
-                Text(
-                    text = text,
-                    fontSize = textSize,
-                    fontWeight = FontWeight.Bold,
-                    textDecoration = if (selected == text)
-                        TextDecoration.Underline
-                    else
-                        TextDecoration.None,
-                    color = if (selected == text) Green700 else Gray300
-                )
-            }
-        }
-
-        Column {
-            val text = "Subidos"
-            Button(
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent
-                ),
-                onClick = { selected = text }
-            ) {
-                Text(
-                    text = text,
-                    fontSize = textSize,
-                    fontWeight = FontWeight.Bold,
-                    textDecoration = if (selected == text)
-                        TextDecoration.Underline
-                    else
-                        TextDecoration.None,
-                    color = if (selected == text) Green700 else Gray300
-                )
-            }
-        }
-    }
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-
+        Row(
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.Bottom,
+            modifier = Modifier
+                .fillMaxWidth()
         ) {
+            val textSize = 20.sp
+            var selected by remember { mutableStateOf("Todos") }
 
-        if (formList.isEmpty()) {
-            Text(
-                text = "No hay formularios guardados",
-                modifier = Modifier.fillMaxSize()
-            )
-        } else {
-            FormList(formList)
+            Column {
+                val text = "Todos"
+                Button(
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Transparent
+                    ),
+                    onClick = { selected = text }
+                ) {
+                    Text(
+                        text = text,
+                        fontSize = textSize,
+                        fontWeight = FontWeight.Bold,
+                        textDecoration = if (selected == text)
+                            TextDecoration.Underline
+                        else
+                            TextDecoration.None,
+                        color = if (selected == text) Green700 else Gray300
+                    )
+
+                }
+            }
+
+            Column {
+                val text = "Guardados"
+                Button(
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Transparent
+                    ),
+                    onClick = { selected = text }
+                ) {
+                    Text(
+                        text = text,
+                        fontSize = textSize,
+                        fontWeight = FontWeight.Bold,
+                        textDecoration = if (selected == text)
+                            TextDecoration.Underline
+                        else
+                            TextDecoration.None,
+                        color = if (selected == text) Green700 else Gray300
+                    )
+                }
+            }
+
+            Column {
+                val text = "Subidos"
+                Button(
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Transparent
+                    ),
+                    onClick = { selected = text }
+                ) {
+                    Text(
+                        text = text,
+                        fontSize = textSize,
+                        fontWeight = FontWeight.Bold,
+                        textDecoration = if (selected == text)
+                            TextDecoration.Underline
+                        else
+                            TextDecoration.None,
+                        color = if (selected == text) Green700 else Gray300
+                    )
+                }
+            }
+        }
+
+        Column(
+            modifier = modifier,
+            horizontalAlignment = Alignment.CenterHorizontally,
+
+            ) {
+
+            if (formList.isEmpty()) {
+                Text(
+                    text = "No hay formularios guardados",
+                    modifier = Modifier.fillMaxSize()
+                )
+            } else {
+                FormList(formList)
+            }
         }
     }
+
 }
 
 @Composable
@@ -321,13 +331,12 @@ fun TopNavBar(navController: NavHostController) {
             .fillMaxWidth()
             .height(90.dp)
             .background(verde_1)
+
         ,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
 
     ){
-
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
