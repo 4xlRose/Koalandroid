@@ -197,6 +197,6 @@ fun FormularioFaunaBusquedaLibre(navController: NavHostController, modifier: Mod
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewFormularioScreen() {
+fun FormularioFaunaBusquedaLibre() {
     FormularioFaunaBusquedaLibre(navController = rememberNavController(), modifier = Modifier)
 }

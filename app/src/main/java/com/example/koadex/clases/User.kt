@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 import com.example.koadex.R
 
 data class User(
-    val username: String,
+    var username: String,
     val totalForms: Int,
     val uploadedForms: Int,
     val locallyStoredForms: Int,
