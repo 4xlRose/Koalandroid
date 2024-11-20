@@ -3,8 +3,10 @@ package com.example.koadex.Views
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Code
@@ -37,34 +39,37 @@ import com.example.koadex.R
 import com.example.koadex.ViewModels.Principal_ViewModel
 import com.example.koadex.clases.User
 import com.example.koadex.navigate.La_navegacion
-
+import com.example.koadex.navigate.sampleUser
 @Composable
 fun Principal(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    user: User = User("Samantha", 5, 3, 2)
+    user: User = sampleUser
 ) {
     var `intro-base` = stringResource(id = R.string.Intro_homepage)
     var `formulario-base` = stringResource(id = R.string.Formularios_base)
 
-    var principal_vm = Principal_ViewModel()
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(color = Color.White)
-            .padding(top = 16.dp)
-    ) {
+    val principal_vm = Principal_ViewModel()
+    val scrollState = rememberScrollState()
 
-        // logo y boton para perfil
-        Spacer(modifier = Modifier.height(48.dp))
-        principal_vm.Logo_perfil(navController)
-
-        // Contenido principal
+    Scaffold(
+        topBar = {
+            principal_vm.Logo_perfil(navController)
+        },
+        bottomBar = {
+            principal_vm.nav_Bar(navController)
+        },
+        containerColor = Color.White
+    ) { innerPadding ->
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+                .verticalScroll(scrollState)
         ) {
-            // 
             principal_vm.Bienvenida_Agregar_formulario(`intro-base`, user, navController)
+
+            Spacer(modifier = Modifier.height(40.dp))
 
             // Dashboard title
             Text(
@@ -77,7 +82,7 @@ fun Principal(
             // Warning message if needed
             if (user.locallyStoredForms > 0) {
                 principal_vm.Advertencia(user)
-            }else{
+            } else {
                 Spacer(modifier = Modifier.height(16.dp))
             }
 
@@ -90,20 +95,15 @@ fun Principal(
             ) {
                 principal_vm.Contador_formularios(user, `formulario-base`)
             }
-
-            // Bottom navigation
-            La_navegacion(navController, true, false, false)
         }
     }
 }
-
-////////////////////////////////////////
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewPrincipal() {
     Principal(
         navController = rememberNavController(),
-        user = User("Samantha", 5, 4, 6)
+        user = sampleUser
     )
 }

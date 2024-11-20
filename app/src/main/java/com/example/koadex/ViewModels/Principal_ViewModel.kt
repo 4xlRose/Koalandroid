@@ -47,6 +47,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.koadex.R
 import com.example.koadex.clases.User
+import com.example.koadex.navigate.La_navegacion
 
 class Principal_ViewModel : ViewModel(
 
@@ -59,7 +60,8 @@ class Principal_ViewModel : ViewModel(
     public fun Bienvenida_Agregar_formulario(
         `intro-base`: String,
         user: User,
-        navController: NavHostController
+        navController: NavHostController,
+        buttonColor: Color = Color(0xFF4E7029)
     ) {
         Box(
             modifier = Modifier
@@ -72,32 +74,49 @@ class Principal_ViewModel : ViewModel(
 
             Column(
                 modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(top = 16.dp),
+                    .padding(top = 20.dp)
+                    .fillMaxWidth()
+                    .padding(bottom = 20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
 
-                Text(
-                    text = `intro-base` + " ${user.username}",
-                    fontSize = 48.sp,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center,
-                    lineHeight = 60.sp
-                )
+                ) {
+                    Text(
+                        text = `intro-base` + " ${user.username}",
+                        fontSize = 48.sp,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center,
+                        lineHeight = 60.sp
+                    )
+                }
 
 
             }
+
 
             // El boton
             FloatingActionButton(
                 onClick = { navController.navigate("FormularioGeneral") },
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .offset(y = 20.dp),
-                containerColor = Color(0xFF4E7029)
+                    .offset(y = 60.dp)
+                    .size(80.dp)
+                ,
+
+                containerColor = buttonColor
             ) {
-                Icon(Icons.Default.Add, "Add", tint = Color.White)
+                Icon(
+                    Icons.Default.Add,
+                    "Add",
+                    tint = Color.White,
+                    modifier = Modifier.size(60.dp)
+                )
             }
+
 
         }
     }
@@ -286,4 +305,8 @@ class Principal_ViewModel : ViewModel(
         }
     }
 
+    @Composable
+    public  fun nav_Bar(navController: NavHostController){
+        La_navegacion(navController, true, false, false)
+    }
 }
