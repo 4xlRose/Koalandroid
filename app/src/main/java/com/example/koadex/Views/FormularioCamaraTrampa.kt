@@ -107,6 +107,7 @@ fun FormularioScreen(
     modifier: Modifier = Modifier
 ) {
     var CameraPermision by remember { mutableStateOf(false) }
+    var isFileSelected by remember { mutableStateOf(false) }
     if (CameraPermision) {
         CameraWindow(activity)
     } else {
