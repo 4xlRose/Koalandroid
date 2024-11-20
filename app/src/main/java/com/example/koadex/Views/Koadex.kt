@@ -1,4 +1,4 @@
-package com.example.koadex.Views
+package com.example.koadex.views
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -58,7 +58,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.koadex.AppViewModelProvider
 import com.example.koadex.R
-import com.example.koadex.data.FormEntity
 import com.example.koadex.navigate.La_navegacion
 import com.example.koadex.ui.principal.KoadexViewModel
 import com.example.koadex.ui.theme.Gray300
@@ -71,7 +70,7 @@ fun KoadexPreview() {
     Koadex(
         navController = rememberNavController(),
         modifier = Modifier,
-        viewModel = viewModel(factory = AppViewModelProvider.Factory)
+
     )
 }
 
@@ -79,7 +78,7 @@ fun KoadexPreview() {
 fun Koadex(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
+
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -99,8 +98,7 @@ fun Koadex(
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
                 .background(Color.White)
-            ,
-            viewModel
+
         )
     }
 
@@ -108,25 +106,24 @@ fun Koadex(
 
 @Composable
 fun KoadexPantalla(modifier: Modifier,
-                   viewModel: KoadexViewModel,
+
 ) {
-    val koadexUiState by viewModel.koadexUiState.collectAsState()
+
     Column(modifier = Modifier
         .fillMaxSize()
         .background(Color.White)
         ,
         horizontalAlignment = Alignment.CenterHorizontally,
-        //verticalArrangement = Arrangement.Center
+
     ) {
 
-        KoadexContenido(formList = koadexUiState.koadexList)
+        KoadexContenido()
 
     }
 }
 
 @Composable
 fun KoadexContenido(
-    formList: List<FormEntity>,
     modifier: Modifier = Modifier
 )
 {
@@ -216,109 +213,16 @@ fun KoadexContenido(
 
             ) {
 
-            if (formList.isEmpty()) {
+
                 Text(
                     text = "No hay formularios guardados",
                     modifier = Modifier.fillMaxSize()
                 )
-            } else {
-                FormList(formList)
-            }
+
         }
     }
 
 }
-
-@Composable
-fun FormList(
-    formList: List<FormEntity>,
-    modifier: Modifier = Modifier
-) {
-    LazyColumn(modifier = modifier) {
-        items(items = formList) { item ->
-            FormInfo(
-                form = item,
-                modifier = Modifier
-            )
-        }
-    }
-}
-
-@Composable
-private fun FormInfo(
-    form: FormEntity,
-    modifier: Modifier = Modifier) {
-    Card(
-        modifier = modifier
-            .padding(20.dp),
-        shape = RoundedCornerShape(10.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = colorResource(R.color.verde_1)
-        )
-    ) {
-        Column(
-            modifier = modifier.fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            Text(
-                text = "ID: " + form.id.toString(),
-                fontWeight = FontWeight.Bold,
-                color = Color.White,
-
-            )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text(
-                        text = "Nombre: " + form.name,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text(
-                        text = "Fecha: " + form.date,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-
-            }
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                ,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text(
-                        text = "Lugar: " + form.place,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text(
-                        text = "Hora: " + form.hour,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-
-            }
-
-        }
-    }
-}
-
 
 @Composable
 fun TopNavBar(navController: NavHostController) {

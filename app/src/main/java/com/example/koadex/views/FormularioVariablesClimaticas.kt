@@ -1,4 +1,4 @@
-package com.example.koadex.Views
+package com.example.koadex.views
 
 import android.os.Build
 import androidx.annotation.RequiresApi
