@@ -8,8 +8,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -71,6 +74,32 @@ import com.example.koadex.ui.form.GeneralFormUiState
 import com.example.koadex.ui.form.SeasonDetails
 import com.example.koadex.ui.form.WeatherDetails
 */
+import androidx.compose.foundation.Image
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+
+
+import androidx.compose.material3.Text
+
+
+
+
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+
+
 // TEST
 import com.example.koadex.utils.DateValidator
 
@@ -116,13 +145,14 @@ fun FormularioGeneralEntry(
         .fillMaxWidth()
         .padding(10.dp)
         .height(40.dp)
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .verticalScroll(rememberScrollState())
             .padding(top = 32.dp)
             .background(Color.White)
-
+            .fillMaxSize()
     ) {
         // ... (keep existing header code)
         val textModifier = Modifier
@@ -181,7 +211,9 @@ fun FormularioGeneralEntry(
 
         Row(
             horizontalArrangement = Arrangement.SpaceEvenly,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 10.dp)
         ) {
             var weather by remember { mutableStateOf(formUiState.formDetails.weather) }
             val buttonSize = 80.dp
@@ -259,6 +291,8 @@ fun FormularioGeneralEntry(
             )
         }
 
+        Spacer(modifier = Modifier.weight(1f))
+
         // Submit button
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -271,7 +305,7 @@ fun FormularioGeneralEntry(
                 ),
                 modifier = Modifier
                     .padding(40.dp)
-                    .width(300.dp),
+                    .fillMaxWidth(),
                 onClick = {
                     onSaveClick()
 
@@ -309,16 +343,23 @@ fun FormInputForm(
         }
         return input
     }*/
-
-    OutlinedTextField(
-        value = formDetails.name,
-        label = { Text("Nombre") },
-        onValueChange = { onFormValueChange(formDetails.copy(name = it)) },
+    Row(
         modifier = Modifier
             .padding(10.dp)
-            .width(320.dp),
-        enabled = enabled
-    )
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+    ){
+        OutlinedTextField(
+            value = formDetails.name,
+            label = { Text("Nombre") },
+            onValueChange = { onFormValueChange(formDetails.copy(name = it)) },
+            modifier = Modifier
+                .padding(10.dp)
+                .fillMaxWidth()
+            ,
+            enabled = enabled
+        )
+    }
 
     Row(
         modifier = Modifier
@@ -351,8 +392,9 @@ fun FormInputForm(
             },
             label = { Text(stringResource(R.string.fecha)) },
             modifier = Modifier
-                .width(180.dp)
-                .offset(26.dp),
+                .padding(10.dp)
+                .fillMaxWidth()
+                ,
             isError = dateError != null,
             supportingText = {
                 dateError?.let {
@@ -377,20 +419,30 @@ fun FormInputForm(
             label = { Text("Localidad") },
             onValueChange = { onFormValueChange(formDetails.copy(place = it)) },
             modifier = Modifier
-                .width(262.dp)
-                .offset(26.dp)
+                .padding(10.dp)
+                .fillMaxWidth()
         )
         // ... (keep location button)
     }
-
-    OutlinedTextField(
-        value = formDetails.hour,
-        label = { Text("Hora") },
-        onValueChange = { onFormValueChange(formDetails.copy(hour = it)) },
+    Row(
         modifier = Modifier
             .padding(10.dp)
-            .width(320.dp)
-    )
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+    ){
+        OutlinedTextField(
+            value = formDetails.hour,
+            label = { Text("Hora") },
+            onValueChange = { onFormValueChange(formDetails.copy(hour = it)) },
+            modifier = Modifier
+                .padding(10.dp)
+                .fillMaxWidth()
+        )
+    }
+
+
+    //Spacer(modifier = Modifier.weight(1f))
+
 }
 
 @Composable
