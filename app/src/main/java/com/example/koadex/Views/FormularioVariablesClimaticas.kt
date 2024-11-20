@@ -174,11 +174,21 @@ fun FormularioClimaEntry(
                     containerColor = Color(0xFF4E7029)
                 ),
                 modifier = Modifier
-                    .width(300.dp),
+                    .width(140.dp),
                 onClick = {
-                    onSaveClick()
-                    navController.navigate("Principal")
-                },
+                     },
+            ) {
+                Text("Atrás", fontWeight = FontWeight.Bold)
+            }
+            Button(
+                shape = RoundedCornerShape(6.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF4E7029)
+                ),
+                modifier = Modifier
+                    .width(140.dp),
+                onClick = {
+                    },
             ) {
                 Text("Enviar", fontWeight = FontWeight.Bold)
             }
