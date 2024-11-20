@@ -58,7 +58,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.koadex.AppViewModelProvider
 import com.example.koadex.R
-import com.example.koadex.data.FormEntity
+import com.example.koadex.data.GeneralFormEntity
 import com.example.koadex.navigate.La_navegacion
 import com.example.koadex.ui.principal.KoadexViewModel
 import com.example.koadex.ui.theme.Gray300
@@ -123,7 +123,7 @@ fun KoadexPantalla(modifier: Modifier,
 
 @Composable
 fun KoadexContenido(
-    formList: List<FormEntity>,
+    formList: List<GeneralFormEntity>?,
     modifier: Modifier = Modifier) {
     Row(
         horizontalArrangement = Arrangement.SpaceAround,
@@ -204,20 +204,22 @@ fun KoadexContenido(
 
         ) {
 
-        if (formList.isEmpty()) {
-            Text(
-                text = "No hay formularios guardados",
-                modifier = Modifier.fillMaxSize()
-            )
-        } else {
-            FormList(formList)
+        if (formList != null) {
+            if (formList.isEmpty()) {
+                Text(
+                    text = "No hay formularios guardados",
+                    modifier = Modifier.fillMaxSize()
+                )
+            } else {
+                FormList(formList)
+            }
         }
     }
 }
 
 @Composable
 fun FormList(
-    formList: List<FormEntity>,
+    formList: List<GeneralFormEntity>,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier = modifier) {
@@ -232,7 +234,7 @@ fun FormList(
 
 @Composable
 private fun FormInfo(
-    form: FormEntity,
+    form: GeneralFormEntity,
     modifier: Modifier = Modifier) {
     Card(
         modifier = modifier
@@ -256,7 +258,7 @@ private fun FormInfo(
 
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Nombre: " + form.name
+                        text = "Nombre: " + form.idUser
                     )
                 }
 

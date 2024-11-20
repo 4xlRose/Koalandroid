@@ -1,16 +1,433 @@
 package com.example.koadex.data
 
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.example.koadex.R
 
-@Entity(tableName = "forms")
-data class FormEntity(
+
+@Entity(tableName = "general_form"/*,
+    foreignKeys = [
+        ForeignKey(
+            entity = UserEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["idUser"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = WeatherEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["idWeather"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = SeasonEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["idSeason"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = SpecieFormEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["idSpecieForm"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = FollowUpFormEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["idFollowUpForm"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = QuadrantFormEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["idQuadrantForm"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = RouteFormEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["idRouteForm"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = WeatherFormEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["idWeatherForm"],
+            onDelete = ForeignKey.CASCADE
+        ),
+    ]*/)
+data class GeneralFormEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val name: String = "",
-    val date: String = "",
-    val place: String = "",
-    val hour: String = "",
-    val weather: String = "",
-    val season: String = ""
+    var date: String = "",
+    var hour: String = "",
+    var idUser: Int, // Foreign Key
+    var idWeather: Int, // Foreign Key
+    var idSeason: Int, // Foreign Key
+    var place: String = ""
+    /*var idSpecieForm: Int, // Foreign Key
+    var idFollowUpForm: Int, // Foreign Key
+    var idQuadrantForm: Int, // Foreign Key
+    var idRouteForm: Int, // Foreign Key
+    var idWeatherForm: Int // Foreign Key*/
+)
+
+@Entity(tableName = "user"/*,
+    foreignKeys = [
+        ForeignKey(
+            entity = ZoneEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["idZone"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]*/)
+data class UserEntity(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+    var name: String = "",
+    var email: String = "",
+    var password: String = "",
+    var startDate: String = "",
+    var idZone: Int, // Foreign Key
+    var totalForms: Int,
+    var uploadedForms: Int,
+    var locallyStoredForms: Int,
+    var posts: Int = 0,
+    var following: Int = 0,
+    var followers: Int = 0,
+    var isloggedIn: Boolean = true,
+    // la foto de perfil
+    var profilePicture: Int = R.drawable.profilepicture
+)
+
+@Entity(tableName = "weather")
+data class WeatherEntity(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+    var weather: String = "",
+)
+
+@Entity(tableName = "season")
+data class SeasonEntity(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+    var season: String = "",
+)
+
+@Entity(tableName = "zone")
+data class ZoneEntity(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int,
+    var zone: String = "",
+)
+
+
+@Entity(tableName = "specie_form"/*,
+    foreignKeys = [
+        ForeignKey(
+            entity = GeneralFormEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["idGeneralForm"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = ZoneTypeEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["idZoneType"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = AnimalTypeEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["idAnimalType"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = ObservTypeEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["idObservType"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = HeightTypeEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["idHeightType"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]*/)
+data class SpecieFormEntity(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+    var idGeneralForm: Int, // Foreign Key
+    var transect: String = "",
+    var idZoneType: Int, // Foreign Key
+    var idAnimalType: Int, // Foreign Key
+    var animalName: String = "",
+    var scientificName: String = "",
+    var quantity: Int = 0,
+    var idObservType: Int, // Foreign Key
+    var idHeightType: Int, // Foreign Key
+    var evidences: String,
+    var observations: String
+)
+
+@Entity(tableName = "zone_type")
+data class ZoneTypeEntity(
+    @PrimaryKey
+    val id: Int = 0,
+    var zoneType: String = "",
+)
+
+@Entity(tableName = "animal_type")
+data class AnimalTypeEntity(
+    @PrimaryKey
+    val id: Int = 0,
+    var animalType: String = "",
+)
+
+@Entity(tableName = "observation_type")
+data class ObservTypeEntity(
+    @PrimaryKey
+    val id: Int = 0,
+    var observType: String = "",
+)
+
+@Entity(tableName = "height_type")
+data class HeightTypeEntity(
+    @PrimaryKey
+    val id: Int = 0,
+    var heightType: String = "",
+)
+
+
+@Entity(tableName = "follow_up_form"/*,
+    foreignKeys = [
+        ForeignKey(
+            entity = GeneralFormEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["idGeneralForm"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = CoverageEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["idCoverage"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = DisturbanceEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["idDisturbance"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]*/)
+data class FollowUpFormEntity(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+    var idGeneralForm: Int, // Foreign Key
+    var followUp: Boolean = false,
+    var change: Boolean = false,
+    var idCoverage: Int, // Foreign Key
+    var cropType: String = "",
+    var idDisturbance: Int, // Foreign Key
+    var evidences: String
+)
+
+@Entity(tableName = "coverage")
+data class CoverageEntity(
+    @PrimaryKey
+    val id: Int = 0,
+    var coverage: String = "" //char(2)
+)
+
+@Entity(tableName = "disturbance")
+data class DisturbanceEntity(
+    @PrimaryKey
+    val id: Int = 0,
+    var disturbance: String = ""
+)
+
+
+@Entity(tableName = "quadrant_form"/*,
+    foreignKeys = [
+        ForeignKey(
+            entity = GeneralFormEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["idGeneralForm"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = SuperQuadrantEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["idSuperQuadrant"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = MidQuadrantEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["idMidQuadrant"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = SubQuadrantEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["idSubQuadrant"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = HabitatEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["idHabitat"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]*/)
+data class QuadrantFormEntity(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+    var idGeneralForm: Int, // Foreign Key
+    var idSuperQuadrant: Int, // Foreign Key
+    var idMidQuadrant: Int, // Foreign Key
+    var idSubQuadrant: Int, // Foreign Key
+    var specieName: String = "",
+    var scientificName: String = "",
+    var idHabitat: Int, // Foreign Key
+    var circumference: Int = 0, // decimal(2)
+    var biomonitorMtSize: Int = 0, // decimal(2)
+    var distanceMt: Int = 0, // decimal(2)
+    var observations: String = "",
+    var heightMt: Int = 0, // decimal(2)
+    var evidences: String
+)
+
+@Entity(tableName = "superior_quadrant")
+data class SuperQuadrantEntity(
+    @PrimaryKey
+    val id: Int = 0,
+    var quadrant: Char = ' '
+)
+
+@Entity(tableName = "intermediate_quadrant")
+data class MidQuadrantEntity(
+    @PrimaryKey
+    val id: Int = 0,
+    var quadrant: Char = ' '
+)
+
+@Entity(tableName = "sub_quadrant")
+data class SubQuadrantEntity(
+    @PrimaryKey
+    val id: Int = 0,
+    var subQuadrant: Char = ' '
+)
+
+@Entity(tableName = "habitat")
+data class HabitatEntity(
+    @PrimaryKey
+    val id: Int = 0,
+    var habitatType: String = ""
+)
+
+
+@Entity(tableName = "route_form"/*,
+    foreignKeys = [
+        ForeignKey(
+            entity = GeneralFormEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["idGeneralForm"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = ZoneTypeEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["idZoneType"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = CameraEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["idCamera"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = CheckListEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["idCheckList"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]*/)
+data class RouteFormEntity(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+    var idGeneralForm: Int, // Foreign Key
+    var idZoneType: Int, // Foreign Key
+    var idCamera: Int, // Foreign Key
+    var  guayaPlate: Int = 0,
+    var routeWidth: Int = 0, // decimal(2)
+    var targetDistance: Int = 0, // decimal(2)
+    var lensHeight: Int = 0, // decimal(2)
+    var idCheckList: Int, // Foreign Key
+    var evidences: String,
+    var observations: String = ""
+)
+
+@Entity(tableName = "camera")
+data class CameraEntity(
+    @PrimaryKey
+    val id: Int = 0,
+    var name: String = "",
+    var plate: Int = 0,
+    var instalationDate: String = ""
+)
+
+@Entity(tableName = "check_list",
+    foreignKeys = [
+        ForeignKey(
+            entity = CheckEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["idCheck"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ])
+data class CheckListEntity(
+    @PrimaryKey
+    val id: Int = 0,
+    var idCheck: Int, // Foreign Key
+)
+
+@Entity(tableName = "checks")
+data class CheckEntity(
+    @PrimaryKey
+    val id: Int = 0,
+    var name: String = "",
+    var state: Boolean = false
+)
+
+
+@Entity(tableName = "weather_form"/*,
+    foreignKeys = [
+        ForeignKey(
+            entity = GeneralFormEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["idGeneralForm"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = ZoneTypeEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["idZoneType"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]*/)
+data class WeatherFormEntity(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+    var idGeneralForm: Int, // Foreign Key
+    var idZoneType: Int, // Foreign Key
+    var rainfall: Double = 0.0, // decimal(2)
+    var maxTemperature: Double = 0.0, // decimal(2)
+    var maxHumidity: Double = 0.0, // decimal(2)
+    var minTemperature: Double = 0.0, // decimal(2)
+    var streamMtLevel: Double = 0.0 // decimal(2)
 )
