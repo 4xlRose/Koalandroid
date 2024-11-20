@@ -13,6 +13,7 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
+
       <SelectionState runConfigName="PreviewFormularioSeleccion">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>

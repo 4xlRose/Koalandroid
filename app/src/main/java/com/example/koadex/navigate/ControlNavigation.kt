@@ -115,7 +115,7 @@ fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modi
             FormularioEspecies(navController = navController)
         }
         composable("FormularioFaunaPuntoConteo"){
-            FormularioFaunaPuntoConteo(activity,navController = navController)
+            FormularioFaunaPuntoConteo(navController = navController)
         }
         composable("FormularioFaunaBusquedaLibre"){
             FormularioFaunaBusquedaLibre(navController = navController)
