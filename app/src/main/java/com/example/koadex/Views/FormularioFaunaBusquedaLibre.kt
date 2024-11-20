@@ -38,7 +38,7 @@ fun FormularioFaunaBusquedaLibre(navController: NavHostController, modifier: Mod
     var zonaSeleccionada by remember { mutableStateOf("") }
     var tipoObservacionSeleccionada by remember { mutableStateOf("") }
     val actionButtonColors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4E7029))
-
+    var isFileSelected by remember { mutableStateOf(false) }
     val FaunaBViewModel = FormularioFaunaBusquedaLibreViewModel()
 
     //Estado de scroll
@@ -158,10 +158,10 @@ fun FormularioFaunaBusquedaLibre(navController: NavHostController, modifier: Mod
             // Evidencias
             Text("Evidencias", style = MaterialTheme.typography.titleMedium)
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Button(onClick = { /* Elegir archivo */ }, colors = actionButtonColors) {
+                Button(onClick = { /* Elegir archivo */ isFileSelected = true }, colors = actionButtonColors) {
                     Text("Elige archivo")
                 }
-                Button(onClick = { /* Tomar foto */ }, colors = actionButtonColors) {
+                Button(onClick = { /* Tomar foto */ isFileSelected = true }, colors = actionButtonColors) {
                     Text("Tomar foto")
                 }
             }
@@ -185,7 +185,7 @@ fun FormularioFaunaBusquedaLibre(navController: NavHostController, modifier: Mod
                     Text("ATRAS", color = Color.White)
                 }
 
-                Button(onClick = { /* Acción de enviar */ }, colors = actionButtonColors) {
+                Button(onClick = { /* Acción de enviar */ }, colors = actionButtonColors, enabled = isFileSelected) {
                     Text("ENVIAR", color = Color.White)
                 }
             }
