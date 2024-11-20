@@ -62,7 +62,9 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.SwitchCamera
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.navigation.compose.rememberNavController
 
 @RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -70,8 +72,8 @@ import androidx.compose.ui.viewinterop.AndroidView
 fun FormularioCamaraTrampa(
     activity: MainActivity,
     navController: NavHostController,
-    modifier: Modifier = Modifier,
-    viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    //modifier: Modifier = Modifier,
+    //viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
 
     Scaffold(
@@ -168,6 +170,7 @@ fun FormularioScreen(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
+            // Bosque
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.clickable { selectedZona = "bosque" }
@@ -180,13 +183,18 @@ fun FormularioScreen(
                         .clickable { selectedZona = "bosque" }
                         .border(
                             width = if (selectedZona == "bosque") 2.dp else 0.dp,
-                            color = if (selectedZona == "bosque") Color.Green else Color.Transparent,
+                            color = Color.Transparent,
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                        .background(
+                            if (selectedZona == "bosque") Color(0xFF4E7029) else Color.Transparent,
                             shape = RoundedCornerShape(8.dp)
                         )
                 )
                 Text(text = "Bosque")
             }
 
+            // Arreglo Agroforestal
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.clickable { selectedZona = "agroforestal" }
@@ -199,7 +207,11 @@ fun FormularioScreen(
                         .clickable { selectedZona = "agroforestal" }
                         .border(
                             width = if (selectedZona == "agroforestal") 2.dp else 0.dp,
-                            color = if (selectedZona == "agroforestal") Color.Green else Color.Transparent,
+                            color = Color.Transparent,
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                        .background(
+                            if (selectedZona == "agroforestal") Color(0xFF4E7029) else Color.Transparent,
                             shape = RoundedCornerShape(8.dp)
                         )
                 )
@@ -207,6 +219,7 @@ fun FormularioScreen(
                 Text(text = "Agroforestal")
             }
 
+            // Cultivos Transitorios
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.clickable { selectedZona = "transitorios" }
@@ -219,7 +232,11 @@ fun FormularioScreen(
                         .clickable { selectedZona = "transitorios" }
                         .border(
                             width = if (selectedZona == "transitorios") 2.dp else 0.dp,
-                            color = if (selectedZona == "transitorios") Color.Green else Color.Transparent,
+                            color = Color.Transparent,
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                        .background(
+                            if (selectedZona == "transitorios") Color(0xFF4E7029) else Color.Transparent,
                             shape = RoundedCornerShape(8.dp)
                         )
                 )
@@ -227,6 +244,7 @@ fun FormularioScreen(
                 Text(text = "Transitorios")
             }
 
+            // Cultivos Permanentes
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.clickable { selectedZona = "permanentes" }
@@ -239,7 +257,11 @@ fun FormularioScreen(
                         .clickable { selectedZona = "permanentes" }
                         .border(
                             width = if (selectedZona == "permanentes") 2.dp else 0.dp,
-                            color = if (selectedZona == "permanentes") Color.Green else Color.Transparent,
+                            color = Color.Transparent,
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                        .background(
+                            if (selectedZona == "permanentes") Color(0xFF4E7029) else Color.Transparent,
                             shape = RoundedCornerShape(8.dp)
                         )
                 )
@@ -363,7 +385,7 @@ fun FormularioScreen(
                 }
             }
 
-            Column(
+            Row (
                 modifier = Modifier.weight(1f)
             ) {
                 // Evidencias
@@ -412,13 +434,7 @@ fun FormularioScreen(
         // Observaciones
         Spacer(modifier = Modifier.height(12.dp))
 
-        OutlinedTextField(
-            value = observaciones,
-            onValueChange = { observaciones = it },
-            label = { Text(stringResource(R.string.observaciones)) },
-            modifier = Modifier.fillMaxWidth(),
-            minLines = 3
-        )
+
 
         // Atras y Enviar
         Row(
@@ -474,4 +490,8 @@ fun EvidenciaItem(
 }
 
 
-
+@Preview(showBackground = true)
+@Composable
+fun FormularioCamaraTrampaPreview(){
+    FormularioCamaraTrampa(activity = MainActivity(), navController = rememberNavController())
+}
