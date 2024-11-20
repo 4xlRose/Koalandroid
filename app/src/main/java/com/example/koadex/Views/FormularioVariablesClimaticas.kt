@@ -23,6 +23,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedIconToggleButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -113,8 +114,8 @@ fun FormularioClimaEntry(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp), // Espaciado general
-        verticalArrangement = Arrangement.spacedBy(16.dp) // Espaciado entre elementos
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
             text = "Zona",
@@ -155,10 +156,8 @@ fun FormularioClimaEntry(
             )
         }
 
-        // Campos de entrada
         ClimaInputForm()
 
-        // Botón de envío
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
@@ -220,56 +219,74 @@ fun ClimaInputForm(
     modifier: Modifier = Modifier,
     enabled: Boolean = true
 ) {
+    val (pluviosidad, setPluviosidad) = remember { mutableStateOf("") }
+    val (temperaturaMaxima, setTemperaturaMaxima) = remember { mutableStateOf("") }
+    val (temperaturaMinima, setTemperaturaMinima) = remember { mutableStateOf("") }
+    val (humedadMaxima, setHumedadMaxima) = remember { mutableStateOf("") }
+    val (humedadMinima, setHumedadMinima) = remember { mutableStateOf("") }
+    val (nivelQuebrada, setNivelQuebrada) = remember { mutableStateOf("") }
+    val (observaciones, setObservaciones) = remember { mutableStateOf("") }
+    val actionButtonColors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4E7029))
+
+
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(12.dp) // Espaciado entre campos
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         OutlinedTextField(
-            value = "pluviosidad",
+            value = pluviosidad,
             label = { Text("Pluviosidad (mm)") },
-            onValueChange = { },
+            onValueChange = setPluviosidad,
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled
         )
         OutlinedTextField(
-            value = "maxtemp",
+            value = temperaturaMaxima,
             label = { Text("Temperatura máxima") },
-            onValueChange = { },
+            onValueChange = setTemperaturaMaxima,
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled
         )
         OutlinedTextField(
-            value = "mintemp",
+            value = temperaturaMinima,
             label = { Text("Temperatura mínima") },
-            onValueChange = { },
+            onValueChange = setTemperaturaMinima,
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled
         )
         OutlinedTextField(
-            value = "maxhum",
+            value = humedadMaxima,
             label = { Text("Humedad máxima") },
-            onValueChange = { },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled
+            onValueChange = setHumedadMaxima,
+            modifier = Modifier.fillMaxWidth()
         )
         OutlinedTextField(
-            value = "minhum",
+            value = humedadMinima,
             label = { Text("Humedad mínima") },
-            onValueChange = { },
+            onValueChange = setHumedadMinima,
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled
         )
         OutlinedTextField(
-            value = "quebrada",
+            value = nivelQuebrada,
             label = { Text("Nivel Quebrada (mt)") },
-            onValueChange = { },
+            onValueChange = setNivelQuebrada,
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled
         )
+        Text("Evidencias", style = MaterialTheme.typography.titleMedium)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Button(onClick = { /* Elegir archivo */ }, colors = actionButtonColors) {
+                Text("Elige archivo")
+            }
+            Button(onClick = { /* Tomar foto */ }, colors = actionButtonColors) {
+                Text("Tomar foto")
+            }
+        }
         OutlinedTextField(
-            value = "observaciones",
+            value = observaciones,
             label = { Text("Observaciones") },
-            onValueChange = { },
+            onValueChange = setObservaciones,
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled
         )
