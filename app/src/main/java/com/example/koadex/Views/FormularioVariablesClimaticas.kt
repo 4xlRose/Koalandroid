@@ -304,14 +304,14 @@ fun ClimaInputForm(
             Button(onClick = {
                 // Simular carga de archivo
                 isFileSelected = true
-                onFileLoaded(isFileSelected) // Notificar cambio de estado
+                onFileLoaded(isFileSelected)
             }, colors = actionButtonColors) {
                 Text("Elige archivo")
             }
             Button(onClick = {
                 // Simular tomar foto
                 isFileSelected = true
-                onFileLoaded(isFileSelected) // Notificar cambio de estado
+                onFileLoaded(isFileSelected)
             }, colors = actionButtonColors) {
                 Text("Tomar foto")
             }
