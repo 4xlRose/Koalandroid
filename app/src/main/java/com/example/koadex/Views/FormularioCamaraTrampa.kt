@@ -363,7 +363,7 @@ fun FormularioScreen(
                 }
             }
 
-            Column(
+            Row (
                 modifier = Modifier.weight(1f)
             ) {
                 // Evidencias
