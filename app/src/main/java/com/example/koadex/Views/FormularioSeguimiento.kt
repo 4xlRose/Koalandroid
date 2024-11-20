@@ -76,6 +76,8 @@ fun FormularioSeguimientoScreen(
     // Estado para los botones seleccionados
     val coberturaSeleccionada = remember { mutableStateOf(-1) }
     val disturbioSeleccionado = remember { mutableStateOf(-1) }
+    val seguimientoSeleccionado = remember { mutableStateOf(-1) } // Estado para los botones de Seguimiento
+    val cambioSeleccionado = remember { mutableStateOf(-1) } // Estado para los botones de Cambió
 
     Column(
         modifier = Modifier
@@ -106,21 +108,21 @@ fun FormularioSeguimientoScreen(
                 Text("Seguimiento", style = MaterialTheme.typography.titleMedium)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     OutlinedButton(
-                        onClick = { },
+                        onClick = { seguimientoSeleccionado.value = 0 }, // Marca el botón como seleccionado
                         border = BorderStroke(1.dp, Color.Gray),
                         colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = Color.White,
-                            contentColor = Color.Black
+                            containerColor = if (seguimientoSeleccionado.value == 0) Color(0xFF4E7029) else Color.White,
+                            contentColor = if (seguimientoSeleccionado.value == 0) Color.White else Color.Black
                         )
                     ) {
                         Icon(Icons.Default.Check, contentDescription = "Check")
                     }
                     OutlinedButton(
-                        onClick = { },
+                        onClick = { seguimientoSeleccionado.value = 1 }, // Marca el botón como seleccionado
                         border = BorderStroke(1.dp, Color.Gray),
                         colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = Color.White,
-                            contentColor = Color.Black
+                            containerColor = if (seguimientoSeleccionado.value == 1) Color(0xFF4E7029) else Color.White,
+                            contentColor = if (seguimientoSeleccionado.value == 1) Color.White else Color.Black
                         )
                     ) {
                         Icon(Icons.Default.Close, contentDescription = "Close")
@@ -131,21 +133,21 @@ fun FormularioSeguimientoScreen(
                 Text("Cambió", style = MaterialTheme.typography.titleMedium)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     OutlinedButton(
-                        onClick = { },
+                        onClick = { cambioSeleccionado.value = 0 }, // Marca el botón como seleccionado
                         border = BorderStroke(1.dp, Color.Gray),
                         colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = Color.White,
-                            contentColor = Color.Black
+                            containerColor = if (cambioSeleccionado.value == 0) Color(0xFF4E7029) else Color.White,
+                            contentColor = if (cambioSeleccionado.value == 0) Color.White else Color.Black
                         )
                     ) {
                         Icon(Icons.Default.Check, contentDescription = "Check")
                     }
                     OutlinedButton(
-                        onClick = { },
+                        onClick = { cambioSeleccionado.value = 1 }, // Marca el botón como seleccionado
                         border = BorderStroke(1.dp, Color.Gray),
                         colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = Color.White,
-                            contentColor = Color.Black
+                            containerColor = if (cambioSeleccionado.value == 1) Color(0xFF4E7029) else Color.White,
+                            contentColor = if (cambioSeleccionado.value == 1) Color.White else Color.Black
                         )
                     ) {
                         Icon(Icons.Default.Close, contentDescription = "Close")

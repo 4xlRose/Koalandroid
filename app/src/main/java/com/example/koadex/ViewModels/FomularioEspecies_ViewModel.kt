@@ -133,7 +133,9 @@ class FomularioEspecies_ViewModel :
         onAnimalTypeSelected: (String) -> Unit,
         primaryGreen: Color
     ) {
-        Text("Tipo de Animal")
+        Text("Tipo de Animal", style = MaterialTheme.typography.titleMedium)
+        Spacer(modifier = Modifier.padding(vertical = 3.dp))
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
@@ -142,9 +144,10 @@ class FomularioEspecies_ViewModel :
                 AnimalTypeButton(
                     text = animalType.name,
                     iconRes = animalType.icon,
-                    selected = selectedAnimalType,
-                    selectedColor = primaryGreen
-                ) { onAnimalTypeSelected(animalType.name) }
+                    selected = selectedAnimalType == animalType.name,
+                    selectedColor = primaryGreen,
+                    onClick = { onAnimalTypeSelected(animalType.name) }
+                )
             }
         }
     }
@@ -153,16 +156,20 @@ class FomularioEspecies_ViewModel :
     fun AnimalTypeButton(
         text: String,
         iconRes: Int,
-        selected: String?,
+        selected: Boolean,
         selectedColor: Color,
         onClick: () -> Unit
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
+                .background(
+                    color = if (selected) Color(0xFF4E7029) else Color.Transparent,
+                    shape = RoundedCornerShape(8.dp)
+                )
                 .border(
                     width = 1.dp,
-                    color = if (selected == text) selectedColor else Color.Gray,
+                    color = if (selected) selectedColor else Color.Gray,
                     shape = RoundedCornerShape(8.dp)
                 )
                 .padding(8.dp)
@@ -175,8 +182,7 @@ class FomularioEspecies_ViewModel :
             )
             Text(text, style = MaterialTheme.typography.bodySmall)
         }
-    }
-///////////////////////////////////////////////////////////
+    }///////////////////////////////////////////////////////////
 
     /// PARA LAS OBSERVACIONES
     @Composable
@@ -186,9 +192,11 @@ class FomularioEspecies_ViewModel :
         green100: Color,
         green700: Color
     ) {
-        Text("Tipo de Observación")
+        Text("Tipo de Observación", style = MaterialTheme.typography.titleMedium)
+        Spacer(modifier = Modifier.padding(vertical = 3.dp))
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.
+            fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             ObservationTypeButton("La vió", R.drawable.ic_ave, selectedObservationType, green100) { onObservationTypeSelected("La vió") }
@@ -198,6 +206,9 @@ class FomularioEspecies_ViewModel :
             ObservationTypeButton("Les dijeron", R.drawable.ic_reptil, selectedObservationType, green100) { onObservationTypeSelected("Les dijeron") }
         }
     }
+
+
+
     @Composable
     fun ObservationTypeButton(
         text: String,
@@ -209,6 +220,10 @@ class FomularioEspecies_ViewModel :
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
+                .background(
+                    if (selected == text) Color(0xFF4E7029) else Color.Transparent,
+                    shape = RoundedCornerShape(8.dp)
+                )
                 .border(
                     width = 1.dp,
                     color = if (selected == text) selectedColor else Color.Gray,

@@ -8,9 +8,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.FileOpen
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.getValue
@@ -41,6 +43,7 @@ fun Especies_preview(){
     FormularioEspecies(navController = rememberNavController())
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormularioEspecies(
     navController: NavController,
@@ -57,7 +60,8 @@ fun FormularioEspecies(
     var individualsCount by remember { mutableStateOf<Int?>(1) }
     var selectedAnimalType by remember { mutableStateOf<String?>(null) }
     var selectedObservationType by remember { mutableStateOf<String?>(null) }
-    var observations            by remember { mutableStateOf(TextFieldValue()) }
+    var observations by remember { mutableStateOf(TextFieldValue()) }
+    var numIndividuos by remember { mutableStateOf(1) }
 
     // ViewnModel con las funciones
     val viewModel = FomularioEspecies_ViewModel()
@@ -67,7 +71,15 @@ fun FormularioEspecies(
             .fillMaxSize()
             .background(Color.White)
     ) {
-        viewModel.Header_Formulario(green100, navController)
+        TopAppBar(
+            title = { Text("Especies en transecto", color = Color.Black) },
+            navigationIcon = {
+                IconButton(onClick = { navController.navigate("TiposForms") }) {
+                    Icon(Icons.Filled.ArrowBack, contentDescription = "Atrás")
+                }
+            },
+            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFFB4D68F))
+        )
 
         Column(
             modifier = modifier
@@ -78,9 +90,11 @@ fun FormularioEspecies(
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight(),
-                verticalArrangement = Arrangement.SpaceEvenly
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 /// El numero de transecto
+                Spacer(modifier = Modifier.padding(vertical = 5.dp))
+
                 OutlinedTextField(
                     value = transectoNumber,
                     onValueChange = { transectoNumber = it },
@@ -88,6 +102,7 @@ fun FormularioEspecies(
                     modifier = Modifier.fillMaxWidth()
                 )
                 ////
+                Spacer(modifier = Modifier.padding(vertical = 5.dp))
 
                 /// Tipo de animal
                 viewModel.Tipo_de_animal(selectedAnimalType = selectedAnimalType, onAnimalTypeSelected = { selectedAnimalType = it }, primaryGreen = green100)
@@ -106,10 +121,36 @@ fun FormularioEspecies(
                     label = { Text("Nombre Científico") },
                     modifier = Modifier.fillMaxWidth()
                 )
+                Spacer(modifier = Modifier.padding(vertical = 5.dp))
 
-                individualsCount?.let { viewModel.Contador_numero_individuos(individualsCount = it, onCountChange = { individualsCount = it }) }
+                // Número de Individuos
+                Text("Número de Individuos", style = MaterialTheme.typography.titleMedium)
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    IconButton(
+                        onClick = {
+                            if (numIndividuos > 1) numIndividuos--
+                        }
+                    ) {
+                        Icon(Icons.Filled.Remove, contentDescription = "Disminuir")
+                    }
+                    Text(text = numIndividuos.toString(), style = MaterialTheme.typography.titleMedium)
+                    IconButton(
+                        onClick = {
+                            numIndividuos++
+                        }
+                    ) {
+                        Icon(Icons.Filled.Add, contentDescription = "Aumentar")
+                    }
+                }
+
+                Spacer(modifier = Modifier.padding(vertical = 5.dp))
 
                 viewModel.Tipo_observacion(selectedObservationType = selectedObservationType, onObservationTypeSelected = { selectedObservationType = it }, green100 = green100, green700 = green700)
+
+                Spacer(modifier = Modifier.padding(vertical = 5.dp))
 
                 viewModel.Botones_captura(green700)
 
