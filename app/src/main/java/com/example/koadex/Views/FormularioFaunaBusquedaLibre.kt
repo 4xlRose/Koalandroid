@@ -193,8 +193,6 @@ fun FormularioFaunaBusquedaLibre(navController: NavHostController, modifier: Mod
     }
 }
 
-
-
 @Preview(showBackground = true)
 @Composable
 fun FormularioFaunaBusquedaLibre() {
