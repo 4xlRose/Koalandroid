@@ -1,4 +1,4 @@
-@file:JvmName("FormularioFaunaBusquedaLibreKt")
+@file:JvmName("FormularioFaunaPuntoConteoKt")
 
 package com.example.koadex.Views
 
