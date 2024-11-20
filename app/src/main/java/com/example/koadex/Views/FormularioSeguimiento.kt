@@ -76,6 +76,7 @@ fun FormularioSeguimientoScreen(
     val disturbioSeleccionado = remember { mutableStateOf(-1) }
     var isFileSelected by remember { mutableStateOf(false) }
 
+
     Column(
         modifier = Modifier
             .fillMaxSize()
