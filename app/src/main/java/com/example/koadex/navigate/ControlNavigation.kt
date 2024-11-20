@@ -1,5 +1,6 @@
 package com.example.koadex.navigate
 
+
 import PerfilScreen
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -36,26 +37,25 @@ import com.auth0.android.Auth0
 import com.example.koadex.MainActivity
 import com.example.koadex.R
 
-import com.example.koadex.Views.Configuracion
-import com.example.koadex.Views.FormularioCamaraTrampa
-import com.example.koadex.Views.FormularioCuadrante
-import com.example.koadex.Views.FormularioEspecies
-import com.example.koadex.Views.FormularioFaunaBusquedaLibre
-import com.example.koadex.Views.FormularioFaunaPuntoConteo
-import com.example.koadex.Views.FormularioGeneral
-import com.example.koadex.Views.FormularioSeleccionScreen
-import com.example.koadex.Views.InicioCarga
-import com.example.koadex.Views.InicioSesion
-import com.example.koadex.Views.Koadex
-import com.example.koadex.Views.OlvidoContrasena
-import com.example.koadex.Views.Perfil
-import com.example.koadex.Views.Principal
-import com.example.koadex.Views.Registro
-import com.example.koadex.Views.Verificacion
-import com.example.koadex.Views.FormularioSeguimiento
-import com.example.koadex.Views.FormularioSeleccion
-import com.example.koadex.Views.FormularioVariablesClimaticas
-import com.example.koadex.Views.EditProfileScreen
+import com.example.koadex.views.Configuracion
+import com.example.koadex.views.FormularioCamaraTrampa
+import com.example.koadex.views.FormularioCuadrante
+import com.example.koadex.views.FormularioEspecies
+import com.example.koadex.views.FormularioFaunaBusquedaLibre
+import com.example.koadex.views.FormularioFaunaPuntoConteo
+import com.example.koadex.views.FormularioGeneral
+import com.example.koadex.views.FormularioSeleccionScreen
+import com.example.koadex.views.InicioCarga
+import com.example.koadex.views.InicioSesion
+import com.example.koadex.views.Koadex
+import com.example.koadex.views.OlvidoContrasena
+import com.example.koadex.views.Principal
+import com.example.koadex.views.Registro
+import com.example.koadex.views.Verificacion
+import com.example.koadex.views.FormularioSeguimiento
+import com.example.koadex.views.FormularioSeleccion
+import com.example.koadex.views.FormularioVariablesClimaticas
+import com.example.koadex.views.EditProfileScreen
 import com.example.koadex.clases.User
 
 
@@ -63,7 +63,7 @@ import com.example.koadex.clases.User
 @Composable
 fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modifier) {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "Principal") {
+    NavHost(navController = navController, startDestination = "InicioCarga") {
         composable("InicioCarga") {
             InicioCarga(navController = navController)
         }
@@ -86,9 +86,7 @@ fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modi
         composable("Configuracion"){
             Configuracion(navController = navController)
         }
-        composable("Perfil"){
-            Perfil(navController = navController)
-        }
+
         composable("OlvidoContrasena"){
             OlvidoContrasena(navController = navController)
         }
@@ -121,7 +119,7 @@ fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modi
             FormularioFaunaBusquedaLibre(navController = navController)
         }
         composable("FormularioCuadrante"){
-            FormularioCuadrante(activity,navController = navController)
+            FormularioCuadrante(navController = navController)
         }
         composable("FormularioSeguimiento"){
             FormularioSeguimiento(navController = navController)
@@ -131,9 +129,6 @@ fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modi
         }
         composable("FormularioVariablesClimaticas") {
             FormularioVariablesClimaticas(navController = navController)
-        }
-        composable("Profile") {
-            PerfilScreen(navController = navController)
         }
     }
 }
@@ -197,7 +192,8 @@ fun BottomNavItem(
 }
 ///////////////////////////
 val sampleUser = User(
-    username = "Samantha Smith",
+    id = 1,
+    username = "Koalandroidcito",
     totalForms = 10,
     uploadedForms = 7,
     locallyStoredForms = 3,

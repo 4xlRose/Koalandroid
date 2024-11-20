@@ -1,6 +1,6 @@
 @file:JvmName("FormularioFaunaPuntoConteoKt")
 
-package com.example.koadex.Views
+package com.example.koadex.views
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

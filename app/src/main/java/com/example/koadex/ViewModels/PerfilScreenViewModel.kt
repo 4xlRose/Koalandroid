@@ -45,7 +45,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.koadex.R
-import com.example.koadex.Views.EditProfileScreen
+import com.example.koadex.views.EditProfileScreen
 import com.example.koadex.clases.User
 
 class PerfilScreenViewModel: ViewModel() {

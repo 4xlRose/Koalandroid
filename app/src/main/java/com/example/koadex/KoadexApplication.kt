@@ -1,23 +1,46 @@
+@file:JvmName("FormApplicationKt")
+
 package com.example.koadex
 
-import android.app.Application
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory
-import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.koadex.ui.form.FormFollowDBViewModel
 
-import com.example.koadex.data.OfflineFormsRepository
-import com.example.koadex.ui.form.FormEntryViewModel
-import com.example.koadex.data.FormDatabase
+import com.example.koadex.ui.form.FormGeneralDBViewModel
+import com.example.koadex.ui.form.FormQuadrantDBViewModel
+import com.example.koadex.ui.form.FormRouteFormDBViewModel
+import com.example.koadex.ui.form.FormSpecieDBViewModel
+import com.example.koadex.ui.form.FormWeatherDBViewModel
+import com.example.koadex.ui.form.FormsPredeterminedViewModel
 import com.example.koadex.ui.principal.KoadexViewModel
 
 
 object AppViewModelProvider {
     val Factory = viewModelFactory {
         initializer {
-            FormEntryViewModel(formApplication().container.formsRepository)
+            FormGeneralDBViewModel(formApplication().container.formsRepository)
         }
+        initializer {
+            FormFollowDBViewModel(formApplication().container.formsRepository)
+        }
+        initializer {
+            FormQuadrantDBViewModel(formApplication().container.formsRepository)
+        }
+        initializer {
+            FormRouteFormDBViewModel(formApplication().container.formsRepository)
+        }
+        initializer {
+            FormSpecieDBViewModel(formApplication().container.formsRepository)
+        }
+        initializer {
+            FormWeatherDBViewModel(formApplication().container.formsRepository)
+        }
+        initializer {
+            FormsPredeterminedViewModel(formApplication().container.formsRepository)
+        }
+
         initializer {
             KoadexViewModel(formApplication().container.formsRepository)
         }

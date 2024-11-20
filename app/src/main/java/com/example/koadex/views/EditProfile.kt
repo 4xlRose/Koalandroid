@@ -1,4 +1,4 @@
-package com.example.koadex.Views
+package com.example.koadex.views
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -30,8 +30,8 @@ import com.example.koadex.ViewModels.PerfilScreenViewModel
 @Composable
 fun EditProfileScreen(
     navController: NavHostController,
-    modifier: Modifier = Modifier,
-    user: User
+    user: User,
+    modifier: Modifier = Modifier
 ) {
 
     val EditProfileViewModel = PerfilScreenViewModel()
@@ -102,10 +102,11 @@ fun EditProfileScreen(
     }
 }
 
-@Preview(showBackground = true)
+//@Preview(showBackground = true)
 @Composable
 fun EditProfileScreenPreview() {
     val sampleUser = User(
+        id = 1,
         username = "Samantha Smith",
         totalForms = 10,
         uploadedForms = 7,

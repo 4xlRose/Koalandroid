@@ -48,13 +48,12 @@ import androidx.navigation.compose.rememberNavController
 import com.example.koadex.R
 import com.example.koadex.clases.User
 import com.example.koadex.navigate.La_navegacion
+import com.example.koadex.navigate.sampleUser
 
-class Principal_ViewModel : ViewModel(
+class PrincipalViewModel : ViewModel(
 
 ) {
-    var user = User("Samantha", 5, 4, 6)
-
-
+    var user = sampleUser
 
     @Composable
     public fun Bienvenida_Agregar_formulario(

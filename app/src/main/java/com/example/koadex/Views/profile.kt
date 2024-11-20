@@ -17,13 +17,14 @@ import com.example.koadex.R
 import com.example.koadex.clases.User
 import com.example.koadex.navigate.La_navegacion
 import com.example.koadex.ViewModels.PerfilScreenViewModel
+import com.example.koadex.navigate.sampleUser
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PerfilScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    user: User = User("Samantha", 5, 3, 2)
+    user: User = sampleUser
 ) {
 
     val ProfileViewModel = PerfilScreenViewModel()
@@ -73,6 +74,7 @@ fun PerfilScreen(
 @Composable
 fun ProfileScreenPreview() {
     val sampleUser = User(
+        id = 1,
         username = "Samantha Smith",
         totalForms = 10,
         uploadedForms = 7,
