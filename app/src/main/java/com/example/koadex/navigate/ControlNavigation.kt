@@ -109,7 +109,7 @@ fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modi
             FormularioGeneral(navController = navController)
         }
         composable("TiposForms") {
-            FormularioSeleccion(activity, navController = navController)
+            FormularioSeleccion(navController = navController)
         }
         composable("FormularioEspecies"){
             FormularioEspecies(navController = navController)
@@ -124,13 +124,13 @@ fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modi
             FormularioCuadrante(activity,navController = navController)
         }
         composable("FormularioSeguimiento"){
-            FormularioSeguimiento(activity,navController = navController)
+            FormularioSeguimiento(navController = navController)
         }
         composable("CamarasTrampa") {
             FormularioCamaraTrampa(activity,navController = navController)
         }
         composable("FormularioVariablesClimaticas") {
-            FormularioVariablesClimaticas(activity,navController = navController)
+            FormularioVariablesClimaticas(navController = navController)
         }
         composable("Profile") {
             PerfilScreen(navController = navController)

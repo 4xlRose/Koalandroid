@@ -43,11 +43,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.koadex.AppViewModelProvider
 import com.example.koadex.MainActivity
 import com.example.koadex.R
@@ -58,10 +60,10 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormularioVariablesClimaticas(
-    activity: MainActivity,
+    //activity: MainActivity,
     navController: NavHostController,
-    modifier: Modifier = Modifier,
-    viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    //modifier: Modifier = Modifier,
+    //viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
 
     Scaffold(
@@ -84,7 +86,7 @@ fun FormularioVariablesClimaticas(
         }
     ) { paddingValues ->
         FormularioVariablesClimaticasScreen(
-            activity = activity,
+            //activity = activity,
             navController = navController,
             modifier = Modifier.padding(paddingValues)
         )
@@ -94,7 +96,7 @@ fun FormularioVariablesClimaticas(
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun FormularioVariablesClimaticasScreen(
-    activity: MainActivity,
+    //activity: MainActivity,
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
@@ -215,6 +217,7 @@ fun ZoneButton(
                     else -> R.drawable.cultivos_permanentes
                 }
             ),
+
             contentDescription = null
         )
     }
@@ -299,3 +302,11 @@ fun ClimaInputForm(
         )
     }
 }
+
+@RequiresApi(Build.VERSION_CODES.P)
+@Preview(showBackground = true)
+@Composable
+fun VariableClimaticasPreview(){
+    FormularioVariablesClimaticas(navController = rememberNavController())
+}
+

@@ -43,6 +43,7 @@ hiltAndroid = "2.51.1"
 storage = "1.5.0"
 junitJunit = "4.12"
 coreTesting = "2.1.0"
+uiTestAndroid = "1.7.4"
 
 [libraries]
 androidx-core = { module = "androidx.test:core", version.ref = "core" }
@@ -99,6 +100,7 @@ hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref
 androidx-storage = { group = "androidx.test.services", name = "storage", version.ref = "storage" }
 junit-junit = { group = "junit", name = "junit", version.ref = "junitJunit" }
 androidx-core-testing = { group = "androidx.arch.core", name = "core-testing", version.ref = "coreTesting" }
+androidx-ui-test-android = { group = "androidx.compose.ui", name = "ui-test-android", version.ref = "uiTestAndroid" }
 
 
 [plugins]
