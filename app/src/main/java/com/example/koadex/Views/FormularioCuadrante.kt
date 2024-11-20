@@ -60,10 +60,10 @@ import com.example.koadex.ui.principal.KoadexViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormularioCuadrante(
-    activity: MainActivity,
+    //activity: MainActivity,
     navController: NavHostController,
-    modifier: Modifier = Modifier,
-    viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    //modifier: Modifier = Modifier,
+    //viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
 
     Scaffold(
@@ -91,7 +91,6 @@ fun FormularioCuadrante(
         )
     }
 }
-@Preview(device = "spec:width=800px,height=1340px,dpi=300")
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun FormularioCuadranteScreen(
@@ -438,7 +437,7 @@ fun BotonCuadranteAB(
         shape = RoundedCornerShape(12.dp),
         border = BorderStroke(1.dp, if (isSelected) Color(0xFF4E7029) else Color.Gray),
         colors = ButtonDefaults.outlinedButtonColors(
-            containerColor = if (isSelected) Color(0xFFB4D68F) else Color.White
+            containerColor = if (isSelected) Color(0xFF4E7029) else Color.White // Cambia el color aquí
         )
     ) {
         Text(
@@ -488,7 +487,7 @@ fun BotonSubCuadrante(
         shape = RoundedCornerShape(4.dp),
         border = BorderStroke(1.dp, if (isSelected) Color(0xFF4E7029) else Color.Gray),
         colors = ButtonDefaults.outlinedButtonColors(
-            containerColor = if (isSelected) Color(0xFF4E7029) else Color.White
+            containerColor = if (isSelected) Color(0xFF4E7029) else Color.White // Cambia el color aquí
         )
     ) {
         Text(
@@ -511,12 +510,16 @@ fun CrecimientoBoton(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .clickable(onClick = onClick)
-            .border(
-                width = 1.dp,
-                color = if (isSelected) Color(0xFF4E7029) else Color.Gray,
-                shape = RoundedCornerShape(8.dp)
-            )
             .padding(8.dp)
+            .background(
+                color = if (isSelected) Color(0xFF4E7029) else Color.White, // Cambia el fondo
+                shape = RoundedCornerShape(8.dp)
+            ) // Cambia el fondo
+            .border(
+                width = 2.dp,
+                color = if (isSelected) Color(0xFF4E7029) else Color.Gray, // Cambia el borde
+                shape = RoundedCornerShape(8.dp)
+            ) // Cambia el borde
     ) {
         Image(
             painter = painterResource(id = icon),
@@ -589,4 +592,11 @@ private fun Boton_seleccionar_archivo(green700: Color) {
         Spacer(modifier = Modifier.width(10.dp))
         Text("Elige archivo")
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.P)
+@Preview(device = "spec:width=800px,height=1340px,dpi=300")
+@Composable
+fun FormularioCuadrantePreview() {
+    FormularioCuadrante(navController = rememberNavController())
 }
