@@ -2,7 +2,9 @@ package com.example.koadex.Views
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -23,7 +25,11 @@ import com.example.koadex.R
 import com.example.koadex.clases.User
 import com.example.koadex.navigate.La_navegacion
 import com.example.koadex.clases.Configuracion
+import androidx.compose.material.icons.filled.ArrowBack
 
+
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Configuracion(
     navController: NavHostController,
@@ -31,27 +37,54 @@ fun Configuracion(
     user: User = User("Samantha Smith", 5, 3, 2, 10, 20, 15)
 ) {
     // Estado para manejar las notificaciones
-    var notificacionesActivas by remember { mutableStateOf(Configuracion.getInstance().notificacionesActivas)}
+    var notificacionesActivas by remember {
+        mutableStateOf(Configuracion.getInstance().notificacionesActivas)
+    }
+    val scrollState = rememberScrollState()
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(Color.White)
-    ) {
-        // Top Bar
-        Header_ajustes(navController)
-
-        // Contenido principal
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = "Ajustes",
+                        color = Color.White,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                navigationIcon = {
+                    IconButton(
+                        onClick = { navController.navigate("Principal") }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Back",
+                            tint = Color.White
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = colorResource(R.color.verde_1)
+                )
+            )
+        },
+        bottomBar = {
+            La_navegacion(navController, false, false, true)
+        },
+        containerColor = Color.White
+    ) { innerPadding ->
         Column(
             modifier = Modifier
-                .fillMaxWidth()
+                .padding(innerPadding)
+                .fillMaxSize()
+                .verticalScroll(scrollState)
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // aqui se maneja las notificaciones, cambiar contraseña, etc
+            // Preferencias de perfil
             Preferencias_perfil(notificacionesActivas, navController)
-
 
             // Botón de cerrar sesión
             Button(
@@ -69,36 +102,36 @@ fun Configuracion(
                 )
             }
         }
-
-        Spacer(Modifier.weight(1f))
-        // barra de navegacion
-        La_navegacion(navController, false, false, true)
     }
 }
+
 
 @Composable
 private fun Preferencias_perfil(
     notificacionesActivas: Boolean,
     navController: NavHostController
 ) {
-    // Toggle para notificaciones
-    var notificacionesActivas1 = notificacionesActivas
+    // Recordar el estado de las notificaciones usando remember
+    var notificacionesActivas1 by remember { mutableStateOf(notificacionesActivas) }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-
-        ) {
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         IconButton(
-            onClick = { /* No action */ },
+            onClick = {
+                // Toggle the switch when icon is clicked
+                notificacionesActivas1 = !notificacionesActivas1
+                Configuracion.getInstance().notificacionesActivas = notificacionesActivas1
+            },
         ) {
             Icon(
                 imageVector = Icons.Default.Notifications,
-                contentDescription = null,
-                tint = colorResource(R.color.verde_1),
-
-                )
+                contentDescription = "Toggle Notifications",
+                tint = colorResource(R.color.verde_1)
+            )
         }
         Column(
             modifier = Modifier
@@ -134,7 +167,7 @@ private fun Preferencias_perfil(
         label = "Configuración de perfil",
         value = "Configurar mi perfil",
         navController = navController,
-        destino = "Perfil"
+        destino = "PerfilScreen"
     )
 
     // Cambiar contraseña

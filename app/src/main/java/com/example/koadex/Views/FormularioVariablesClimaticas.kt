@@ -4,6 +4,9 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +15,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,6 +29,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedIconToggleButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -39,25 +46,29 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.koadex.AppViewModelProvider
 import com.example.koadex.MainActivity
 import com.example.koadex.R
 import com.example.koadex.ui.principal.KoadexViewModel
 import kotlinx.coroutines.launch
+import androidx.compose.ui.draw.clip
+
 
 @RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormularioVariablesClimaticas(
-    activity: MainActivity,
+    //activity: MainActivity,
     navController: NavHostController,
-    modifier: Modifier = Modifier,
-    viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    //modifier: Modifier = Modifier,
+    //viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
 
     Scaffold(
@@ -80,7 +91,7 @@ fun FormularioVariablesClimaticas(
         }
     ) { paddingValues ->
         FormularioVariablesClimaticasScreen(
-            activity = activity,
+            //activity = activity,
             navController = navController,
             modifier = Modifier.padding(paddingValues)
         )
@@ -90,7 +101,7 @@ fun FormularioVariablesClimaticas(
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun FormularioVariablesClimaticasScreen(
-    activity: MainActivity,
+    //activity: MainActivity,
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
@@ -110,11 +121,15 @@ fun FormularioClimaEntry(
     onSaveClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val scrollState = rememberScrollState()
+    val (currentZone, setCurrentZone) = remember { mutableStateOf("") } // Estado para la zona seleccionada
+
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp), // Espaciado general
-        verticalArrangement = Arrangement.spacedBy(16.dp) // Espaciado entre elementos
+            .padding(16.dp)
+            .verticalScroll(scrollState), // Habilitar scroll
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
             text = "Zona",
@@ -128,37 +143,36 @@ fun FormularioClimaEntry(
             modifier = Modifier.fillMaxWidth()
         ) {
             val buttonSize = 80.dp
-            val zona = "zona"
             ZoneButton(
                 type = "bosque",
-                currentZone = zona,
-                onZoneChange = {},
+                currentZone = currentZone,
+                onZoneChange = setCurrentZone,
                 buttonSize = buttonSize
             )
             ZoneButton(
                 type = "arreglo",
-                currentZone = zona,
-                onZoneChange = {},
+                currentZone = currentZone,
+                onZoneChange = setCurrentZone,
                 buttonSize = buttonSize
             )
             ZoneButton(
                 type = "transitorio",
-                currentZone = zona,
-                onZoneChange = {},
+                currentZone = currentZone,
+                onZoneChange = setCurrentZone,
                 buttonSize = buttonSize
             )
             ZoneButton(
                 type = "permanente",
-                currentZone = zona,
-                onZoneChange = {},
+                currentZone = currentZone,
+                onZoneChange = setCurrentZone,
                 buttonSize = buttonSize
             )
         }
 
-        // Campos de entrada
-        ClimaInputForm()
+        ClimaInputForm(
+            modifier = Modifier.fillMaxWidth()
+        )
 
-        // Botón de envío
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
@@ -188,90 +202,123 @@ fun ZoneButton(
     onZoneChange: (String) -> Unit,
     buttonSize: Dp
 ) {
-    OutlinedIconToggleButton(
-        checked = currentZone == type,
-        onCheckedChange = { onZoneChange(type) },
-        shape = RoundedCornerShape(12.dp),
-        colors = IconButtonDefaults.iconToggleButtonColors(
-            containerColor = if (currentZone == type) Color(0xFFCDE4B4) else Color.White
-        ),
-        border = BorderStroke(
-            width = 1.dp,
-            color = if (currentZone == type) Color(0xFF4E7029) else Color.Black
-        ),
-        modifier = Modifier.size(buttonSize)
+    val isSelected = currentZone == type // Determina si el botón está seleccionado
+
+    Box(
+        modifier = Modifier
+            .size(buttonSize)
+            .padding(4.dp)
+            .clip(RoundedCornerShape(12.dp)) // Aplica las esquinas redondeadas al fondo
+            .background(
+                color = if (isSelected) Color(0xFF4E7029) else Color.White // Fondo dinámico
+            )
+            .border(
+                width = 2.dp,
+                color = Color(0xFF4E7029) , // Verde si está seleccionado, más suave si no
+                shape = RoundedCornerShape(12.dp)
+            )
+            .clickable { onZoneChange(type) },
+        contentAlignment = Alignment.Center
     ) {
         Image(
             painter = painterResource(
                 when (type) {
                     "bosque" -> R.drawable.bosque
                     "arreglo" -> R.drawable.arreglo_agroforestal
-                    "transitorios" -> R.drawable.cultivos_transitorios
+                    "transitorio" -> R.drawable.cultivos_transitorios
                     else -> R.drawable.cultivos_permanentes
                 }
             ),
-            contentDescription = null
+            contentDescription = null,
+            modifier = Modifier.size(60.dp) // Aumenta el tamaño de la imagen
         )
     }
 }
+
 
 @Composable
 fun ClimaInputForm(
     modifier: Modifier = Modifier,
     enabled: Boolean = true
 ) {
+    val (pluviosidad, setPluviosidad) = remember { mutableStateOf("") }
+    val (temperaturaMaxima, setTemperaturaMaxima) = remember { mutableStateOf("") }
+    val (temperaturaMinima, setTemperaturaMinima) = remember { mutableStateOf("") }
+    val (humedadMaxima, setHumedadMaxima) = remember { mutableStateOf("") }
+    val (humedadMinima, setHumedadMinima) = remember { mutableStateOf("") }
+    val (nivelQuebrada, setNivelQuebrada) = remember { mutableStateOf("") }
+    val (observaciones, setObservaciones) = remember { mutableStateOf("") }
+    val actionButtonColors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4E7029))
+
+
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(12.dp) // Espaciado entre campos
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         OutlinedTextField(
-            value = "pluviosidad",
+            value = pluviosidad,
             label = { Text("Pluviosidad (mm)") },
-            onValueChange = { },
+            onValueChange = setPluviosidad,
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled
         )
         OutlinedTextField(
-            value = "maxtemp",
+            value = temperaturaMaxima,
             label = { Text("Temperatura máxima") },
-            onValueChange = { },
+            onValueChange = setTemperaturaMaxima,
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled
         )
         OutlinedTextField(
-            value = "mintemp",
+            value = temperaturaMinima,
             label = { Text("Temperatura mínima") },
-            onValueChange = { },
+            onValueChange = setTemperaturaMinima,
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled
         )
         OutlinedTextField(
-            value = "maxhum",
+            value = humedadMaxima,
             label = { Text("Humedad máxima") },
-            onValueChange = { },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled
+            onValueChange = setHumedadMaxima,
+            modifier = Modifier.fillMaxWidth()
         )
         OutlinedTextField(
-            value = "minhum",
+            value = humedadMinima,
             label = { Text("Humedad mínima") },
-            onValueChange = { },
+            onValueChange = setHumedadMinima,
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled
         )
         OutlinedTextField(
-            value = "quebrada",
+            value = nivelQuebrada,
             label = { Text("Nivel Quebrada (mt)") },
-            onValueChange = { },
+            onValueChange = setNivelQuebrada,
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled
         )
+        Text("Evidencias", style = MaterialTheme.typography.titleMedium)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Button(onClick = { /* Elegir archivo */ }, colors = actionButtonColors) {
+                Text("Elige archivo")
+            }
+            Button(onClick = { /* Tomar foto */ }, colors = actionButtonColors) {
+                Text("Tomar foto")
+            }
+        }
         OutlinedTextField(
-            value = "observaciones",
+            value = observaciones,
             label = { Text("Observaciones") },
-            onValueChange = { },
+            onValueChange = setObservaciones,
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled
         )
     }
 }
+
+@RequiresApi(Build.VERSION_CODES.P)
+@Preview(showBackground = true)
+@Composable
+fun VariableClimaticasPreview(){
+    FormularioVariablesClimaticas(navController = rememberNavController())
+}
+
