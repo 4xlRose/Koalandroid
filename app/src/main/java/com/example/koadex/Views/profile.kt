@@ -23,7 +23,7 @@ import com.example.koadex.ViewModels.PerfilScreenViewModel
 fun PerfilScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    user: User
+    user: User = User("Samantha", 5, 3, 2)
 ) {
 
     val ProfileViewModel = PerfilScreenViewModel()
@@ -33,7 +33,7 @@ fun PerfilScreen(
             TopAppBar(
                 title = { Text("") },
                 navigationIcon = {
-                    IconButton(onClick = { /* Acción de retroceso */ }) {
+                    IconButton(onClick = { navController.navigate("Principal")}) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Atrás")
                     }
                 },

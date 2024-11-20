@@ -47,7 +47,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.koadex.R
 import com.example.koadex.Views.EditProfileScreen
 import com.example.koadex.clases.User
-import dagger.hilt.android.lifecycle.HiltViewModel
 
 class PerfilScreenViewModel: ViewModel() {
 

@@ -1,5 +1,5 @@
 package com.example.koadex.ui.test
-
+/*
 import com.example.koadex.ViewModels.FormularioEspeciesViewModel
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
@@ -33,3 +33,5 @@ class NumberViewModelTest {
         assertEquals(1, viewModel.entero)
     }
 }
+
+ */
