@@ -56,6 +56,8 @@ import androidx.navigation.NavHostController
 
 import com.example.koadex.R
 
+import com.example.koadex.ui.form.FormEntryViewModel
+
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -64,7 +66,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.koadex.AppViewModelProvider
-
+import com.example.koadex.ui.form.FormDetails
+import com.example.koadex.ui.form.FormUiState
 /*
 import com.example.koadex.ui.form.GeneralFormDetails
 import com.example.koadex.ui.form.GeneralFormUiState
@@ -95,10 +98,6 @@ import androidx.compose.ui.res.stringResource
 
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.koadex.ui.form.FormGeneralDBViewModel
-import com.example.koadex.ui.form.GeneralFormUiState
-import com.example.koadex.ui.form.GeneralFormsDetails
-
 
 
 // TEST
@@ -112,22 +111,22 @@ import kotlinx.coroutines.launch
 fun FormularioGeneral(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    viewModel: FormGeneralDBViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: FormEntryViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
     FormularioGeneralEntry(
         navController = navController,
-        formUiState = viewModel.formGeneralUiState,
-        onFormValueChange = viewModel::updateGeneraFormlUiState,
+        formUiState = viewModel.formUiState,
+        onFormValueChange = viewModel::updateUiState,
         onSaveClick = {
             coroutineScope.launch {
-                viewModel.saveGeneralForm()
+                viewModel.saveForm()
                 navController.navigate("TiposForms")
             }
         },
-        /*onDateChange = { newDate ->
-            viewModel.updateGeneraFormlUiState(viewModel.formUiState.formDetails.copy(date = newDate))
-        },*/
+        onDateChange = { newDate ->
+            viewModel.updateUiState(viewModel.formUiState.formDetails.copy(date = newDate))
+        },
         modifier = modifier
     )
 }
@@ -136,9 +135,9 @@ fun FormularioGeneral(
 @Composable
 fun FormularioGeneralEntry(
     navController: NavHostController,
-    formUiState: GeneralFormUiState,
-    onFormValueChange: (GeneralFormsDetails) -> Unit,
-    /*onDateChange: (String) -> Unit,*/
+    formUiState: FormUiState,
+    onFormValueChange: (FormDetails) -> Unit,
+    onDateChange: (String) -> Unit,
     onSaveClick: () -> Unit,
     modifier: Modifier
 ) {
@@ -190,11 +189,11 @@ fun FormularioGeneralEntry(
         }
 
         FormInputForm(
-            formDetails = formUiState.formsDetails,
+            formDetails = formUiState.formDetails,
             onFormValueChange = onFormValueChange,
-            /*onDateChange = { newDate ->
+            onDateChange = { newDate ->
                 onFormValueChange(formUiState.formDetails.copy(date = newDate))
-            },*/
+            },
             modifier = Modifier
         )
 
@@ -216,34 +215,36 @@ fun FormularioGeneralEntry(
                 .fillMaxWidth()
                 .padding(top = 10.dp)
         ) {
-            var weather by remember { mutableStateOf(formUiState.formsDetails.idWeather) }
+            var weather by remember { mutableStateOf(formUiState.formDetails.weather) }
             val buttonSize = 80.dp
 
             // Weather buttons
             WeatherButton(
                 type = "soleado",
-                currentWeather = weather.toString(),
+                currentWeather = weather,
                 onWeatherChange = {
-
-                    onFormValueChange(formUiState.formsDetails.copy(idWeather = it.toInt()))
+                    weather = it
+                    onFormValueChange(formUiState.formDetails.copy(weather = it))
                 },
                 buttonSize = buttonSize
             )
 
             WeatherButton(
                 type = "nublado",
-                currentWeather = weather.toString(),
+                currentWeather = weather,
                 onWeatherChange = {
-                    onFormValueChange(formUiState.formsDetails.copy(idWeather = it.toInt()))
+                    weather = it
+                    onFormValueChange(formUiState.formDetails.copy(weather = it))
                 },
                 buttonSize = buttonSize
             )
 
             WeatherButton(
                 type = "lluvioso",
-                currentWeather = weather.toString(),
+                currentWeather = weather,
                 onWeatherChange = {
-                    onFormValueChange(formUiState.formsDetails.copy(idWeather = it.toInt()))
+                    weather = it
+                    onFormValueChange(formUiState.formDetails.copy(weather = it))
                 },
                 buttonSize = buttonSize
             )
@@ -265,24 +266,26 @@ fun FormularioGeneralEntry(
             horizontalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier.fillMaxWidth()
         ) {
-            var season by remember { mutableStateOf(formUiState.formsDetails.idSeason) }
+            var season by remember { mutableStateOf(formUiState.formDetails.season) }
             val buttonSize = 80.dp
 
             // Season buttons
             SeasonButton(
-                type = "Verano",
-                currentSeason = season.toString(),
+                type = "verano",
+                currentSeason = season,
                 onSeasonChange = {
-                    onFormValueChange(formUiState.formsDetails.copy(idSeason = it.toInt()))
+                    season = it
+                    onFormValueChange(formUiState.formDetails.copy(season = it))
                 },
                 buttonSize = buttonSize
             )
 
             SeasonButton(
                 type = "invierno",
-                currentSeason = season.toString(),
+                currentSeason = season,
                 onSeasonChange = {
-                    onFormValueChange(formUiState.formsDetails.copy(idSeason = it.toInt()))
+                    season = it
+                    onFormValueChange(formUiState.formDetails.copy(season = it))
                 },
                 buttonSize = buttonSize
             )
@@ -318,9 +321,9 @@ fun FormularioGeneralEntry(
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun FormInputForm(
-    formDetails: GeneralFormsDetails,
-    onFormValueChange: (GeneralFormsDetails) -> Unit,
-    /*onDateChange: (String) -> Unit,*/
+    formDetails: FormDetails,
+    onFormValueChange: (FormDetails) -> Unit,
+    onDateChange: (String) -> Unit,
     modifier: Modifier,
     enabled: Boolean = true
 ) {
@@ -340,7 +343,6 @@ fun FormInputForm(
         }
         return input
     }*/
-
     Row(
         modifier = Modifier
             .padding(10.dp)
@@ -364,18 +366,46 @@ fun FormInputForm(
             .padding(10.dp)
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
-    ){
+    ) {
         OutlinedTextField(
-            value = formDetails.idUser.toString(),
-            label = { Text("Nombre") },
-            onValueChange = { onFormValueChange(formDetails.copy(idUser = it.toInt())) },
+            value = dateText,
+            onValueChange = { input ->
+                if (input.length <= 8) { // Considerando los '/'
+                    val formattedInput = if (input.replace("/", "").length <= 6) {
+                        dateValidator.formatDate(input.replace("/", ""))
+                    } else {
+                        input
+                    }
+
+                    dateText = formattedInput
+
+                    // Validar solo si el campo está completo
+                    if (formattedInput.length == 8) { // dd/mm/yy
+                        if (dateValidator.isValidDate(formattedInput)) {
+                            dateError = null
+                            onDateChange(formattedInput)
+                        } else {
+                            dateError = "Fecha inválida"
+                        }
+                    }
+                }
+            },
+            label = { Text(stringResource(R.string.fecha)) },
             modifier = Modifier
                 .padding(10.dp)
                 .fillMaxWidth()
-            ,
-            enabled = enabled
-
+                ,
+            isError = dateError != null,
+            supportingText = {
+                dateError?.let {
+                    Text(
+                        text = it,
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+            }
         )
+        // ... (keep date picker button)
     }
 
     Row(
@@ -533,11 +563,201 @@ fun FormularioGeneralEntry(
             .height(40.dp)
         Row(
             modifier = Modifier
-                .padding(10.dp)
                 .fillMaxWidth()
-            ,
-            enabled = enabled
-            /*
+                .height(67.dp)
+                .background(color = colorResource(R.color.green_100)),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(
+                modifier = Modifier
+                    .padding(20.dp)
+                    .size(30.dp),
+                onClick = { navController.navigate("Principal") }
+                )
+             {
+                Icon(
+                    Icons.AutoMirrored.Rounded.ArrowBack,
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+            Text(
+                text = "Formulario",
+                modifier = modifier
+                    .offset(x = 10.dp),
+                fontSize = 25.sp
+            )
+        }
+
+        FormInputForm(
+            formDetails = formUiState.formDetails,
+            onFormValueChange = onFormValueChange,
+            modifier = Modifier
+        )
+
+        // Weather section
+        Row(
+            modifier = textModifier,
+            verticalAlignment = Alignment.Bottom
+        ) {
+            Text(
+                text = "Estado del Tiempo",
+                modifier = modifier.offset(x = 30.dp),
+                fontSize = 18.sp
+            )
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            var weather by remember { mutableStateOf(WeatherDetails().weather) }
+            val buttonSize = 80.dp
+
+            // Weather buttons
+            WeatherButton(
+                type = "soleado",
+                currentWeather = weather,
+                onWeatherChange = {
+                    weather = it
+                    onFormValueChange(formUiState.formDetails.copy(serialCode = it)) // serial code es temporal
+                },
+                buttonSize = buttonSize
+            )
+
+            WeatherButton(
+                type = "nublado",
+                currentWeather = weather,
+                onWeatherChange = {
+                    weather = it
+                    onFormValueChange(formUiState.formDetails.copy(serialCode = it))
+                },
+                buttonSize = buttonSize
+            )
+
+            WeatherButton(
+                type = "lluvioso",
+                currentWeather = weather,
+                onWeatherChange = {
+                    weather = it
+                    onFormValueChange(formUiState.formDetails.copy(serialCode = it))
+                },
+                buttonSize = buttonSize
+            )
+        }
+
+        // Season section
+        Row(
+            modifier = textModifier,
+            verticalAlignment = Alignment.Bottom
+        ) {
+            Text(
+                text = "Época",
+                modifier = modifier.offset(x = 30.dp),
+                fontSize = 18.sp
+            )
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            var season by remember { mutableStateOf(SeasonDetails().season) }
+            val buttonSize = 80.dp
+
+            // Season buttons
+            SeasonButton(
+                type = "verano",
+                currentSeason = season,
+                onSeasonChange = {
+                    season = it
+                    onFormValueChange(formUiState.formDetails.copy(serialCode = it))
+                },
+                buttonSize = buttonSize
+            )
+
+            SeasonButton(
+                type = "invierno",
+                currentSeason = season,
+                onSeasonChange = {
+                    season = it
+                    onFormValueChange(formUiState.formDetails.copy(serialCode = it))
+                },
+                buttonSize = buttonSize
+            )
+        }
+
+        // Submit button
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Button(
+                shape = RoundedCornerShape(6.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF4E7029)
+                ),
+                modifier = Modifier
+                    .padding(40.dp)
+                    .width(300.dp),
+                onClick = { onSaveClick
+                    ;navController.navigate("TiposForms")
+                     },
+                enabled = formUiState.isEntryValid
+            ) {
+                Text("SIGUIENTE", fontWeight = FontWeight.Bold)
+            }
+        }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun FormInputForm(
+    formDetails: FormDetails,
+    onFormValueChange: (FormDetails) -> Unit,
+    onDateChange: (String) -> Unit,
+    modifier: Modifier,
+    enabled: Boolean = true
+) {
+    var dateText by remember { mutableStateOf(formDetails.date) }
+
+    // Variables para el TEST
+    val dateValidator = remember { DateValidator() }
+    var dateError by remember { mutableStateOf<String?>(null) }
+
+    /* Formatear la fecha a dd/mm/aa
+    fun formatFecha(input: String): String {
+        if (input.length == 6) {
+            val dia = input.substring(0, 2)
+            val mes = input.substring(2, 4)
+            val anio = input.substring(4, 6)
+            return "$dia/$mes/$anio"
+        }
+        return input
+    }*/
+
+
+    OutlinedTextField(
+        value = formDetails.name,
+        label = { Text("Nombre") },
+        onValueChange = {
+            val it = 0
+            onFormValueChange(formDetails.copy(idUser = it))
+        },
+        modifier = Modifier
+            .padding(10.dp)
+            .width(320.dp),
+        enabled = enabled
+    )
+
+    Row(
+        modifier = Modifier
+            .padding(10.dp)
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        OutlinedTextField(
             value = dateText,
             onValueChange = { input ->
                 if (input.length <= 8) { // Considerando los '/'
@@ -549,7 +769,7 @@ fun FormularioGeneralEntry(
 
                     dateText = formattedInput
 
-                    // Validar solo si el campo está completo
+                    // Validar solo si el campo esta completo
                     if (formattedInput.length == 8) { // dd/mm/yy
                         if (dateValidator.isValidDate(formattedInput)) {
                             dateError = null
@@ -562,9 +782,8 @@ fun FormularioGeneralEntry(
             },
             label = { Text(stringResource(R.string.fecha)) },
             modifier = Modifier
-                .padding(10.dp)
-                .fillMaxWidth()
-                ,
+                .width(180.dp)
+                .offset(26.dp),
             isError = dateError != null,
             supportingText = {
                 dateError?.let {
@@ -573,7 +792,7 @@ fun FormularioGeneralEntry(
                         color = MaterialTheme.colorScheme.error
                     )
                 }
-            }*/
+            }
         )
         // ... (keep date picker button)
     }
@@ -589,29 +808,30 @@ fun FormularioGeneralEntry(
             label = { Text("Localidad") },
             onValueChange = { onFormValueChange(formDetails.copy(place = it)) },
             modifier = Modifier
-                .padding(10.dp)
-                .fillMaxWidth()
+                .width(262.dp)
+
         )
         // ... (keep location button)
     }
-    Row(
+
+    OutlinedTextField(
+        value = formDetails.hour,
+        label = { Text("Hora") },
+        onValueChange = { onFormValueChange(formDetails.copy(hour = it)) },
         modifier = Modifier
             .padding(10.dp)
             .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-    ){
+        //verticalAlignment = Alignment.CenterVertically,
+    ) {
         OutlinedTextField(
             value = formDetails.hour,
             label = { Text("Hora") },
             onValueChange = { onFormValueChange(formDetails.copy(hour = it)) },
             modifier = Modifier
-                .padding(10.dp)
-                .fillMaxWidth()
+
+                .width(320.dp)
         )
     }
-
-
-    //Spacer(modifier = Modifier.weight(1f))
 
 }
 
@@ -679,3 +899,4 @@ fun SeasonButton(
         )
     }
 }
+*/

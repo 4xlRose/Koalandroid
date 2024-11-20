@@ -14,7 +14,6 @@ import androidx.compose.material3.ButtonDefaults
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,14 +24,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 
 import androidx.navigation.NavHostController
-import com.example.koadex.AppViewModelProvider
 import com.example.koadex.R
-import com.example.koadex.ui.form.FormsPredeterminedViewModel
-import kotlinx.coroutines.launch
-import okhttp3.internal.platform.android.BouncyCastleSocketAdapter.Companion.factory
 
 
 @Composable
@@ -82,8 +76,6 @@ fun Fondo_vista(modifier: Modifier = Modifier){
 
 @Composable
 fun Botton_inicio_sesion(navController: NavHostController, modifier: Modifier = Modifier) {
-    val viewModelInicialiazar: FormsPredeterminedViewModel = viewModel(factory = AppViewModelProvider.Factory)
-    val coroutineScope = rememberCoroutineScope()
     Column(
         modifier = modifier
             .fillMaxHeight()
@@ -111,11 +103,7 @@ fun Botton_inicio_sesion(navController: NavHostController, modifier: Modifier = 
         ) {
             Button(
                 onClick = {
-                    coroutineScope.launch {
-                        viewModelInicialiazar.inicializarTablasPredeterminadas()
-                        navController.navigate("InicioSesion") // Navigate to InicioSesion
-                    }
-
+                    navController.navigate("InicioSesion") // Navigate to InicioSesion
                 },
                 modifier = Modifier.padding(5.dp),
                 colors = ButtonDefaults.buttonColors(

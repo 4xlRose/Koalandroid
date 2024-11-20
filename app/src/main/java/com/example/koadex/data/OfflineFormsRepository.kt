@@ -1,9 +1,9 @@
+
 package com.example.koadex.data
 
 import kotlinx.coroutines.flow.Flow
-//import javax.inject.Inject
 
-class OfflineFormRepository(private val formDao : FormDao) : FormRepository {
+class OfflineFormsRepository(private val formDao : FormDao) : FormRepository {
 
     override fun getAllForms(): Flow<List<FormEntity>> = formDao.getAllForms()
     override fun getForm(id: Int): Flow<FormEntity?> = formDao.getForm(id)
@@ -14,3 +14,4 @@ class OfflineFormRepository(private val formDao : FormDao) : FormRepository {
 
     override suspend fun updateForm(formGeneral: FormEntity) = formDao.update(formGeneral)
 }
+

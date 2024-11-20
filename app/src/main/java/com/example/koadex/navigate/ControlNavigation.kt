@@ -63,7 +63,7 @@ import com.example.koadex.clases.User
 @Composable
 fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modifier) {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "InicioCarga") {
+    NavHost(navController = navController, startDestination = "Principal") {
         composable("InicioCarga") {
             InicioCarga(navController = navController)
         }

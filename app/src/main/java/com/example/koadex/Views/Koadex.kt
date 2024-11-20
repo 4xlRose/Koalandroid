@@ -58,7 +58,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.koadex.AppViewModelProvider
 import com.example.koadex.R
-import com.example.koadex.data.GeneralFormEntity
+import com.example.koadex.data.FormEntity
 import com.example.koadex.navigate.La_navegacion
 import com.example.koadex.ui.principal.KoadexViewModel
 import com.example.koadex.ui.theme.Gray300
@@ -126,35 +126,6 @@ fun KoadexPantalla(modifier: Modifier,
 
 @Composable
 fun KoadexContenido(
-    formList: List<GeneralFormEntity>?,
-    modifier: Modifier = Modifier) {
-    Row(
-        horizontalArrangement = Arrangement.SpaceAround,
-        verticalAlignment = Alignment.Bottom,
-        modifier = Modifier
-            .fillMaxWidth()
-    ) {
-        val textSize = 20.sp
-        var selected by remember { mutableStateOf("Todos") }
-
-        Column {
-            val text = "Todos"
-            Button(
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent
-                ),
-                onClick = { selected = text }
-            ) {
-                Text(
-                    text = text,
-                    fontSize = textSize,
-                    fontWeight = FontWeight.Bold,
-                    textDecoration = if (selected == text)
-                        TextDecoration.Underline
-                    else
-                        TextDecoration.None,
-                    color = if (selected == text) Green700 else Gray300
-                )
     formList: List<FormEntity>,
     modifier: Modifier = Modifier
 )
@@ -192,6 +163,7 @@ fun KoadexContenido(
                             TextDecoration.None,
                         color = if (selected == text) Green700 else Gray300
                     )
+
                 }
             }
 
@@ -255,23 +227,11 @@ fun KoadexContenido(
         }
     }
 
-        if (formList != null) {
-            if (formList.isEmpty()) {
-                Text(
-                    text = "No hay formularios guardados",
-                    modifier = Modifier.fillMaxSize()
-                )
-            } else {
-                FormList(formList)
-            }
-        }
-    }
-
 }
 
 @Composable
 fun FormList(
-    formList: List<GeneralFormEntity>,
+    formList: List<FormEntity>,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier = modifier) {
@@ -286,7 +246,7 @@ fun FormList(
 
 @Composable
 private fun FormInfo(
-    form: GeneralFormEntity,
+    form: FormEntity,
     modifier: Modifier = Modifier) {
     Card(
         modifier = modifier
@@ -314,8 +274,7 @@ private fun FormInfo(
 
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-
-                        text = "Nombre: " + form.idUser,
+                        text = "Nombre: " + form.name,
                         color = Color.White,
                         fontWeight = FontWeight.Bold
                     )
