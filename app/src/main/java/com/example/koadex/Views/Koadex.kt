@@ -68,7 +68,11 @@ import com.example.koadex.ui.theme.Green700
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun KoadexPreview() {
-    Koadex(navController = rememberNavController(), modifier = Modifier, viewModel = viewModel(factory = AppViewModelProvider.Factory))
+    Koadex(
+        navController = rememberNavController(),
+        modifier = Modifier,
+        viewModel = viewModel(factory = AppViewModelProvider.Factory)
+    )
 }
 
 @Composable
@@ -239,7 +243,7 @@ private fun FormInfo(
             .padding(20.dp),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Green100
+            containerColor = colorResource(R.color.verde_1)
         )
     ) {
         Column(
@@ -247,41 +251,55 @@ private fun FormInfo(
                 .padding(16.dp)
         ) {
             Text(
-                text = "ID: " + form.id.toString()
+                text = "ID: " + form.id.toString(),
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
+
             )
             Row(
-                modifier = Modifier,
-                horizontalArrangement = Arrangement.SpaceEvenly
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
 
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Nombre: " + form.name
+                        text = "Nombre: " + form.name,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
                     )
                 }
 
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Fecha: " + form.date
+                        text = "Fecha: " + form.date,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
                     )
                 }
 
             }
 
             Row(
-                modifier = Modifier,
-                horizontalArrangement = Arrangement.SpaceEvenly
+                modifier = Modifier
+                    .fillMaxWidth()
+                ,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
 
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Lugar: " + form.place
+                        text = "Lugar: " + form.place,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
                     )
                 }
 
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Hora: " + form.hour
+                        text = "Hora: " + form.hour,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
                     )
                 }
 
