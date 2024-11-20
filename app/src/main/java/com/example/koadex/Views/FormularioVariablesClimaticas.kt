@@ -12,6 +12,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -111,10 +114,13 @@ fun FormularioClimaEntry(
     onSaveClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(16.dp)
+            .verticalScroll(scrollState), // Habilitar scroll
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
@@ -195,8 +201,8 @@ fun ZoneButton(
             containerColor = if (currentZone == type) Color(0xFFCDE4B4) else Color.White
         ),
         border = BorderStroke(
-            width = 1.dp,
-            color = if (currentZone == type) Color(0xFF4E7029) else Color.Black
+            width = 2.dp,
+            color = if (currentZone == type) Color(0xFF4E7029) else Color.Black // Verde si está seleccionado
         ),
         modifier = Modifier.size(buttonSize)
     ) {
@@ -213,6 +219,7 @@ fun ZoneButton(
         )
     }
 }
+
 
 @Composable
 fun ClimaInputForm(
