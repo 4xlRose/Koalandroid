@@ -23,7 +23,7 @@ import com.example.koadex.ViewModels.PerfilScreenViewModel
 fun PerfilScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    user: User
+    user: User = User("Samantha", 5, 3, 2)
 ) {
 
     val ProfileViewModel = PerfilScreenViewModel()
