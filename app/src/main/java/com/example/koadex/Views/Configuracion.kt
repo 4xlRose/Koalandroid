@@ -26,7 +26,7 @@ import com.example.koadex.clases.User
 import com.example.koadex.navigate.La_navegacion
 import com.example.koadex.clases.Configuracion
 import androidx.compose.material.icons.filled.ArrowBack
-
+import com.example.koadex.navigate.sampleUser
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,9 +34,10 @@ import androidx.compose.material.icons.filled.ArrowBack
 fun Configuracion(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    user: User = User("Samantha Smith", 5, 3, 2, 10, 20, 15)
+    user: User = sampleUser
 ) {
     // Estado para manejar las notificaciones
+    var showLogoutDialog by remember { mutableStateOf(false) }
     var notificacionesActivas by remember {
         mutableStateOf(Configuracion.getInstance().notificacionesActivas)
     }
@@ -86,9 +87,11 @@ fun Configuracion(
             // Preferencias de perfil
             Preferencias_perfil(notificacionesActivas, navController)
 
-            // Botón de cerrar sesión
             Button(
-                onClick = { /* Implementar diálogo de confirmación */ },
+                onClick = {
+
+                    showLogoutDialog = true
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 32.dp),
@@ -101,8 +104,66 @@ fun Configuracion(
                     modifier = Modifier.padding(8.dp)
                 )
             }
+
+            // Logout Confirmation Dialog
+            if (showLogoutDialog) {
+                user.isLogged = false
+                Alerta_cerrar_sesion(showLogoutDialog, navController)
+            }
         }
     }
+}
+
+@Composable
+private fun Alerta_cerrar_sesion(
+    showLogoutDialog: Boolean,
+    navController: NavHostController
+) {
+    var showLogoutDialog1 = showLogoutDialog
+    AlertDialog(
+        onDismissRequest = {
+            // Dismiss the dialog when clicking outside
+            showLogoutDialog1 = false
+        },
+        title = {
+            Text(
+                text = "Cerrar Sesión",
+                fontWeight = FontWeight.Bold
+            )
+        },
+        text = {
+            Text("¿Estás seguro de que quieres cerrar sesión?")
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    // Implement logout logic here
+                    // For example:
+                    // viewModel.logout()
+                    navController.navigate("InicioSesion") {
+                        // Clear the back stack
+                        popUpTo(0) { inclusive = true }
+                    }
+                    showLogoutDialog1 = false
+                }
+            ) {
+                Text("Sí, cerrar sesión")
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = {
+                    showLogoutDialog1 = false
+                    navController.navigate("Configuracion")
+                }
+            ) {
+                Text("Cancelar")
+            }
+        },
+        containerColor = Color.White,
+        textContentColor = Color.Black,
+        titleContentColor = Color.Black
+    )
 }
 
 
@@ -255,5 +316,5 @@ private fun ProfileItem(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun ConfiguracionPreview() {
-    Configuracion(rememberNavController(), user = User("Samantha Smith", 5, 3, 2, 10, 20, 15))
+    Configuracion(rememberNavController(), user = sampleUser)
 }
