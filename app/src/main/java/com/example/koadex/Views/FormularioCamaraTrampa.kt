@@ -490,6 +490,7 @@ fun EvidenciaItem(
 }
 
 
+@RequiresApi(Build.VERSION_CODES.P)
 @Preview(showBackground = true)
 @Composable
 fun FormularioCamaraTrampaPreview(){

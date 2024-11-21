@@ -75,6 +75,8 @@ import com.example.koadex.ui.form.SeasonDetails
 import com.example.koadex.ui.form.WeatherDetails
 */
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -87,8 +89,7 @@ import androidx.compose.material3.Button
 
 
 import androidx.compose.material3.Text
-
-
+import androidx.compose.ui.draw.scale
 
 
 import androidx.compose.ui.layout.ContentScale
@@ -98,6 +99,7 @@ import androidx.compose.ui.res.stringResource
 
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.rememberNavController
 
 
 // TEST
@@ -452,29 +454,40 @@ fun WeatherButton(
     onWeatherChange: (String) -> Unit,
     buttonSize: Dp
 ) {
-    OutlinedIconToggleButton(
-        checked = currentWeather == type,
-        onCheckedChange = { onWeatherChange(type) },
+    Button(
+        onClick = { onWeatherChange(type) },
         shape = RoundedCornerShape(12.dp),
-        colors = IconButtonDefaults.iconToggleButtonColors(
-            containerColor = if (currentWeather == type) Color(0xFFCDE4B4) else Color.White
+        colors = ButtonDefaults.buttonColors(
+            containerColor = if (currentWeather == type) Color(0xFF4E7029) else Color.White
         ),
-        border = BorderStroke(
-            width = 1.dp,
-            color = if (currentWeather == type) Color(0xFF4E7029) else Color.Black
-        ),
-        modifier = Modifier.size(buttonSize)
+        modifier = Modifier
+            .size(buttonSize)
+            .border(
+                BorderStroke(
+                    width = 1.dp,
+                    color = Color.Transparent
+                ),
+                shape = RoundedCornerShape(12.dp)
+            )
     ) {
-        Image(
-            painter = painterResource(
-                when (type) {
-                    "soleado" -> R.drawable.soleado
-                    "nublado" -> R.drawable.nublado
-                    else -> R.drawable.lluvioso
-                }
-            ),
-            contentDescription = null
-        )
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Image(
+                painter = painterResource(
+                    when (type) {
+                        "soleado" -> R.drawable.soleado
+                        "nublado" -> R.drawable.nublado
+                        else -> R.drawable.lluvioso
+                    }
+                ),
+                contentDescription = null,
+                modifier = Modifier
+                    .scale(4f)
+                    .padding(5.dp)
+            )
+        }
     }
 }
 
@@ -485,30 +498,61 @@ fun SeasonButton(
     onSeasonChange: (String) -> Unit,
     buttonSize: Dp
 ) {
-    OutlinedIconToggleButton(
-        checked = currentSeason == type,
-        onCheckedChange = { onSeasonChange(type) },
+    Button(
+        onClick = { onSeasonChange(type) },
         shape = RoundedCornerShape(12.dp),
-        colors = IconButtonDefaults.iconToggleButtonColors(
-            containerColor = if (currentSeason == type) Color(0xFFCDE4B4) else Color.White
+        colors = ButtonDefaults.buttonColors(
+            containerColor = if (currentSeason == type) Color(0xFF4E7029) else Color.White
         ),
-        border = BorderStroke(
-            width = 1.dp,
-            color = if (currentSeason == type) Color(0xFF4E7029) else Color.Black
-        ),
-        modifier = Modifier.size(buttonSize)
+        modifier = Modifier
+            .size(buttonSize)
+            .border(
+                BorderStroke(
+                    width = 1.dp,
+                    color = Color.Transparent
+                ),
+                shape = RoundedCornerShape(12.dp)
+            )
     ) {
-        Image(
-            painter = painterResource(
-                when (type) {
-                    "verano" -> R.drawable.verano
-                    else -> R.drawable.invierno
-                }
-            ),
-            contentDescription = null
-        )
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Image(
+                painter = painterResource(
+                    when (type) {
+                        "verano" -> R.drawable.verano
+                        else -> R.drawable.invierno
+                    }
+                ),
+                contentDescription = null,
+                modifier = Modifier
+                    .scale(4f)
+                    .padding(5.dp)
+            )
+        }
     }
 }
+
+
+
+
+
+
+
+@RequiresApi(Build.VERSION_CODES.P)
+@Preview(showBackground = true)
+@Composable
+fun PreviewFormularioGeneral(){
+    FormularioGeneral(
+        navController = rememberNavController(),
+        modifier = Modifier,
+        viewModel = viewModel(factory = AppViewModelProvider.Factory)
+
+    )
+
+}
+
 
 /*
 @RequiresApi(Build.VERSION_CODES.O)
