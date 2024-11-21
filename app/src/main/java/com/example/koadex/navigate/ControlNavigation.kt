@@ -86,9 +86,7 @@ fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modi
         composable("Configuracion"){
             Configuracion(navController = navController)
         }
-        composable("Perfil"){
-            Perfil(navController = navController)
-        }
+
         composable("OlvidoContrasena"){
             OlvidoContrasena(navController = navController)
         }
@@ -121,7 +119,7 @@ fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modi
             FormularioFaunaBusquedaLibre(navController = navController)
         }
         composable("FormularioCuadrante"){
-            FormularioCuadrante(activity,navController = navController)
+            FormularioCuadrante(navController = navController)
         }
         composable("FormularioSeguimiento"){
             FormularioSeguimiento(navController = navController)
