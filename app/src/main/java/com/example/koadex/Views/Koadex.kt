@@ -21,7 +21,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
@@ -53,6 +55,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -68,11 +71,17 @@ import com.example.koadex.ui.theme.Green700
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun KoadexPreview() {
-    Koadex(
-        navController = rememberNavController(),
-        modifier = Modifier,
-        viewModel = viewModel(factory = AppViewModelProvider.Factory)
+    var form_example = FormEntity(
+        id = 1,
+        name = "Juan",
+        date = "12/03/2023",
+        place = "Monterrey",
+        hour = "12:00",
+        weather = "Soleado",
+        season = "Verano"
     )
+
+    FormInfo(form_example)
 }
 
 @Composable
@@ -266,7 +275,7 @@ private fun FormInfo(
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            // Header with ID and more details
+            // ID y hora
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -285,12 +294,26 @@ private fun FormInfo(
                     ),
                     shape = RoundedCornerShape(8.dp)
                 ) {
-                    Text(
-                        text = form.hour,
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                        color = Color.White,
-                        fontSize = 12.sp
-                    )
+
+                    Row(verticalAlignment = Alignment.CenterVertically) { // Use a Row for horizontal alignment
+
+                        Spacer(modifier = Modifier.width(12.dp))
+
+                        Icon(
+                            imageVector = Icons.Filled.Schedule, // Use the clock icon
+                            contentDescription = "Clock Icon",
+                            tint = Color.White, // Set the tint to white
+                            modifier = Modifier.size(16.dp) // Adjust the size as needed
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+
+                        Text(
+                            text =  form.hour,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                            color = Color.White,
+                            fontSize = 12.sp
+                        )
+                    }
                 }
             }
 
@@ -317,7 +340,7 @@ private fun FormInfo(
                     modifier = Modifier.weight(1f)
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.koadex),
+                        imageVector = Icons.Default.LocationOn,
                         contentDescription = "Location",
                         tint = colorResource(R.color.green_100),
                         modifier = Modifier.size(16.dp)

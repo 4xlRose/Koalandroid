@@ -63,6 +63,7 @@ dependencies{
     implementation(libs.junit.junit)
     implementation(libs.androidx.core.testing)
     implementation(libs.androidx.ui.test.android)
+    implementation(libs.androidx.compilercommon)
     /*Room*/
     ksp(libs.androidx.room.compiler.v250)
     implementation(libs.room.runtime)
