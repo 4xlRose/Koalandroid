@@ -37,9 +37,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -122,6 +124,7 @@ fun FormularioClimaEntry(
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
+    val isFileLoaded = remember { mutableStateOf(false) }
     val (currentZone, setCurrentZone) = remember { mutableStateOf("") } // Estado para la zona seleccionada
 
     Column(
@@ -170,6 +173,7 @@ fun FormularioClimaEntry(
         }
 
         ClimaInputForm(
+            onFileLoaded = { isFileLoaded.value = it },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -183,11 +187,22 @@ fun FormularioClimaEntry(
                     containerColor = Color(0xFF4E7029)
                 ),
                 modifier = Modifier
-                    .width(300.dp),
+                    .width(140.dp),
                 onClick = {
-                    onSaveClick()
-                    navController.navigate("Principal")
-                },
+                     },
+            ) {
+                Text("Atrás", fontWeight = FontWeight.Bold)
+            }
+            Button(
+                shape = RoundedCornerShape(6.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF4E7029)
+                ),
+                modifier = Modifier
+                    .width(140.dp),
+                onClick = {
+                    },
+                enabled = isFileLoaded.value
             ) {
                 Text("Enviar", fontWeight = FontWeight.Bold)
             }
@@ -239,7 +254,8 @@ fun ZoneButton(
 @Composable
 fun ClimaInputForm(
     modifier: Modifier = Modifier,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    onFileLoaded: (Boolean) -> Unit
 ) {
     val (pluviosidad, setPluviosidad) = remember { mutableStateOf("") }
     val (temperaturaMaxima, setTemperaturaMaxima) = remember { mutableStateOf("") }
@@ -248,8 +264,8 @@ fun ClimaInputForm(
     val (humedadMinima, setHumedadMinima) = remember { mutableStateOf("") }
     val (nivelQuebrada, setNivelQuebrada) = remember { mutableStateOf("") }
     val (observaciones, setObservaciones) = remember { mutableStateOf("") }
+    var isFileSelected by remember { mutableStateOf(false) }
     val actionButtonColors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4E7029))
-
 
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -297,14 +313,24 @@ fun ClimaInputForm(
             enabled = enabled
         )
         Text("Evidencias", style = MaterialTheme.typography.titleMedium)
+
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Button(onClick = { /* Elegir archivo */ }, colors = actionButtonColors) {
+            Button(onClick = {
+                // Simular carga de archivo
+                isFileSelected = true
+                onFileLoaded(isFileSelected)
+            }, colors = actionButtonColors) {
                 Text("Elige archivo")
             }
-            Button(onClick = { /* Tomar foto */ }, colors = actionButtonColors) {
+            Button(onClick = {
+                // Simular tomar foto
+                isFileSelected = true
+                onFileLoaded(isFileSelected)
+            }, colors = actionButtonColors) {
                 Text("Tomar foto")
             }
         }
+
         OutlinedTextField(
             value = observaciones,
             label = { Text("Observaciones") },

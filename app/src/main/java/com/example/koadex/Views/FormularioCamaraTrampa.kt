@@ -109,6 +109,7 @@ fun FormularioScreen(
     modifier: Modifier = Modifier
 ) {
     var CameraPermision by remember { mutableStateOf(false) }
+    var isFileSelected by remember { mutableStateOf(false) }
     if (CameraPermision) {
         CameraWindow(activity)
     } else {
@@ -399,7 +400,7 @@ fun FormularioScreen(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Button(
-                        onClick = { /* Aqui va la selección de las fotos */ },
+                        onClick = { /* Aqui va la selección de las fotos */ isFileSelected = true },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color(0xFF4E7029),
                             contentColor = Color.White
@@ -410,7 +411,7 @@ fun FormularioScreen(
                     }
                     Button(
                         onClick = {
-                            CameraPermision = true
+                            CameraPermision = true; isFileSelected = true
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color(0xFF4E7029),
@@ -459,7 +460,8 @@ fun FormularioScreen(
                     containerColor = Color(0xFF4E7029),
                     contentColor = Color.White
                 ),
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                // enabled = isFileSelected
             ) {
                 Text(stringResource(R.string.enviar))
             }
