@@ -3,6 +3,7 @@ package com.example.koadex.Views
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -57,7 +58,8 @@ fun FormularioSeleccion(
 ) {
     Scaffold(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .background(Color.White),
         topBar = {
             TopAppBar(
                 title = { Text(text = stringResource(id = R.string.formulario)) },
@@ -90,6 +92,7 @@ fun FormularioSeleccionScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color.White)
             .padding(horizontal = 32.dp)
             .padding(top = 140.dp, bottom = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -229,7 +232,7 @@ fun OptionButton( //Configuracion de los botones con una imagen
             Image(
                 painter = painterResource(id = icon),
                 contentDescription = null,
-                modifier = Modifier.size(50.dp)
+                modifier = Modifier.size(30.dp)
             )
             Spacer(modifier = Modifier.width(16.dp))
             Text(
@@ -277,15 +280,15 @@ fun OptionButtonTwoIcons( //Botones con 2 iconos
                     painter = painterResource(id = icon1),
                     contentDescription = null,
                     modifier = Modifier
-                        .size(44.dp)
+                        .size(24.dp)
                         .align(Alignment.CenterStart)
                 )
                 Image(
                     painter = painterResource(id = icon2),
                     contentDescription = null,
                     modifier = Modifier
-                        .size(44.dp)
-                        .align(Alignment.CenterEnd)
+                        .size(24.dp)
+                        .align(Alignment.Center)
                 )
             }
             Text(
