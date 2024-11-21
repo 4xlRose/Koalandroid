@@ -1,3 +1,4 @@
+package com.example.koadex.Views
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
