@@ -94,7 +94,7 @@ fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modi
             Verificacion(navController = navController)
         }
 
-        //Perfiles
+        // Perfiles
         composable("PerfilScreen") {
             PerfilScreen(navController = navController, user = sampleUser)
         }
