@@ -25,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -36,27 +35,26 @@ import com.auth0.android.Auth0
 import com.example.koadex.MainActivity
 import com.example.koadex.R
 
-import com.example.koadex.views.Configuracion
-import com.example.koadex.views.FormularioCamaraTrampa
-import com.example.koadex.views.FormularioCuadrante
-import com.example.koadex.views.FormularioEspecies
-import com.example.koadex.views.FormularioFaunaBusquedaLibre
-import com.example.koadex.views.FormularioFaunaPuntoConteo
-import com.example.koadex.views.FormularioGeneral
-import com.example.koadex.views.FormularioSeleccionScreen
-import com.example.koadex.views.InicioCarga
-import com.example.koadex.views.InicioSesion
-import com.example.koadex.views.Koadex
-import com.example.koadex.views.OlvidoContrasena
-import com.example.koadex.views.Principal
-import com.example.koadex.views.Registro
-import com.example.koadex.views.Verificacion
-import com.example.koadex.views.FormularioSeguimiento
-import com.example.koadex.views.FormularioSeleccion
-import com.example.koadex.views.FormularioVariablesClimaticas
-import com.example.koadex.views.EditProfileScreen
+import com.example.koadex.Views.Configuracion
+import com.example.koadex.Views.FormularioCamaraTrampa
+import com.example.koadex.Views.FormularioCuadrante
+import com.example.koadex.Views.FormularioEspecies
+import com.example.koadex.Views.FormularioFaunaBusquedaLibre
+import com.example.koadex.Views.FormularioFaunaPuntoConteo
+import com.example.koadex.Views.FormularioGeneral
+import com.example.koadex.Views.InicioCarga
+import com.example.koadex.Views.InicioSesion
+import com.example.koadex.Views.Koadex
+import com.example.koadex.Views.OlvidoContrasena
+import com.example.koadex.Views.Principal
+import com.example.koadex.Views.Registro
+import com.example.koadex.Views.Verificacion
+import com.example.koadex.Views.FormularioSeguimiento
+import com.example.koadex.Views.FormularioSeleccion
+import com.example.koadex.Views.FormularioVariablesClimaticas
+import com.example.koadex.Views.EditProfileScreen
 import com.example.koadex.clases.User
-import com.example.koadex.views.PerfilScreen
+import com.example.koadex.Views.PerfilScreen
 
 
 @RequiresApi(Build.VERSION_CODES.P)

@@ -1,4 +1,4 @@
-package com.example.koadex.views
+package com.example.koadex.Views
 
 
 import androidx.compose.runtime.getValue
