@@ -95,16 +95,16 @@ fun FormularioCamaraTrampa(
         }
     ) { paddingValues ->
         FormularioScreen(
-            //activity = activity,
+            activity = activity,
             modifier = Modifier.padding(paddingValues)
         )
     }
 }
-@Preview(device = "spec:width=800px,height=1340px,dpi=300", showBackground = true)
+//@Preview(device = "spec:width=800px,height=1340px,dpi=300", showBackground = true)
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun FormularioScreen(
-    /*activity: MainActivity,*/
+    activity: MainActivity,
     modifier: Modifier = Modifier
 ) {
     var CameraPermision by remember { mutableStateOf(false) }
