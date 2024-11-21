@@ -181,11 +181,11 @@ fun FormularioFaunaBusquedaLibre(navController: NavHostController, modifier: Mod
 
             // Botones de acción
             Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                Button(onClick = { /* Acción de volver */ }, colors = actionButtonColors) {
+                Button(onClick = {navController.navigate("TiposForms")}, colors = actionButtonColors) {
                     Text("ATRAS", color = Color.White)
                 }
 
-                Button(onClick = { /* Acción de enviar */ }, colors = actionButtonColors, enabled = isFileSelected) {
+                Button(onClick = { navController.navigate("Principal")}, colors = actionButtonColors, enabled = isFileSelected) {
                     Text("ENVIAR", color = Color.White)
                 }
             }

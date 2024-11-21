@@ -167,7 +167,7 @@ private fun Preferencias_perfil(
         label = "Configuración de perfil",
         value = "Configurar mi perfil",
         navController = navController,
-        destino = "Perfil"
+        destino = "PerfilScreen"
     )
 
     // Cambiar contraseña

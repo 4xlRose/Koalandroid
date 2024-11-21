@@ -4,6 +4,9 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -45,25 +48,29 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.koadex.AppViewModelProvider
 import com.example.koadex.MainActivity
 import com.example.koadex.R
 import com.example.koadex.ui.principal.KoadexViewModel
 import kotlinx.coroutines.launch
+import androidx.compose.ui.draw.clip
+
 
 @RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormularioVariablesClimaticas(
-    activity: MainActivity,
+    //activity: MainActivity,
     navController: NavHostController,
-    modifier: Modifier = Modifier,
-    viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    //modifier: Modifier = Modifier,
+    //viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
 
     Scaffold(
@@ -86,7 +93,7 @@ fun FormularioVariablesClimaticas(
         }
     ) { paddingValues ->
         FormularioVariablesClimaticasScreen(
-            activity = activity,
+            //activity = activity,
             navController = navController,
             modifier = Modifier.padding(paddingValues)
         )
@@ -96,7 +103,7 @@ fun FormularioVariablesClimaticas(
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun FormularioVariablesClimaticasScreen(
-    activity: MainActivity,
+    //activity: MainActivity,
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
@@ -118,6 +125,7 @@ fun FormularioClimaEntry(
 ) {
     val scrollState = rememberScrollState()
     val isFileLoaded = remember { mutableStateOf(false) }
+    val (currentZone, setCurrentZone) = remember { mutableStateOf("") } // Estado para la zona seleccionada
 
     Column(
         modifier = modifier
@@ -138,35 +146,35 @@ fun FormularioClimaEntry(
             modifier = Modifier.fillMaxWidth()
         ) {
             val buttonSize = 80.dp
-            val zona = "zona"
             ZoneButton(
                 type = "bosque",
-                currentZone = zona,
-                onZoneChange = {},
+                currentZone = currentZone,
+                onZoneChange = setCurrentZone,
                 buttonSize = buttonSize
             )
             ZoneButton(
                 type = "arreglo",
-                currentZone = zona,
-                onZoneChange = {},
+                currentZone = currentZone,
+                onZoneChange = setCurrentZone,
                 buttonSize = buttonSize
             )
             ZoneButton(
                 type = "transitorio",
-                currentZone = zona,
-                onZoneChange = {},
+                currentZone = currentZone,
+                onZoneChange = setCurrentZone,
                 buttonSize = buttonSize
             )
             ZoneButton(
                 type = "permanente",
-                currentZone = zona,
-                onZoneChange = {},
+                currentZone = currentZone,
+                onZoneChange = setCurrentZone,
                 buttonSize = buttonSize
             )
         }
 
         ClimaInputForm(
-            onFileLoaded = { isFileLoaded.value = it }
+            onFileLoaded = { isFileLoaded.value = it },
+            modifier = Modifier.fillMaxWidth()
         )
 
         Row(
@@ -209,29 +217,35 @@ fun ZoneButton(
     onZoneChange: (String) -> Unit,
     buttonSize: Dp
 ) {
-    OutlinedIconToggleButton(
-        checked = currentZone == type,
-        onCheckedChange = { onZoneChange(type) },
-        shape = RoundedCornerShape(12.dp),
-        colors = IconButtonDefaults.iconToggleButtonColors(
-            containerColor = if (currentZone == type) Color(0xFFCDE4B4) else Color.White
-        ),
-        border = BorderStroke(
-            width = 2.dp,
-            color = if (currentZone == type) Color(0xFF4E7029) else Color.Black // Verde si está seleccionado
-        ),
-        modifier = Modifier.size(buttonSize)
+    val isSelected = currentZone == type // Determina si el botón está seleccionado
+
+    Box(
+        modifier = Modifier
+            .size(buttonSize)
+            .padding(4.dp)
+            .clip(RoundedCornerShape(12.dp)) // Aplica las esquinas redondeadas al fondo
+            .background(
+                color = if (isSelected) Color(0xFF4E7029) else Color.White // Fondo dinámico
+            )
+            .border(
+                width = 2.dp,
+                color = Color(0xFF4E7029) , // Verde si está seleccionado, más suave si no
+                shape = RoundedCornerShape(12.dp)
+            )
+            .clickable { onZoneChange(type) },
+        contentAlignment = Alignment.Center
     ) {
         Image(
             painter = painterResource(
                 when (type) {
                     "bosque" -> R.drawable.bosque
                     "arreglo" -> R.drawable.arreglo_agroforestal
-                    "transitorios" -> R.drawable.cultivos_transitorios
+                    "transitorio" -> R.drawable.cultivos_transitorios
                     else -> R.drawable.cultivos_permanentes
                 }
             ),
-            contentDescription = null
+            contentDescription = null,
+            modifier = Modifier.size(60.dp) // Aumenta el tamaño de la imagen
         )
     }
 }
@@ -326,3 +340,11 @@ fun ClimaInputForm(
         )
     }
 }
+
+@RequiresApi(Build.VERSION_CODES.P)
+@Preview(showBackground = true)
+@Composable
+fun VariableClimaticasPreview(){
+    FormularioVariablesClimaticas(navController = rememberNavController())
+}
+

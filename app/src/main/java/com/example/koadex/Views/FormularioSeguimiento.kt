@@ -19,9 +19,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.koadex.AppViewModelProvider
 import com.example.koadex.MainActivity
 import com.example.koadex.R
@@ -31,10 +33,10 @@ import com.example.koadex.ui.principal.KoadexViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormularioSeguimiento(
-    activity: MainActivity,
+    //activity: MainActivity,
     navController: NavHostController,
-    modifier: Modifier = Modifier,
-    viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    //modifier: Modifier = Modifier,
+    //viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     Scaffold(
         modifier = Modifier
@@ -57,7 +59,7 @@ fun FormularioSeguimiento(
         }
     ) { paddingValues ->
         FormularioSeguimientoScreen(
-            activity = activity,
+            //activity = activity,
             navController = navController,
             modifier = Modifier.padding(paddingValues)
         )
@@ -67,7 +69,7 @@ fun FormularioSeguimiento(
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun FormularioSeguimientoScreen(
-    activity: MainActivity,
+    //activity: MainActivity,
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
@@ -75,6 +77,8 @@ fun FormularioSeguimientoScreen(
     val coberturaSeleccionada = remember { mutableStateOf(-1) }
     val disturbioSeleccionado = remember { mutableStateOf(-1) }
     var isFileSelected by remember { mutableStateOf(false) }
+    val seguimientoSeleccionado = remember { mutableStateOf(-1) } // Estado para los botones de Seguimiento
+    val cambioSeleccionado = remember { mutableStateOf(-1) } // Estado para los botones de Cambió
 
     Column(
         modifier = Modifier
@@ -105,21 +109,21 @@ fun FormularioSeguimientoScreen(
                 Text("Seguimiento", style = MaterialTheme.typography.titleMedium)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     OutlinedButton(
-                        onClick = { },
+                        onClick = { seguimientoSeleccionado.value = 0 }, // Marca el botón como seleccionado
                         border = BorderStroke(1.dp, Color.Gray),
                         colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = Color.White,
-                            contentColor = Color.Black
+                            containerColor = if (seguimientoSeleccionado.value == 0) Color(0xFF4E7029) else Color.White,
+                            contentColor = if (seguimientoSeleccionado.value == 0) Color.White else Color.Black
                         )
                     ) {
                         Icon(Icons.Default.Check, contentDescription = "Check")
                     }
                     OutlinedButton(
-                        onClick = { },
+                        onClick = { seguimientoSeleccionado.value = 1 }, // Marca el botón como seleccionado
                         border = BorderStroke(1.dp, Color.Gray),
                         colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = Color.White,
-                            contentColor = Color.Black
+                            containerColor = if (seguimientoSeleccionado.value == 1) Color(0xFF4E7029) else Color.White,
+                            contentColor = if (seguimientoSeleccionado.value == 1) Color.White else Color.Black
                         )
                     ) {
                         Icon(Icons.Default.Close, contentDescription = "Close")
@@ -130,21 +134,21 @@ fun FormularioSeguimientoScreen(
                 Text("Cambió", style = MaterialTheme.typography.titleMedium)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     OutlinedButton(
-                        onClick = { },
+                        onClick = { cambioSeleccionado.value = 0 }, // Marca el botón como seleccionado
                         border = BorderStroke(1.dp, Color.Gray),
                         colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = Color.White,
-                            contentColor = Color.Black
+                            containerColor = if (cambioSeleccionado.value == 0) Color(0xFF4E7029) else Color.White,
+                            contentColor = if (cambioSeleccionado.value == 0) Color.White else Color.Black
                         )
                     ) {
                         Icon(Icons.Default.Check, contentDescription = "Check")
                     }
                     OutlinedButton(
-                        onClick = { },
+                        onClick = { cambioSeleccionado.value = 1 }, // Marca el botón como seleccionado
                         border = BorderStroke(1.dp, Color.Gray),
                         colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = Color.White,
-                            contentColor = Color.Black
+                            containerColor = if (cambioSeleccionado.value == 1) Color(0xFF4E7029) else Color.White,
+                            contentColor = if (cambioSeleccionado.value == 1) Color.White else Color.Black
                         )
                     ) {
                         Icon(Icons.Default.Close, contentDescription = "Close")
@@ -453,4 +457,15 @@ fun Botones(
             )
         }
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.P)
+@Preview(showBackground = true)
+@Composable
+fun PreviewFormularioSeguimiento(){
+    FormularioSeguimiento(
+        //activity = MainActivity(),
+        navController = rememberNavController()
+    )
+
 }

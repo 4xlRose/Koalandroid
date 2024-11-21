@@ -3,6 +3,7 @@ package com.example.koadex.Views
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,6 +30,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,6 +46,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.koadex.AppViewModelProvider
 import com.example.koadex.MainActivity
 import com.example.koadex.R
@@ -50,11 +56,13 @@ import com.example.koadex.ui.principal.KoadexViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormularioSeleccion(
-    activity: MainActivity,
+    //activity: MainActivity,
     navController: NavHostController,
-    modifier: Modifier = Modifier,
-    viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
-) {
+    //modifier: Modifier = Modifier,
+    //viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
+
+)
+{
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
@@ -87,6 +95,8 @@ fun FormularioSeleccionScreen(
     navController: androidx.navigation.NavController,
     modifier: Modifier = Modifier
 ) {
+    val FormularioSeleccionado by remember { mutableStateOf("") }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -121,6 +131,7 @@ fun FormularioSeleccionScreen(
                     icon2 = R.drawable.ruta,
                     text = "Fauna en Transectos",
                     onClick = { navController.navigate("FormularioEspecies") },
+                    FormularioSeleccionado == "Fauna en Transectos",
                     modifier = Modifier.weight(1f)
                 )
                 OptionButtonTwoIcons(
@@ -128,6 +139,7 @@ fun FormularioSeleccionScreen(
                     icon2 = R.drawable.aritmetica,
                     text = "Fauna en Punto de Conteo",
                     onClick = { navController.navigate("FormularioFaunaPuntoConteo") },
+                    FormularioSeleccionado == "Fauna en Transectos",
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -142,6 +154,7 @@ fun FormularioSeleccionScreen(
                     icon2 = R.drawable.search,
                     text = "Fauna Búsqueda Libre",
                     onClick = { navController.navigate("FormularioFaunaBusquedaLibre") },
+                    FormularioSeleccionado == "Fauna Búsqueda Libre",
                     modifier = Modifier.weight(1f)
                 )
                 OptionButton(
@@ -248,14 +261,18 @@ fun OptionButtonTwoIcons( //Botones con 2 iconos
     icon2: Int,
     text: String,
     onClick: () -> Unit,
+    isSelected: Boolean,
     modifier: Modifier = Modifier
 ) {
     OutlinedButton(
         onClick = onClick,
         modifier = modifier
             .height(160.dp)
-            .padding(vertical = 16.dp),
+            .padding(vertical = 16.dp)
+            .background(if (isSelected) Color(0xFF97B96E) else Color.Transparent)
+        ,
         shape = RoundedCornerShape(8.dp),
+
         colors = ButtonDefaults.outlinedButtonColors(
             containerColor = Color.White
         )
@@ -297,4 +314,13 @@ fun OptionButtonTwoIcons( //Botones con 2 iconos
         }
         Spacer(modifier = Modifier.weight(0.1f))
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.P)
+@Preview(showBackground = true)
+@Composable
+fun PreviewFormularioSeleccion(){
+    FormularioSeleccion(
+        navController = rememberNavController())
+
 }

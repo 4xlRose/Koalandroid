@@ -46,6 +46,8 @@ coreTesting = "2.1.0"
 coreKtxVersion = "1.6.1"
 junitKtx = "1.2.1"
 
+uiTestAndroid = "1.7.4"
+
 [libraries]
 androidx-core = { module = "androidx.test:core", version.ref = "core" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -103,6 +105,7 @@ junit-junit = { group = "junit", name = "junit", version.ref = "junitJunit" }
 androidx-core-testing = { group = "androidx.arch.core", name = "core-testing", version.ref = "coreTesting" }
 core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "coreKtxVersion" }
 androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
+androidx-ui-test-android = { group = "androidx.compose.ui", name = "ui-test-android", version.ref = "uiTestAndroid" }
 
 
 [plugins]
