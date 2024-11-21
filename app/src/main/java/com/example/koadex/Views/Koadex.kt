@@ -21,7 +21,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
@@ -53,6 +55,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -68,11 +71,17 @@ import com.example.koadex.ui.theme.Green700
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun KoadexPreview() {
-    Koadex(
-        navController = rememberNavController(),
-        modifier = Modifier,
-        viewModel = viewModel(factory = AppViewModelProvider.Factory)
+    var form_example = FormEntity(
+        id = 1,
+        name = "Juan",
+        date = "12/03/2023",
+        place = "Monterrey",
+        hour = "12:00",
+        weather = "Soleado",
+        season = "Verano"
     )
+
+    FormInfo(form_example)
 }
 
 @Composable
@@ -134,6 +143,8 @@ fun KoadexContenido(
         //modifier = Modifier
 
     ){
+        var selected by remember { mutableStateOf("Todos") }
+
         Spacer(modifier = Modifier.height(90.dp))
 
         Row(
@@ -143,7 +154,6 @@ fun KoadexContenido(
                 .fillMaxWidth()
         ) {
             val textSize = 20.sp
-            var selected by remember { mutableStateOf("Todos") }
 
             Column {
                 val text = "Todos"
@@ -222,7 +232,7 @@ fun KoadexContenido(
                     modifier = Modifier.fillMaxSize()
                 )
             } else {
-                FormList(formList)
+                FormList(formList , modifier , selected)
             }
         }
     }
@@ -232,7 +242,8 @@ fun KoadexContenido(
 @Composable
 fun FormList(
     formList: List<FormEntity>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    filter: String = "Todos"
 ) {
     LazyColumn(modifier = modifier) {
         items(items = formList) { item ->
@@ -247,78 +258,121 @@ fun FormList(
 @Composable
 private fun FormInfo(
     form: FormEntity,
-    modifier: Modifier = Modifier) {
+    modifier: Modifier = Modifier
+) {
     Card(
         modifier = modifier
-            .padding(20.dp),
-        shape = RoundedCornerShape(10.dp),
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(
             containerColor = colorResource(R.color.verde_1)
         )
     ) {
         Column(
-            modifier = modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(16.dp)
         ) {
+            // ID y hora
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "ID: ${form.id}",
+                    color = colorResource(R.color.green_100),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp
+                )
+
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = colorResource(R.color.verde_oscuro_1)
+                    ),
+                    shape = RoundedCornerShape(8.dp)
+                ) {
+
+                    Row(verticalAlignment = Alignment.CenterVertically) { // Use a Row for horizontal alignment
+
+                        Spacer(modifier = Modifier.width(12.dp))
+
+                        Icon(
+                            imageVector = Icons.Filled.Schedule, // Use the clock icon
+                            contentDescription = "Clock Icon",
+                            tint = Color.White, // Set the tint to white
+                            modifier = Modifier.size(16.dp) // Adjust the size as needed
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+
+                        Text(
+                            text =  form.hour,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                            color = Color.White,
+                            fontSize = 12.sp
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Name section
             Text(
-                text = "ID: " + form.id.toString(),
-                fontWeight = FontWeight.Bold,
+                text = form.name,
                 color = Color.White,
-
+                fontWeight = FontWeight.Bold,
+                fontSize = 24.sp
             )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Location and date information
             Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-
-                Column(modifier = Modifier.padding(16.dp)) {
+                // Location info
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.LocationOn,
+                        contentDescription = "Location",
+                        tint = colorResource(R.color.green_100),
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = "Nombre: " + form.name,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold
+                        text = form.place,
+                        color = colorResource(R.color.green_100),
+                        fontSize = 14.sp,
+                        maxLines = 1
                     )
                 }
 
-                Column(modifier = Modifier.padding(16.dp)) {
+                // Date info
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = colorResource(R.color.green_100)
+                    ),
+                    shape = RoundedCornerShape(8.dp)
+                ) {
                     Text(
-                        text = "Fecha: " + form.date,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold
+                        text = form.date,
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                        color = colorResource(R.color.verde_oscuro_1),
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Medium
                     )
                 }
-
             }
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                ,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text(
-                        text = "Lugar: " + form.place,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text(
-                        text = "Hora: " + form.hour,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-
-            }
-
         }
     }
 }
-
 
 @Composable
 fun TopNavBar(navController: NavHostController) {
@@ -331,7 +385,6 @@ fun TopNavBar(navController: NavHostController) {
             .fillMaxWidth()
             .height(90.dp)
             .background(verde_1)
-
         ,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -401,7 +454,7 @@ fun TopNavBar(navController: NavHostController) {
     }
 
 }
-
+/*
 @Composable
 fun BottomNavBar() {
     var navBarSelect by remember { mutableStateOf("Búsqueda") }
@@ -516,3 +569,4 @@ fun BottomNavBar() {
         }
     }
 }
+*/
