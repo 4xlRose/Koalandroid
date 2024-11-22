@@ -27,10 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.koadex.AppViewModelProvider
-import com.example.koadex.MainActivity
 import com.example.koadex.R
-import com.example.koadex.ui.principal.KoadexViewModel
 
 @RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)

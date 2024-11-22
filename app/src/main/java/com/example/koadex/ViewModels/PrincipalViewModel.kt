@@ -50,12 +50,10 @@ import com.example.koadex.clases.User
 import com.example.koadex.navigate.La_navegacion
 import com.example.koadex.navigate.sampleUser
 
-class Principal_ViewModel : ViewModel(
+class PrincipalViewModel : ViewModel(
 
 ) {
     var user = sampleUser
-
-
 
     @Composable
     public fun Bienvenida_Agregar_formulario(

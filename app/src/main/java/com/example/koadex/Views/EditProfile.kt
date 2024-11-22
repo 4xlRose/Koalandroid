@@ -18,20 +18,20 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.koadex.R
 import com.example.koadex.clases.User
 import com.example.koadex.ViewModels.PerfilScreenViewModel
+import com.example.koadex.navigate.sampleUser
 
 
 @Composable
 fun EditProfileScreen(
     navController: NavHostController,
-    modifier: Modifier = Modifier,
-    user: User
+    user: User,
+    modifier: Modifier = Modifier
 ) {
 
     val EditProfileViewModel = PerfilScreenViewModel()
@@ -102,19 +102,22 @@ fun EditProfileScreen(
     }
 }
 
-@Preview(showBackground = true)
+//@Preview(showBackground = true)
 @Composable
 fun EditProfileScreenPreview() {
     val sampleUser = User(
-        username = "Samantha Smith",
-        totalForms = 10,
-        uploadedForms = 7,
-        locallyStoredForms = 3,
-        posts = 15,
-        following = 200,
-        followers = 150,
-        isloggedIn = true,
-        profilePicture = R.drawable.profilepicture // Recurso de imagen predeterminado
+        id = 1,
+        username = sampleUser.username,
+        email = sampleUser.email,
+        password = sampleUser.password,
+        totalForms = sampleUser.totalForms,
+        uploadedForms = sampleUser.uploadedForms,
+        locallyStoredForms = sampleUser.locallyStoredForms,
+        posts = sampleUser.posts,
+        following = sampleUser.following,
+        followers = sampleUser.followers,
+        isloggedIn = sampleUser.isloggedIn,
+        profilePicture = sampleUser.profilePicture
     )
 
     EditProfileScreen(navController = rememberNavController(), user = sampleUser)
