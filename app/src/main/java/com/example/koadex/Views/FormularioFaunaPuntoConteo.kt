@@ -39,7 +39,6 @@ fun FormularioFaunaPuntoConteo(navController: NavHostController, modifier: Modif
     var zonaSeleccionada by remember { mutableStateOf("") }
     var tipoObservacionSeleccionada by remember { mutableStateOf("") }
     val actionButtonColors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4E7029))
-
     val FaunaBViewModel = FormularioFaunaBusquedaLibreViewModel()
     val viewModel = FomularioEspecies_ViewModel()
     val green700 = colorResource(id = R.color.green_700)
@@ -173,7 +172,6 @@ fun FormularioFaunaPuntoConteo(navController: NavHostController, modifier: Modif
                 modifier = Modifier.align(Alignment.Start))
             viewModel.Botones_captura(green700)
 
-
             Spacer(modifier = Modifier.height(16.dp))
 
             // Observaciones
@@ -188,8 +186,6 @@ fun FormularioFaunaPuntoConteo(navController: NavHostController, modifier: Modif
             Spacer(modifier = Modifier.height(16.dp))
 
             viewModel.Atras_enviar(navController, green700)
-
-
         }
     }
 }

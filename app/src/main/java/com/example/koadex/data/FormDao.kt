@@ -16,7 +16,6 @@ interface FormDao {
     /*Borrar después de actualizar el koadex con la nueva tabla de formularios general*/
 
     @Query("SELECT * FROM forms ORDER BY id DESC")
-
     fun getAllForms(): Flow<List<FormEntity>>
 
     @Query("SELECT * from forms WHERE id = :id")
