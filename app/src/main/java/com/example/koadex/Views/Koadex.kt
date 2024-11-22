@@ -115,6 +115,7 @@ fun Koadex(
     modifier: Modifier = Modifier,
     viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+    var current_scroll by remember { mutableStateOf(0f) }
     Scaffold(
         modifier = Modifier.fillMaxSize()
             .background(Color.White)
@@ -345,7 +346,7 @@ fun FormInfo(
 
 
                 Text(
-                    text = form.name,
+                    text = Get_name(form),
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
                     fontSize = 24.sp
@@ -400,6 +401,14 @@ fun FormInfo(
         }
     }
 }
+
+@Composable
+private fun Get_name(form: FormEntity): String {
+    // aca se implementa la funcionalidad de regresar un nombre en funcion de un id
+    return form.name
+}
+
+
 @Composable
 fun TopNavBar(navController: NavHostController) {
     val context = LocalContext.current.applicationContext
