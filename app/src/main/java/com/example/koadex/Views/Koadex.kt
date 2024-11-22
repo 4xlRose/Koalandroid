@@ -93,8 +93,20 @@ fun KoadexPreview() {
         weather = "Soleado",
         season = "Verano"
     )
+    var selected by remember { mutableStateOf("Todos") }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+        ,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ){
+        TopNavBar(rememberNavController())
+        selected = Filtro_seleccion(selected)
 
-    FormInfo(form_example)
+        FormInfo(form_example)
+    }
+
 }
 
 @Composable
