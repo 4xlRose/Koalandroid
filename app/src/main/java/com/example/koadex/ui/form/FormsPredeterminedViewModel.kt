@@ -86,7 +86,7 @@ class FormsPredeterminedViewModel(private val formRepository: FormRepository) : 
             CoverageEntity(7,"CT"),
             CoverageEntity(8,"VH"),
             CoverageEntity(9,"TD"),
-            CoverageEntity(10,"if"),
+            CoverageEntity(10,"If"),
 
             )
         formRepository.insertCoberturatipoBegin(ListaCobertura)
