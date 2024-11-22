@@ -6,6 +6,18 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.example.koadex.R
 
+/*Borrar después de actualizar koadex con la nueva tabla formulario general*/
+@Entity(tableName = "forms")
+data class FormEntity(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+    val name: String = "",
+    val date: String = "",
+    val place: String = "",
+    val hour: String = "",
+    val weather: String = "",
+    val season: String = ""
+)
 
 @Entity(tableName = "general_form"/*,
     foreignKeys = [
@@ -86,18 +98,18 @@ data class GeneralFormEntity(
 data class UserEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    var name: String = "",
-    var email: String = "",
-    var password: String = "",
-    var startDate: String = "",
-    var idZone: Int, // Foreign Key
-    var totalForms: Int,
-    var uploadedForms: Int,
-    var locallyStoredForms: Int,
-    var posts: Int = 0,
-    var following: Int = 0,
-    var followers: Int = 0,
-    var isloggedIn: Boolean = true,
+    var name: String = "", //Se agrega
+    var email: String = "", //Se agrega
+    var password: String = "", //Se agrega
+    var startDate: String = "", //Se agrega
+    var idZone: Int, // Foreign Key //1
+    var totalForms: Int, //predeterminado 0
+    var uploadedForms: Int, // predeterminado 0
+    var locallyStoredForms: Int, // predeterminado 0
+    var posts: Int = 0, // 0
+    var following: Int = 0, // 0
+    var followers: Int = 0, // 0
+    var isloggedIn: Boolean = true, //
     // la foto de perfil
     var profilePicture: Int = R.drawable.profilepicture
 )

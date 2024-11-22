@@ -45,6 +45,8 @@ import com.example.koadex.R
 import com.example.koadex.ui.principal.KoadexViewModel
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.font.FontWeight
 
 @RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)
