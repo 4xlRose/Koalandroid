@@ -45,6 +45,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -60,38 +61,40 @@ import com.example.koadex.ui.principal.KoadexViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormularioCuadrante(
-    activity: MainActivity,
+    //activity: MainActivity,
     navController: NavHostController,
-    modifier: Modifier = Modifier,
-    viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    //modifier: Modifier = Modifier,
+    //viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
-                title = { Text(text = stringResource(id = R.string.formulario)) },
+                title = { Text(text = stringResource(id = R.string.formulario),
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigate("TiposForms") }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
-                            contentDescription = stringResource(id = R.string.atras)
+                            contentDescription = stringResource(id = R.string.atras),
+                            tint = Color.White
                         )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFFB4D68F)
+                    containerColor = Color(0xFF4E7029)
                 )
             )
         }
     ) { paddingValues ->
         FormularioCuadranteScreen(
             /*activity = activity,*/
-            modifier = Modifier.padding(paddingValues)
+        modifier = Modifier.padding(paddingValues)
         )
     }
 }
-@Preview(device = "spec:width=800px,height=1340px,dpi=300")
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun FormularioCuadranteScreen(
@@ -120,6 +123,7 @@ fun FormularioCuadranteScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFFFFFFF))
+            .padding(16.dp)
     ) {
 
         // Contenido desplazable
@@ -131,7 +135,7 @@ fun FormularioCuadranteScreen(
             horizontalAlignment = Alignment.Start
         ) {
 
-            Spacer(modifier = Modifier.height(90.dp))
+            Spacer(modifier = Modifier.height(60.dp))
 
             // Código
             OutlinedTextField(
@@ -149,22 +153,23 @@ fun FormularioCuadranteScreen(
                     .padding(4.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                // Cuadrante
+                // Cuadrante y Subcuadrante
                 Column(
                     modifier = Modifier.weight(1f),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // Cuadrantes divididos en dos columnas
+                    Text("Cuadrante", style = MaterialTheme.typography.titleMedium)
+                    Spacer(modifier = Modifier.height(8.dp))
+
                     Row(
-                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        horizontalArrangement = Arrangement.Start,
                         modifier = Modifier.fillMaxWidth()
                     ) {
+                        // A y B
                         Column(
-                            horizontalAlignment = Alignment.CenterHorizontally
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.padding(end = 8.dp)
                         ) {
-                            Text("Cuadrante", style = MaterialTheme.typography.titleMedium)
-                            Spacer(modifier = Modifier.height(8.dp))
-
                             BotonCuadranteAB(
                                 text = "A",
                                 isSelected = cuadranteSeleccionado == "A",
@@ -178,35 +183,36 @@ fun FormularioCuadranteScreen(
                             )
                         }
 
+                        // C a G
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Spacer(modifier = Modifier.height(6.dp))
+                            //Spacer(modifier = Modifier.height(6.dp))
 
                             BotonCuadranteCG(
                                 text = "C",
                                 isSelected = cuadranteSeleccionado == "C",
                                 onClick = { cuadranteSeleccionado = "C" }
                             )
-                            Spacer(modifier = Modifier.height(5.dp))
+                            Spacer(modifier = Modifier.height(4.dp))
                             BotonCuadranteCG(
                                 text = "D",
                                 isSelected = cuadranteSeleccionado == "D",
                                 onClick = { cuadranteSeleccionado = "D" }
                             )
-                            Spacer(modifier = Modifier.height(5.dp))
+                            Spacer(modifier = Modifier.height(4.dp))
                             BotonCuadranteCG(
                                 text = "E",
                                 isSelected = cuadranteSeleccionado == "E",
                                 onClick = { cuadranteSeleccionado = "E" }
                             )
-                            Spacer(modifier = Modifier.height(5.dp))
+                            Spacer(modifier = Modifier.height(4.dp))
                             BotonCuadranteCG(
                                 text = "F",
                                 isSelected = cuadranteSeleccionado == "F",
                                 onClick = { cuadranteSeleccionado = "F" }
                             )
-                            Spacer(modifier = Modifier.height(5.dp))
+                            Spacer(modifier = Modifier.height(4.dp))
                             BotonCuadranteCG(
                                 text = "G",
                                 isSelected = cuadranteSeleccionado == "G",
@@ -214,19 +220,49 @@ fun FormularioCuadranteScreen(
                             )
                         }
                     }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // Subcuadrante
+                    Text("Sub-Cuadrante", style = MaterialTheme.typography.titleMedium)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        BotonSubCuadrante(
+                            text = "1",
+                            isSelected = subCuadranteSeleccionado == "1",
+                            onClick = { subCuadranteSeleccionado = "1" }
+                        )
+                        BotonSubCuadrante(
+                            text = "2",
+                            isSelected = subCuadranteSeleccionado == "2",
+                            onClick = { subCuadranteSeleccionado = "2" }
+                        )
+                        BotonSubCuadrante(
+                            text = "3",
+                            isSelected = subCuadranteSeleccionado == "3",
+                            onClick = { subCuadranteSeleccionado = "3" }
+                        )
+                        BotonSubCuadrante(
+                            text = "4",
+                            isSelected = subCuadranteSeleccionado == "4",
+                            onClick = { subCuadranteSeleccionado = "4" }
+                        )
+                    }
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Hábito de crecimiento
+                // Habito de crecimiento
                 Column(
                     modifier = Modifier.weight(1.1f),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text("Hábito de crecimiento", style = MaterialTheme.typography.titleMedium)
+                    Spacer(modifier = Modifier.height(8.dp))
                     Row(
-                        modifier = Modifier.fillMaxWidth()/*,
-                        horizontalArrangement = Arrangement.SpaceEvenly*/
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         Spacer(modifier = Modifier.height(16.dp))
 
@@ -263,34 +299,7 @@ fun FormularioCuadranteScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text("Sub-Cuadrante", style = MaterialTheme.typography.titleMedium)
-                Spacer(modifier = Modifier.height(6.dp))
 
-                Row(
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    BotonSubCuadrante(
-                        text = "1",
-                        isSelected = subCuadranteSeleccionado == "1",
-                        onClick = { subCuadranteSeleccionado = "1" }
-                    )
-                    BotonSubCuadrante(
-                        text = "2",
-                        isSelected = subCuadranteSeleccionado == "2",
-                        onClick = { subCuadranteSeleccionado = "2" }
-                    )
-                    BotonSubCuadrante(
-                        text = "3",
-                        isSelected = subCuadranteSeleccionado == "3",
-                        onClick = { subCuadranteSeleccionado = "3" }
-                    )
-                    BotonSubCuadrante(
-                        text = "4",
-                        isSelected = subCuadranteSeleccionado == "4",
-                        onClick = { subCuadranteSeleccionado = "4" }
-                    )
-                }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -298,20 +307,20 @@ fun FormularioCuadranteScreen(
             // Campos de texto
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 OutlinedTextField(
                     value = nombreComun,
                     onValueChange = { nombreComun = it },
                     label = { Text("Nombre Común") }, //Especie
-                    modifier = Modifier.weight(1f).padding(start = 2.dp)
+                    modifier = Modifier.weight(1f)//.padding(start = 2.dp)
                 )
 
                 OutlinedTextField(
                     value = nombreCientifico,
                     onValueChange = { nombreCientifico = it },
                     label = { Text("Nombre Científico") },
-                    modifier = Modifier.weight(1f).padding(end = 2.dp)
+                    modifier = Modifier.weight(1f)//.padding(end = 2.dp)
                 )
             }
 
@@ -326,20 +335,20 @@ fun FormularioCuadranteScreen(
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.spacedBy(5.dp)
             ) {
                 OutlinedTextField(
                     value = circunferencia,
                     onValueChange = { circunferencia = it },
                     label = { Text("Circunferencia(CL)") }, //en cm
-                    modifier = Modifier.weight(1f).padding(start = 2.dp)
+                    modifier = Modifier.weight(1f)//.padding(start = 2.dp)
                 )
 
                 OutlinedTextField(
                     value = distancia,
                     onValueChange = { distancia = it },
                     label = { Text("Distancia en mt") },
-                    modifier = Modifier.weight(1f).padding(end = 2.dp)
+                    modifier = Modifier.weight(1f)//.padding(end = 2.dp)
                 )
             }
 
@@ -347,19 +356,19 @@ fun FormularioCuadranteScreen(
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.spacedBy(5.dp)
             ) {
                 OutlinedTextField(
                     value = estaturaBiometrica,
                     onValueChange = { estaturaBiometrica = it },
                     label = { Text("Estatura Biométrica") }, // en mt
-                    modifier = Modifier.weight(1f).padding(start = 2.dp)
+                    modifier = Modifier.weight(1f)//.padding(start = 2.dp)
                 )
                 OutlinedTextField(
                     value = altura,
                     onValueChange = { altura = it },
                     label = { Text("Altura en mt") },
-                    modifier = Modifier.weight(1f).padding(end = 2.dp)
+                    modifier = Modifier.weight(1f)//.padding(end = 2.dp)
                 )
             }
 
@@ -438,7 +447,7 @@ fun BotonCuadranteAB(
         shape = RoundedCornerShape(12.dp),
         border = BorderStroke(1.dp, if (isSelected) Color(0xFF4E7029) else Color.Gray),
         colors = ButtonDefaults.outlinedButtonColors(
-            containerColor = if (isSelected) Color(0xFFB4D68F) else Color.White
+            containerColor = if (isSelected) Color(0xFF4E7029) else Color.White // Cambia el color aquí
         )
     ) {
         Text(
@@ -488,7 +497,7 @@ fun BotonSubCuadrante(
         shape = RoundedCornerShape(4.dp),
         border = BorderStroke(1.dp, if (isSelected) Color(0xFF4E7029) else Color.Gray),
         colors = ButtonDefaults.outlinedButtonColors(
-            containerColor = if (isSelected) Color(0xFF4E7029) else Color.White
+            containerColor = if (isSelected) Color(0xFF4E7029) else Color.White // Cambia el color aquí
         )
     ) {
         Text(
@@ -511,12 +520,16 @@ fun CrecimientoBoton(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .clickable(onClick = onClick)
-            .border(
-                width = 1.dp,
-                color = if (isSelected) Color(0xFF4E7029) else Color.Gray,
-                shape = RoundedCornerShape(8.dp)
-            )
             .padding(8.dp)
+            .background(
+                color = if (isSelected) Color(0xFF4E7029) else Color.White, // Cambia el fondo
+                shape = RoundedCornerShape(8.dp)
+            ) // Cambia el fondo
+            .border(
+                width = 2.dp,
+                color = if (isSelected) Color(0xFF4E7029) else Color.Gray, // Cambia el borde
+                shape = RoundedCornerShape(8.dp)
+            ) // Cambia el borde
     ) {
         Image(
             painter = painterResource(id = icon),
@@ -589,4 +602,11 @@ private fun Boton_seleccionar_archivo(green700: Color) {
         Spacer(modifier = Modifier.width(10.dp))
         Text("Elige archivo")
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.P)
+@Preview(device = "spec:width=800px,height=1340px,dpi=300")
+@Composable
+fun FormularioCuadrantePreview() {
+    FormularioCuadrante(navController = rememberNavController())
 }
