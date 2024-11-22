@@ -36,10 +36,10 @@ import com.example.koadex.ui.principal.KoadexViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormularioSeguimiento(
-    //activity: MainActivity,
+    activity: MainActivity,
     navController: NavHostController,
-    //modifier: Modifier = Modifier,
-    //viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    modifier: Modifier = Modifier,
+    viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     Scaffold(
         modifier = Modifier
@@ -63,7 +63,7 @@ fun FormularioSeguimiento(
         }
     ) { paddingValues ->
         FormularioSeguimientoScreen(
-            //activity = activity,
+            activity = activity,
             navController = navController,
             modifier = Modifier.padding(paddingValues)
         )
@@ -73,7 +73,7 @@ fun FormularioSeguimiento(
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun FormularioSeguimientoScreen(
-    //activity: MainActivity,
+    activity: MainActivity,
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
@@ -448,7 +448,6 @@ fun DisturbioButton(
     val buttonColor = if (isSelected) Color(0xFF4E7029) else Color.White
     val textColor = if (isSelected) Color.White else Color.Black
     val buttonSize = 85.dp
-    val buttonHeight = 90.dp
     val iconSize = 46.dp
 
     OutlinedButton(
@@ -489,7 +488,7 @@ fun DisturbioButton(
         }
     }
 }
-
+/*
 @RequiresApi(Build.VERSION_CODES.P)
 @Preview(showBackground = true)
 @Composable
@@ -498,5 +497,5 @@ fun PreviewFormularioSeguimiento(){
         //activity = MainActivity(),
         navController = rememberNavController()
     )
-
 }
+*/
