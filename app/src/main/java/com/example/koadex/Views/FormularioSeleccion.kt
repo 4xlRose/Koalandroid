@@ -74,7 +74,7 @@ fun FormularioSeleccion(
                     color = Color.White,
                     fontWeight = FontWeight.Bold) },
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigate("TiposForms") }) {
+                    IconButton(onClick = { navController.navigate("Principal") }) {
                         Icon(Icons.Filled.ArrowBack,
                             contentDescription = "Atrás",
                             tint = Color.White
@@ -107,6 +107,8 @@ fun FormularioSeleccionScreen(
             .padding(top = 80.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        Spacer(modifier = Modifier.height(16.dp))
+
         Text(
             text = "Tipo de Registro",
             style = MaterialTheme.typography.headlineLarge,

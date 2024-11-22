@@ -135,6 +135,7 @@ fun FormularioCuadranteScreen(
             .background(Color(0xFFFFFFFF))
             .padding(16.dp)
     ) {
+        Spacer(modifier = Modifier.height(30.dp))
 
         // Contenido desplazable
         Column(
@@ -145,7 +146,7 @@ fun FormularioCuadranteScreen(
             horizontalAlignment = Alignment.Start
         ) {
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(30.dp))
 
             // Código
             OutlinedTextField(
