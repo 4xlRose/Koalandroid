@@ -128,12 +128,18 @@ class FomularioEspecies_ViewModel :
     )
 
     @Composable
-    public fun Tipo_de_animal(
+    fun Tipo_de_animal(
         selectedAnimalType: String?,
         onAnimalTypeSelected: (String) -> Unit,
         primaryGreen: Color
     ) {
-        Text("Tipo de Animal", style = MaterialTheme.typography.titleMedium)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Text("Tipo de Animal", style = MaterialTheme.typography.titleMedium)
+        }
+
         Spacer(modifier = Modifier.padding(vertical = 3.dp))
 
         Row(
@@ -164,12 +170,12 @@ class FomularioEspecies_ViewModel :
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .background(
-                    color = if (selected) Color(0xFF4E7029) else Color.Transparent,
+                    color = if (selected) Color(0xFF97B96E) else Color.Transparent,
                     shape = RoundedCornerShape(8.dp)
                 )
                 .border(
                     width = 1.dp,
-                    color = if (selected) selectedColor else Color.Gray,
+                    color = Color(0xFF97B96E),
                     shape = RoundedCornerShape(8.dp)
                 )
                 .padding(8.dp)
@@ -182,7 +188,7 @@ class FomularioEspecies_ViewModel :
             )
             Text(text, style = MaterialTheme.typography.bodySmall)
         }
-    }///////////////////////////////////////////////////////////
+    }//////////////////////////////////////////////////////
 
     /// PARA LAS OBSERVACIONES
     @Composable
@@ -192,7 +198,12 @@ class FomularioEspecies_ViewModel :
         green100: Color,
         green700: Color
     ) {
-        Text("Tipo de Observación", style = MaterialTheme.typography.titleMedium)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Text("Tipo de Observación", style = MaterialTheme.typography.titleMedium)
+        }
         Spacer(modifier = Modifier.padding(vertical = 3.dp))
         Row(
             modifier = Modifier.
@@ -221,12 +232,12 @@ class FomularioEspecies_ViewModel :
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .background(
-                    if (selected == text) Color(0xFF4E7029) else Color.Transparent,
+                    if (selected == text) Color(0xFF97B96E) else Color.White,
                     shape = RoundedCornerShape(8.dp)
                 )
                 .border(
                     width = 1.dp,
-                    color = if (selected == text) selectedColor else Color.Gray,
+                    color = Color(0xFF97B96E),
                     shape = RoundedCornerShape(8.dp)
                 )
                 .padding(8.dp)
@@ -270,12 +281,14 @@ class FomularioEspecies_ViewModel :
 //        }
 //    }
 //}
+    /*
     @Composable
     public fun Contador_numero_individuos(
         individualsCount: Int,
         onCountChange: (Int) -> Unit
     ) {
         Text("Número de individuos")
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -326,7 +339,7 @@ class FomularioEspecies_ViewModel :
             return individualsCount
     }
 ////////////////////////////
-
+*/
 
     @Composable
     public fun Header_Formulario(

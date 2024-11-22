@@ -1,6 +1,5 @@
 package com.example.koadex.navigate
 
-import PerfilScreen
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
@@ -56,6 +55,7 @@ import com.example.koadex.Views.FormularioSeguimiento
 import com.example.koadex.Views.FormularioSeleccion
 import com.example.koadex.Views.FormularioVariablesClimaticas
 import com.example.koadex.Views.EditProfileScreen
+import com.example.koadex.Views.PerfilScreen
 import com.example.koadex.clases.User
 
 
@@ -86,9 +86,7 @@ fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modi
         composable("Configuracion"){
             Configuracion(navController = navController)
         }
-        composable("Perfil"){
-            Perfil(navController = navController)
-        }
+
         composable("OlvidoContrasena"){
             OlvidoContrasena(navController = navController)
         }
@@ -96,7 +94,7 @@ fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modi
             Verificacion(navController = navController)
         }
 
-        //Perfiles
+        // Perfiles
         composable("PerfilScreen") {
             PerfilScreen(navController = navController, user = sampleUser)
         }
@@ -121,7 +119,7 @@ fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modi
             FormularioFaunaBusquedaLibre(navController = navController)
         }
         composable("FormularioCuadrante"){
-            FormularioCuadrante(/*activity,*/navController = navController)
+            FormularioCuadrante(navController = navController)
         }
         composable("FormularioSeguimiento"){
             FormularioSeguimiento(navController = navController)

@@ -5,6 +5,7 @@ import com.example.koadex.R
 
 data class User(
     var username: String,
+    var isLogged: Boolean = true,
     val totalForms: Int,
     val uploadedForms: Int,
     val locallyStoredForms: Int,
@@ -16,5 +17,6 @@ data class User(
     // la foto de perfil
     val profilePicture: Int = R.drawable.profilepicture
     ) {
+
 
 }

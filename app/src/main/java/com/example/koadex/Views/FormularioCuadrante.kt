@@ -44,6 +44,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -58,16 +59,17 @@ import androidx.navigation.compose.rememberNavController
 import com.example.koadex.AppViewModelProvider
 import com.example.koadex.MainActivity
 import com.example.koadex.R
+import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
 import com.example.koadex.ui.principal.KoadexViewModel
 
 @RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormularioCuadrante(
-    activity: MainActivity,
+    //activity: MainActivity,
     navController: NavHostController,
-    modifier: Modifier = Modifier,
-    viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    //modifier: Modifier = Modifier,
+    //viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
 
     Scaffold(
@@ -93,16 +95,18 @@ fun FormularioCuadrante(
         }
     ) { paddingValues ->
         FormularioCuadranteScreen(
-            activity = activity,
-            modifier = Modifier.padding(paddingValues)
+            /*activity = activity,*/
+            modifier = Modifier.padding(paddingValues),
+            navController = navController
         )
     }
 }
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun FormularioCuadranteScreen(
-    activity: MainActivity,
-    modifier: Modifier = Modifier
+    /*activity: MainActivity,*/
+    modifier: Modifier = Modifier,
+    navController: NavHostController
 ) {
     var codigo by remember { mutableStateOf("") }
     var nombreComun by remember { mutableStateOf("") }
@@ -119,6 +123,9 @@ fun FormularioCuadranteScreen(
     var subCuadranteSeleccionado by remember { mutableStateOf("") }
     var habitoCrecimientoSeleccionado by remember { mutableStateOf("") }
 
+    val viewModel = FomularioEspecies_ViewModel()
+    val green700 = colorResource(id = R.color.green_700)
+
     val actionButtonColors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4E7029))
     val scrollState = rememberScrollState()
 
@@ -134,7 +141,7 @@ fun FormularioCuadranteScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(scrollState)
-                .padding(16.dp),
+                .padding(horizontal = 32.dp),
             horizontalAlignment = Alignment.Start
         ) {
 
@@ -385,24 +392,9 @@ fun FormularioCuadranteScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             // Evidencias
-            Text("Evidencias", style = MaterialTheme.typography.titleMedium)
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Button(
-                    onClick = { /* Elegir archivo */ },
-                    colors = actionButtonColors
-                ) {
-                    Text("Elige archivo")
-                }
-                Button(
-                    onClick = { /* Tomar foto */ },
-                    colors = actionButtonColors
-                ) {
-                    Text("Tomar foto")
-                }
-            }
+            Text("Evidencias", style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.align(Alignment.Start))
+            viewModel.Botones_captura(green700)
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -419,25 +411,8 @@ fun FormularioCuadranteScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             // Botones de acción
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                Button(
-                    onClick = { /* Volver atrás */ },
-                    colors = actionButtonColors,
-                    modifier = Modifier.weight(1f).padding(end = 8.dp)
-                ) {
-                    Text("ATRAS", color = Color.White)
-                }
-                Button(
-                    onClick = { /* Enviar formulario */ },
-                    colors = actionButtonColors,
-                    modifier = Modifier.weight(1f).padding(start = 8.dp)
-                ) {
-                    Text("ENVIAR", color = Color.White)
-                }
-            }
+            viewModel.Atras_enviar(navController, green700)
+
         }
     }
 }
@@ -455,9 +430,9 @@ fun BotonCuadranteAB(
             .width(80.dp)
             .padding(1.dp),
         shape = RoundedCornerShape(12.dp),
-        border = BorderStroke(1.dp, if (isSelected) Color(0xFF4E7029) else Color.Gray),
+        border = BorderStroke(1.dp, if (isSelected) Color(0xFF97B96E) else Color.Gray),
         colors = ButtonDefaults.outlinedButtonColors(
-            containerColor = if (isSelected) Color(0xFF4E7029) else Color.White // Cambia el color aquí
+            containerColor = if (isSelected) Color(0xFF97B96E) else Color.White // Cambia el color aquí
         )
     ) {
         Text(
@@ -483,9 +458,10 @@ fun BotonCuadranteCG(
         shape = RoundedCornerShape(8.dp),
         border = BorderStroke(0.7.dp, if (isSelected) Color(0xFF4E7029) else Color.Gray),
         colors = ButtonDefaults.outlinedButtonColors(
-            containerColor = if (isSelected) Color(0xFFB4D68F) else Color.White
+            containerColor = if (isSelected) Color(0xFF97B96E) else Color.White
         ),
         contentPadding = PaddingValues(1.dp)
+
     ) {
         Text(
             text = text,
@@ -509,11 +485,12 @@ fun BotonSubCuadrante(
             .width(40.dp)
             .padding(1.dp),
         shape = RoundedCornerShape(8.dp),
-        border = BorderStroke(1.dp, if (isSelected) Color(0xFF4E7029) else Color.Gray),
+        border = BorderStroke(1.dp, if (isSelected) Color(0xFF97B96E) else Color.Gray),
         colors = ButtonDefaults.outlinedButtonColors(
-            containerColor = if (isSelected) Color(0xFF4E7029) else Color.White // Cambia el color aquí
+            containerColor = if (isSelected) Color(0xFF97B96E) else Color.White // Cambia el color aquí
         ),
         contentPadding = PaddingValues(2.dp)
+
     ) {
         Text(
             text = text,
@@ -541,12 +518,12 @@ fun CrecimientoBoton(
             .clickable(onClick = onClick)
             .padding(1.dp)
             .background(
-                color = if (isSelected) Color(0xFF4E7029) else Color.White, // Cambia el fondo
+                color = if (isSelected) Color(0xFF97B96E) else Color.White, // Cambia el fondo
                 shape = RoundedCornerShape(4.dp)
             )
             .border(
                 width = 1.dp,
-                color = if (isSelected) Color(0xFF4E7029) else Color.Gray, // Cambia el borde
+                color = if (isSelected) Color(0xFF97B96E) else Color.Gray, // Cambia el borde
                 shape = RoundedCornerShape(8.dp)
             ),
     ) {
@@ -624,11 +601,10 @@ private fun Boton_seleccionar_archivo(green700: Color) {
         Text("Elige archivo")
     }
 }
-/*
+
 @RequiresApi(Build.VERSION_CODES.P)
 @Preview(device = "spec:width=800px,height=1340px,dpi=300")
 @Composable
 fun FormularioCuadrantePreview() {
     FormularioCuadrante(navController = rememberNavController())
 }
-*/

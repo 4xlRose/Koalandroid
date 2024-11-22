@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -17,11 +18,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
@@ -53,6 +58,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -64,15 +70,31 @@ import com.example.koadex.ui.principal.KoadexViewModel
 import com.example.koadex.ui.theme.Gray300
 import com.example.koadex.ui.theme.Green100
 import com.example.koadex.ui.theme.Green700
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.Help
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.TextStyle
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun KoadexPreview() {
-    Koadex(
-        navController = rememberNavController(),
-        modifier = Modifier,
-        viewModel = viewModel(factory = AppViewModelProvider.Factory)
+    var form_example = FormEntity(
+        id = 1,
+        name = "Juan",
+        date = "12/03/2023",
+        place = "Monterrey",
+        hour = "12:00",
+        weather = "Soleado",
+        season = "Verano"
     )
+
+    FormInfo(form_example)
 }
 
 @Composable
@@ -113,11 +135,10 @@ fun KoadexPantalla(modifier: Modifier,
     val koadexUiState by viewModel.koadexUiState.collectAsState()
     Column(modifier = Modifier
         .fillMaxSize()
-        .padding(top = 90.dp)
         .background(Color.White)
         ,
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        //verticalArrangement = Arrangement.Center
     ) {
 
         KoadexContenido(formList = koadexUiState.koadexList)
@@ -128,101 +149,92 @@ fun KoadexPantalla(modifier: Modifier,
 @Composable
 fun KoadexContenido(
     formList: List<FormEntity>,
-    modifier: Modifier = Modifier) {
-    Row(
-        horizontalArrangement = Arrangement.SpaceAround,
-        verticalAlignment = Alignment.Bottom,
-        modifier = Modifier
-            .fillMaxWidth()
-    ) {
-        val textSize = 20.sp
+    modifier: Modifier = Modifier
+) {
+    Column {
         var selected by remember { mutableStateOf("Todos") }
 
-        Column {
-            val text = "Todos"
-            Button(
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent
-                ),
-                onClick = { selected = text }
-            ) {
-                Text(
-                    text = text,
-                    fontSize = textSize,
-                    fontWeight = FontWeight.Bold,
-                    textDecoration = if (selected == text)
-                        TextDecoration.Underline
-                    else
-                        TextDecoration.None,
-                    color = if (selected == text) Green700 else Gray300
-                )
+        Spacer(modifier = Modifier.height(110.dp))
 
-            }
-        }
+        // Opciones de selección
+        selected = Filtro_seleccion(selected)
 
-        Column {
-            val text = "Guardados"
-            Button(
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent
-                ),
-                onClick = { selected = text }
-            ) {
-                Text(
-                    text = text,
-                    fontSize = textSize,
-                    fontWeight = FontWeight.Bold,
-                    textDecoration = if (selected == text)
-                        TextDecoration.Underline
-                    else
-                        TextDecoration.None,
-                    color = if (selected == text) Green700 else Gray300
-                )
-            }
-        }
+        Spacer(modifier = Modifier.height(16.dp))
 
-        Column {
-            val text = "Subidos"
-            Button(
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent
-                ),
-                onClick = { selected = text }
-            ) {
-                Text(
-                    text = text,
-                    fontSize = textSize,
-                    fontWeight = FontWeight.Bold,
-                    textDecoration = if (selected == text)
-                        TextDecoration.Underline
-                    else
-                        TextDecoration.None,
-                    color = if (selected == text) Green700 else Gray300
-                )
-            }
-        }
-    }
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-
+        // Lista de formularios
+        Column(
+            modifier = modifier,
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-
-        if (formList.isEmpty()) {
-            Text(
-                text = "No hay formularios guardados",
-                modifier = Modifier.fillMaxSize()
-            )
-        } else {
-            FormList(formList)
+            if (formList.isEmpty()) {
+                Text(
+                    text = "No hay formularios guardados",
+                    modifier = Modifier.fillMaxSize()
+                )
+            } else {
+                FormList(formList, modifier, selected)
+            }
         }
     }
 }
 
 @Composable
+private fun Filtro_seleccion(selected: String): String {
+    var selected1 by remember { mutableStateOf(selected) } // Remember the selected
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(4.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            val options = listOf("Todos", "Guardados", "Subidos")
+
+            options.forEach { option ->
+                Card(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(4.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = if (selected1 == option) Green700 else Color.Transparent
+                    ),
+                    shape = RoundedCornerShape(8.dp)
+                ) {
+                    Button(
+                        onClick = { selected1 = option },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.Transparent
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = option,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = if (selected1 == option) Color.White else Gray300,
+                            modifier = Modifier.padding(vertical = 4.dp)
+                        )
+                    }
+                }
+            }
+        }
+    }
+    return selected1
+}
+
+@Composable
 fun FormList(
     formList: List<FormEntity>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    filter: String = "Todos"
 ) {
     LazyColumn(modifier = modifier) {
         items(items = formList) { item ->
@@ -235,164 +247,306 @@ fun FormList(
 }
 
 @Composable
-private fun FormInfo(
+fun FormInfo(
     form: FormEntity,
-    modifier: Modifier = Modifier) {
+    modifier: Modifier = Modifier
+) {
     Card(
         modifier = modifier
-            .padding(20.dp),
-        shape = RoundedCornerShape(10.dp),
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = colorResource(R.color.verde_1)
         )
     ) {
         Column(
-            modifier = modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(16.dp)
         ) {
+            // ID, hora y botón de edición
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "ID: ${form.id}",
+                    color = colorResource(R.color.green_100),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp
+                )
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    // Hora
+                    Card(
+                        colors = CardDefaults.cardColors(
+                            containerColor = colorResource(R.color.verde_oscuro_1)
+                        ),
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Schedule,
+                                contentDescription = "Clock Icon",
+                                tint = Color.White,
+                                modifier = Modifier.size(16.dp)
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text(
+                                text = form.hour,
+                                color = Color.White,
+                                fontSize = 12.sp
+                            )
+                        }
+                    }
+
+                    IconButton(
+                        onClick = { /* Acción de edición */ },
+                        modifier = Modifier.size(29.dp)
+                    ){
+                        Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = "Editar",
+                            tint = Color.White,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
+
+
+
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Nombre del formulario
             Text(
-                text = "ID: " + form.id.toString(),
-                fontWeight = FontWeight.Bold,
+                text = form.name,
                 color = Color.White,
-
+                fontWeight = FontWeight.Bold,
+                fontSize = 24.sp
             )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Lugar y fecha
             Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-
-                Column(modifier = Modifier.padding(16.dp)) {
+                // Lugar
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.LocationOn,
+                        contentDescription = "Location",
+                        tint = colorResource(R.color.green_100),
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = "Nombre: " + form.name,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold
+                        text = form.place,
+                        color = colorResource(R.color.green_100),
+                        fontSize = 14.sp,
+                        maxLines = 1
                     )
                 }
 
-                Column(modifier = Modifier.padding(16.dp)) {
+                // Fecha
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = colorResource(R.color.green_100)
+                    ),
+                    shape = RoundedCornerShape(8.dp)
+                ) {
                     Text(
-                        text = "Fecha: " + form.date,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold
+                        text = form.date,
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                        color = colorResource(R.color.verde_oscuro_1),
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Medium
                     )
                 }
-
             }
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                ,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text(
-                        text = "Lugar: " + form.place,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text(
-                        text = "Hora: " + form.hour,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-
-            }
-
         }
     }
 }
-
-
 @Composable
 fun TopNavBar(navController: NavHostController) {
-
     val context = LocalContext.current.applicationContext
     val verde_1 = Color(colorResource(R.color.verde_1).toArgb())
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(90.dp)
+            .height(100.dp)
             .background(verde_1)
-        ,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-
-    ){
+    ) {
 
 
+        // Contenido de la barra de navegación
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(80.dp)
-                .background(verde_1)
-            ,
+                .fillMaxSize()
+                .padding(horizontal = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
+            // Botón Atrás
             IconButton(
+                onClick = { navController.navigate("Principal") },
                 modifier = Modifier
-                    .padding(20.dp)
-                    .size(30.dp),
-                onClick = { navController.navigate("Principal") }
+                    .size(40.dp)
+
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
+                    contentDescription = "Atrás",
                     tint = Color.White,
-                    modifier = Modifier
-                        .fillMaxSize()
-
+                    modifier = Modifier.size(24.dp)
                 )
             }
 
+            // Logo y título centrales
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceAround,
-                modifier = Modifier
-                    .width(170.dp)
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.padding(8.dp)
             ) {
-                Button(
-                    modifier = Modifier.size(50.dp),
-                    contentPadding = PaddingValues(
-                        horizontal = 0.dp,
-                        vertical = 0.dp
-                    ),
-                    onClick = { Toast.makeText(context, "Koadex", Toast.LENGTH_SHORT).show() }
+                // Logo con sombra y animación
+                Card(
+                    modifier = Modifier
+                        .size(45.dp)
+                        .clip(CircleShape)
+                    ,
+
                 ) {
                     Image(
                         painter = painterResource(R.drawable.koadex),
-                        contentDescription = "Koadex Logo"
+                        contentDescription = "Koadex Logo",
+                        modifier = Modifier
+                            .fillMaxSize()
+
                     )
                 }
 
-                Text(text = "Koadex", fontSize = 30.sp, fontWeight = FontWeight.Medium, color = Color.White)
-            }
-            IconButton(
-                modifier = Modifier
-                    .padding(20.dp)
-                    .size(30.dp),
-                onClick = { Toast.makeText(context, "Koadex", Toast.LENGTH_SHORT).show() }
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.MoreVert,
-                    contentDescription = "More",
-                    tint = Color.White,
-                    modifier = Modifier.fillMaxSize()
+                Spacer(modifier = Modifier.width(12.dp))
+
+                // Título con estilo mejorado
+                Text(
+                    text = "Koadex",
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.White
                 )
+            }
+
+            // Menú de opciones con diseño mejorado
+            Box() {
+                var showMenu by remember { mutableStateOf(false) }
+
+                showMenu = Dropdown_(showMenu)
             }
         }
     }
-
 }
 
+@Composable
+private fun Dropdown_(showMenu: Boolean): Boolean {
+    var showMenu1 by remember { mutableStateOf(showMenu) }
+    IconButton(
+        onClick = { showMenu1 = true },
+        modifier = Modifier
+            .size(40.dp)
+
+
+    ) {
+        Icon(
+            imageVector = Icons.Filled.MoreVert,
+            contentDescription = "Más opciones",
+            tint = Color.White,
+            modifier = Modifier.size(24.dp)
+        )
+    }
+
+    DropdownMenu(
+        expanded = showMenu1,
+        onDismissRequest = { showMenu1 = false },
+        modifier = Modifier
+            .background(Color.White)
+            .width(200.dp)
+    ) {
+        MenuOption(
+            text = "Configuración",
+            icon = Icons.Default.Settings
+        ) {
+            showMenu1 = false
+            // Implementar navegación a configuración
+        }
+
+        MenuOption(
+            text = "Compartir",
+            icon = Icons.Default.Share
+        ) {
+            showMenu1 = false
+            // Implementar función de compartir
+        }
+
+        MenuOption(
+            text = "Ayuda",
+            icon = Icons.Default.Help
+        ) {
+            showMenu1 = false
+            // Implementar navegación a ayuda
+        }
+    }
+    return showMenu1
+}
+
+@Composable
+private fun MenuOption(
+    text: String,
+    icon: ImageVector,
+    onClick: () -> Unit
+) {
+    DropdownMenuItem(
+        text = {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = colorResource(R.color.verde_1),
+                    modifier = Modifier.size(20.dp)
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+                Text(
+                    text = text,
+                    color = colorResource(R.color.verde_1),
+                    fontSize = 16.sp
+                )
+            }
+        },
+        onClick = onClick,
+        modifier = Modifier.padding(horizontal = 8.dp)
+    )
+}
+
+/*
 @Composable
 fun BottomNavBar() {
     var navBarSelect by remember { mutableStateOf("Búsqueda") }
@@ -507,3 +661,4 @@ fun BottomNavBar() {
         }
     }
 }
+*/
