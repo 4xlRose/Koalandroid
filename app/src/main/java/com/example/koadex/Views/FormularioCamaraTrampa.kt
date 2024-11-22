@@ -75,8 +75,8 @@ import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
 fun FormularioCamaraTrampa(
     activity: MainActivity,
     navController: NavHostController,
-    //modifier: Modifier = Modifier,
-    //viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    modifier: Modifier = Modifier,
+    viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
 
     Scaffold(
@@ -108,7 +108,7 @@ fun FormularioCamaraTrampa(
         )
     }
 }
-
+//@Preview(device = "spec:width=800px,height=1340px,dpi=300", showBackground = true)
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun FormularioScreen(
@@ -144,6 +144,7 @@ fun FormularioScreen(
 
         val evidencias = remember { mutableStateListOf<String>() }
         val context = LocalContext.current
+        val scrollState = rememberScrollState()
         val viewModel = FomularioEspecies_ViewModel()
         val green700 = colorResource(id = R.color.green_700)
 
@@ -182,6 +183,7 @@ fun FormularioScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
+
                 // Bosque
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -218,7 +220,7 @@ fun FormularioScreen(
                             .size(80.dp)
                             .clickable { selectedZona = "agroforestal" }
                             .border(
-                                width = 2.dp,
+                              width = 2.dp,
                                 color = Color(0xFF97B96E),
                                 shape = RoundedCornerShape(8.dp)
                             )
@@ -283,6 +285,7 @@ fun FormularioScreen(
             }
 
             Spacer(modifier = Modifier.height(16.dp))
+
 
             // Informacion de la camara
             Text(
@@ -352,11 +355,20 @@ fun FormularioScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // LISTA DE CHEQUEO
+            Text(
+                text = stringResource(R.string.lista_chequeo),
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(bottom = 4.dp)
+            )
+
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Column(
+
                     modifier = Modifier.weight(1f)
                 ) {
                     // LISTA DE CHEQUEO
@@ -493,6 +505,29 @@ fun EvidenciaItem(
 @RequiresApi(Build.VERSION_CODES.P)
 @Preview(device = "spec:width=800px,height=1340px,dpi=300")
 @Composable
-fun FormularioCamaraTrampaPreview(){
-    FormularioCamaraTrampa(activity = MainActivity(), navController = rememberNavController())
+fun CheckboxItem(
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    text: String
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 2.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Checkbox(
+            checked = checked,
+            onCheckedChange = onCheckedChange,
+            modifier = Modifier.size(20.dp),
+            colors = CheckboxDefaults.colors(
+                checkedColor = Color(0xFF4E7029)
+            )
+        )
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodySmall,
+            modifier = Modifier.padding(start = 4.dp)
+        )
+    }
 }

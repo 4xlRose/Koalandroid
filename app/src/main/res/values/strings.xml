@@ -16,17 +16,17 @@
     <string name="nombre_camara">Nombre Cámara</string>
     <string name="placa_camara">Placa Cámara</string>
     <string name="placa_guaya">Placa Guaya</string>
-    <string name="ancho_camino">Ancho Camino mt</string>
-    <string name="fecha">DD/MM/AA</string>
-    <string name="distancia_objetivo">Dist. a objetivo mt</string>
-    <string name="altura_lente">Altura del lente mt</string>
+    <string name="ancho_camino">Ancho Camino</string> //mt
+    <string name="fecha">dd/mm/aa</string>
+    <string name="distancia_objetivo">Dis.objetivo</string> //Dist. a _ mt
+    <string name="altura_lente">Altura lente</string> //del _ mt
     <string name="lista_chequeo">Lista de chequeo</string>
     <string name="instalada">Instalada</string>
     <string name="programada">Programada</string>
     <string name="memoria">Memoria</string>
     <string name="prendida">Prendida</string>
     <string name="prueba_gateo">Prueba de gateo</string>
-    <string name="cerrojo_camara">Cerrojo de cámara</string>
+    <string name="letrero_camara">Letrero de cámara</string>
     <string name="evidencias">Evidencias</string>
     <string name="elegir_archivo">Elegir archivo</string>
     <string name="tomar_foto">Tomar foto</string>
@@ -45,5 +45,6 @@
     <string name="Intro_homepage">Hola,</string>
     <string name="Dashboard_hompage">Mis formularios</string>
     <string name="Formularios_base">Formularios</string>
+    <string name="inundacion">Inundacion</string>
     <string name="letrero_camara">Letrero de cámara</string>
 </resources>

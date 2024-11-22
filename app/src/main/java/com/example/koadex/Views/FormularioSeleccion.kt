@@ -118,7 +118,7 @@ fun FormularioSeleccionScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = 32.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             OptionButton(
