@@ -192,6 +192,8 @@ fun BottomNavItem(
 val sampleUser = User(
     id = 1,
     username = "Koalandroidcito",
+    email = "koalandroid@tec.mx",
+    password = "KoalAndroid*2025",
     totalForms = 10,
     uploadedForms = 7,
     locallyStoredForms = 3,

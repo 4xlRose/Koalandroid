@@ -14,15 +14,10 @@ interface FormRepository {
     suspend fun insertUser(user: UserEntity)
     suspend fun updateUser(user: UserEntity)
     suspend fun deleteUser(user: UserEntity)
-    fun getAllUsers(): List<UserEntity>
-    fun getUserById(id: Int): UserEntity?
-    fun getUserByName(name: String): UserEntity?
-    fun getAllAccountsByName(name: String): List<UserEntity>
-    fun getUserByEmail(email: String): UserEntity?
-    fun getAllAccountsByEmail(email: String): List<UserEntity>
+    fun getAllUsers(): Flow<List<UserEntity>>
+    fun getUserById(id: Int): Flow<UserEntity?>
 
     //Clima
-
     fun getWeatherById(id: Int): Flow<WeatherEntity?>
     suspend fun inserWeatherBegin(weathers: List<WeatherEntity>)
 

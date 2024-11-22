@@ -5,9 +5,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.example.koadex.R
 import com.example.koadex.data.FormRepository
 import com.example.koadex.data.GeneralFormEntity
+import com.example.koadex.data.SeasonEntity
 import com.example.koadex.data.UserEntity
+import com.example.koadex.data.WeatherEntity
 import kotlinx.coroutines.flow.Flow
 
 class FormGeneralDBViewModel (private val formRepository: FormRepository) : ViewModel()
@@ -16,7 +19,7 @@ class FormGeneralDBViewModel (private val formRepository: FormRepository) : View
     var formGeneralUiState by mutableStateOf(GeneralFormUiState())
         private  set
 
-    fun updateGeneraFormlUiState(formGeneral: GeneralFormsDetails) {
+    fun updateGeneraFormUiState(formGeneral: GeneralFormsDetails) {
         formGeneralUiState = GeneralFormUiState(
             formsDetails = formGeneral
         )
@@ -25,6 +28,12 @@ class FormGeneralDBViewModel (private val formRepository: FormRepository) : View
     suspend fun saveGeneralForm() {
         formRepository.insertGeneralForm(formGeneralUiState.formsDetails.toEntity())
     }
+
+    //Usuario
+    var userUiState by mutableStateOf(UserUiState())
+        private  set
+
+
 
     suspend fun insertUser(user: UserEntity) {
         formRepository.insertUser(user)
@@ -35,23 +44,24 @@ class FormGeneralDBViewModel (private val formRepository: FormRepository) : View
     suspend fun deleteUser(user: UserEntity) {
         formRepository.deleteUser(user)
     }
-    fun getAllUsers(): List<UserEntity> {
+    fun getAllUsers(): Flow<List<UserEntity>> {
         return formRepository.getAllUsers()
     }
-    fun getUserById(id: Int): UserEntity? {
+    fun getUserById(id: Int): Flow<UserEntity?> {
         return formRepository.getUserById(id)
     }
-    fun getUserByName(name: String): UserEntity? {
-        return formRepository.getUserByName(name)
+    fun updateUserUiState(user: UserDetails) {
+        userUiState = UserUiState(
+            userDetails = user
+        )
     }
-    fun getAllAccountsByName(name: String): List<UserEntity> {
-        return formRepository.getAllAccountsByName(name)
+
+
+    fun getWeatherById(id: Int): Flow<WeatherEntity?> {
+        return formRepository.getWeatherById(id)
     }
-    fun getUserByEmail(email: String): UserEntity? {
-        return formRepository.getUserByEmail(email)
-    }
-    fun getAllAccountsByEmail(email: String): List<UserEntity> {
-        return formRepository.getAllAccountsByEmail(email)
+    fun getSeasonById(id: Int): Flow<SeasonEntity?> {
+        return formRepository.getSeasonById(id)
     }
 }
 
@@ -75,4 +85,41 @@ fun GeneralFormsDetails.toEntity() : GeneralFormEntity = GeneralFormEntity(
     idWeather = idWeather,
     idSeason = idSeason,
     place = place
+)
+
+/*User*/
+data class UserUiState(
+    var userDetails: UserDetails = UserDetails()
+)
+data class UserDetails(
+    val id: Int = 0,
+    var name: String = "",
+    var email: String = "",
+    var password: String = "",
+    var startDate: String = "",
+    var idZone: Int = 0, // Foreign Key
+    var totalForms: Int = 0,
+    var uploadedForms: Int = 0,
+    var locallyStoredForms: Int = 0,
+    var posts: Int = 0,
+    var following: Int = 0,
+    var followers: Int = 0,
+    var isloggedIn: Boolean = true,
+    var profilePicture: Int = R.drawable.profilepicture
+)
+fun UserDetails.toEntity() : UserEntity = UserEntity(
+    id = id,
+    name = name,
+    email = email,
+    password = password,
+    startDate = startDate,
+    idZone = idZone,
+    totalForms = totalForms,
+    uploadedForms = uploadedForms,
+    locallyStoredForms = locallyStoredForms,
+    posts = posts,
+    following = following,
+    followers = followers,
+    isloggedIn = isloggedIn,
+    profilePicture = profilePicture
 )

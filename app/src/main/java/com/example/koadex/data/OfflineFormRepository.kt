@@ -14,12 +14,8 @@ class OfflineFormRepository (private val formDao: FormDao) : FormRepository {
     override suspend fun insertUser(user: UserEntity) = formDao.insertUser(user)
     override suspend fun updateUser(user: UserEntity) = formDao.updateUser(user)
     override suspend fun deleteUser(user: UserEntity) = formDao.deleteUser(user)
-    override fun getAllUsers(): List<UserEntity> = formDao.getAllUsers()
-    override fun getUserById(id: Int): UserEntity? = formDao.getUserById(id)
-    override fun getUserByName(name: String): UserEntity? = formDao.getUserByName(name)
-    override fun getAllAccountsByName(name: String): List<UserEntity> = formDao.getAllAccountsByName(name)
-    override fun getUserByEmail(email: String): UserEntity? = formDao.getUserByEmail(email)
-    override fun getAllAccountsByEmail(email: String): List<UserEntity> = formDao.getAllAccountsByEmail(email)
+    override fun getAllUsers(): Flow<List<UserEntity>> = formDao.getAllUsers()
+    override fun getUserById(id: Int): Flow<UserEntity?> = formDao.getUserById(id)
 
     //Clima
     override fun getWeatherById(id: Int): Flow<WeatherEntity?> = formDao.getWeatherById(id)
@@ -28,6 +24,7 @@ class OfflineFormRepository (private val formDao: FormDao) : FormRepository {
     //Epoca
     override fun getSeasonById(id: Int): Flow<SeasonEntity?> = formDao.getSeasonById(id)
     override suspend fun insertSeasonBegin(seasons: List<SeasonEntity>) = formDao.insertSeasonBegin(seasons)
+
     //Zona tipo
     override suspend fun insertZonasTiposBegin(zonasTipos: List<ZoneTypeEntity>) = formDao.insertZonasTiposBegin(zonasTipos)
     override fun getZonaTipoId(id: Int): Flow<ZoneTypeEntity?> = formDao.getZonaTipoId(id)

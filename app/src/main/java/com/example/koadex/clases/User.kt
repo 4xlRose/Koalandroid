@@ -6,6 +6,8 @@ import com.example.koadex.R
 data class User(
     val id: Int,
     var username: String,
+    var email: String,
+    var password: String,
     var isLogged: Boolean = true,
     val totalForms: Int,
     val uploadedForms: Int,

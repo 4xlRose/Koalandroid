@@ -76,16 +76,17 @@ fun PerfilScreen(
 fun ProfileScreenPreview() {
     val sampleUser = User(
         id = 1,
-        username = "Samantha Smith",
-        totalForms = 10,
-        uploadedForms = 7,
-        locallyStoredForms = 3,
-        posts = 15,
-        following = 200,
-        followers = 150,
-        isloggedIn = true,
-        profilePicture = R.drawable.profilepicture
+        username = sampleUser.username,
+        email = sampleUser.email,
+        password = sampleUser.password,
+        totalForms = sampleUser.totalForms,
+        uploadedForms = sampleUser.uploadedForms,
+        locallyStoredForms = sampleUser.locallyStoredForms,
+        posts = sampleUser.posts,
+        following = sampleUser.following,
+        followers = sampleUser.followers,
+        isloggedIn = sampleUser.isloggedIn,
+        profilePicture = sampleUser.profilePicture
     )
-
     PerfilScreen(navController = rememberNavController(), user = sampleUser)
 }

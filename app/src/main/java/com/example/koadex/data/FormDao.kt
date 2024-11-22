@@ -19,6 +19,7 @@ interface FormDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertIntoListForms(listForms: List<GeneralFormEntity>)
 
+
     // Métodos de Formulario General
     @Query("SELECT * from general_form WHERE id = :id")
     fun getFormById(id: Int): Flow<GeneralFormEntity>
@@ -44,22 +45,10 @@ interface FormDao {
     suspend fun deleteUser(user: UserEntity)
 
     @Query("SELECT * FROM user")
-    fun getAllUsers(): List<UserEntity>
+    fun getAllUsers(): Flow<List<UserEntity>>
 
     @Query("SELECT * FROM user WHERE id = :id")
-    fun getUserById(id: Int): UserEntity?
-
-    @Query("SELECT * FROM user WHERE name = :name")
-    fun getUserByName(name: String): UserEntity?
-
-    @Query("SELECT * FROM user WHERE email = :email")
-    fun getUserByEmail(email: String): UserEntity?
-
-    @Query("SELECT * FROM user WHERE name LIKE '%' || :name || '%'")
-    fun getAllAccountsByName(name: String): List<UserEntity>
-
-    @Query("SELECT * FROM user WHERE email LIKE '%' || :email || '%'")
-    fun getAllAccountsByEmail(email: String): List<UserEntity>
+    fun getUserById(id: Int): Flow<UserEntity?>
 
 
     // Clima
@@ -68,8 +57,6 @@ interface FormDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertWeatherBegin(weathers: List<WeatherEntity>)
-
-
 
 
     // Época

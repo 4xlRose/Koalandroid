@@ -24,6 +24,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.koadex.R
 import com.example.koadex.clases.User
 import com.example.koadex.ViewModels.PerfilScreenViewModel
+import com.example.koadex.navigate.sampleUser
 
 
 @Composable
@@ -106,15 +107,17 @@ fun EditProfileScreen(
 fun EditProfileScreenPreview() {
     val sampleUser = User(
         id = 1,
-        username = "Samantha Smith",
-        totalForms = 10,
-        uploadedForms = 7,
-        locallyStoredForms = 3,
-        posts = 15,
-        following = 200,
-        followers = 150,
-        isloggedIn = true,
-        profilePicture = R.drawable.profilepicture // Recurso de imagen predeterminado
+        username = sampleUser.username,
+        email = sampleUser.email,
+        password = sampleUser.password,
+        totalForms = sampleUser.totalForms,
+        uploadedForms = sampleUser.uploadedForms,
+        locallyStoredForms = sampleUser.locallyStoredForms,
+        posts = sampleUser.posts,
+        following = sampleUser.following,
+        followers = sampleUser.followers,
+        isloggedIn = sampleUser.isloggedIn,
+        profilePicture = sampleUser.profilePicture
     )
 
     EditProfileScreen(navController = rememberNavController(), user = sampleUser)
