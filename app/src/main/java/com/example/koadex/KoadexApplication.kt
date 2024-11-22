@@ -40,7 +40,6 @@ object AppViewModelProvider {
         initializer {
             FormsPredeterminedViewModel(formApplication().container.formsRepository)
         }
-
         initializer {
             KoadexViewModel(formApplication().container.formsRepository)
         }
