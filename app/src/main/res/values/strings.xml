@@ -45,4 +45,5 @@
     <string name="Intro_homepage">Hola,</string>
     <string name="Dashboard_hompage">Mis formularios</string>
     <string name="Formularios_base">Formularios</string>
+    <string name="letrero_camara">Letrero de cámara</string>
 </resources>
