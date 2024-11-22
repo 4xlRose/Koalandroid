@@ -59,6 +59,8 @@ import com.example.koadex.R
 import com.example.koadex.ui.principal.KoadexViewModel
 import kotlinx.coroutines.launch
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.colorResource
+import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
 
 
 @RequiresApi(Build.VERSION_CODES.P)
@@ -75,17 +77,20 @@ fun FormularioVariablesClimaticas(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
-                title = { Text(text = stringResource(id = R.string.formulario)) },
+                title = { Text(text = stringResource(id = R.string.formulario),
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigate("TiposForms") }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
-                            contentDescription = stringResource(id = R.string.atras)
+                            contentDescription = stringResource(id = R.string.atras),
+                            tint = Color.White
                         )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFFB4D68F)
+                    containerColor = Color(0xFF4E7029)
                 )
             )
         }
@@ -123,6 +128,8 @@ fun FormularioClimaEntry(
 ) {
     val scrollState = rememberScrollState()
     val (currentZone, setCurrentZone) = remember { mutableStateOf("") } // Estado para la zona seleccionada
+    val viewModel = FomularioEspecies_ViewModel()
+    val green700 = colorResource(id = R.color.green_700)
 
     Column(
         modifier = modifier
@@ -173,25 +180,7 @@ fun FormularioClimaEntry(
             modifier = Modifier.fillMaxWidth()
         )
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Button(
-                shape = RoundedCornerShape(6.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF4E7029)
-                ),
-                modifier = Modifier
-                    .width(300.dp),
-                onClick = {
-                    onSaveClick()
-                    navController.navigate("Principal")
-                },
-            ) {
-                Text("Enviar", fontWeight = FontWeight.Bold)
-            }
-        }
+        viewModel.Atras_enviar(navController, green700)
     }
 }
 
@@ -207,14 +196,14 @@ fun ZoneButton(
     Box(
         modifier = Modifier
             .size(buttonSize)
-            .padding(4.dp)
+            .padding(3.dp)
             .clip(RoundedCornerShape(12.dp)) // Aplica las esquinas redondeadas al fondo
             .background(
-                color = if (isSelected) Color(0xFF4E7029) else Color.White // Fondo dinámico
+                color = if (isSelected) Color(0xFF97B96E) else Color.White // Fondo dinámico
             )
             .border(
                 width = 2.dp,
-                color = Color(0xFF4E7029) , // Verde si está seleccionado, más suave si no
+                color = Color(0xFF97B96E) , // Verde si está seleccionado, más suave si no
                 shape = RoundedCornerShape(12.dp)
             )
             .clickable { onZoneChange(type) },
@@ -249,7 +238,8 @@ fun ClimaInputForm(
     val (nivelQuebrada, setNivelQuebrada) = remember { mutableStateOf("") }
     val (observaciones, setObservaciones) = remember { mutableStateOf("") }
     val actionButtonColors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4E7029))
-
+    val viewModel = FomularioEspecies_ViewModel()
+    val green700 = colorResource(id = R.color.green_700)
 
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -297,26 +287,21 @@ fun ClimaInputForm(
             enabled = enabled
         )
         Text("Evidencias", style = MaterialTheme.typography.titleMedium)
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Button(onClick = { /* Elegir archivo */ }, colors = actionButtonColors) {
-                Text("Elige archivo")
-            }
-            Button(onClick = { /* Tomar foto */ }, colors = actionButtonColors) {
-                Text("Tomar foto")
-            }
-        }
+        viewModel.Botones_captura(green700)
+
+        // Observaciones
         OutlinedTextField(
-            value = observaciones,
+            value = "", onValueChange = { /* Actualizar estado */ },
             label = { Text("Observaciones") },
-            onValueChange = setObservaciones,
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(100.dp)
         )
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.P)
-@Preview(showBackground = true)
+@Preview(device = "spec:width=800px,height=1340px,dpi=300")
 @Composable
 fun VariableClimaticasPreview(){
     FormularioVariablesClimaticas(navController = rememberNavController())
