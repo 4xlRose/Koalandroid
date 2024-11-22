@@ -80,6 +80,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
+import com.example.koadex.clases.User
+import com.example.koadex.navigate.sampleUser
 
 @Preview(showBackground = true, showSystemUi = true, device = "spec:width=500dp,height=800dp")
 @Composable
@@ -113,7 +115,8 @@ fun KoadexPreview() {
 fun Koadex(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    user: User = sampleUser
 ) {
     var current_scroll by remember { mutableStateOf(0f) }
     Scaffold(
