@@ -317,21 +317,21 @@ data class QuadrantFormEntity(
 data class SuperQuadrantEntity(
     @PrimaryKey
     val id: Int = 0,
-    var quadrant: Char = ' '
+    var quadrant: String = ""
 )
 
 @Entity(tableName = "intermediate_quadrant")
 data class MidQuadrantEntity(
     @PrimaryKey
     val id: Int = 0,
-    var quadrant: Char = ' '
+    var quadrant: String = ""
 )
 
 @Entity(tableName = "sub_quadrant")
 data class SubQuadrantEntity(
     @PrimaryKey
     val id: Int = 0,
-    var subQuadrant: Char = ' '
+    var subQuadrant: String = ""
 )
 
 @Entity(tableName = "habitat")
