@@ -1,10 +1,24 @@
 package com.example.koadex.data
+
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [FormEntity::class], version = 1, exportSchema = false)
+@Database(entities =
+[
+    GeneralFormEntity::class, UserEntity::class,
+    WeatherEntity::class, SeasonEntity::class, ZoneEntity::class,
+    SpecieFormEntity::class, ZoneTypeEntity::class, AnimalTypeEntity::class,
+    ObservTypeEntity::class, HeightTypeEntity::class, FollowUpFormEntity::class,
+    CoverageEntity::class, DisturbanceEntity::class, QuadrantFormEntity::class,
+    SuperQuadrantEntity::class, MidQuadrantEntity::class, SubQuadrantEntity::class,
+    HabitatEntity::class, RouteFormEntity::class, CameraEntity::class,
+    CheckListEntity::class, CheckEntity::class, WeatherFormEntity::class, FormEntity::class
+],
+    version = 7,
+    exportSchema = false
+)
 abstract class FormDatabase : RoomDatabase() {
     abstract fun formDao(): FormDao
 
@@ -14,7 +28,7 @@ abstract class FormDatabase : RoomDatabase() {
 
         fun getDatabase(context: Context): FormDatabase {
             return Instance ?: synchronized(this) {
-                Room.databaseBuilder(context, FormDatabase::class.java, "form_database")
+                Room.databaseBuilder(context, FormDatabase::class.java, "Koadex_DB")
                     .fallbackToDestructiveMigration()
                     .build()
                     .also { Instance = it }
@@ -22,22 +36,3 @@ abstract class FormDatabase : RoomDatabase() {
         }
     }
 }
-/*
-@Da tabase(entities = [GeneralFormEntity::class], version = 2, exportSchema = false)
-abstract class FormDatabase : RoomDatabase() {
-    abstract fun formDao(): FormDao
-
-    companion object {
-        @Volatile
-        private var Instance: FormDatabase? = null
-
-        fun getDatabase(context: Context): FormDatabase {
-            return Instance ?: synchronized(this) {
-                Room.databaseBuilder(context, FormDatabase::class.java, "form_database")
-                    .fallbackToDestructiveMigration()
-                    .build()
-                    .also { Instance = it }
-            }
-        }
-    }
-}*/

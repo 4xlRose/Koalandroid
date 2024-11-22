@@ -56,8 +56,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.koadex.AppViewModelProvider
-import com.example.koadex.MainActivity
 import com.example.koadex.R
 import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
 import com.example.koadex.ui.principal.KoadexViewModel

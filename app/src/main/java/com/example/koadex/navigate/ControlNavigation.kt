@@ -24,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -42,12 +41,10 @@ import com.example.koadex.Views.FormularioEspecies
 import com.example.koadex.Views.FormularioFaunaBusquedaLibre
 import com.example.koadex.Views.FormularioFaunaPuntoConteo
 import com.example.koadex.Views.FormularioGeneral
-import com.example.koadex.Views.FormularioSeleccionScreen
 import com.example.koadex.Views.InicioCarga
 import com.example.koadex.Views.InicioSesion
 import com.example.koadex.Views.Koadex
 import com.example.koadex.Views.OlvidoContrasena
-import com.example.koadex.Views.Perfil
 import com.example.koadex.Views.Principal
 import com.example.koadex.Views.Registro
 import com.example.koadex.Views.Verificacion
@@ -57,13 +54,14 @@ import com.example.koadex.Views.FormularioVariablesClimaticas
 import com.example.koadex.Views.EditProfileScreen
 import com.example.koadex.Views.PerfilScreen
 import com.example.koadex.clases.User
+import com.example.koadex.Views.PerfilScreen
 
 
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modifier) {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "Principal") {
+    NavHost(navController = navController, startDestination = "InicioCarga") {
         composable("InicioCarga") {
             InicioCarga(navController = navController)
         }
@@ -130,9 +128,6 @@ fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modi
         composable("FormularioVariablesClimaticas") {
             FormularioVariablesClimaticas(navController = navController)
         }
-        composable("Profile") {
-            PerfilScreen(navController = navController)
-        }
     }
 }
 
@@ -195,7 +190,10 @@ fun BottomNavItem(
 }
 ///////////////////////////
 val sampleUser = User(
-    username = "Samantha Smith",
+    id = 1,
+    username = "Koalandroidcito",
+    email = "koalandroid@tec.mx",
+    password = "KoalAndroid*2025",
     totalForms = 10,
     uploadedForms = 7,
     locallyStoredForms = 3,
