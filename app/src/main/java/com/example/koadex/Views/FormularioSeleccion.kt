@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -33,22 +32,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.koadex.AppViewModelProvider
-import com.example.koadex.MainActivity
 import com.example.koadex.R
 import com.example.koadex.ui.principal.KoadexViewModel
 import androidx.compose.foundation.rememberScrollState
@@ -74,7 +66,7 @@ fun FormularioSeleccion(
                     color = Color.White,
                     fontWeight = FontWeight.Bold) },
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigate("TiposForms") }) {
+                    IconButton(onClick = { navController.navigate("Principal") }) {
                         Icon(Icons.Filled.ArrowBack,
                             contentDescription = "Atrás",
                             tint = Color.White
@@ -107,6 +99,8 @@ fun FormularioSeleccionScreen(
             .padding(top = 80.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        Spacer(modifier = Modifier.height(16.dp))
+
         Text(
             text = "Tipo de Registro",
             style = MaterialTheme.typography.headlineLarge,
@@ -118,7 +112,7 @@ fun FormularioSeleccionScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = 32.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             OptionButton(

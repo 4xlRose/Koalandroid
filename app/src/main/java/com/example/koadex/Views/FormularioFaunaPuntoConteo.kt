@@ -2,9 +2,7 @@
 
 package com.example.koadex.Views
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -19,7 +17,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -42,7 +39,6 @@ fun FormularioFaunaPuntoConteo(navController: NavHostController, modifier: Modif
     var zonaSeleccionada by remember { mutableStateOf("") }
     var tipoObservacionSeleccionada by remember { mutableStateOf("") }
     val actionButtonColors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4E7029))
-
     val FaunaBViewModel = FormularioFaunaBusquedaLibreViewModel()
     val viewModel = FomularioEspecies_ViewModel()
     val green700 = colorResource(id = R.color.green_700)
@@ -176,7 +172,6 @@ fun FormularioFaunaPuntoConteo(navController: NavHostController, modifier: Modif
                 modifier = Modifier.align(Alignment.Start))
             viewModel.Botones_captura(green700)
 
-
             Spacer(modifier = Modifier.height(16.dp))
 
             // Observaciones
@@ -191,8 +186,6 @@ fun FormularioFaunaPuntoConteo(navController: NavHostController, modifier: Modif
             Spacer(modifier = Modifier.height(16.dp))
 
             viewModel.Atras_enviar(navController, green700)
-
-
         }
     }
 }

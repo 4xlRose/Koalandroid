@@ -7,6 +7,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
@@ -21,13 +23,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.koadex.AppViewModelProvider
-import com.example.koadex.MainActivity
 import com.example.koadex.R
-import com.example.koadex.ui.principal.KoadexViewModel
 
 @RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,25 +35,26 @@ import com.example.koadex.ui.principal.KoadexViewModel
 fun FormularioSeguimiento(
     //activity: MainActivity,
     navController: NavHostController,
-    //modifier: Modifier = Modifier,
-    //viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    modifier: Modifier = Modifier,
+    viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
         topBar = {
             TopAppBar(
-                title = { Text(text = stringResource(id = R.string.formulario)) },
+                title = { Text(text = stringResource(id = R.string.formulario), color = Color.White) },
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
+                    IconButton(onClick = { navController.navigate("TiposForms") }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
-                            contentDescription = stringResource(id = R.string.atras)
+                            contentDescription = stringResource(id = R.string.atras),
+                            tint = Color.White
                         )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFFB4D68F)
+                    containerColor = Color(0xFF4E7029)
                 )
             )
         }
@@ -65,7 +66,7 @@ fun FormularioSeguimiento(
         )
     }
 }
-
+//@Preview(device = "spec:width=800px,height=1340px,dpi=300", showBackground = true)
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun FormularioSeguimientoScreen(
@@ -73,17 +74,18 @@ fun FormularioSeguimientoScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
+    val scrollState = rememberScrollState()
     // Estado para los botones seleccionados
     val coberturaSeleccionada = remember { mutableStateOf(-1) }
     val disturbioSeleccionado = remember { mutableStateOf(-1) }
-    var isFileSelected by remember { mutableStateOf(false) }
     val seguimientoSeleccionado = remember { mutableStateOf(-1) } // Estado para los botones de Seguimiento
     val cambioSeleccionado = remember { mutableStateOf(-1) } // Estado para los botones de Cambió
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(50.dp)
+            .padding(32.dp)
+            .verticalScroll(rememberScrollState())
     ) {
 
         Spacer(modifier = Modifier.height(60.dp))
@@ -98,7 +100,7 @@ fun FormularioSeguimientoScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Sección de Seguimiento y Cambio (más centrada)
+        // SECCION SEGUIMIENTO Y CAMBIO
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -159,93 +161,101 @@ fun FormularioSeguimientoScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Sección de Cobertura
+        // SECCION COBERTURA
         Text("Cobertura", style = MaterialTheme.typography.titleMedium)
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        Column {
-            // Primera fila de botones de Cobertura
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Botones(
-                    icon = R.drawable.bd_cobertura,
-                    text = "",
-                    isSelected = coberturaSeleccionada.value == 0,
-                    onClick = { coberturaSeleccionada.value = 0 }
-                )
-                Botones(
-                    icon = R.drawable.ra_cobertura,
-                    text = "",
-                    isSelected = coberturaSeleccionada.value == 1,
-                    onClick = { coberturaSeleccionada.value = 1 }
-                )
-                Botones(
-                    icon = R.drawable.rb_cobertura,
-                    text = "",
-                    isSelected = coberturaSeleccionada.value == 2,
-                    onClick = { coberturaSeleccionada.value = 2 }
-                )
-                Botones(
-                    icon = R.drawable.pa_cobertura,
-                    text = "",
-                    isSelected = coberturaSeleccionada.value == 3,
-                    onClick = { coberturaSeleccionada.value = 3 }
-                )
-                Botones(
-                    icon = R.drawable.pl_cobertura,
-                    text = "",
-                    isSelected = coberturaSeleccionada.value == 4,
-                    onClick = { coberturaSeleccionada.value = 4 }
-                )
-            }
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ){
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.width(IntrinsicSize.Min)
+            ){
+                // Primera fila de botones de Cobertura
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ){
+                    CoberturaButton(
+                        index = 1,
+                        icon = R.drawable.bd_cobertura,
+                        isSelected = coberturaSeleccionada.value == 0,
+                        onClick = { coberturaSeleccionada.value = 0 }
+                    )
+                    CoberturaButton(
+                        index = 2,
+                        icon = R.drawable.ra_cobertura,
+                        isSelected = coberturaSeleccionada.value == 1,
+                        onClick = { coberturaSeleccionada.value = 1 }
+                    )
+                    CoberturaButton(
+                        index = 3,
+                        icon = R.drawable.rb_cobertura,
+                        isSelected = coberturaSeleccionada.value == 2,
+                        onClick = { coberturaSeleccionada.value = 2 }
+                    )
+                    CoberturaButton(
+                        index = 4,
+                        icon = R.drawable.pa_cobertura,
+                        isSelected = coberturaSeleccionada.value == 3,
+                        onClick = { coberturaSeleccionada.value = 3 }
+                    )
+                    CoberturaButton(
+                        index = 5,
+                        icon = R.drawable.pl_cobertura,
+                        isSelected = coberturaSeleccionada.value == 4,
+                        onClick = { coberturaSeleccionada.value = 4 }
+                    )
+                }
 
-            Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
-            // Segunda fila de botones de Cobertura
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Botones(
-                    icon = R.drawable.cp_cobertura,
-                    text = "",
-                    isSelected = coberturaSeleccionada.value == 5,
-                    onClick = { coberturaSeleccionada.value = 5 }
-                )
-                Botones(
-                    icon = R.drawable.ct_cobertura,
-                    text = "",
-                    isSelected = coberturaSeleccionada.value == 6,
-                    onClick = { coberturaSeleccionada.value = 6 }
-                )
-                Botones(
-                    icon = R.drawable.vh_cobertura,
-                    text = "",
-                    isSelected = coberturaSeleccionada.value == 7,
-                    onClick = { coberturaSeleccionada.value = 7 }
-                )
-                Botones(
-                    icon = R.drawable.td_cobertura,
-                    text = "",
-                    isSelected = coberturaSeleccionada.value == 8,
-                    onClick = { coberturaSeleccionada.value = 8 }
-                )
-                Botones(
-                    icon = R.drawable.if_cobertura,
-                    text = "",
-                    isSelected = coberturaSeleccionada.value == 9,
-                    onClick = { coberturaSeleccionada.value = 9 }
-                )
+                // Segunda fila de botones de Cobertura
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ){
+                    CoberturaButton(
+                        index = 6,
+                        icon = R.drawable.cp_cobertura,
+                        isSelected = coberturaSeleccionada.value == 5,
+                        onClick = { coberturaSeleccionada.value = 5 }
+                    )
+                    CoberturaButton(
+                        index = 7,
+                        icon = R.drawable.ct_cobertura,
+                        isSelected = coberturaSeleccionada.value == 6,
+                        onClick = { coberturaSeleccionada.value = 6 }
+                    )
+                    CoberturaButton(
+                        index = 8,
+                        icon = R.drawable.vh_cobertura,
+                        isSelected = coberturaSeleccionada.value == 7,
+                        onClick = { coberturaSeleccionada.value = 7 }
+                    )
+                    CoberturaButton(
+                        index = 9,
+                        icon = R.drawable.td_cobertura,
+                        isSelected = coberturaSeleccionada.value == 8,
+                        onClick = { coberturaSeleccionada.value = 8 }
+                    )
+                    CoberturaButton(
+                        index = 10,
+                        icon = R.drawable.if_cobertura,
+                        isSelected = coberturaSeleccionada.value == 9,
+                        onClick = { coberturaSeleccionada.value = 9 }
+                    )
+                }
             }
         }
 
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Campo de Tipos de Cultivo
+        // CAMPO TIPO DE CULTIVO
         OutlinedTextField(
             value = "",
             onValueChange = { },
@@ -255,74 +265,79 @@ fun FormularioSeguimientoScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Seccion de Disturbio
-        Text("Disturbio", style = MaterialTheme.typography.titleMedium)
+        // SECCION DISTURBIO
+        Text("Disturbio", style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(vertical = 8.dp))
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        Column (
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier.fillMaxWidth(),
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ){
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.width(IntrinsicSize.Min)
             ) {
-                Botones(
-                    icon = R.drawable.inundacion_1,
-                    text = "Inundación",
-                    isSelected = disturbioSeleccionado.value == 0,
-                    onClick = { disturbioSeleccionado.value = 0 }
-                )
-                Botones(
-                    icon = R.drawable.hoguera_1,
-                    text = "Quema",
-                    isSelected = disturbioSeleccionado.value == 1,
-                    onClick = { disturbioSeleccionado.value = 1 }
-                )
-                Botones(
-                    icon = R.drawable.tala_de_arboles_1,
-                    text = "Tala",
-                    isSelected = disturbioSeleccionado.value == 2,
-                    onClick = { disturbioSeleccionado.value = 2 }
-                )
-                Botones(
-                    icon = R.drawable.polvo_1,
-                    text = "Erosión",
-                    isSelected = disturbioSeleccionado.value == 3,
-                    onClick = { disturbioSeleccionado.value = 3 }
-                )
-            }
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+                ) {
+                    DisturbioButton(
+                        icon = R.drawable.inundacion_1,
+                        text = "Inundación",
+                        isSelected = disturbioSeleccionado.value == 0,
+                        onClick = { disturbioSeleccionado.value = 0 }
+                    )
+                    DisturbioButton(
+                        icon = R.drawable.hoguera_1,
+                        text = "Quema",
+                        isSelected = disturbioSeleccionado.value == 1,
+                        onClick = { disturbioSeleccionado.value = 1 }
+                    )
+                    DisturbioButton(
+                        icon = R.drawable.tala_de_arboles_1,
+                        text = "Tala",
+                        isSelected = disturbioSeleccionado.value == 2,
+                        onClick = { disturbioSeleccionado.value = 2 }
+                    )
+                    DisturbioButton(
+                        icon = R.drawable.polvo_1,
+                        text = "Erosión",
+                        isSelected = disturbioSeleccionado.value == 3,
+                        onClick = { disturbioSeleccionado.value = 3 }
+                    )
+                }
 
-            Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Botones(
-                    icon = R.drawable.mineria_1,
-                    text = "Minería",
-                    isSelected = disturbioSeleccionado.value == 4,
-                    onClick = { disturbioSeleccionado.value = 4 }
-                )
-                Botones(
-                    icon = R.drawable.camino_1,
-                    text = "Carretera",
-                    isSelected = disturbioSeleccionado.value == 5,
-                    onClick = { disturbioSeleccionado.value = 5 }
-                )
-                Botones(
-                    icon = R.drawable.algas_marinas_1,
-                    text = "Plantas acuáticas",
-                    isSelected = disturbioSeleccionado.value == 6,
-                    onClick = { disturbioSeleccionado.value = 6 }
-                )
-                Botones(
-                    icon = R.drawable.otrodisturbio,
-                    text = "",
-                    isSelected = disturbioSeleccionado.value == 7,
-                    onClick = { disturbioSeleccionado.value = 7 }
-                )
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+                ) {
+                    DisturbioButton(
+                        icon = R.drawable.mineria_1,
+                        text = "Minería",
+                        isSelected = disturbioSeleccionado.value == 4,
+                        onClick = { disturbioSeleccionado.value = 4 }
+                    )
+                    DisturbioButton(
+                        icon = R.drawable.camino_1,
+                        text = "Carretera",
+                        isSelected = disturbioSeleccionado.value == 5,
+                        onClick = { disturbioSeleccionado.value = 5 }
+                    )
+                    DisturbioButton(
+                        icon = R.drawable.algas_marinas_1,
+                        text = "Plantas \nacuáticas",
+                        isSelected = disturbioSeleccionado.value == 6,
+                        onClick = { disturbioSeleccionado.value = 6 }
+                    )
+                    DisturbioButton(
+                        text = "Otro",
+                        isSelected = disturbioSeleccionado.value == 7,
+                        onClick = { disturbioSeleccionado.value = 7 }
+                    )
+                }
             }
         }
 
@@ -369,7 +384,7 @@ fun FormularioSeguimientoScreen(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Button(
-                onClick = { navController.navigateUp() },
+                onClick = { /*navController.navigateUp() */},
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4E7029)),
                 modifier = Modifier.weight(1f)
             ) {
@@ -399,16 +414,17 @@ fun CoberturaButton(
     Button(
         onClick = onClick,
         modifier = Modifier
-            .size(80.dp)
+            .size(70.dp)
             .border(1.dp, Color.Gray, RoundedCornerShape(8.dp)),
         colors = ButtonDefaults.buttonColors(
             containerColor = buttonColor,
             contentColor = textColor
-        )
+        ),
+        contentPadding = PaddingValues(2.dp)
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
         ) {
             Image(
                 painter = painterResource(id = icon),
@@ -420,52 +436,62 @@ fun CoberturaButton(
 }
 
 @Composable
-fun Botones(
-    icon: Int,
+fun DisturbioButton(
+    icon: Int? = null,
     text: String,
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
     val buttonColor = if (isSelected) Color(0xFF4E7029) else Color.White
     val textColor = if (isSelected) Color.White else Color.Black
+    val buttonSize = 85.dp
+    val iconSize = 46.dp
 
     OutlinedButton(
         onClick = onClick,
         modifier = Modifier
-            .height(120.dp)
+            .size(buttonSize)
             .aspectRatio(1f),
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(6.dp),
         border = BorderStroke(1.dp, Color.Gray),
         colors = ButtonDefaults.outlinedButtonColors(
             containerColor = buttonColor,
             contentColor = textColor
-        )
+        ),
+        contentPadding = PaddingValues(4.dp)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxSize()
         ) {
-            Image(
-                painter = painterResource(id = icon),
-                contentDescription = text,
-                modifier = Modifier.size(60.dp)
-            )
+            if (icon != null) {
+                Image(
+                    painter = painterResource(id = icon),
+                    contentDescription = text,
+                    modifier = Modifier
+                        .size(iconSize)
+                        .padding(bottom = 4.dp)
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+            }
             Text(
                 text = text,
-                style = MaterialTheme.typography.bodySmall,
-                textAlign = TextAlign.Center
+                fontSize = 12.sp,
+                textAlign = TextAlign.Center,
+                maxLines = 2,
+                lineHeight = 8.5.sp
             )
         }
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.P)
-@Preview(device = "spec:width=800px,height=1340px,dpi=300")
+@Preview(showBackground = true)
 @Composable
 fun PreviewFormularioSeguimiento(){
     FormularioSeguimiento(
         //activity = MainActivity(),
-    navController = rememberNavController()
+        navController = rememberNavController()
     )
-
 }

@@ -1,5 +1,5 @@
 package com.example.koadex
-
+/*
 import com.auth0.android.Auth0
 import com.auth0.android.authentication.AuthenticationAPIClient
 import com.auth0.android.authentication.AuthenticationException
@@ -8,8 +8,8 @@ import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test
 import com.auth0.android.callback.Callback
-import com.example.koadex.Views.AuthRepository
-import com.example.koadex.Views.AuthViewModel
+import com.example.koadex.views.AuthRepository
+import com.example.koadex.views.AuthViewModel
 import io.mockk.MockKAnnotations
 import junit.framework.TestCase.assertTrue
 import io.mockk.*
@@ -68,7 +68,7 @@ class AuthViewModelTest {
     }
 }
 
-/*
+
 class AuthViewModelTest {
 
     private lateinit var authViewModel: AuthViewModel

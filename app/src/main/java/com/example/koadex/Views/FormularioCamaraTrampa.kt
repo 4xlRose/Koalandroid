@@ -1,10 +1,6 @@
 package com.example.koadex.Views
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Build
-import android.os.Bundle
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -37,21 +33,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.example.cameraexample.ViewModels.CameraViewModel
-import com.example.koadex.AppViewModelProvider
 import com.example.koadex.MainActivity
 import com.example.koadex.R
-import com.example.koadex.ui.principal.KoadexViewModel
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.camera.core.Camera
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageCapture
-import androidx.camera.view.CameraController
-import androidx.camera.view.LifecycleCameraController
-import androidx.camera.view.PreviewView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.filled.AccountBox
@@ -65,7 +49,6 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.compose.rememberNavController
 import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
 
@@ -75,8 +58,8 @@ import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
 fun FormularioCamaraTrampa(
     activity: MainActivity,
     navController: NavHostController,
-    //modifier: Modifier = Modifier,
-    //viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    modifier: Modifier = Modifier,
+    viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
 
     Scaffold(
@@ -108,7 +91,7 @@ fun FormularioCamaraTrampa(
         )
     }
 }
-
+//@Preview(device = "spec:width=800px,height=1340px,dpi=300", showBackground = true)
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun FormularioScreen(
@@ -144,6 +127,7 @@ fun FormularioScreen(
 
         val evidencias = remember { mutableStateListOf<String>() }
         val context = LocalContext.current
+        val scrollState = rememberScrollState()
         val viewModel = FomularioEspecies_ViewModel()
         val green700 = colorResource(id = R.color.green_700)
 
@@ -182,6 +166,7 @@ fun FormularioScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
+
                 // Bosque
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -218,7 +203,7 @@ fun FormularioScreen(
                             .size(80.dp)
                             .clickable { selectedZona = "agroforestal" }
                             .border(
-                                width = 2.dp,
+                              width = 2.dp,
                                 color = Color(0xFF97B96E),
                                 shape = RoundedCornerShape(8.dp)
                             )
@@ -283,6 +268,7 @@ fun FormularioScreen(
             }
 
             Spacer(modifier = Modifier.height(16.dp))
+
 
             // Informacion de la camara
             Text(
@@ -352,11 +338,20 @@ fun FormularioScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // LISTA DE CHEQUEO
+            Text(
+                text = stringResource(R.string.lista_chequeo),
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(bottom = 4.dp)
+            )
+
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Column(
+
                     modifier = Modifier.weight(1f)
                 ) {
                     // LISTA DE CHEQUEO
@@ -489,10 +484,9 @@ fun EvidenciaItem(
     }
 }
 
-
 @RequiresApi(Build.VERSION_CODES.P)
 @Preview(device = "spec:width=800px,height=1340px,dpi=300")
 @Composable
-fun FormularioCamaraTrampaPreview(){
+fun FormularioCamaraTrampaPreview() {
     FormularioCamaraTrampa(activity = MainActivity(), navController = rememberNavController())
 }
