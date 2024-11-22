@@ -1,12 +1,10 @@
 package com.example.koadex.Views
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,6 +13,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,14 +25,10 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Schedule
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -49,30 +45,34 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.koadex.R
 import com.example.koadex.navigate.La_navegacion
 import com.example.koadex.ui.theme.Gray300
-import com.example.koadex.ui.theme.Green100
 import com.example.koadex.ui.theme.Green700
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Help
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Shadow
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.graphics.vector.ImageVector
+
+import com.example.koadex.AppViewModelProvider
+import com.example.koadex.data.FormEntity
+import com.example.koadex.data.GeneralFormEntity
+import com.example.koadex.ui.principal.KoadexViewModel
+
 import androidx.compose.ui.text.TextStyle
 import com.example.koadex.clases.User
 import com.example.koadex.navigate.sampleUser
+
 
 @Preview(showBackground = true, showSystemUi = true, device = "spec:width=500dp,height=800dp")
 @Composable
@@ -106,8 +106,10 @@ fun KoadexPreview() {
 fun Koadex(
     navController: NavHostController,
     modifier: Modifier = Modifier,
+
     viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory),
     user: User = sampleUser
+
 ) {
     var current_scroll by remember { mutableStateOf(0f) }
     Scaffold(
@@ -127,7 +129,8 @@ fun Koadex(
             modifier = Modifier
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
-                .background(Color.White)
+                .background(Color.White),
+            viewModel
 
         )
     }
@@ -136,8 +139,10 @@ fun Koadex(
 
 @Composable
 fun KoadexPantalla(modifier: Modifier,
+                   viewModel: KoadexViewModel
 
 ) {
+    val koadexUiState by viewModel.koadexUiState.collectAsState()
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -147,13 +152,14 @@ fun KoadexPantalla(modifier: Modifier,
 
     ) {
 
-        KoadexContenido()
+        KoadexContenido(formList = koadexUiState.koadexList)
 
     }
 }
 
 @Composable
 fun KoadexContenido(
+    formList: List<FormEntity>,
     modifier: Modifier = Modifier
 ) {
     Column (
@@ -174,13 +180,15 @@ fun KoadexContenido(
             modifier = modifier,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            if (formList.isEmpty()) {
-                Text(
-                    text = "No hay formularios guardados",
-                    modifier = Modifier.fillMaxSize()
-                )
-            } else {
-                FormList(formList, modifier, selected)
+            if (formList != null) {
+                if (formList.isEmpty()) {
+                    Text(
+                        text = "No hay formularios guardados",
+                        modifier = Modifier.fillMaxSize()
+                    )
+                } else {
+                    FormList(formList, modifier, selected)
+                }
             }
         }
     }
@@ -258,6 +266,9 @@ fun FormList(
         }
     }
 }
+
+
+
 
 @Composable
 fun FormInfo(

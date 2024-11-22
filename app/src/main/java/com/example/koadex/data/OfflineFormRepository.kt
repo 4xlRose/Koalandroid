@@ -6,6 +6,15 @@ import javax.inject.Inject
 
 class OfflineFormRepository (private val formDao: FormDao) : FormRepository {
 
+    /*Borrar después de actualizar el koadex con la nueva tabla de formularios general*/
+    override fun getAllForms(): Flow<List<FormEntity>> = formDao.getAllForms()
+    override fun getForm(id: Int): Flow<FormEntity?> = formDao.getForm(id)
+
+    override suspend fun insertForm(formGeneral: FormEntity) = formDao.insert(formGeneral)
+
+    override suspend fun deleteForm(formGeneral: FormEntity) = formDao.delete(formGeneral)
+
+    override suspend fun updateForm(formGeneral: FormEntity) = formDao.update(formGeneral)
     /*Para el koadex*/
     override fun getFullDatabase(): Flow<List<GeneralFormEntity>>  = formDao.getFullDatabase()
     override suspend fun insertIntoListForms(listForms: List<GeneralFormEntity>) = formDao.insertIntoListForms(listForms)
