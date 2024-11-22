@@ -501,33 +501,9 @@ fun EvidenciaItem(
     }
 }
 
-
 @RequiresApi(Build.VERSION_CODES.P)
 @Preview(device = "spec:width=800px,height=1340px,dpi=300")
 @Composable
-fun CheckboxItem(
-    checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit,
-    text: String
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 2.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Checkbox(
-            checked = checked,
-            onCheckedChange = onCheckedChange,
-            modifier = Modifier.size(20.dp),
-            colors = CheckboxDefaults.colors(
-                checkedColor = Color(0xFF4E7029)
-            )
-        )
-        Text(
-            text = text,
-            style = MaterialTheme.typography.bodySmall,
-            modifier = Modifier.padding(start = 4.dp)
-        )
-    }
+fun FormularioCamaraTrampaPreview() {
+    FormularioCamaraTrampa(activity = MainActivity(), navController = rememberNavController())
 }

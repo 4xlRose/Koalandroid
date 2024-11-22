@@ -147,9 +147,9 @@ fun FormularioGeneralEntry(
             .padding(10.dp)
             .height(40.dp)
 
-        Header_Formulario(navController, modifier)
+        //Header_Formulario(navController, modifier)
 
-        FormInputForm(
+        /*FormInputForm(
             formDetails = formUiState.formDetails,
             onFormValueChange = onFormValueChange,
             onDateChange = { newDate ->
@@ -158,6 +158,8 @@ fun FormularioGeneralEntry(
             modifier = Modifier
         )
 
+         */
+
         Seleccion_clima(textModifier, modifier, formUiState, onFormValueChange)
 
         Seleccion_estacion(textModifier, modifier, formUiState, onFormValueChange)
@@ -165,7 +167,7 @@ fun FormularioGeneralEntry(
         Spacer(modifier = Modifier.weight(1f))
 
         // Submit button
-        Boton_Enviar(onSaveClick)
+        //Boton_Enviar(onSaveClick)
     }
 }
 

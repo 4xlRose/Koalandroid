@@ -36,7 +36,7 @@ import com.example.koadex.ui.principal.KoadexViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormularioSeguimiento(
-    activity: MainActivity,
+    //activity: MainActivity,
     navController: NavHostController,
     modifier: Modifier = Modifier,
     viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
@@ -63,7 +63,7 @@ fun FormularioSeguimiento(
         }
     ) { paddingValues ->
         FormularioSeguimientoScreen(
-            activity = activity,
+            //activity = activity,
             navController = navController,
             modifier = Modifier.padding(paddingValues)
         )
@@ -73,7 +73,7 @@ fun FormularioSeguimiento(
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun FormularioSeguimientoScreen(
-    activity: MainActivity,
+    //activity: MainActivity,
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
@@ -81,7 +81,6 @@ fun FormularioSeguimientoScreen(
     // Estado para los botones seleccionados
     val coberturaSeleccionada = remember { mutableStateOf(-1) }
     val disturbioSeleccionado = remember { mutableStateOf(-1) }
-    var isFileSelected by remember { mutableStateOf(false) }
     val seguimientoSeleccionado = remember { mutableStateOf(-1) } // Estado para los botones de Seguimiento
     val cambioSeleccionado = remember { mutableStateOf(-1) } // Estado para los botones de Cambió
 
@@ -489,14 +488,13 @@ fun DisturbioButton(
         }
     }
 }
-/*
+
 @RequiresApi(Build.VERSION_CODES.P)
-@Preview(device = "spec:width=800px,height=1340px,dpi=300")
+@Preview(showBackground = true)
 @Composable
 fun PreviewFormularioSeguimiento(){
     FormularioSeguimiento(
         //activity = MainActivity(),
-    navController = rememberNavController()
+        navController = rememberNavController()
     )
 }
-*/
