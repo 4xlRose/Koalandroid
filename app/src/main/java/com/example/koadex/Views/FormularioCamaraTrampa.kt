@@ -62,9 +62,12 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.SwitchCamera
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.compose.rememberNavController
+import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
 
 @RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -80,24 +83,28 @@ fun FormularioCamaraTrampa(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
-                title = { Text(text = stringResource(id = R.string.formulario)) },
+                title = { Text(text = stringResource(id = R.string.formulario),
+                    color = Color.White, fontWeight = FontWeight.Bold)
+                    },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigate("TiposForms") }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
-                            contentDescription = stringResource(id = R.string.atras)
+                            contentDescription = stringResource(id = R.string.atras),
+                            tint = Color.White
                         )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFFB4D68F)
+                    containerColor = Color(0xFF4E7029)
                 )
             )
         }
     ) { paddingValues ->
         FormularioScreen(
             activity = activity,
-            modifier = Modifier.padding(paddingValues)
+            modifier = Modifier.padding(paddingValues),
+            navController = navController
         )
     }
 }
@@ -106,366 +113,357 @@ fun FormularioCamaraTrampa(
 @Composable
 fun FormularioScreen(
     activity: MainActivity,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavHostController
 ) {
     var CameraPermision by remember { mutableStateOf(false) }
-    var isFileSelected by remember { mutableStateOf(false) }
     if (CameraPermision) {
         CameraWindow(activity)
     } else {
-    var codigo by remember { mutableStateOf("") }
-    var selectedZona by remember { mutableStateOf<String?>(null) }
-    var nombreCamara by remember { mutableStateOf("") }
-    var placaCamara by remember { mutableStateOf("") }
-    var placaGuaya by remember { mutableStateOf("") }
-    var anchoCamino by remember { mutableStateOf("") }
-    var fecha by remember { mutableStateOf("") }
-    var distanciaObjetivo by remember { mutableStateOf("") }
-    var alturaLente by remember { mutableStateOf("") }
-    var observaciones by remember { mutableStateOf("") }
+        var codigo by remember { mutableStateOf("") }
+        var selectedZona by remember { mutableStateOf<String?>(null) }
+        var nombreCamara by remember { mutableStateOf("") }
+        var placaCamara by remember { mutableStateOf("") }
+        var placaGuaya by remember { mutableStateOf("") }
+        var anchoCamino by remember { mutableStateOf("") }
+        var fecha by remember { mutableStateOf("") }
+        var distanciaObjetivo by remember { mutableStateOf("") }
+        var alturaLente by remember { mutableStateOf("") }
+        var observaciones by remember { mutableStateOf("") }
 
-    val checklist = remember {
-        mutableStateListOf(
-            false, // instalada
-            false, // programada
-            false, // memoria
-            false, // prendida
-            false, // prueba de gateo
-            false  // cerrojo camara
-        )
-    }
-
-    val evidencias = remember { mutableStateListOf<String>() }
-    val context = LocalContext.current
-
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState())
-    ) {
-        // Codigo de la camara
-        Text(
-            text = stringResource(R.string.codigo),
-            style = MaterialTheme.typography.titleMedium
-
-        )
-        Spacer(modifier = Modifier.height(6.dp))
-
-        OutlinedTextField(
-            value = codigo,
-            onValueChange = { codigo = it },
-            label = { Text(stringResource(R.string.codigo_camara)) },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Zona de la camara
-        Text(
-            text = stringResource(R.string.zona),
-            style = MaterialTheme.typography.titleMedium
-        )
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            // Bosque
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.clickable { selectedZona = "bosque" }
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.bosque),
-                    contentDescription = "Bosque",
-                    modifier = Modifier
-                        .size(80.dp)
-                        .clickable { selectedZona = "bosque" }
-                        .border(
-                            width = if (selectedZona == "bosque") 2.dp else 0.dp,
-                            color = Color.Transparent,
-                            shape = RoundedCornerShape(8.dp)
-                        )
-                        .background(
-                            if (selectedZona == "bosque") Color(0xFF4E7029) else Color.Transparent,
-                            shape = RoundedCornerShape(8.dp)
-                        )
-                )
-                Text(text = "Bosque")
-            }
-
-            // Arreglo Agroforestal
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.clickable { selectedZona = "agroforestal" }
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.arreglo_agroforestal),
-                    contentDescription = "Arreglo Agroforestal",
-                    modifier = Modifier
-                        .size(80.dp)
-                        .clickable { selectedZona = "agroforestal" }
-                        .border(
-                            width = if (selectedZona == "agroforestal") 2.dp else 0.dp,
-                            color = Color.Transparent,
-                            shape = RoundedCornerShape(8.dp)
-                        )
-                        .background(
-                            if (selectedZona == "agroforestal") Color(0xFF4E7029) else Color.Transparent,
-                            shape = RoundedCornerShape(8.dp)
-                        )
-                )
-                Text(text = "Arreglo")
-                Text(text = "Agroforestal")
-            }
-
-            // Cultivos Transitorios
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.clickable { selectedZona = "transitorios" }
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.cultivos_transitorios),
-                    contentDescription = "Cultivos Transitorios",
-                    modifier = Modifier
-                        .size(80.dp)
-                        .clickable { selectedZona = "transitorios" }
-                        .border(
-                            width = if (selectedZona == "transitorios") 2.dp else 0.dp,
-                            color = Color.Transparent,
-                            shape = RoundedCornerShape(8.dp)
-                        )
-                        .background(
-                            if (selectedZona == "transitorios") Color(0xFF4E7029) else Color.Transparent,
-                            shape = RoundedCornerShape(8.dp)
-                        )
-                )
-                Text(text = "Cultivos")
-                Text(text = "Transitorios")
-            }
-
-            // Cultivos Permanentes
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.clickable { selectedZona = "permanentes" }
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.cultivos_permanentes),
-                    contentDescription = "Cultivos Permanentes",
-                    modifier = Modifier
-                        .size(80.dp)
-                        .clickable { selectedZona = "permanentes" }
-                        .border(
-                            width = if (selectedZona == "permanentes") 2.dp else 0.dp,
-                            color = Color.Transparent,
-                            shape = RoundedCornerShape(8.dp)
-                        )
-                        .background(
-                            if (selectedZona == "permanentes") Color(0xFF4E7029) else Color.Transparent,
-                            shape = RoundedCornerShape(8.dp)
-                        )
-                )
-                Text(text = "Cultivos")
-                Text(text = "Permanentes")
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Informacion de la camara
-        Text(
-            text = stringResource(R.string.informacion),
-            style = MaterialTheme.typography.titleMedium
-        )
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            OutlinedTextField(
-                value = nombreCamara,
-                onValueChange = { nombreCamara = it },
-                label = { Text(stringResource(R.string.nombre_camara)) },
-                modifier = Modifier.weight(1f)
-            )
-            OutlinedTextField(
-                value = placaCamara,
-                onValueChange = { placaCamara = it },
-                label = { Text(stringResource(R.string.placa_camara)) },
-                modifier = Modifier.weight(1f)
+        val checklist = remember {
+            mutableStateListOf(
+                false, // instalada
+                false, // programada
+                false, // memoria
+                false, // prendida
+                false, // prueba de gateo
+                false  // cerrojo camara
             )
         }
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            OutlinedTextField(
-                value = placaGuaya,
-                onValueChange = { placaGuaya = it },
-                label = { Text(stringResource(R.string.placa_guaya)) },
-                modifier = Modifier.weight(1f)
-            )
-            OutlinedTextField(
-                value = anchoCamino,
-                onValueChange = { anchoCamino = it },
-                label = { Text(stringResource(R.string.ancho_camino)) },
-                modifier = Modifier.weight(1f)
-            )
-        }
+        val evidencias = remember { mutableStateListOf<String>() }
+        val context = LocalContext.current
+        val viewModel = FomularioEspecies_ViewModel()
+        val green700 = colorResource(id = R.color.green_700)
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            OutlinedTextField(
-                value = fecha,
-                onValueChange = { fecha = it },
-                label = { Text(stringResource(R.string.fecha)) },
-                modifier = Modifier.weight(1f)
-            )
-            OutlinedTextField(
-                value = distanciaObjetivo,
-                onValueChange = { distanciaObjetivo = it },
-                label = { Text(stringResource(R.string.distancia_objetivo)) },
-                modifier = Modifier.weight(1f)
-            )
-            OutlinedTextField(
-                value = alturaLente,
-                onValueChange = { alturaLente = it },
-                label = { Text(stringResource(R.string.altura_lente)) },
-                modifier = Modifier.weight(1f)
-            )
-        }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(horizontal = 32.dp)
+                .verticalScroll(rememberScrollState())
         ) {
-            Column(
-                modifier = Modifier.weight(1f)
+            // Codigo de la camara
+            Spacer(modifier = Modifier.height(6.dp))
+
+            Text(
+                text = stringResource(R.string.codigo),
+                style = MaterialTheme.typography.titleMedium
+
+            )
+
+            OutlinedTextField(
+                value = codigo,
+                onValueChange = { codigo = it },
+                label = { Text(stringResource(R.string.codigo_camara)) },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Zona de la camara
+            Text(
+                text = stringResource(R.string.zona),
+                style = MaterialTheme.typography.titleMedium
+            )
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                // Lista de chequeo
-                Text(
-                    text = stringResource(R.string.lista_chequeo),
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(bottom = 4.dp)
-                )
-
-                checklist.forEachIndexed { index, isChecked ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 2.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Checkbox(
-                            checked = isChecked,
-                            onCheckedChange = { checklist[index] = it },
-                            modifier = Modifier.size(20.dp),
-                            colors = CheckboxDefaults.colors(
-                                checkedColor = Color(0xFF4E7029)
-                            )
-                        )
-                        Text(
-                            text = when (index) {
-                                0 -> stringResource(R.string.instalada)
-                                1 -> stringResource(R.string.programada)
-                                2 -> stringResource(R.string.memoria)
-                                3 -> stringResource(R.string.prendida)
-                                4 -> stringResource(R.string.prueba_gateo)
-                                else -> stringResource(R.string.cerrojo_camara)
-                            },
-                            style = MaterialTheme.typography.bodySmall,
-                            modifier = Modifier.padding(start = 4.dp)
-                        )
-                    }
-                }
-            }
-
-            Row (
-                modifier = Modifier.weight(1f)
-            ) {
-                // Evidencias
-                Text(
-                    text = stringResource(R.string.evidencias),
-                    style = MaterialTheme.typography.titleMedium
-                )
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                // Bosque
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.clickable { selectedZona = "bosque" }
                 ) {
-                    Button(
-                        onClick = { /* Aqui va la selección de las fotos */ isFileSelected = true },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF4E7029),
-                            contentColor = Color.White
-                        ),
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Text(stringResource(R.string.elegir_archivo))
-                    }
-                    Button(
-                        onClick = {
-                            CameraPermision = true; isFileSelected = true
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF4E7029),
-                            contentColor = Color.White
-                        ),
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Text(stringResource(R.string.tomar_foto))
-                    }
+                    Image(
+                        painter = painterResource(id = R.drawable.bosque),
+                        contentDescription = "Bosque",
+                        modifier = Modifier
+                            .size(80.dp)
+                            .clickable { selectedZona = "bosque" }
+                            .border(
+                                width = 2.dp,
+                                color = Color(0xFF97B96E),
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                            .background(
+                                if (selectedZona == "bosque") Color(0xFF97B96E) else Color.White,
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                    )
+                   //Text(text = "Bosque")
                 }
 
-                evidencias.forEach { evidencia ->
-                    EvidenciaItem(
-                        nombreArchivo = evidencia,
-                        onDelete = { evidencias.remove(evidencia) })
+                // Arreglo Agroforestal
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.clickable { selectedZona = "agroforestal" }
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.arreglo_agroforestal),
+                        contentDescription = "Arreglo Agroforestal",
+                        modifier = Modifier
+                            .size(80.dp)
+                            .clickable { selectedZona = "agroforestal" }
+                            .border(
+                                width = 2.dp,
+                                color = Color(0xFF97B96E),
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                            .background(
+                                if (selectedZona == "agroforestal") Color(0xFF97B96E) else Color.White,
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                    )
+                    //Text(text = "Arreglo")
+                    //Text(text = "Agroforestal")
+                }
+
+                // Cultivos Transitorios
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.clickable { selectedZona = "transitorios" }
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.cultivos_transitorios),
+                        contentDescription = "Cultivos Transitorios",
+                        modifier = Modifier
+                            .size(80.dp)
+                            .clickable { selectedZona = "transitorios" }
+                            .border(
+                                width = 2.dp,
+                                color = Color(0xFF97B96E),
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                            .background(
+                                if (selectedZona == "transitorios") Color(0xFF97B96E) else Color.White,
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                    )
+                    //Text(text = "Cultivos")
+                    //Text(text = "Transitorios")
+                }
+
+                // Cultivos Permanentes
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.clickable { selectedZona = "permanentes" }
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.cultivos_permanentes),
+                        contentDescription = "Cultivos Permanentes",
+                        modifier = Modifier
+                            .size(80.dp)
+                            .clickable { selectedZona = "permanentes" }
+                            .border(
+                                width = 2.dp,
+                                color = Color(0xFF97B96E),
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                            .background(
+                                if (selectedZona == "permanentes") Color(0xFF97B96E) else Color.White,
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                    )
+                    //Text(text = "Cultivos")
+                    //Text(text = "Permanentes")
                 }
             }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Informacion de la camara
+            Text(
+                text = stringResource(R.string.informacion),
+                style = MaterialTheme.typography.titleMedium
+            )
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                OutlinedTextField(
+                    value = nombreCamara,
+                    onValueChange = { nombreCamara = it },
+                    label = { Text(stringResource(R.string.nombre_camara)) },
+                    modifier = Modifier.weight(1f)
+                )
+                OutlinedTextField(
+                    value = placaCamara,
+                    onValueChange = { placaCamara = it },
+                    label = { Text(stringResource(R.string.placa_camara)) },
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                OutlinedTextField(
+                    value = placaGuaya,
+                    onValueChange = { placaGuaya = it },
+                    label = { Text(stringResource(R.string.placa_guaya)) },
+                    modifier = Modifier.weight(1f)
+                )
+                OutlinedTextField(
+                    value = anchoCamino,
+                    onValueChange = { anchoCamino = it },
+                    label = { Text(stringResource(R.string.ancho_camino)) },
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                OutlinedTextField(
+                    value = fecha,
+                    onValueChange = { fecha = it },
+                    label = { Text(stringResource(R.string.fecha)) },
+                    modifier = Modifier.weight(1f)
+                )
+                OutlinedTextField(
+                    value = distanciaObjetivo,
+                    onValueChange = { distanciaObjetivo = it },
+                    label = { Text(stringResource(R.string.distancia_objetivo)) },
+                    modifier = Modifier.weight(1f)
+                )
+                OutlinedTextField(
+                    value = alturaLente,
+                    onValueChange = { alturaLente = it },
+                    label = { Text(stringResource(R.string.altura_lente)) },
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Column(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    // LISTA DE CHEQUEO
+                    Text(
+                        text = stringResource(R.string.lista_chequeo),
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.padding(bottom = 4.dp)
+                    )
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        Column(
+                            modifier = Modifier.weight(0.9f)
+                        ) {
+                            CheckboxItem(
+                                checked = checklist[0],
+                                onCheckedChange = { checklist[0] = it },
+                                text = stringResource(R.string.instalada)
+                            )
+                            CheckboxItem(
+                                checked = checklist[1],
+                                onCheckedChange = { checklist[1] = it },
+                                text = stringResource(R.string.programada)
+                            )
+                        }
+
+                        Column(
+                            modifier = Modifier.weight(0.8f)
+                        ) {
+                            CheckboxItem(
+                                checked = checklist[2],
+                                onCheckedChange = { checklist[2] = it },
+                                text = stringResource(R.string.memoria)
+                            )
+                            CheckboxItem(
+                                checked = checklist[3],
+                                onCheckedChange = { checklist[3] = it },
+                                text = stringResource(R.string.prendida)
+                            )
+                        }
+
+                        Column(
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            CheckboxItem(
+                                checked = checklist[4],
+                                onCheckedChange = { checklist[4] = it },
+                                text = stringResource(R.string.prueba_gateo)
+                            )
+                            CheckboxItem(
+                                checked = checklist[5],
+                                onCheckedChange = { checklist[5] = it },
+                                text = stringResource(R.string.letrero_camara)
+                            )
+                        }
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Text("Evidencias", style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.align(Alignment.Start))
+            viewModel.Botones_captura(green700)
+
+            // Observaciones
+            OutlinedTextField(
+                value = "", onValueChange = { /* Actualizar estado */ },
+                label = { Text("Observaciones") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp)
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            viewModel.Atras_enviar(navController, green700)
         }
     }
+}
 
-        // Observaciones
-        Spacer(modifier = Modifier.height(12.dp))
-
-
-
-        // Atras y Enviar
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Button(
-                onClick = { /* Navegacion */},
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF4E7029),
-                    contentColor = Color.White
-                ),
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(stringResource(R.string.atras))
-            }
-            Button(
-                onClick = { /* Envio del formulario */ },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF4E7029),
-                    contentColor = Color.White
-                ),
-                modifier = Modifier.weight(1f),
-                // enabled = isFileSelected
-            ) {
-                Text(stringResource(R.string.enviar))
-            }
-        }
+@Composable
+fun CheckboxItem(
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    text: String
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 2.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Checkbox(
+            checked = checked,
+            onCheckedChange = onCheckedChange,
+            modifier = Modifier.size(20.dp),
+            colors = CheckboxDefaults.colors(
+                checkedColor = Color(0xFF4E7029)
+            )
+        )
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodySmall,
+            modifier = Modifier.padding(start = 4.dp)
+        )
     }
 }
 
@@ -492,7 +490,8 @@ fun EvidenciaItem(
 }
 
 
-@Preview(showBackground = true)
+@RequiresApi(Build.VERSION_CODES.P)
+@Preview(device = "spec:width=800px,height=1340px,dpi=300")
 @Composable
 fun FormularioCamaraTrampaPreview(){
     FormularioCamaraTrampa(activity = MainActivity(), navController = rememberNavController())

@@ -51,6 +51,8 @@ import com.example.koadex.AppViewModelProvider
 import com.example.koadex.MainActivity
 import com.example.koadex.R
 import com.example.koadex.ui.principal.KoadexViewModel
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 
 @RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -68,18 +70,18 @@ fun FormularioSeleccion(
             .fillMaxSize(),
         topBar = {
             TopAppBar(
-                title = { Text(text = stringResource(id = R.string.formulario)) },
+                title = { Text("Formulario",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold) },
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = stringResource(id = R.string.atras)
+                    IconButton(onClick = { navController.navigate("TiposForms") }) {
+                        Icon(Icons.Filled.ArrowBack,
+                            contentDescription = "Atrás",
+                            tint = Color.White
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFFB4D68F)
-                )
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF4E7029))
             )
         }
     ) { paddingValues ->
@@ -95,15 +97,15 @@ fun FormularioSeleccionScreen(
     navController: androidx.navigation.NavController,
     modifier: Modifier = Modifier
 ) {
-    val FormularioSeleccionado by remember { mutableStateOf("") }
+    // Estado que rastrea el texto del botón seleccionado
+    var selectedButton by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 32.dp)
-            .padding(top = 140.dp, bottom = 24.dp),
+            .verticalScroll(rememberScrollState())
+            .padding(top = 80.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         Text(
             text = "Tipo de Registro",
@@ -111,122 +113,103 @@ fun FormularioSeleccionScreen(
             color = Color.Black
         )
 
-        Spacer(modifier = Modifier.weight(0.1f))
+        Spacer(modifier = Modifier.height(16.dp))
 
-        // Grid contenedor de los botones
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .width(800.dp)
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Primera fila
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                OptionButtonTwoIcons(
-                    icon1 = R.drawable.fauna,
-                    icon2 = R.drawable.ruta,
-                    text = "Fauna en Transectos",
-                    onClick = { navController.navigate("FormularioEspecies") },
-                    FormularioSeleccionado == "Fauna en Transectos",
-                    modifier = Modifier.weight(1f)
-                )
-                OptionButtonTwoIcons(
-                    icon1 = R.drawable.fauna,
-                    icon2 = R.drawable.aritmetica,
-                    text = "Fauna en Punto de Conteo",
-                    onClick = { navController.navigate("FormularioFaunaPuntoConteo") },
-                    FormularioSeleccionado == "Fauna en Transectos",
-                    modifier = Modifier.weight(1f)
-                )
-            }
+            OptionButton(
+                icon = R.drawable.fauna,
+                text = "Fauna en Transectos",
+                isSelected = selectedButton == "Fauna en Transectos",
+                onClick = {
+                    selectedButton = "Fauna en Transectos" // Cambiar el botón seleccionado
+                    navController.navigate("FormularioEspecies")
+                }
+            )
 
-            // Segunda fila
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                OptionButtonTwoIcons(
-                    icon1 = R.drawable.fauna,
-                    icon2 = R.drawable.search,
-                    text = "Fauna Búsqueda Libre",
-                    onClick = { navController.navigate("FormularioFaunaBusquedaLibre") },
-                    FormularioSeleccionado == "Fauna Búsqueda Libre",
-                    modifier = Modifier.weight(1f)
-                )
-                OptionButton(
-                    icon = R.drawable.cobertura,
-                    text = "Validación de Cobertura",
-                    onClick = { navController.navigate("FormularioSeguimiento") },
-                    modifier = Modifier.weight(1f)
-                )
-            }
+            OptionButton(
+                icon = R.drawable.aritmetica,
+                text = "Fauna en Punto de Conteo",
+                isSelected = selectedButton == "Fauna en Punto de Conteo",
+                onClick = {
+                    selectedButton = "Fauna en Punto de Conteo"
+                    navController.navigate("FormularioFaunaPuntoConteo")
+                }
+            )
 
-            // Tercera fila
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                OptionButton(
-                    icon = R.drawable.vegetacion,
-                    text = "Parcela de Vegetación",
-                    onClick = { navController.navigate("FormularioCuadrante") },
-                    modifier = Modifier.weight(1f)
-                )
-                OptionButton(
-                    icon = R.drawable.camara,
-                    text = "Cámaras Trampa",
-                    onClick = { navController.navigate("CamarasTrampa") },
-                    modifier = Modifier.weight(1f)
-                )
-            }
+            OptionButton(
+                icon = R.drawable.search,
+                text = "Fauna Búsqueda Libre",
+                isSelected = selectedButton == "Fauna Búsqueda Libre",
+                onClick = {
+                    selectedButton = "Fauna Búsqueda Libre"
+                    navController.navigate("FormularioFaunaBusquedaLibre")
+                }
+            )
 
-            // Este ultimo boton queda fuera del grid para que no se vea tan asimetrico
+            OptionButton(
+                icon = R.drawable.cobertura,
+                text = "Validación de Cobertura",
+                isSelected = selectedButton == "Validación de Cobertura",
+                onClick = {
+                    selectedButton = "Validación de Cobertura"
+                    navController.navigate("FormularioSeguimiento")
+                }
+            )
+
+            OptionButton(
+                icon = R.drawable.vegetacion,
+                text = "Parcela de Vegetación",
+                isSelected = selectedButton == "Parcela de Vegetación",
+                onClick = {
+                    selectedButton = "Parcela de Vegetación"
+                    navController.navigate("FormularioCuadrante")
+                }
+            )
+
+            OptionButton(
+                icon = R.drawable.camara,
+                text = "Cámaras Trampa",
+                isSelected = selectedButton == "Cámaras Trampa",
+                onClick = {
+                    selectedButton = "Cámaras Trampa"
+                    navController.navigate("CamarasTrampa")
+                }
+            )
+
             OptionButton(
                 icon = R.drawable.temporada,
                 text = "Variables Climáticas",
-                onClick = { navController.navigate("FormularioVariablesClimaticas") },
-                modifier = Modifier.fillMaxWidth()
-
+                isSelected = selectedButton == "Variables Climáticas",
+                onClick = {
+                    selectedButton = "Variables Climáticas"
+                    navController.navigate("FormularioVariablesClimaticas")
+                }
             )
         }
 
-        Spacer(modifier = Modifier.weight(1f))
-
-        /*Button(
-            onClick = { navController.navigate("siguiente") },
-            modifier = Modifier
-                .width(800.dp)
-                .height(70.dp)
-                .padding(vertical = 8.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF4E7029)
-            ),
-            shape = RoundedCornerShape(8.dp)
-        ) {
-            Text(
-                "SIGUIENTE",
-                style = MaterialTheme.typography.headlineLarge
-            )
-        }*/
+        Spacer(modifier = Modifier.weight(1f)) // Espacio flexible al final
     }
 }
 
 @Composable
-fun OptionButton( //Configuracion de los botones con una imagen
+fun OptionButton(
     icon: Int,
     text: String,
+    isSelected: Boolean, // Estado de selección
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     OutlinedButton(
         onClick = onClick,
         modifier = modifier
-            .height(160.dp)
-            .padding(vertical = 16.dp),
+            .height(90.dp)
+            .fillMaxWidth()
+            .background(if (isSelected) Color(0xFF97B96E) else Color.Transparent), // Fondo dinámico
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.outlinedButtonColors(
             containerColor = Color.White
@@ -242,16 +225,15 @@ fun OptionButton( //Configuracion de los botones con una imagen
             Image(
                 painter = painterResource(id = icon),
                 contentDescription = null,
-                modifier = Modifier.size(50.dp)
+                modifier = Modifier.size(60.dp)
             )
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(22.dp))
             Text(
                 text = text,
                 color = Color.Black,
                 style = MaterialTheme.typography.titleLarge
             )
         }
-        Spacer(modifier = Modifier.weight(0.1f))
     }
 }
 
@@ -317,7 +299,7 @@ fun OptionButtonTwoIcons( //Botones con 2 iconos
 }
 
 @RequiresApi(Build.VERSION_CODES.P)
-@Preview(showBackground = true)
+@Preview(device = "spec:width=800px,height=1340px,dpi=300")
 @Composable
 fun PreviewFormularioSeleccion(){
     FormularioSeleccion(
