@@ -259,6 +259,10 @@ fun FormInfo(
         colors = CardDefaults.cardColors(
             containerColor = colorResource(R.color.verde_1)
         )
+        ,
+        onClick = {
+            // Acción al hacer clic en el formulario
+        }
     ) {
         Column(
             modifier = Modifier
@@ -327,13 +331,15 @@ fun FormInfo(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Nombre del formulario
-            Text(
-                text = form.name,
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                fontSize = 24.sp
-            )
+
+                Text(
+                    text = form.name,
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp
+                )
+
+
 
             Spacer(modifier = Modifier.height(8.dp))
 
