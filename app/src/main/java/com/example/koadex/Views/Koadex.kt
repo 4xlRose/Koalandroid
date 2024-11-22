@@ -63,12 +63,18 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.graphics.vector.ImageVector
+
 import com.example.koadex.AppViewModelProvider
 import com.example.koadex.data.FormEntity
 import com.example.koadex.data.GeneralFormEntity
 import com.example.koadex.ui.principal.KoadexViewModel
 
-@Preview(showBackground = true, showSystemUi = true)
+import androidx.compose.ui.text.TextStyle
+import com.example.koadex.clases.User
+import com.example.koadex.navigate.sampleUser
+
+
+@Preview(showBackground = true, showSystemUi = true, device = "spec:width=500dp,height=800dp")
 @Composable
 fun KoadexPreview() {
     var form_example = FormEntity(
@@ -80,17 +86,32 @@ fun KoadexPreview() {
         weather = "Soleado",
         season = "Verano"
     )
+    var selected by remember { mutableStateOf("Todos") }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+        ,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ){
+        TopNavBar(rememberNavController())
+        selected = Filtro_seleccion(selected)
 
-    FormInfo(form_example)
+        FormInfo(form_example)
+    }
+
 }
 
 @Composable
 fun Koadex(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
+
+    viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    user: User = sampleUser
 
 ) {
+    var current_scroll by remember { mutableStateOf(0f) }
     Scaffold(
         modifier = Modifier.fillMaxSize()
             .background(Color.White)
@@ -141,7 +162,10 @@ fun KoadexContenido(
     formList: List<FormEntity>,
     modifier: Modifier = Modifier
 ) {
-    Column {
+    Column (
+        modifier = Modifier
+            .padding(bottom = 110.dp)
+    ){
         var selected by remember { mutableStateOf("Todos") }
 
         Spacer(modifier = Modifier.height(110.dp))
@@ -169,7 +193,9 @@ fun KoadexContenido(
         }
     }
 }
-
+/*
+* Funcion para la barra de filtros
+*/
 @Composable
 private fun Filtro_seleccion(selected: String): String {
     var selected1 by remember { mutableStateOf(selected) } // Remember the selected
@@ -222,6 +248,9 @@ private fun Filtro_seleccion(selected: String): String {
     return selected1
 }
 
+/*
+*  Funcion para la lista de formularios y las tarjetas
+*/
 @Composable
 fun FormList(
     formList: List<FormEntity>,
@@ -254,6 +283,10 @@ fun FormInfo(
         colors = CardDefaults.cardColors(
             containerColor = colorResource(R.color.verde_1)
         )
+        ,
+        onClick = {
+            // Acción al hacer clic en el formulario
+        }
     ) {
         Column(
             modifier = Modifier
@@ -322,13 +355,15 @@ fun FormInfo(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Nombre del formulario
-            Text(
-                text = form.name,
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                fontSize = 24.sp
-            )
+
+                Text(
+                    text = Get_name(form),
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp
+                )
+
+
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -377,6 +412,16 @@ fun FormInfo(
         }
     }
 }
+
+@Composable
+private fun Get_name(form: FormEntity): String {
+    // aca se implementa la funcionalidad de regresar un nombre en funcion de un id
+    return form.name
+}
+
+/*
+* Funciones para la barra de navegacion
+*/
 @Composable
 fun TopNavBar(navController: NavHostController) {
     val context = LocalContext.current.applicationContext
@@ -457,6 +502,9 @@ fun TopNavBar(navController: NavHostController) {
     }
 }
 
+/*
+* Funciones para el menu de 3 botones
+*/
 @Composable
 private fun Dropdown_(showMenu: Boolean): Boolean {
     var showMenu1 by remember { mutableStateOf(showMenu) }
