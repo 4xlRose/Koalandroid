@@ -81,7 +81,7 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(showBackground = true, showSystemUi = true, device = "spec:width=500dp,height=800dp")
 @Composable
 fun KoadexPreview() {
     var form_example = FormEntity(
@@ -164,7 +164,10 @@ fun KoadexContenido(
     formList: List<FormEntity>,
     modifier: Modifier = Modifier
 ) {
-    Column {
+    Column (
+        modifier = Modifier
+            .padding(bottom = 110.dp)
+    ){
         var selected by remember { mutableStateOf("Todos") }
 
         Spacer(modifier = Modifier.height(110.dp))
@@ -190,7 +193,9 @@ fun KoadexContenido(
         }
     }
 }
-
+/*
+* Funcion para la barra de filtros
+*/
 @Composable
 private fun Filtro_seleccion(selected: String): String {
     var selected1 by remember { mutableStateOf(selected) } // Remember the selected
@@ -243,6 +248,9 @@ private fun Filtro_seleccion(selected: String): String {
     return selected1
 }
 
+/*
+*  Funcion para la lista de formularios y las tarjetas
+*/
 @Composable
 fun FormList(
     formList: List<FormEntity>,
@@ -408,7 +416,9 @@ private fun Get_name(form: FormEntity): String {
     return form.name
 }
 
-
+/*
+* Funciones para la barra de navegacion
+*/
 @Composable
 fun TopNavBar(navController: NavHostController) {
     val context = LocalContext.current.applicationContext
@@ -489,6 +499,9 @@ fun TopNavBar(navController: NavHostController) {
     }
 }
 
+/*
+* Funciones para el menu de 3 botones
+*/
 @Composable
 private fun Dropdown_(showMenu: Boolean): Boolean {
     var showMenu1 by remember { mutableStateOf(showMenu) }
