@@ -68,7 +68,6 @@ import com.example.koadex.ui.form.SeasonDetails
 import com.example.koadex.ui.form.WeatherDetails
 */
 
-
 import com.example.koadex.data.SeasonEntity
 import com.example.koadex.data.UserEntity
 import com.example.koadex.data.WeatherEntity
@@ -78,7 +77,6 @@ import com.example.koadex.ui.form.GeneralFormUiState
 import com.example.koadex.ui.form.GeneralFormsDetails
 import com.example.koadex.ui.form.UserDetails
 import com.example.koadex.ui.form.UserUiState
-
 
 // TEST
 import com.example.koadex.utils.DateValidator
@@ -189,6 +187,7 @@ fun FormularioGeneralEntry(
             },
             modifier = Modifier
         )
+
 
         // Weather section
         Row(
