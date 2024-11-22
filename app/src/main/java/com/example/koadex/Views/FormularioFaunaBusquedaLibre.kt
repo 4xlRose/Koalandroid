@@ -27,6 +27,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.koadex.R
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontWeight
+import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
 import com.example.koadex.ViewModels.FormularioFaunaBusquedaLibreViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -38,8 +41,10 @@ fun FormularioFaunaBusquedaLibre(navController: NavHostController, modifier: Mod
     var zonaSeleccionada by remember { mutableStateOf("") }
     var tipoObservacionSeleccionada by remember { mutableStateOf("") }
     val actionButtonColors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4E7029))
-    var isFileSelected by remember { mutableStateOf(false) }
+
     val FaunaBViewModel = FormularioFaunaBusquedaLibreViewModel()
+    val viewModel = FomularioEspecies_ViewModel()
+    val green700 = colorResource(id = R.color.green_700)
 
     //Estado de scroll
     val scrollState = rememberScrollState()
@@ -51,13 +56,18 @@ fun FormularioFaunaBusquedaLibre(navController: NavHostController, modifier: Mod
     ) {
         // Barra superior
         TopAppBar(
-            title = { Text("Formulario", color = Color.Black) },
+            title = { Text("Formulario",
+                color = Color.White,
+                fontWeight = FontWeight.Bold) },
             navigationIcon = {
                 IconButton(onClick = { navController.navigate("TiposForms") }) {
-                    Icon(Icons.Filled.ArrowBack, contentDescription = "Atrás")
+                    Icon(Icons.Filled.ArrowBack,
+                        contentDescription = "Atrás",
+                        tint = Color.White
+                    )
                 }
             },
-            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFFB4D68F))
+            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF4E7029))
         )
 
         // Contenido desplazable
@@ -65,13 +75,14 @@ fun FormularioFaunaBusquedaLibre(navController: NavHostController, modifier: Mod
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(scrollState) // Habilitar scroll
-                .padding(16.dp),
+                .padding(horizontal = 32.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.padding(vertical = 5.dp))
 
             // Zona
-            Text("Zona", style = MaterialTheme.typography.titleMedium)
+            Text("Zona", style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.align(Alignment.Start))
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 FaunaBViewModel.ZonaButton("Bosque", zonaSeleccionada == "Bosque", R.drawable.ic_bosque) { zonaSeleccionada = "Bosque" }
                 FaunaBViewModel.ZonaButton("Arreglo Agroforestal", zonaSeleccionada == "Arreglo Agroforestal", R.drawable.ic_agroforestal) { zonaSeleccionada = "Arreglo Agroforestal" }
@@ -82,7 +93,8 @@ fun FormularioFaunaBusquedaLibre(navController: NavHostController, modifier: Mod
             Spacer(modifier = Modifier.height(16.dp))
 
             // Tipo de Animal
-            Text("Tipo de Animal", style = MaterialTheme.typography.titleMedium)
+            Text("Tipo de Animal", style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.align(Alignment.Start))
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 FaunaBViewModel.TipoAnimalButton("Mamífero", tipoAnimalSeleccionado == "Mamífero", R.drawable.ic_mamifero) { tipoAnimalSeleccionado = "Mamífero" }
                 FaunaBViewModel.TipoAnimalButton("Ave", tipoAnimalSeleccionado == "Ave", R.drawable.ic_ave) { tipoAnimalSeleccionado = "Ave" }
@@ -109,7 +121,8 @@ fun FormularioFaunaBusquedaLibre(navController: NavHostController, modifier: Mod
             Spacer(modifier = Modifier.height(16.dp))
 
             // Número de Individuos
-            Text("Número de Individuos", style = MaterialTheme.typography.titleMedium)
+            Text("Número de Individuos", style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.align(Alignment.Start))
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalAlignment = Alignment.CenterVertically
@@ -134,7 +147,8 @@ fun FormularioFaunaBusquedaLibre(navController: NavHostController, modifier: Mod
             Spacer(modifier = Modifier.height(16.dp))
 
             // Tipo de Observación
-            Text("Tipo de Observación", style = MaterialTheme.typography.titleMedium)
+            Text("Tipo de Observación", style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.align(Alignment.Start))
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 FaunaBViewModel.TipoObservacionButton("La vio", tipoObservacionSeleccionada == "La vio", R.drawable.ic_la_vio) { tipoObservacionSeleccionada = "La vio" }
                 FaunaBViewModel.TipoObservacionButton("Huella", tipoObservacionSeleccionada == "Huella", R.drawable.ic_huella) { tipoObservacionSeleccionada = "Huella" }
@@ -146,7 +160,8 @@ fun FormularioFaunaBusquedaLibre(navController: NavHostController, modifier: Mod
             Spacer(modifier = Modifier.height(16.dp))
 
             // Altura de Observación
-            Text("Altura de Observación", style = MaterialTheme.typography.titleMedium)
+            Text("Altura de Observación", style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.align(Alignment.Start))
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 FaunaBViewModel.AlturaButton("< 1mt Baja", alturaObservacion == "< 1mt Baja") { alturaObservacion = "< 1mt Baja" }
                 FaunaBViewModel.AlturaButton("1-3 mt Media", alturaObservacion == "1-3 mt Media") { alturaObservacion = "1-3 mt Media" }
@@ -156,15 +171,10 @@ fun FormularioFaunaBusquedaLibre(navController: NavHostController, modifier: Mod
             Spacer(modifier = Modifier.height(16.dp))
 
             // Evidencias
-            Text("Evidencias", style = MaterialTheme.typography.titleMedium)
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Button(onClick = { /* Elegir archivo */ isFileSelected = true }, colors = actionButtonColors) {
-                    Text("Elige archivo")
-                }
-                Button(onClick = { /* Tomar foto */ isFileSelected = true }, colors = actionButtonColors) {
-                    Text("Tomar foto")
-                }
-            }
+            Text("Evidencias", style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.align(Alignment.Start))
+            viewModel.Botones_captura(green700)
+
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -179,21 +189,14 @@ fun FormularioFaunaBusquedaLibre(navController: NavHostController, modifier: Mod
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Botones de acción
-            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                Button(onClick = {navController.navigate("TiposForms")}, colors = actionButtonColors) {
-                    Text("ATRAS", color = Color.White)
-                }
-
-                Button(onClick = { navController.navigate("Principal")}, colors = actionButtonColors, enabled = isFileSelected) {
-                    Text("ENVIAR", color = Color.White)
-                }
-            }
+            viewModel.Atras_enviar(navController, green700)
         }
     }
 }
 
-@Preview(showBackground = true)
+
+
+@Preview(device = "spec:width=800px,height=1340px,dpi=300")
 @Composable
 fun FormularioFaunaBusquedaLibre() {
     FormularioFaunaBusquedaLibre(navController = rememberNavController(), modifier = Modifier)

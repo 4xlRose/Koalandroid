@@ -60,10 +60,33 @@ import com.example.koadex.ui.form.GeneralFormUiState
 import com.example.koadex.ui.form.SeasonDetails
 import com.example.koadex.ui.form.WeatherDetails
 */
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+
+
+import androidx.compose.material3.Text
 import androidx.compose.ui.draw.scale
+
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
+
+
 // TEST
 import com.example.koadex.utils.DateValidator
 import kotlinx.coroutines.launch
@@ -256,11 +279,141 @@ private fun Seleccion_clima(
     }
 }
 
+//Spacer(modifier = Modifier.weight(1f))
+
+@Composable
+fun WeatherButton(
+    type: String,
+    currentWeather: String,
+    onWeatherChange: (String) -> Unit,
+    buttonSize: Dp
+) {
+    Button(
+        onClick = { onWeatherChange(type) },
+        shape = RoundedCornerShape(12.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = if (currentWeather == type) Color(0xFF4E7029) else Color.White
+        ),
+        modifier = Modifier
+            .size(buttonSize)
+            .border(
+                BorderStroke(
+                    width = 1.dp,
+                    color = Color.Transparent
+                ),
+                shape = RoundedCornerShape(12.dp)
+            )
+    ) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Image(
+                painter = painterResource(
+                    when (type) {
+                        "soleado" -> R.drawable.soleado
+                        "nublado" -> R.drawable.nublado
+                        else -> R.drawable.lluvioso
+                    }
+                ),
+                contentDescription = null,
+                modifier = Modifier
+                    .scale(4f)
+                    .padding(5.dp)
+            )
+        }
+    }
+}
+
 /*
  *  Funciones para view model
  */
 // Boton de enviar
 @Composable
+fun SeasonButton(
+    type: String,
+    currentSeason: String,
+    onSeasonChange: (String) -> Unit,
+    buttonSize: Dp
+) {
+    Button(
+        onClick = { onSeasonChange(type) },
+        shape = RoundedCornerShape(12.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = if (currentSeason == type) Color(0xFF4E7029) else Color.White
+        ),
+        modifier = Modifier
+            .size(buttonSize)
+            .border(
+                BorderStroke(
+                    width = 1.dp,
+                    color = Color.Transparent
+                ),
+                shape = RoundedCornerShape(12.dp)
+            )
+    ) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Image(
+                painter = painterResource(
+                    when (type) {
+                        "verano" -> R.drawable.verano
+                        else -> R.drawable.invierno
+                    }
+                ),
+                contentDescription = null,
+                modifier = Modifier
+                    .scale(4f)
+                    .padding(5.dp)
+            )
+        }
+    }
+}
+
+
+
+
+
+
+
+@RequiresApi(Build.VERSION_CODES.P)
+@Preview(showBackground = true)
+@Composable
+fun PreviewFormularioGeneral(){
+    FormularioGeneral(
+        navController = rememberNavController(),
+        modifier = Modifier,
+        viewModel = viewModel(factory = AppViewModelProvider.Factory)
+
+    )
+
+}
+
+
+/*
+@RequiresApi(Build.VERSION_CODES.O)
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun FormularioGeneral(
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
+    viewModel: FormEntryViewModel = viewModel(factory = AppViewModelProvider.Factory)
+) {
+    val coroutineScope = rememberCoroutineScope()
+    FormularioGeneralEntry(
+        navController = navController,
+        formUiState = viewModel.generalFormUiState,
+        onFormValueChange = viewModel::generalFormUpdateUiState,
+        onSaveClick = {
+            coroutineScope.launch {
+                viewModel
+                navController.navigate("Principal")
+            }
+        },
+        modifier = modifier
+    )
 private fun Boton_Enviar(onSaveClick: () -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -562,3 +715,4 @@ fun PreviewFormularioGeneral(){
 
 }
 
+ */
