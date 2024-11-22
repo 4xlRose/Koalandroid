@@ -34,6 +34,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -51,6 +56,8 @@ class FomularioEspecies_ViewModel :
     ViewModel(
 
     ) {
+
+    val isFileSelected: MutableState<Boolean> = mutableStateOf(false)
 
     @Composable
     public fun Atras_enviar(
@@ -72,7 +79,8 @@ class FomularioEspecies_ViewModel :
             Button(
                 onClick = { /* Handle form submission */ },
                 modifier = Modifier.weight(1f),
-                colors = ButtonDefaults.buttonColors(containerColor = green700)
+                colors = ButtonDefaults.buttonColors(containerColor = green700),
+                enabled = isFileSelected.value
             ) {
                 Text("ENVIAR")
             }
@@ -94,7 +102,7 @@ class FomularioEspecies_ViewModel :
     @Composable
     public fun Boton_abrir_camara(green700: Color) {
         Button(
-            onClick = { /* Handle photo capture */ },
+            onClick = { /* Handle photo capture */ isFileSelected.value = true },
             colors = ButtonDefaults.buttonColors(containerColor = green700)
         ) {
             Icon(Icons.Default.Camera, contentDescription = "Tomar foto")
@@ -106,7 +114,7 @@ class FomularioEspecies_ViewModel :
     @Composable
     public fun Boton_seleccionar_archivo(green700: Color) {
         Button(
-            onClick = { /* Handle file selection */ },
+            onClick = { /* Handle file selection */ isFileSelected.value = true},
             colors = ButtonDefaults.buttonColors(containerColor = green700)
         ) {
             Icon(Icons.Default.FileOpen, contentDescription = "Seleccionar archivo")
