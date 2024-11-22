@@ -1,3 +1,4 @@
+package com.example.koadex.Views
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -17,13 +18,14 @@ import com.example.koadex.R
 import com.example.koadex.clases.User
 import com.example.koadex.navigate.La_navegacion
 import com.example.koadex.ViewModels.PerfilScreenViewModel
+import com.example.koadex.navigate.sampleUser
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PerfilScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    user: User = User("Samantha", 5, 3, 2)
+    user: User = sampleUser
 ) {
 
     val ProfileViewModel = PerfilScreenViewModel()

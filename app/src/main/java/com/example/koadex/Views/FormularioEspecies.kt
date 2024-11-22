@@ -35,6 +35,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.koadex.R
 import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
 import com.example.koadex.clases.User
+import com.example.koadex.navigate.sampleUser
 import com.example.koadex.ui.theme.KoadexTheme
 import java.io.File
 
@@ -50,7 +51,7 @@ fun Especies_preview(){
 fun FormularioEspecies(
     navController: NavController,
     modifier: Modifier = Modifier,
-    usuario: User = User("Samantha", 5, 3, 2)
+    usuario: User = sampleUser
 ) {
     // Variables para los colores
     val green100 = colorResource(id = R.color.green_100)

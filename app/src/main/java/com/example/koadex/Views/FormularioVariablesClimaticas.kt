@@ -306,4 +306,3 @@ fun ClimaInputForm(
 fun VariableClimaticasPreview(){
     FormularioVariablesClimaticas(navController = rememberNavController())
 }
-

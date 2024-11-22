@@ -76,6 +76,7 @@ fun FormularioSeguimientoScreen(
     // Estado para los botones seleccionados
     val coberturaSeleccionada = remember { mutableStateOf(-1) }
     val disturbioSeleccionado = remember { mutableStateOf(-1) }
+    var isFileSelected by remember { mutableStateOf(false) }
     val seguimientoSeleccionado = remember { mutableStateOf(-1) } // Estado para los botones de Seguimiento
     val cambioSeleccionado = remember { mutableStateOf(-1) } // Estado para los botones de Cambió
 
