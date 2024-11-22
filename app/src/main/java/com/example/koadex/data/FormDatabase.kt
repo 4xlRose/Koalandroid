@@ -14,9 +14,9 @@ import androidx.room.RoomDatabase
     CoverageEntity::class, DisturbanceEntity::class, QuadrantFormEntity::class,
     SuperQuadrantEntity::class, MidQuadrantEntity::class, SubQuadrantEntity::class,
     HabitatEntity::class, RouteFormEntity::class, CameraEntity::class,
-    CheckListEntity::class, CheckEntity::class, WeatherFormEntity::class
+    CheckListEntity::class, CheckEntity::class, WeatherFormEntity::class, FormEntity::class
 ],
-    version = 6,
+    version = 7,
     exportSchema = false
 )
 abstract class FormDatabase : RoomDatabase() {
