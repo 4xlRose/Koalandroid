@@ -181,11 +181,11 @@ fun FormularioFaunaBusquedaLibre(navController: NavHostController, modifier: Mod
 
             // Botones de acción
             Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                Button(onClick = { /* Acción de volver */ }, colors = actionButtonColors) {
+                Button(onClick = {navController.navigate("TiposForms")}, colors = actionButtonColors) {
                     Text("ATRAS", color = Color.White)
                 }
 
-                Button(onClick = { /* Acción de enviar */ }, colors = actionButtonColors) {
+                Button(onClick = { navController.navigate("Principal")}, colors = actionButtonColors) {
                     Text("ENVIAR", color = Color.White)
                 }
             }
@@ -197,6 +197,6 @@ fun FormularioFaunaBusquedaLibre(navController: NavHostController, modifier: Mod
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewFormularioScreen() {
+fun FormularioFaunaBusquedaLibre() {
     FormularioFaunaBusquedaLibre(navController = rememberNavController(), modifier = Modifier)
 }
