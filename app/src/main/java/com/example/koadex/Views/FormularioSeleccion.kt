@@ -234,14 +234,14 @@ fun OptionButton( //Configuracion de los botones con una imagen
                 contentDescription = null,
                 modifier = Modifier.size(30.dp)
             )
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(20.dp))
             Text(
                 text = text,
                 color = Color.Black,
                 style = MaterialTheme.typography.titleLarge
             )
         }
-        Spacer(modifier = Modifier.weight(0.1f))
+        //Spacer(modifier = Modifier.weight(0.1f))
     }
 }
 
@@ -272,7 +272,7 @@ fun OptionButtonTwoIcons( //Botones con 2 iconos
         ) {
             Box(
                 modifier = Modifier
-                    .width(88.dp)
+                    .width(85.dp)
                     .height(70.dp),
                 contentAlignment = Alignment.CenterStart
             ) {
@@ -280,14 +280,14 @@ fun OptionButtonTwoIcons( //Botones con 2 iconos
                     painter = painterResource(id = icon1),
                     contentDescription = null,
                     modifier = Modifier
-                        .size(24.dp)
+                        .size(28.dp)
                         .align(Alignment.CenterStart)
                 )
                 Image(
                     painter = painterResource(id = icon2),
                     contentDescription = null,
                     modifier = Modifier
-                        .size(24.dp)
+                        .size(28.dp)
                         .align(Alignment.Center)
                 )
             }
@@ -295,9 +295,9 @@ fun OptionButtonTwoIcons( //Botones con 2 iconos
                 text = text,
                 color = Color.Black,
                 style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(start = 8.dp)
+                modifier = Modifier.padding(start = 1.dp)
             )
         }
-        Spacer(modifier = Modifier.weight(0.1f))
+        //Spacer(modifier = Modifier.weight(0.1f))
     }
 }

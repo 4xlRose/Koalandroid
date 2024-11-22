@@ -109,7 +109,7 @@ fun FormularioScreen(
 ) {
     var CameraPermision by remember { mutableStateOf(false) }
     if (CameraPermision) {
-        //CameraWindow(activity)
+        CameraWindow(activity)
     } else {
         var codigo by remember { mutableStateOf("") }
         var selectedZona by remember { mutableStateOf<String?>(null) }

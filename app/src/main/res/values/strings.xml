@@ -30,8 +30,6 @@
     <string name="evidencias">Evidencias</string>
     <string name="elegir_archivo">Elegir archivo</string>
     <string name="tomar_foto">Tomar foto</string>
-    <string name="elegir_archivo2">Archivo</string>
-    <string name="tomar_foto2">Foto</string>
     <string name="observaciones">Observaciones</string>
     <string name="atras">ATRÁS</string>
     <string name="enviar">ENVIAR</string>
@@ -47,4 +45,5 @@
     <string name="Intro_homepage">Hola,</string>
     <string name="Dashboard_hompage">Mis formularios</string>
     <string name="Formularios_base">Formularios</string>
+    <string name="inundacion">Inundacion</string>
 </resources>
