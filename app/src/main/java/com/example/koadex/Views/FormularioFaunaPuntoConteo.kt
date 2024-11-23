@@ -42,6 +42,10 @@ fun FormularioFaunaPuntoConteo(navController: NavHostController, modifier: Modif
     val FaunaBViewModel = FormularioFaunaBusquedaLibreViewModel()
     val viewModel = FomularioEspecies_ViewModel()
     val green700 = colorResource(id = R.color.green_700)
+    var nombreComun by remember { mutableStateOf("") } // Estado para Nombre Común
+    var nombreCientifico by remember { mutableStateOf("") } // Estado para Nombre Científico
+    var observaciones by remember { mutableStateOf("") } // Estado para Observaciones
+
 
     //Estado de scroll
     val scrollState = rememberScrollState()
@@ -104,16 +108,19 @@ fun FormularioFaunaPuntoConteo(navController: NavHostController, modifier: Modif
 
             // Campos de texto
             OutlinedTextField(
-                value = "", onValueChange = { /* Actualizar estado */ },
+                value = nombreComun,
+                onValueChange = { nombreComun = it }, // Actualizar el estado
                 label = { Text("Nombre Común") },
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
-                value = "", onValueChange = { /* Actualizar estado */ },
+                value = nombreCientifico,
+                onValueChange = { nombreCientifico = it }, // Actualizar el estado
                 label = { Text("Nombre Científico") },
                 modifier = Modifier.fillMaxWidth()
             )
+
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -176,7 +183,8 @@ fun FormularioFaunaPuntoConteo(navController: NavHostController, modifier: Modif
 
             // Observaciones
             OutlinedTextField(
-                value = "", onValueChange = { /* Actualizar estado */ },
+                value = observaciones,
+                onValueChange = { observaciones = it }, // Actualizar el estado
                 label = { Text("Observaciones") },
                 modifier = Modifier
                     .fillMaxWidth()

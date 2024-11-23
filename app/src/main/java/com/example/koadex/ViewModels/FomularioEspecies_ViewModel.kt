@@ -105,7 +105,7 @@ class FomularioEspecies_ViewModel :
             onClick = { /* Handle photo capture */ isFileSelected.value = true },
             colors = ButtonDefaults.buttonColors(containerColor = green700)
         ) {
-            Icon(Icons.Default.Camera, contentDescription = "Tomar foto")
+            Icon(Icons.Default.Camera, contentDescription = "Tomar foto", tint = Color.White)
             Spacer(modifier = Modifier.width(10.dp))
             Text("Tomar foto")
         }
@@ -117,7 +117,7 @@ class FomularioEspecies_ViewModel :
             onClick = { /* Handle file selection */ isFileSelected.value = true},
             colors = ButtonDefaults.buttonColors(containerColor = green700)
         ) {
-            Icon(Icons.Default.FileOpen, contentDescription = "Seleccionar archivo")
+            Icon(Icons.Default.FileOpen, contentDescription = "Seleccionar archivo", tint = Color.White)
             Spacer(modifier = Modifier.width(10.dp))
             Text("Elige archivo")
         }

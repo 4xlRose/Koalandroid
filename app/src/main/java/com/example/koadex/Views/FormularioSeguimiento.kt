@@ -18,6 +18,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -29,6 +30,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.koadex.AppViewModelProvider
 import com.example.koadex.R
+import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
 import com.example.koadex.ui.principal.KoadexViewModel
 
 @RequiresApi(Build.VERSION_CODES.P)
@@ -38,7 +40,7 @@ fun FormularioSeguimiento(
     //activity: MainActivity,
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    //viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     Scaffold(
         modifier = Modifier
@@ -82,6 +84,8 @@ fun FormularioSeguimientoScreen(
     val disturbioSeleccionado = remember { mutableStateOf(-1) }
     val seguimientoSeleccionado = remember { mutableStateOf(-1) } // Estado para los botones de Seguimiento
     val cambioSeleccionado = remember { mutableStateOf(-1) } // Estado para los botones de Cambió
+    val viewModel = FomularioEspecies_ViewModel()
+    val green700 = colorResource(id = R.color.green_700)
 
     Column(
         modifier = Modifier
@@ -116,7 +120,7 @@ fun FormularioSeguimientoScreen(
                         onClick = { seguimientoSeleccionado.value = 0 }, // Marca el botón como seleccionado
                         border = BorderStroke(1.dp, Color.Gray),
                         colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = if (seguimientoSeleccionado.value == 0) Color(0xFF4E7029) else Color.White,
+                            containerColor = if (seguimientoSeleccionado.value == 0) Color(0xFF97B96E) else Color.White,
                             contentColor = if (seguimientoSeleccionado.value == 0) Color.White else Color.Black
                         )
                     ) {
@@ -126,7 +130,7 @@ fun FormularioSeguimientoScreen(
                         onClick = { seguimientoSeleccionado.value = 1 }, // Marca el botón como seleccionado
                         border = BorderStroke(1.dp, Color.Gray),
                         colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = if (seguimientoSeleccionado.value == 1) Color(0xFF4E7029) else Color.White,
+                            containerColor = if (seguimientoSeleccionado.value == 1) Color(0xFF97B96E) else Color.White,
                             contentColor = if (seguimientoSeleccionado.value == 1) Color.White else Color.Black
                         )
                     ) {
@@ -168,49 +172,35 @@ fun FormularioSeguimientoScreen(
 
         Spacer(modifier = Modifier.height(10.dp))
 
+        val coberturaSeleccionada = remember { mutableIntStateOf(-1) } // Estado compartido
+
         Box(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center
-        ){
+        ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.width(IntrinsicSize.Min)
-            ){
+            ) {
                 // Primera fila de botones de Cobertura
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier.fillMaxWidth()
-                ){
-                    CoberturaButton(
-                        index = 1,
-                        icon = R.drawable.bd_cobertura,
-                        isSelected = coberturaSeleccionada.value == 0,
-                        onClick = { coberturaSeleccionada.value = 0 }
-                    )
-                    CoberturaButton(
-                        index = 2,
-                        icon = R.drawable.ra_cobertura,
-                        isSelected = coberturaSeleccionada.value == 1,
-                        onClick = { coberturaSeleccionada.value = 1 }
-                    )
-                    CoberturaButton(
-                        index = 3,
-                        icon = R.drawable.rb_cobertura,
-                        isSelected = coberturaSeleccionada.value == 2,
-                        onClick = { coberturaSeleccionada.value = 2 }
-                    )
-                    CoberturaButton(
-                        index = 4,
-                        icon = R.drawable.pa_cobertura,
-                        isSelected = coberturaSeleccionada.value == 3,
-                        onClick = { coberturaSeleccionada.value = 3 }
-                    )
-                    CoberturaButton(
-                        index = 5,
-                        icon = R.drawable.pl_cobertura,
-                        isSelected = coberturaSeleccionada.value == 4,
-                        onClick = { coberturaSeleccionada.value = 4 }
-                    )
+                ) {
+                    (0..4).forEach { index -> // Iterar por los botones de la fila
+                        CoberturaButton(
+                            index = index + 1, // Índice visible comienza en 1
+                            icon = when (index) {
+                                0 -> R.drawable.bd_cobertura
+                                1 -> R.drawable.ra_cobertura
+                                2 -> R.drawable.rb_cobertura
+                                3 -> R.drawable.pa_cobertura
+                                else -> R.drawable.pl_cobertura
+                            },
+                            isSelected = coberturaSeleccionada.intValue == index,
+                            onClick = { coberturaSeleccionada.intValue = index }
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(20.dp))
@@ -219,37 +209,21 @@ fun FormularioSeguimientoScreen(
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier.fillMaxWidth()
-                ){
-                    CoberturaButton(
-                        index = 6,
-                        icon = R.drawable.cp_cobertura,
-                        isSelected = coberturaSeleccionada.value == 5,
-                        onClick = { coberturaSeleccionada.value = 5 }
-                    )
-                    CoberturaButton(
-                        index = 7,
-                        icon = R.drawable.ct_cobertura,
-                        isSelected = coberturaSeleccionada.value == 6,
-                        onClick = { coberturaSeleccionada.value = 6 }
-                    )
-                    CoberturaButton(
-                        index = 8,
-                        icon = R.drawable.vh_cobertura,
-                        isSelected = coberturaSeleccionada.value == 7,
-                        onClick = { coberturaSeleccionada.value = 7 }
-                    )
-                    CoberturaButton(
-                        index = 9,
-                        icon = R.drawable.td_cobertura,
-                        isSelected = coberturaSeleccionada.value == 8,
-                        onClick = { coberturaSeleccionada.value = 8 }
-                    )
-                    CoberturaButton(
-                        index = 10,
-                        icon = R.drawable.if_cobertura,
-                        isSelected = coberturaSeleccionada.value == 9,
-                        onClick = { coberturaSeleccionada.value = 9 }
-                    )
+                ) {
+                    (5..9).forEach { index -> // Iterar por los botones de la fila
+                        CoberturaButton(
+                            index = index + 1,
+                            icon = when (index) {
+                                5 -> R.drawable.cp_cobertura
+                                6 -> R.drawable.ct_cobertura
+                                7 -> R.drawable.vh_cobertura
+                                8 -> R.drawable.td_cobertura
+                                else -> R.drawable.if_cobertura
+                            },
+                            isSelected = coberturaSeleccionada.intValue == index,
+                            onClick = { coberturaSeleccionada.intValue = index }
+                        )
+                    }
                 }
             }
         }
@@ -346,60 +320,25 @@ fun FormularioSeguimientoScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         // Sección de Evidencias
-        Text("Evidencias", style = MaterialTheme.typography.titleMedium)
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Button(
-                onClick = { },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4E7029)),
-                modifier = Modifier.weight(1f)
-            ) {
-                Text("Elegir archivo")
-            }
-            Button(
-                onClick = { },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4E7029)),
-                modifier = Modifier.weight(1f)
-            ) {
-                Text("Tomar foto")
-            }
-        }
+        Text("Evidencias", style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.align(Alignment.Start))
+        viewModel.Botones_captura(green700)
+
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Campo de Observaciones
+        // Observaciones
         OutlinedTextField(
-            value = "",
-            onValueChange = { },
+            value = "", onValueChange = { /* Actualizar estado */ },
             label = { Text("Observaciones") },
-            modifier = Modifier.fillMaxWidth(),
-            minLines = 3
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(100.dp)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Botones Atrás y Enviar
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Button(
-                onClick = { /*navController.navigateUp() */},
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4E7029)),
-                modifier = Modifier.weight(1f)
-            ) {
-                Text("ATRÁS")
-            }
-            Button(
-                onClick = { },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4E7029)),
-                modifier = Modifier.weight(1f)
-            ) {
-                Text("ENVIAR")
-            }
-        }
+        viewModel.Atras_enviar(navController, green700)
     }
 }
 
@@ -410,30 +349,27 @@ fun CoberturaButton(
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
-    val buttonColor = if (isSelected) Color(0xFF4E7029) else Color.White
+    val buttonColor = if (isSelected) Color(0xFF97B96E) else Color.White
     val textColor = if (isSelected) Color.White else Color.Black
 
     Button(
         onClick = onClick,
         modifier = Modifier
             .size(70.dp)
-            .border(1.dp, Color.Gray, RoundedCornerShape(8.dp)),
+            .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
+            .fillMaxSize(), // Asegura que el fondo cubra
         colors = ButtonDefaults.buttonColors(
             containerColor = buttonColor,
             contentColor = textColor
         ),
-        contentPadding = PaddingValues(2.dp)
+        contentPadding = PaddingValues(2.dp),
+        shape = RoundedCornerShape(8.dp) // Forma cuadrada con bordes redondeados
     ) {
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
-        ) {
-            Image(
-                painter = painterResource(id = icon),
-                contentDescription = "Cobertura $index",
-                modifier = Modifier.size(60.dp)
-            )
-        }
+        Image(
+            painter = painterResource(id = icon),
+            contentDescription = "Cobertura $index",
+            modifier = Modifier.size(60.dp)
+        )
     }
 }
 
@@ -444,7 +380,7 @@ fun DisturbioButton(
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
-    val buttonColor = if (isSelected) Color(0xFF4E7029) else Color.White
+    val buttonColor = if (isSelected) Color(0xFF97B96E) else Color.White
     val textColor = if (isSelected) Color.White else Color.Black
     val buttonSize = 85.dp
     val iconSize = 46.dp
@@ -489,7 +425,7 @@ fun DisturbioButton(
 }
 
 @RequiresApi(Build.VERSION_CODES.P)
-@Preview(showBackground = true)
+@Preview(device = "spec:width=800px,height=1340px,dpi=300")
 @Composable
 fun PreviewFormularioSeguimiento(){
     FormularioSeguimiento(

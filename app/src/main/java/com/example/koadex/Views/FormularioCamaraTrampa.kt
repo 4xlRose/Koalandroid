@@ -62,7 +62,7 @@ fun FormularioCamaraTrampa(
     activity: MainActivity,
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    //viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
 
     Scaffold(
@@ -491,5 +491,5 @@ fun EvidenciaItem(
 @Preview(device = "spec:width=800px,height=1340px,dpi=300")
 @Composable
 fun FormularioCamaraTrampaPreview() {
-    FormularioCamaraTrampa(activity = MainActivity(), navController = rememberNavController())
+    FormularioCamaraTrampa(activity = MainActivity(), modifier = Modifier, navController = rememberNavController())
 }

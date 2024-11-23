@@ -188,7 +188,7 @@ fun FormularioSeleccionScreen(
             )
         }
 
-        Spacer(modifier = Modifier.weight(1f)) // Espacio flexible al final
+        Spacer(modifier = Modifier.height(60.dp))
     }
 }
 
