@@ -14,10 +14,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.koadex.R
-import com.example.koadex.clases.User
 import com.example.koadex.navigate.La_navegacion
 import com.example.koadex.ViewModels.PerfilScreenViewModel
+import com.example.koadex.data.UserEntity
 import com.example.koadex.navigate.sampleUser
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -25,7 +24,7 @@ import com.example.koadex.navigate.sampleUser
 fun PerfilScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    user: User = sampleUser
+    user: UserEntity
 ) {
 
     val ProfileViewModel = PerfilScreenViewModel()
@@ -55,7 +54,7 @@ fun PerfilScreen(
         ) {
             ProfileViewModel.ProfileHeader(user)
             Spacer(modifier = Modifier.height(32.dp))
-            ProfileViewModel.ProfileInfo()
+            ProfileViewModel.ProfileInfo(user)
             Spacer(modifier = Modifier.height(32.dp))
             Button(
                 onClick = { navController.navigate("EditProfileScreen")},
@@ -71,22 +70,27 @@ fun PerfilScreen(
     }
 }
 
+/*
 @Preview(showBackground = true)
 @Composable
 fun ProfileScreenPreview() {
-    val sampleUser = User(
+    val sampleUser = UserEntity(
         id = 1,
-        username = sampleUser.username,
+        name = sampleUser.name,
         email = sampleUser.email,
+        phone = sampleUser.phone,
         password = sampleUser.password,
         totalForms = sampleUser.totalForms,
+        startDate = sampleUser.startDate,
         uploadedForms = sampleUser.uploadedForms,
         locallyStoredForms = sampleUser.locallyStoredForms,
         posts = sampleUser.posts,
         following = sampleUser.following,
         followers = sampleUser.followers,
         isloggedIn = sampleUser.isloggedIn,
+        idZone = sampleUser.idZone,
         profilePicture = sampleUser.profilePicture
     )
     PerfilScreen(navController = rememberNavController(), user = sampleUser)
 }
+*/

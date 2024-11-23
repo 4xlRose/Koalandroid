@@ -21,20 +21,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.koadex.R
-import com.example.koadex.clases.User
 import com.example.koadex.ViewModels.PerfilScreenViewModel
+import com.example.koadex.data.UserEntity
 import com.example.koadex.navigate.sampleUser
 
 
 @Composable
 fun EditProfileScreen(
     navController: NavHostController,
-    user: User,
+    user: UserEntity,
     modifier: Modifier = Modifier
 ) {
 
-    val EditProfileViewModel = PerfilScreenViewModel()
+    val editProfileViewModel = PerfilScreenViewModel()
 
     Column(
         modifier = Modifier
@@ -79,10 +78,10 @@ fun EditProfileScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         // Campos de entrada
-        EditProfileViewModel.ProfileTextField("Nombre", user.username)
-        EditProfileViewModel.ProfileTextField("Email", "samanthasmith@gmail.com") // Puedes añadir un campo de email en `User`
-        EditProfileViewModel.ProfileTextField("Contraseña", "********", isPassword = true)
-        EditProfileViewModel.ProfileTextField("Teléfono", "+57 312 345 6789") // Puedes añadir teléfono a `User`
+        editProfileViewModel.ProfileTextField("Nombre", user.name)
+        editProfileViewModel.ProfileTextField("Email", user.email) // Puedes añadir un campo de email en `User`
+        editProfileViewModel.ProfileTextField("Contraseña", user.password, isPassword = true)
+        editProfileViewModel.ProfileTextField("Teléfono", user.phone) // Puedes añadir teléfono a `User`
 
         Spacer(modifier = Modifier.height(32.dp))
 
@@ -105,9 +104,9 @@ fun EditProfileScreen(
 //@Preview(showBackground = true)
 @Composable
 fun EditProfileScreenPreview() {
-    val sampleUser = User(
+    val sampleUser = UserEntity(
         id = 1,
-        username = sampleUser.username,
+        name = sampleUser.name,
         email = sampleUser.email,
         password = sampleUser.password,
         totalForms = sampleUser.totalForms,
@@ -117,6 +116,7 @@ fun EditProfileScreenPreview() {
         following = sampleUser.following,
         followers = sampleUser.followers,
         isloggedIn = sampleUser.isloggedIn,
+        idZone = sampleUser.idZone,
         profilePicture = sampleUser.profilePicture
     )
 

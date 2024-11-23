@@ -100,6 +100,7 @@ data class UserEntity(
     val id: Int = 0,
     var name: String = "", //Se agrega
     var email: String = "", //Se agrega
+    var phone: String = "", //Se agrega
     var password: String = "", //Se agrega
     var startDate: String = "", //Se agrega
     var idZone: Int, // Foreign Key //1

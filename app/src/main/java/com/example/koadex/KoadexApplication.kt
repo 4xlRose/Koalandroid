@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.koadex.ViewModels.NavigationModel
 import com.example.koadex.ui.form.FormFollowDBViewModel
 
 import com.example.koadex.ui.form.FormGeneralDBViewModel
@@ -42,6 +43,9 @@ object AppViewModelProvider {
         }
         initializer {
             KoadexViewModel(formApplication().container.formsRepository)
+        }
+        initializer {
+            NavigationModel(formApplication().container.formsRepository)
         }
     }
 }

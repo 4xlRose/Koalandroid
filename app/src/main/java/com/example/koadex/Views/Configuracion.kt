@@ -24,6 +24,7 @@ import com.example.koadex.clases.User
 import com.example.koadex.navigate.La_navegacion
 import com.example.koadex.clases.Configuracion
 import androidx.compose.material.icons.filled.ArrowBack
+import com.example.koadex.data.UserEntity
 import com.example.koadex.navigate.sampleUser
 
 
@@ -32,7 +33,7 @@ import com.example.koadex.navigate.sampleUser
 fun Configuracion(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    user: User = sampleUser
+    user: UserEntity = sampleUser
 ) {
     // Estado para manejar las notificaciones
     var showLogoutDialog by remember { mutableStateOf(false) }
@@ -105,7 +106,7 @@ fun Configuracion(
 
             // Logout Confirmation Dialog
             if (showLogoutDialog) {
-                user.isLogged = false
+                user.isloggedIn = false
                 Alerta_cerrar_sesion(showLogoutDialog, navController)
             }
         }

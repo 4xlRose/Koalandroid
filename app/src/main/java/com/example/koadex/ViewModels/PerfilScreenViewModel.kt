@@ -43,11 +43,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import com.example.koadex.clases.User
+import com.example.koadex.data.UserEntity
 
 class PerfilScreenViewModel: ViewModel() {
 
     @Composable
-    fun ProfileHeader(user: User) {
+    fun ProfileHeader(user: UserEntity) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -76,13 +77,13 @@ class PerfilScreenViewModel: ViewModel() {
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = user.username,
+                    text = user.name,
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White
                 )
                 Text(
-                    text = "Activo desde Ene. 2024",
+                    text = "Activo desde " + user.startDate,
                     fontSize = 14.sp,
                     color = Color.White
                 )
@@ -90,18 +91,32 @@ class PerfilScreenViewModel: ViewModel() {
         }
     }
 
+    /*
+    fun formatDate(date: String): String {
+        val months = listOf(
+            "Ene.", "Feb.", "Mar.", "Abr.", "May.", "Jun.",
+            "Jul.", "Ago.", "Sep.", "Oct.", "Nov.", "Dic."
+        )
+        val parts = date.split("-")
+        val day = parts[2].toInt()
+        val month = parts[1].toInt()
+        val year = parts[0].toInt()
+
+        return "$day de ${months[month - 1]} $year"
+    }*/
+
     @Composable
-    fun ProfileInfo() {
+    fun ProfileInfo(user: UserEntity) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
         ) {
-            ProfileInfoRow(Icons.Default.Email, "samanthasmith@gmail.com")
+            ProfileInfoRow(Icons.Default.Email, user.email)
             Divider(color = Color.Gray, thickness = 0.5.dp)
-            ProfileInfoRow(Icons.Default.Visibility, "Contraseña")
+            ProfileInfoRow(Icons.Default.Visibility, user.password)
             Divider(color = Color.Gray, thickness = 0.5.dp)
-            ProfileInfoRow(Icons.Default.Phone, "+57 312 345 6789")
+            ProfileInfoRow(Icons.Default.Phone, user.phone)
             Divider(color = Color.Gray, thickness = 0.5.dp)
         }
     }

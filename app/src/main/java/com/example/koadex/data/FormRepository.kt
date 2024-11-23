@@ -9,19 +9,11 @@ import kotlinx.coroutines.flow.Flow
 interface FormRepository {
     /*Borrar después de actualizar koadex con la nueva tabla formulario general*/
 
-    fun getAllForms(): Flow<List<FormEntity>>
-
-    fun getForm(id: Int): Flow<FormEntity?>
-
-    suspend fun insertForm(form: FormEntity)
-    suspend fun updateForm(form: FormEntity)
-    suspend fun deleteForm(form: FormEntity)
-
-
-
-
-
-    fun getFullDatabase(): Flow<List<GeneralFormEntity>>
+    fun getAllForms(): Flow<List<GeneralFormEntity>>
+    fun getForm(id: Int): Flow<GeneralFormEntity?>
+    suspend fun insertForm(form: GeneralFormEntity)
+    suspend fun updateForm(form: GeneralFormEntity)
+    suspend fun deleteForm(form: GeneralFormEntity)
     suspend fun insertIntoListForms(listForms: List<GeneralFormEntity>)
 
     suspend fun insertUser(user: UserEntity)
@@ -29,6 +21,7 @@ interface FormRepository {
     suspend fun deleteUser(user: UserEntity)
     fun getAllUsers(): Flow<List<UserEntity>>
     fun getUserById(id: Int): Flow<UserEntity?>
+    fun getUserByEmail(email: String): Flow<UserEntity?>
 
     //Clima
     fun getWeatherById(id: Int): Flow<WeatherEntity?>

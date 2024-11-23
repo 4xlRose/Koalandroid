@@ -33,8 +33,6 @@ class FormGeneralDBViewModel (private val formRepository: FormRepository) : View
     var userUiState by mutableStateOf(UserUiState())
         private  set
 
-
-
     suspend fun insertUser(user: UserEntity) {
         formRepository.insertUser(user)
     }

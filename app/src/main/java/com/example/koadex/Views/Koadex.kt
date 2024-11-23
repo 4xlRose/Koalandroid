@@ -66,8 +66,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.koadex.AppViewModelProvider
 import com.example.koadex.data.FormEntity
 import com.example.koadex.data.GeneralFormEntity
+import com.example.koadex.data.UserEntity
 import com.example.koadex.ui.principal.KoadexViewModel
 
+/*
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun KoadexPreview() {
@@ -83,6 +85,7 @@ fun KoadexPreview() {
 
     FormInfo(form_example)
 }
+*/
 
 @Composable
 fun Koadex(
@@ -122,6 +125,7 @@ fun KoadexPantalla(modifier: Modifier,
 
 ) {
     val koadexUiState by viewModel.koadexUiState.collectAsState()
+    val userList by viewModel.getAllUsers.collectAsState(initial = null)
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -131,14 +135,15 @@ fun KoadexPantalla(modifier: Modifier,
 
     ) {
 
-        KoadexContenido(formList = koadexUiState.koadexList)
+        KoadexContenido(formList = koadexUiState.koadexList, userList = userList)
 
     }
 }
 
 @Composable
 fun KoadexContenido(
-    formList: List<FormEntity>,
+    formList: List<GeneralFormEntity>,
+    userList: List<UserEntity>?,
     modifier: Modifier = Modifier
 ) {
     Column {
@@ -163,7 +168,7 @@ fun KoadexContenido(
                         modifier = Modifier.fillMaxSize()
                     )
                 } else {
-                    FormList(formList, modifier, selected)
+                    FormList(formList, userList, modifier, selected)
                 }
             }
         }
@@ -224,14 +229,17 @@ private fun Filtro_seleccion(selected: String): String {
 
 @Composable
 fun FormList(
-    formList: List<FormEntity>,
+    formList: List<GeneralFormEntity>,
+    userList: List<UserEntity>?,
     modifier: Modifier = Modifier,
     filter: String = "Todos"
 ) {
     LazyColumn(modifier = modifier) {
         items(items = formList) { item ->
+            val user = userList?.find { it.id == item.idUser }
             FormInfo(
                 form = item,
+                user = user,
                 modifier = Modifier
             )
         }
@@ -243,7 +251,8 @@ fun FormList(
 
 @Composable
 fun FormInfo(
-    form: FormEntity,
+    form: GeneralFormEntity,
+    user: UserEntity?,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -324,7 +333,7 @@ fun FormInfo(
 
             // Nombre del formulario
             Text(
-                text = form.name,
+                text = user?.name ?: "Desconocido",
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp

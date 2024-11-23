@@ -2,21 +2,15 @@
 package com.example.koadex.data
 
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
 
 class OfflineFormRepository (private val formDao: FormDao) : FormRepository {
 
     /*Borrar después de actualizar el koadex con la nueva tabla de formularios general*/
-    override fun getAllForms(): Flow<List<FormEntity>> = formDao.getAllForms()
-    override fun getForm(id: Int): Flow<FormEntity?> = formDao.getForm(id)
-
-    override suspend fun insertForm(formGeneral: FormEntity) = formDao.insert(formGeneral)
-
-    override suspend fun deleteForm(formGeneral: FormEntity) = formDao.delete(formGeneral)
-
-    override suspend fun updateForm(formGeneral: FormEntity) = formDao.update(formGeneral)
-    /*Para el koadex*/
-    override fun getFullDatabase(): Flow<List<GeneralFormEntity>>  = formDao.getFullDatabase()
+    override fun getAllForms(): Flow<List<GeneralFormEntity>> = formDao.getAllForms()
+    override fun getForm(id: Int): Flow<GeneralFormEntity?> = formDao.getForm(id)
+    override suspend fun insertForm(form: GeneralFormEntity) = formDao.insert(form)
+    override suspend fun deleteForm(form: GeneralFormEntity) = formDao.delete(form)
+    override suspend fun updateForm(form: GeneralFormEntity) = formDao.update(form)
     override suspend fun insertIntoListForms(listForms: List<GeneralFormEntity>) = formDao.insertIntoListForms(listForms)
 
     // Usuario
@@ -25,6 +19,7 @@ class OfflineFormRepository (private val formDao: FormDao) : FormRepository {
     override suspend fun deleteUser(user: UserEntity) = formDao.deleteUser(user)
     override fun getAllUsers(): Flow<List<UserEntity>> = formDao.getAllUsers()
     override fun getUserById(id: Int): Flow<UserEntity?> = formDao.getUserById(id)
+    override fun getUserByEmail(email: String): Flow<UserEntity?> = formDao.getUserByEmail(email)
 
     //Clima
     override fun getWeatherById(id: Int): Flow<WeatherEntity?> = formDao.getWeatherById(id)

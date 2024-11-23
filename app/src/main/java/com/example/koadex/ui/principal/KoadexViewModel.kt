@@ -1,10 +1,16 @@
 
 package com.example.koadex.ui.principal
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.koadex.data.FormEntity
 import com.example.koadex.data.FormRepository
+import com.example.koadex.data.GeneralFormEntity
+import com.example.koadex.data.UserEntity
+import com.example.koadex.ui.form.UserUiState
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -18,8 +24,11 @@ class KoadexViewModel(formsRespository: FormRepository) : ViewModel() {
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
                 initialValue = KoadexUiState()
             )
+
+    val getAllUsers = formsRespository.getAllUsers()
+
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L
     }
 }
-data class KoadexUiState(val koadexList: List<FormEntity> = listOf())
+data class KoadexUiState(val koadexList: List<GeneralFormEntity> = listOf())

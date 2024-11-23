@@ -13,25 +13,21 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface FormDao {
 
-    /*Borrar después de actualizar el koadex con la nueva tabla de formularios general*/
-
-    @Query("SELECT * FROM forms ORDER BY id DESC")
-    fun getAllForms(): Flow<List<FormEntity>>
-
-    @Query("SELECT * from forms WHERE id = :id")
-    fun getForm(id: Int): Flow<FormEntity>
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(form: FormEntity)
-
-    @Update
-    suspend fun update(form: FormEntity)
-
-    @Delete
-    suspend fun delete(form: FormEntity)
     // Métodos de Lista de Formularios
     @Query("SELECT * FROM general_form")
-    fun getFullDatabase(): Flow<List<GeneralFormEntity>>
+    fun getAllForms(): Flow<List<GeneralFormEntity>>
+
+    @Query("SELECT * FROM general_form WHERE id = :id")
+    fun getForm(id: Int): Flow<GeneralFormEntity?>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(formGeneral: GeneralFormEntity)
+
+    @Delete
+    suspend fun delete(formGeneral: GeneralFormEntity)
+
+    @Update
+    suspend fun update(formGeneral: GeneralFormEntity)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertIntoListForms(listForms: List<GeneralFormEntity>)
@@ -66,6 +62,9 @@ interface FormDao {
 
     @Query("SELECT * FROM user WHERE id = :id")
     fun getUserById(id: Int): Flow<UserEntity?>
+
+    @Query("SELECT * FROM user WHERE email = :email")
+    fun getUserByEmail(email: String): Flow<UserEntity?>
 
 
     // Clima

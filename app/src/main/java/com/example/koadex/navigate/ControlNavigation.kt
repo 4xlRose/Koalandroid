@@ -19,6 +19,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,13 +31,18 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.Navigator
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.auth0.android.Auth0
+import com.example.koadex.AppViewModelProvider
 import com.example.koadex.MainActivity
 import com.example.koadex.R
+import com.example.koadex.ViewModels.NavigationModel
 
 import com.example.koadex.Views.Configuracion
 import com.example.koadex.Views.FormularioCamaraTrampa
@@ -53,30 +63,39 @@ import com.example.koadex.Views.FormularioSeleccion
 import com.example.koadex.Views.FormularioVariablesClimaticas
 import com.example.koadex.Views.EditProfileScreen
 import com.example.koadex.Views.PerfilScreen
-import com.example.koadex.clases.User
-import com.example.koadex.Views.PerfilScreen
+import com.example.koadex.data.UserEntity
+import com.example.koadex.ui.form.FormGeneralDBViewModel
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modifier) {
     val navController = rememberNavController()
+
+    var user = remember { mutableStateOf(sampleUser) }
+    val model: NavigationModel = viewModel(factory = AppViewModelProvider.Factory)
+
     NavHost(navController = navController, startDestination = "InicioCarga") {
         composable("InicioCarga") {
             InicioCarga(navController = navController)
         }
         composable("InicioSesion") {
-            InicioSesion(navController = navController,account)
+            val newUser = InicioSesion(navController = navController, account = account, model = model)
+            user = remember { mutableStateOf(newUser) }
         }
 
         composable("Koadex") {
             Koadex(navController = navController)
         }
         composable("Principal") {
-            Principal(navController = navController)
+            Principal(navController = navController, user = user.value)
         }
         composable("Registro") {
-            Registro(navController = navController)
+            Registro(navController = navController, model = model)
         }
         /*composable("SeleccionForm") {
             SeleccionForm(navController = navController)
@@ -94,10 +113,10 @@ fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modi
 
         // Perfiles
         composable("PerfilScreen") {
-            PerfilScreen(navController = navController, user = sampleUser)
+            PerfilScreen(navController = navController, user = user.value)
         }
         composable("EditProfileScreen") {
-            EditProfileScreen(navController = navController, user = sampleUser)
+            EditProfileScreen(navController = navController, user = user.value)
         }
 
         //Tipos de formulario
@@ -188,19 +207,28 @@ fun BottomNavItem(
         )
     }
 }
+
+fun getCurrentDate(): String {
+    val dateFormat = SimpleDateFormat("d MMM yyyy", Locale.getDefault())
+    val date = dateFormat.format(Date())
+    return date
+}
+
 ///////////////////////////
-val sampleUser = User(
-    id = 1,
-    username = "Koalandroidcito",
+val sampleUser = UserEntity(
+    name = "Koalandroidcito",
     email = "koalandroid@tec.mx",
+    phone = "+00 012 345 6789",
     password = "KoalAndroid*2025",
-    totalForms = 10,
-    uploadedForms = 7,
-    locallyStoredForms = 3,
-    posts = 15,
-    following = 200,
-    followers = 150,
-    isloggedIn = true,
+    startDate = getCurrentDate(),
+    totalForms = 0,
+    uploadedForms = 0,
+    locallyStoredForms = 0,
+    posts = 0,
+    following = 0,
+    followers = 0,
+    isloggedIn = false,
+    idZone = 0,
     profilePicture = R.drawable.profilepicture // Recurso de imagen predeterminado
 )
 ///////////////////

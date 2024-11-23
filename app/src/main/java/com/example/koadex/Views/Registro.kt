@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,15 +32,30 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.koadex.AppViewModelProvider
 import com.example.koadex.R
+import com.example.koadex.ViewModels.NavigationModel
+import com.example.koadex.data.UserEntity
+import com.example.koadex.navigate.sampleUser
+import com.example.koadex.ui.form.FormGeneralDBViewModel
+import kotlinx.coroutines.launch
 
 @Composable
-fun Registro(navController: NavHostController, modifier: Modifier = Modifier) {
-    RegistroFondo(navController, modifier)
+fun Registro(
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
+    model: NavigationModel
+) {
+    RegistroFondo(navController, modifier, model)
 }
 @Composable
-fun RegistroFondo(navController: NavHostController, modifier: Modifier =Modifier) {
+fun RegistroFondo(
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
+    model: NavigationModel
+) {
     val fondo = painterResource(R.drawable.login)
     Box (
         modifier = Modifier
@@ -52,16 +68,28 @@ fun RegistroFondo(navController: NavHostController, modifier: Modifier =Modifier
             modifier = Modifier
                 .fillMaxSize()
         )
-        RegistroContenido(navController, modifier)
+        RegistroContenido(navController, modifier, model)
     }
 }
 
 @Composable
-fun RegistroContenido(navController: NavHostController, modifier: Modifier = Modifier) {
+fun RegistroContenido(
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
+    model: NavigationModel
+) {
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(start = 16.dp, top = 50.dp, end = 16.dp, bottom = 16.dp)
     ) {
+        val user = sampleUser
+        val coroutineScope = rememberCoroutineScope()
+        val insertUser = { newUser: UserEntity ->
+            coroutineScope.launch {
+                model.insertUser(newUser)
+            }
+        }
+
         IconButton(
             onClick = {
                 navController.navigate("InicioSesion")
@@ -99,7 +127,10 @@ fun RegistroContenido(navController: NavHostController, modifier: Modifier = Mod
         var text3 by remember { mutableStateOf("Pepe") }
         OutlinedTextField(
             value = text3,
-            onValueChange = { text3 = it },
+            onValueChange = {
+                text3 = it
+                user.name = it
+            },
             label = { Text(
                 "Nombre",
                 color = Color.Black) },
@@ -109,7 +140,10 @@ fun RegistroContenido(navController: NavHostController, modifier: Modifier = Mod
         var text1 by remember { mutableStateOf("example@gmail.com") }
         OutlinedTextField(
             value = text1,
-            onValueChange = { text1 = it },
+            onValueChange = {
+                text1 = it
+                user.email = it
+                            },
             label = { Text(
                 "Email",
                 color = Color.Black) },
@@ -121,6 +155,7 @@ fun RegistroContenido(navController: NavHostController, modifier: Modifier = Mod
             value = text2,
             onValueChange = {
                 text2 = it
+                user.password = it
             },
             label = {
                 Text(
@@ -131,12 +166,12 @@ fun RegistroContenido(navController: NavHostController, modifier: Modifier = Mod
                 .fillMaxWidth()
         )
 
-
         Spacer(
             Modifier.padding(90.dp)
         )
         Button(
             onClick = {
+                insertUser(user)
                 navController.navigate("InicioSesion")
             },
 
@@ -153,7 +188,5 @@ fun RegistroContenido(navController: NavHostController, modifier: Modifier = Mod
                 fontSize = 22.sp
             )
         }
-
-
     }
 }

@@ -17,9 +17,7 @@ import com.example.koadex.data.WeatherEntity
 import com.example.koadex.data.ZoneTypeEntity
 
 class FormsPredeterminedViewModel(private val formRepository: FormRepository) : ViewModel() {
-
     //Guardar el clima
-
     suspend fun inicializarClimas() {
 
         var ListaClimas = listOf(

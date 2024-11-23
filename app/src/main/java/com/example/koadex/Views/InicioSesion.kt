@@ -20,6 +20,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,18 +44,34 @@ import com.auth0.android.authentication.AuthenticationException
 import com.auth0.android.callback.Callback
 import com.auth0.android.result.Credentials
 import com.example.koadex.R
+import com.example.koadex.ViewModels.NavigationModel
+import com.example.koadex.data.UserEntity
+import com.example.koadex.navigate.sampleUser
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @Composable
-fun InicioSesion(navController: NavHostController, account: Auth0, modifier: Modifier = Modifier) {
-    IniciarSesionFondo(navController,account, modifier)
+fun InicioSesion(navController: NavHostController,
+                 account: Auth0,
+                 model: NavigationModel,
+                 modifier: Modifier = Modifier
+): UserEntity {
+    val user = IniciarSesionFondo(navController,account, model, modifier)
+    return user
 }
 
 @Composable
-fun IniciarSesionFondo(navController: NavHostController,account: Auth0, modifier: Modifier = Modifier) {
+fun IniciarSesionFondo(navController: NavHostController,
+                       account: Auth0,
+                       model: NavigationModel,
+                       modifier: Modifier = Modifier
+): UserEntity {
     var loggedIn by remember { mutableStateOf(false) }
     var credentials by remember { mutableStateOf<Credentials?>(null) }
-
+    var user = remember { mutableStateOf(sampleUser) }
     val fondo = painterResource(R.drawable.login)
+
     Box (
         modifier = Modifier
     ) {
@@ -66,7 +83,14 @@ fun IniciarSesionFondo(navController: NavHostController,account: Auth0, modifier
                 .fillMaxSize()
         )
         if (loggedIn) {
-            Principal(navController)
+            val userFlow = model.getUserByEmail(credentials?.user?.name ?: "")
+            val newUser = userFlow.collectAsState(initial = null)
+
+            user = remember { mutableStateOf(newUser.value ?: sampleUser) }
+            user = remember { mutableStateOf(user.value.copy(isloggedIn = true)) }
+
+            Principal(navController, user.value)
+
         } else {
             IniciarSesionLogInContenido(
                 navController = navController,
@@ -75,10 +99,11 @@ fun IniciarSesionFondo(navController: NavHostController,account: Auth0, modifier
                     credentials = it
                     loggedIn = true
                 },
-                modifier = Modifier)
+                modifier = Modifier
+            )
         }
-
     }
+    return user.value
 }
 
 @Composable
@@ -88,7 +113,7 @@ fun IniciarSesionLogInContenido(
     onLoginSuccess: (Credentials) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var username by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
 
@@ -130,8 +155,8 @@ fun IniciarSesionLogInContenido(
             fontWeight = FontWeight.Bold
         )
         OutlinedTextField(
-            value = username,
-            onValueChange = { username = it},
+            value = email,
+            onValueChange = { email = it},
             label = { Text( stringResource(R.string.email),
                 color = Color.Black) },
             modifier = modifier
@@ -184,7 +209,7 @@ fun IniciarSesionLogInContenido(
 
         Button(
             onClick = {
-                loginWithUsernamePassword(account, username, password, onLoginSuccess, onError = { message ->
+                loginWithUsernamePassword(account, email, password, onLoginSuccess, onError = { message ->
                     errorMessage = message // Actualiza el mensaje de error si ocurre un problema
                 })
             },
@@ -215,8 +240,6 @@ fun IniciarSesionLogInContenido(
                 color = Color.White
             )
         }
-
-
     }
 }
 
