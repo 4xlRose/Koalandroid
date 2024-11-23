@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -86,21 +87,25 @@ fun FormularioSeguimientoScreen(
     val cambioSeleccionado = remember { mutableStateOf(-1) } // Estado para los botones de Cambió
     val viewModel = FomularioEspecies_ViewModel()
     val green700 = colorResource(id = R.color.green_700)
+    var codigo by remember { mutableStateOf("") } // Estado para Observaciones
+    var tipoCultivo by remember { mutableStateOf("") } // Estado para Observaciones
+    var observaciones by remember { mutableStateOf("") } // Estado para Observaciones
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(32.dp)
             .verticalScroll(rememberScrollState())
+            .background(Color.White)
     ) {
 
         Spacer(modifier = Modifier.height(60.dp))
 
         // Campo de Código
         OutlinedTextField(
-            value = "",
-            onValueChange = { },
-            label = { Text("Código") },
+            value = codigo,
+            onValueChange = { codigo = it},
+            label = { Text("Código", color = Color.DarkGray) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -114,7 +119,9 @@ fun FormularioSeguimientoScreen(
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("Seguimiento", style = MaterialTheme.typography.titleMedium)
+                Text("Seguimiento",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = Color.Black)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     OutlinedButton(
                         onClick = { seguimientoSeleccionado.value = 0 }, // Marca el botón como seleccionado
@@ -139,7 +146,9 @@ fun FormularioSeguimientoScreen(
                 }
             }
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("Cambió", style = MaterialTheme.typography.titleMedium)
+                Text("Cambió",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = Color.Black)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     OutlinedButton(
                         onClick = { cambioSeleccionado.value = 0 }, // Marca el botón como seleccionado
@@ -168,7 +177,9 @@ fun FormularioSeguimientoScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         // SECCION COBERTURA
-        Text("Cobertura", style = MaterialTheme.typography.titleMedium)
+        Text("Cobertura",
+            style = MaterialTheme.typography.titleMedium,
+            color = Color.Black)
 
         Spacer(modifier = Modifier.height(10.dp))
 
@@ -233,16 +244,19 @@ fun FormularioSeguimientoScreen(
 
         // CAMPO TIPO DE CULTIVO
         OutlinedTextField(
-            value = "",
-            onValueChange = { },
-            label = { Text("Tipos de Cultivo") },
+            value = tipoCultivo,
+            onValueChange = {tipoCultivo = it },
+            label = { Text("Tipos de Cultivo", color = Color.DarkGray) },
             modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         // SECCION DISTURBIO
-        Text("Disturbio", style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(vertical = 8.dp))
+        Text("Disturbio",
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(vertical = 8.dp),
+            color = Color.Black)
 
         Spacer(modifier = Modifier.height(10.dp))
 
@@ -320,8 +334,10 @@ fun FormularioSeguimientoScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         // Sección de Evidencias
-        Text("Evidencias", style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.align(Alignment.Start))
+        Text("Evidencias",
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.align(Alignment.Start),
+            color = Color.Black)
         viewModel.Botones_captura(green700)
 
 
@@ -329,8 +345,9 @@ fun FormularioSeguimientoScreen(
 
         // Observaciones
         OutlinedTextField(
-            value = "", onValueChange = { /* Actualizar estado */ },
-            label = { Text("Observaciones") },
+            value = observaciones,
+            onValueChange = { observaciones = it }, // Actualizar el estado
+            label = { Text("Observaciones", color = Color.DarkGray) },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(100.dp)

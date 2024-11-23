@@ -132,6 +132,7 @@ fun FormularioCuadranteScreen(
             .fillMaxSize()
             .background(Color(0xFFFFFFFF))
             .padding(16.dp)
+            .background(Color.White)
     ) {
         Spacer(modifier = Modifier.height(30.dp))
 
@@ -167,7 +168,9 @@ fun FormularioCuadranteScreen(
                     modifier = Modifier.weight(1f),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text("Cuadrante", style = MaterialTheme.typography.titleMedium)
+                    Text("Cuadrante",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color.Black)
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Row(
@@ -246,7 +249,9 @@ fun FormularioCuadranteScreen(
                     Spacer(modifier = Modifier.height(4.dp))
 
                     // Subcuadrante
-                    Text("Sub-Cuadrante", style = MaterialTheme.typography.titleMedium)
+                    Text("Sub-Cuadrante",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color.Black)
                     //Spacer(modifier = Modifier.height(8.dp))
                     Row(
                         horizontalArrangement = Arrangement.SpaceEvenly,
@@ -281,7 +286,9 @@ fun FormularioCuadranteScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Spacer(modifier = Modifier.height(30.dp)) // Me apoyo para centrar
-                    Text("Hábito de crecimiento", style = MaterialTheme.typography.titleMedium)
+                    Text("Hábito de crecimiento",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color.Black)
                     Spacer(modifier = Modifier.height(8.dp))
                     Row(
                         modifier = Modifier
@@ -328,7 +335,7 @@ fun FormularioCuadranteScreen(
                 OutlinedTextField(
                     value = nombreComun,
                     onValueChange = { nombreComun = it },
-                    label = { Text("Nombre Común") }, //Especie
+                    label = { Text("Nombre Común", color = Color.DarkGray) }, //Especie
                     modifier = Modifier.weight(1f)//.padding(start = 2.dp)
                 )
 
@@ -392,7 +399,8 @@ fun FormularioCuadranteScreen(
 
             // Evidencias
             Text("Evidencias", style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.align(Alignment.Start))
+                modifier = Modifier.align(Alignment.Start),
+                color = Color.Black)
             viewModel.Botones_captura(green700)
 
             Spacer(modifier = Modifier.height(16.dp))

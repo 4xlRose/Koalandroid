@@ -140,20 +140,22 @@ fun FormularioScreen(
                 .fillMaxSize()
                 .padding(horizontal = 32.dp)
                 .verticalScroll(rememberScrollState())
+                .background(Color.White)
+
         ) {
             // Codigo de la camara
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
                 text = stringResource(R.string.codigo),
-                style = MaterialTheme.typography.titleMedium
-
+                style = MaterialTheme.typography.titleMedium,
+                color = Color.Black
             )
 
             OutlinedTextField(
                 value = codigo,
                 onValueChange = { codigo = it },
-                label = { Text(stringResource(R.string.codigo_camara)) },
+                label = { Text(stringResource(R.string.codigo_camara), color = Color.DarkGray) },
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -162,7 +164,8 @@ fun FormularioScreen(
             // Zona de la camara
             Text(
                 text = stringResource(R.string.zona),
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium,
+                color = Color.Black
             )
 
             Row(
@@ -276,7 +279,8 @@ fun FormularioScreen(
             // Informacion de la camara
             Text(
                 text = stringResource(R.string.informacion),
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium,
+                color = Color.Black
             )
 
             Row(
@@ -286,13 +290,13 @@ fun FormularioScreen(
                 OutlinedTextField(
                     value = nombreCamara,
                     onValueChange = { nombreCamara = it },
-                    label = { Text(stringResource(R.string.nombre_camara)) },
+                    label = { Text(stringResource(R.string.nombre_camara), color = Color.DarkGray) },
                     modifier = Modifier.weight(1f)
                 )
                 OutlinedTextField(
                     value = placaCamara,
                     onValueChange = { placaCamara = it },
-                    label = { Text(stringResource(R.string.placa_camara)) },
+                    label = { Text(stringResource(R.string.placa_camara), color = Color.DarkGray) },
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -304,13 +308,13 @@ fun FormularioScreen(
                 OutlinedTextField(
                     value = placaGuaya,
                     onValueChange = { placaGuaya = it },
-                    label = { Text(stringResource(R.string.placa_guaya)) },
+                    label = { Text(stringResource(R.string.placa_guaya), color = Color.DarkGray) },
                     modifier = Modifier.weight(1f)
                 )
                 OutlinedTextField(
                     value = anchoCamino,
                     onValueChange = { anchoCamino = it },
-                    label = { Text(stringResource(R.string.ancho_camino)) },
+                    label = { Text(stringResource(R.string.ancho_camino), color = Color.DarkGray) },
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -322,32 +326,25 @@ fun FormularioScreen(
                 OutlinedTextField(
                     value = fecha,
                     onValueChange = { fecha = it },
-                    label = { Text(stringResource(R.string.fecha)) },
+                    label = { Text(stringResource(R.string.fecha), color = Color.DarkGray) },
                     modifier = Modifier.weight(1f)
                 )
                 OutlinedTextField(
                     value = distanciaObjetivo,
                     onValueChange = { distanciaObjetivo = it },
-                    label = { Text(stringResource(R.string.distancia_objetivo)) },
+                    label = { Text(stringResource(R.string.distancia_objetivo), color = Color.DarkGray) },
                     modifier = Modifier.weight(1f)
                 )
                 OutlinedTextField(
                     value = alturaLente,
                     onValueChange = { alturaLente = it },
-                    label = { Text(stringResource(R.string.altura_lente)) },
+                    label = { Text(stringResource(R.string.altura_lente), color = Color.DarkGray) },
                     modifier = Modifier.weight(1f)
                 )
             }
 
             Spacer(modifier = Modifier.height(16.dp))
-
-            // LISTA DE CHEQUEO
-            Text(
-                text = stringResource(R.string.lista_chequeo),
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(bottom = 4.dp)
-            )
-
+            
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -361,7 +358,9 @@ fun FormularioScreen(
                     Text(
                         text = stringResource(R.string.lista_chequeo),
                         style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.padding(bottom = 4.dp)
+                        modifier = Modifier.padding(bottom = 4.dp),
+                        color = Color.Black
+
                     )
 
                     Row(
@@ -418,13 +417,15 @@ fun FormularioScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             Text("Evidencias", style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.align(Alignment.Start))
+                modifier = Modifier.align(Alignment.Start),
+                color = Color.Black)
             viewModel.Botones_captura(green700)
 
             // Observaciones
             OutlinedTextField(
-                value = "", onValueChange = { /* Actualizar estado */ },
-                label = { Text("Observaciones") },
+                value = observaciones,
+                onValueChange = { observaciones = it }, // Actualizar el estado
+                label = { Text("Observaciones", color = Color.DarkGray) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(100.dp)

@@ -73,7 +73,7 @@ class FomularioEspecies_ViewModel :
                 modifier = Modifier.weight(1f),
                 colors = ButtonDefaults.buttonColors(containerColor = green700)
             ) {
-                Text("ATRAS")
+                Text("ATRAS", color = Color.White)
             }
             Spacer(modifier = Modifier.width(8.dp))
             Button(
@@ -82,7 +82,7 @@ class FomularioEspecies_ViewModel :
                 colors = ButtonDefaults.buttonColors(containerColor = green700),
                 enabled = isFileSelected.value
             ) {
-                Text("ENVIAR")
+                Text("ENVIAR", color = Color.White)
             }
         }
     }
@@ -119,7 +119,7 @@ class FomularioEspecies_ViewModel :
         ) {
             Icon(Icons.Default.FileOpen, contentDescription = "Seleccionar archivo", tint = Color.White)
             Spacer(modifier = Modifier.width(10.dp))
-            Text("Elige archivo")
+            Text("Elige archivo", color = Color.White)
         }
     }
 ////////////////////////////////////////////////////////////////
@@ -145,7 +145,7 @@ class FomularioEspecies_ViewModel :
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Start
         ) {
-            Text("Tipo de Animal", style = MaterialTheme.typography.titleMedium)
+            Text("Tipo de Animal", style = MaterialTheme.typography.titleMedium, color = Color.Black)
         }
 
         Spacer(modifier = Modifier.padding(vertical = 3.dp))
@@ -210,7 +210,7 @@ class FomularioEspecies_ViewModel :
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Start
         ) {
-            Text("Tipo de Observación", style = MaterialTheme.typography.titleMedium)
+            Text("Tipo de Observación", style = MaterialTheme.typography.titleMedium, color = Color.DarkGray)
         }
         Spacer(modifier = Modifier.padding(vertical = 3.dp))
         Row(
