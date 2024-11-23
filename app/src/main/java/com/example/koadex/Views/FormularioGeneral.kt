@@ -56,8 +56,10 @@ import com.example.koadex.R
 
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.rememberNavController
 import com.example.koadex.AppViewModelProvider
 import com.example.koadex.clases.User
 
@@ -198,7 +200,8 @@ fun FormularioGeneralEntry(
             Text(
                 text = "Estado del Tiempo",
                 modifier = modifier.offset(x = 30.dp),
-                fontSize = 18.sp
+                fontSize = 18.sp,
+                color = Color.Black
             )
         }
 
@@ -249,7 +252,8 @@ fun FormularioGeneralEntry(
             Text(
                 text = "Época",
                 modifier = modifier.offset(x = 30.dp),
-                fontSize = 18.sp
+                fontSize = 18.sp,
+                color = Color.Black
             )
         }
 
@@ -303,7 +307,7 @@ fun FormularioGeneralEntry(
                 },
                 // enabled = formUiState.isEntryValid
             ) {
-                Text("SIGUIENTE", fontWeight = FontWeight.Bold)
+                Text("SIGUIENTE", fontWeight = FontWeight.Bold, color = Color.White)
             }
         }
     }
@@ -344,7 +348,7 @@ fun FormInputForm(
     ){
         OutlinedTextField(
             value = userDetails.name,
-            label = { Text("Nombre") },
+            label = { Text("Nombre", color = Color.DarkGray) },
             onValueChange = {
                 onFormValueChange(formDetails.copy(idUser = userDetails.id))
                 onUserValueChange(userDetails.copy(name = it))
@@ -385,7 +389,7 @@ fun FormInputForm(
                     }
                 }
             },
-            label = { Text(stringResource(R.string.fecha)) },
+            label = { Text(stringResource(R.string.fecha), color = Color.DarkGray) },
             modifier = Modifier
                 .padding(10.dp)
                 .fillMaxWidth(),
@@ -410,7 +414,7 @@ fun FormInputForm(
     ) {
         OutlinedTextField(
             value = formDetails.place,
-            label = { Text("Localidad") },
+            label = { Text("Localidad", color = Color.DarkGray) },
             onValueChange = { onFormValueChange(formDetails.copy(place = it)) },
             modifier = Modifier
                 .padding(10.dp)
@@ -426,7 +430,7 @@ fun FormInputForm(
     ){
         OutlinedTextField(
             value = formDetails.hour,
-            label = { Text("Hora") },
+            label = { Text("Hora", color = Color.DarkGray) },
             onValueChange = { onFormValueChange(formDetails.copy(hour = it)) },
             modifier = Modifier
                 .padding(10.dp)

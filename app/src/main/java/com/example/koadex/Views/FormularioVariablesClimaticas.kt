@@ -65,7 +65,9 @@ fun FormularioVariablesClimaticas(
 ) {
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White),
         topBar = {
             TopAppBar(
                 title = { Text(text = stringResource(id = R.string.formulario),
@@ -84,12 +86,16 @@ fun FormularioVariablesClimaticas(
                     containerColor = Color(0xFF4E7029)
                 )
             )
-        }
+        },
+        containerColor = Color.White
     ) { paddingValues ->
         FormularioVariablesClimaticasScreen(
             //activity = activity,
             navController = navController,
-            modifier = Modifier.padding(paddingValues)
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize() // Asegura que el contenido llene todo el espacio
+                .background(Color.White) // Fondo blanco para todo
         )
     }
 }
@@ -125,10 +131,14 @@ fun FormularioClimaEntry(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp)
-            .verticalScroll(scrollState), // Habilitar scroll
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+            .padding(horizontal = 32.dp)
+            .verticalScroll(scrollState)
+            .background(color = Color.White), // Habilitar scroll
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+
     ) {
+        Spacer(modifier = Modifier.height(6.dp))
+
         Text(
             text = "Zona",
             fontSize = 18.sp,
@@ -172,6 +182,9 @@ fun FormularioClimaEntry(
         )
 
         viewModel.Atras_enviar(navController, green700)
+
+        Spacer(modifier = Modifier.height(50.dp))
+
     }
 }
 
