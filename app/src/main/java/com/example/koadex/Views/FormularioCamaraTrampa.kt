@@ -87,7 +87,8 @@ fun FormularioCamaraTrampa(
                     containerColor = Color(0xFF4E7029)
                 )
             )
-        }
+        },
+        containerColor = Color.White
     ) { paddingValues ->
         FormularioScreen(
             activity = activity,
@@ -375,12 +376,14 @@ fun FormularioScreen(
                             CheckboxItem(
                                 checked = checklist[0],
                                 onCheckedChange = { checklist[0] = it },
-                                text = stringResource(R.string.instalada)
+                                text = stringResource(R.string.instalada),
+                                color = Color.Black // Color negro para el texto
                             )
                             CheckboxItem(
                                 checked = checklist[1],
                                 onCheckedChange = { checklist[1] = it },
-                                text = stringResource(R.string.programada)
+                                text = stringResource(R.string.programada),
+                                color = Color.Black // Color negro para el texto
                             )
                         }
 
@@ -390,12 +393,14 @@ fun FormularioScreen(
                             CheckboxItem(
                                 checked = checklist[2],
                                 onCheckedChange = { checklist[2] = it },
-                                text = stringResource(R.string.memoria)
+                                text = stringResource(R.string.memoria),
+                                color = Color.Black // Color negro para el texto
                             )
                             CheckboxItem(
                                 checked = checklist[3],
                                 onCheckedChange = { checklist[3] = it },
-                                text = stringResource(R.string.prendida)
+                                text = stringResource(R.string.prendida),
+                                color = Color.Black // Color negro para el texto
                             )
                         }
 
@@ -405,12 +410,14 @@ fun FormularioScreen(
                             CheckboxItem(
                                 checked = checklist[4],
                                 onCheckedChange = { checklist[4] = it },
-                                text = stringResource(R.string.prueba_gateo)
+                                text = stringResource(R.string.prueba_gateo),
+                                color = Color.Black // Color negro para el texto
                             )
                             CheckboxItem(
                                 checked = checklist[5],
                                 onCheckedChange = { checklist[5] = it },
-                                text = stringResource(R.string.letrero_camara)
+                                text = stringResource(R.string.letrero_camara),
+                                color = Color.Black // Color negro para el texto
                             )
                         }
                     }
@@ -447,7 +454,8 @@ fun FormularioScreen(
 fun CheckboxItem(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
-    text: String
+    text: String,
+    color: Color = Color.Black // Color por defecto negro
 ) {
     Row(
         modifier = Modifier
@@ -466,7 +474,8 @@ fun CheckboxItem(
         Text(
             text = text,
             style = MaterialTheme.typography.bodySmall,
-            modifier = Modifier.padding(start = 4.dp)
+            modifier = Modifier.padding(start = 4.dp),
+            color = Color.Black
         )
     }
 }

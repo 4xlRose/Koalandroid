@@ -86,12 +86,16 @@ fun FormularioVariablesClimaticas(
                     containerColor = Color(0xFF4E7029)
                 )
             )
-        }
+        },
+        containerColor = Color.White
     ) { paddingValues ->
         FormularioVariablesClimaticasScreen(
             //activity = activity,
             navController = navController,
-            modifier = Modifier.padding(paddingValues)
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize() // Asegura que el contenido llene todo el espacio
+                .background(Color.White) // Fondo blanco para todo
         )
     }
 }
@@ -128,7 +132,8 @@ fun FormularioClimaEntry(
         modifier = modifier
             .fillMaxSize()
             .padding(horizontal = 32.dp)
-            .verticalScroll(scrollState), // Habilitar scroll
+            .verticalScroll(scrollState)
+            .background(color = Color.White), // Habilitar scroll
         verticalArrangement = Arrangement.spacedBy(16.dp),
 
     ) {

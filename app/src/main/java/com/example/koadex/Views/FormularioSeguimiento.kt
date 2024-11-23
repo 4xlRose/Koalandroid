@@ -63,7 +63,8 @@ fun FormularioSeguimiento(
                     containerColor = Color(0xFF4E7029)
                 )
             )
-        }
+        },
+        containerColor = Color.White
     ) { paddingValues ->
         FormularioSeguimientoScreen(
             //activity = activity,
