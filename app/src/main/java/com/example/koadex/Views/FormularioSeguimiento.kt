@@ -339,6 +339,9 @@ fun FormularioSeguimientoScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         viewModel.Atras_enviar(navController, green700)
+
+        Spacer(modifier = Modifier.height(50.dp))
+
     }
 }
 

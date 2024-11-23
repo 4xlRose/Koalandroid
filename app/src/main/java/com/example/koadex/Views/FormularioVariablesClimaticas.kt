@@ -172,6 +172,9 @@ fun FormularioClimaEntry(
         )
 
         viewModel.Atras_enviar(navController, green700)
+
+        Spacer(modifier = Modifier.height(50.dp))
+
     }
 }
 

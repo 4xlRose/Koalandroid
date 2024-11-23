@@ -433,6 +433,9 @@ fun FormularioScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             viewModel.Atras_enviar(navController, green700)
+
+            Spacer(modifier = Modifier.height(50.dp))
+
         }
     }
 }

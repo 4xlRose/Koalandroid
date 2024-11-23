@@ -181,6 +181,9 @@ fun FormularioEspecies(
                 Spacer(modifier = Modifier.padding(vertical = 10.dp))
 
                 viewModel.Atras_enviar(navController, green700)
+
+                Spacer(modifier = Modifier.height(50.dp))
+
             }
         }
     }
