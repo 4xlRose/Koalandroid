@@ -65,7 +65,9 @@ fun FormularioVariablesClimaticas(
 ) {
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White),
         topBar = {
             TopAppBar(
                 title = { Text(text = stringResource(id = R.string.formulario),
@@ -125,10 +127,13 @@ fun FormularioClimaEntry(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(horizontal = 32.dp)
             .verticalScroll(scrollState), // Habilitar scroll
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+
     ) {
+        Spacer(modifier = Modifier.height(6.dp))
+
         Text(
             text = "Zona",
             fontSize = 18.sp,

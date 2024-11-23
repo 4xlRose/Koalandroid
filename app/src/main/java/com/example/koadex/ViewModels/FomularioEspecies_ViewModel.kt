@@ -107,7 +107,7 @@ class FomularioEspecies_ViewModel :
         ) {
             Icon(Icons.Default.Camera, contentDescription = "Tomar foto", tint = Color.White)
             Spacer(modifier = Modifier.width(10.dp))
-            Text("Tomar foto")
+            Text("Tomar foto", color = Color.White)
         }
     }
 

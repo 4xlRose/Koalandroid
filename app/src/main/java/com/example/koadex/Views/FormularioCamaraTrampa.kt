@@ -66,7 +66,9 @@ fun FormularioCamaraTrampa(
 ) {
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White),
         topBar = {
             TopAppBar(
                 title = { Text(text = stringResource(id = R.string.formulario),

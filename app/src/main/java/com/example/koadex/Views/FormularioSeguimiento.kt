@@ -45,7 +45,8 @@ fun FormularioSeguimiento(
 ) {
     Scaffold(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .background(Color.White),
         topBar = {
             TopAppBar(
                 title = { Text(text = stringResource(id = R.string.formulario), color = Color.White) },

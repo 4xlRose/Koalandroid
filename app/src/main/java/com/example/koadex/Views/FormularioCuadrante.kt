@@ -131,17 +131,16 @@ fun FormularioCuadranteScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFFFFFFF))
-            .padding(16.dp)
+            .padding(32.dp)
             .background(Color.White)
     ) {
-        Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier = Modifier.height(15.dp))
 
         // Contenido desplazable
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(scrollState)
-                .padding(horizontal = 32.dp),
+                .verticalScroll(scrollState),
             horizontalAlignment = Alignment.Start
         ) {
 
