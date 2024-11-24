@@ -24,6 +24,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,10 +44,12 @@ import com.auth0.android.authentication.AuthenticationAPIClient
 import com.auth0.android.authentication.AuthenticationException
 import com.auth0.android.callback.Callback
 import com.auth0.android.result.Credentials
+import com.auth0.android.result.UserProfile
 import com.example.koadex.R
 import com.example.koadex.ViewModels.NavigationModel
 import com.example.koadex.data.UserEntity
 import com.example.koadex.navigate.sampleUser
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -69,7 +72,7 @@ fun IniciarSesionFondo(navController: NavHostController,
 ): UserEntity {
     var loggedIn by remember { mutableStateOf(false) }
     var credentials by remember { mutableStateOf<Credentials?>(null) }
-    var user = remember { mutableStateOf(sampleUser) }
+    val user = remember { mutableStateOf(sampleUser) }
     val fondo = painterResource(R.drawable.login)
 
     Box (
@@ -86,8 +89,8 @@ fun IniciarSesionFondo(navController: NavHostController,
             val userFlow = model.getUserByEmail(credentials?.user?.name ?: "")
             val newUser = userFlow.collectAsState(initial = null)
 
-            user = remember { mutableStateOf(newUser.value ?: sampleUser) }
-            user = remember { mutableStateOf(user.value.copy(isloggedIn = true)) }
+            user.value = newUser.value ?: sampleUser
+            user.value = user.value.copy(isloggedIn = true)
 
             Principal(navController, user.value)
 
@@ -205,8 +208,6 @@ fun IniciarSesionLogInContenido(
                 Modifier.padding(50.dp)
             )
         }
-
-
         Button(
             onClick = {
                 loginWithUsernamePassword(account, email, password, onLoginSuccess, onError = { message ->
@@ -241,6 +242,17 @@ fun IniciarSesionLogInContenido(
             )
         }
     }
+}
+
+
+private suspend fun getCloudUser(
+    auth0: Auth0,
+    credentials: Credentials?
+) {
+    val authentication = AuthenticationAPIClient(auth0)
+    authentication
+        .userInfo(credentials?.idToken ?: "")
+        .await()
 }
 
 private fun loginWithUsernamePassword(

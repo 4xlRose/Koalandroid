@@ -21,15 +21,6 @@ interface FormDao {
     fun getForm(id: Int): Flow<GeneralFormEntity?>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(formGeneral: GeneralFormEntity)
-
-    @Delete
-    suspend fun delete(formGeneral: GeneralFormEntity)
-
-    @Update
-    suspend fun update(formGeneral: GeneralFormEntity)
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertIntoListForms(listForms: List<GeneralFormEntity>)
 
 
@@ -56,6 +47,13 @@ interface FormDao {
 
     @Delete
     suspend fun deleteUser(user: UserEntity)
+
+    @Query("DELETE FROM user") // Use with resetUserTable()
+    suspend fun deleteAllUsers()
+
+    @Query("UPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'user'") // Resets Auto Increment if there is 1 user left
+    suspend fun resetUserTable()
+
 
     @Query("SELECT * FROM user")
     fun getAllUsers(): Flow<List<UserEntity>>

@@ -9,6 +9,9 @@ class NavigationModel(private val formRepository: FormRepository): ViewModel() {
     suspend fun insertUser(user: UserEntity) {
         formRepository.insertUser(user)
     }
+    suspend fun updateUser(user: UserEntity) {
+        formRepository.updateUser(user)
+    }
     fun getUserByEmail(email: String): Flow<UserEntity?> {
         return formRepository.getUserByEmail(email)
     }

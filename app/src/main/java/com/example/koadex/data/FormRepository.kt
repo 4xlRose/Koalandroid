@@ -11,14 +11,13 @@ interface FormRepository {
 
     fun getAllForms(): Flow<List<GeneralFormEntity>>
     fun getForm(id: Int): Flow<GeneralFormEntity?>
-    suspend fun insertForm(form: GeneralFormEntity)
-    suspend fun updateForm(form: GeneralFormEntity)
-    suspend fun deleteForm(form: GeneralFormEntity)
     suspend fun insertIntoListForms(listForms: List<GeneralFormEntity>)
 
     suspend fun insertUser(user: UserEntity)
     suspend fun updateUser(user: UserEntity)
     suspend fun deleteUser(user: UserEntity)
+    suspend fun deleteAllUsers()
+    suspend fun resetUserTable()
     fun getAllUsers(): Flow<List<UserEntity>>
     fun getUserById(id: Int): Flow<UserEntity?>
     fun getUserByEmail(email: String): Flow<UserEntity?>

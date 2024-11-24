@@ -1,6 +1,8 @@
 package com.example.koadex.ui.form
 
 import android.util.Log
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.ViewModel
 import com.example.koadex.data.AnimalTypeEntity
 import com.example.koadex.data.CoverageEntity
@@ -13,8 +15,15 @@ import com.example.koadex.data.ObservTypeEntity
 import com.example.koadex.data.SeasonEntity
 import com.example.koadex.data.SubQuadrantEntity
 import com.example.koadex.data.SuperQuadrantEntity
+import com.example.koadex.data.UserEntity
 import com.example.koadex.data.WeatherEntity
 import com.example.koadex.data.ZoneTypeEntity
+import com.example.koadex.navigate.koalandroidAtTecMxUser
+import com.example.koadex.navigate.sampleUser
+import com.example.koadex.navigate.siAtTecMxUser
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.launch
 
 class FormsPredeterminedViewModel(private val formRepository: FormRepository) : ViewModel() {
     //Guardar el clima
@@ -29,9 +38,10 @@ class FormsPredeterminedViewModel(private val formRepository: FormRepository) : 
     suspend fun inicializarEpocas() {
         var ListaEpocas = listOf(
             SeasonEntity(1,"Verano"),
-            SeasonEntity(2,"Primavera"),
+            //SeasonEntity(2,"Primavera"),
             SeasonEntity(3,"Invierno"),
-            SeasonEntity(4,"Otoño"))
+            //SeasonEntity(4,"Otoño")
+            )
         formRepository.insertSeasonBegin(ListaEpocas)
     }
 
@@ -157,6 +167,22 @@ class FormsPredeterminedViewModel(private val formRepository: FormRepository) : 
 
     }
 
+
+    // Usuario
+    private suspend fun insertUser(user: UserEntity) {
+        formRepository.insertUser(user)
+    }
+
+    private suspend fun truncateUsers() {
+        formRepository.deleteAllUsers()
+        formRepository.resetUserTable()
+    }
+
+    suspend fun inicializarUsuariosPredeterminados() {
+        truncateUsers()
+        insertUser(siAtTecMxUser)
+        insertUser(koalandroidAtTecMxUser)
+    }
 }
 
 

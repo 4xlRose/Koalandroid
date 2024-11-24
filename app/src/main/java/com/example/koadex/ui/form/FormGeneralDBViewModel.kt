@@ -29,25 +29,55 @@ class FormGeneralDBViewModel (private val formRepository: FormRepository) : View
         formRepository.insertGeneralForm(formGeneralUiState.formsDetails.toEntity())
     }
 
-    //Usuario
+    // Usuario
+    data class UserUiState(
+        var userDetails: UserDetails = UserDetails()
+    )
+    data class UserDetails(
+        val id: Int = 0,
+        var name: String = "",
+        var email: String = "",
+        var password: String = "",
+        var startDate: String = "",
+        var idZone: Int = 0, // Foreign Key
+        var totalForms: Int = 0,
+        var uploadedForms: Int = 0,
+        var locallyStoredForms: Int = 0,
+        var posts: Int = 0,
+        var following: Int = 0,
+        var followers: Int = 0,
+        var isloggedIn: Boolean = true,
+        var profilePicture: Int = R.drawable.profilepicture
+    )
+
     var userUiState by mutableStateOf(UserUiState())
         private  set
 
-    suspend fun insertUser(user: UserEntity) {
-        formRepository.insertUser(user)
+    private fun entityToDetails(user: UserEntity): UserDetails {
+        return UserDetails(
+            id = user.id,
+            name = user.name,
+            email = user.email,
+            password = user.password,
+            startDate = user.startDate,
+            idZone = user.idZone,
+            totalForms = user.totalForms,
+            uploadedForms = user.uploadedForms,
+            locallyStoredForms = user.locallyStoredForms,
+            posts = user.posts,
+            following = user.following,
+            followers = user.followers,
+            isloggedIn = user.isloggedIn,
+            profilePicture = user.profilePicture
+        )
     }
-    suspend fun updateUser(user: UserEntity) {
-        formRepository.updateUser(user)
+
+    fun getUser(user: UserEntity) {
+        userUiState = UserUiState(
+            userDetails = entityToDetails(user)
+        )
     }
-    suspend fun deleteUser(user: UserEntity) {
-        formRepository.deleteUser(user)
-    }
-    fun getAllUsers(): Flow<List<UserEntity>> {
-        return formRepository.getAllUsers()
-    }
-    fun getUserById(id: Int): Flow<UserEntity?> {
-        return formRepository.getUserById(id)
-    }
+
     fun updateUserUiState(user: UserDetails) {
         userUiState = UserUiState(
             userDetails = user
@@ -83,41 +113,4 @@ fun GeneralFormsDetails.toEntity() : GeneralFormEntity = GeneralFormEntity(
     idWeather = idWeather,
     idSeason = idSeason,
     place = place
-)
-
-/*User*/
-data class UserUiState(
-    var userDetails: UserDetails = UserDetails()
-)
-data class UserDetails(
-    val id: Int = 0,
-    var name: String = "",
-    var email: String = "",
-    var password: String = "",
-    var startDate: String = "",
-    var idZone: Int = 0, // Foreign Key
-    var totalForms: Int = 0,
-    var uploadedForms: Int = 0,
-    var locallyStoredForms: Int = 0,
-    var posts: Int = 0,
-    var following: Int = 0,
-    var followers: Int = 0,
-    var isloggedIn: Boolean = true,
-    var profilePicture: Int = R.drawable.profilepicture
-)
-fun UserDetails.toEntity() : UserEntity = UserEntity(
-    id = id,
-    name = name,
-    email = email,
-    password = password,
-    startDate = startDate,
-    idZone = idZone,
-    totalForms = totalForms,
-    uploadedForms = uploadedForms,
-    locallyStoredForms = locallyStoredForms,
-    posts = posts,
-    following = following,
-    followers = followers,
-    isloggedIn = isloggedIn,
-    profilePicture = profilePicture
 )

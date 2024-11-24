@@ -14,6 +14,7 @@ import androidx.compose.material3.ButtonDefaults
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,8 +29,14 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 import androidx.navigation.NavHostController
+import com.auth0.android.authentication.AuthenticationAPIClient
 import com.example.koadex.AppViewModelProvider
 import com.example.koadex.R
+import com.example.koadex.ViewModels.NavigationModel
+import com.example.koadex.data.UserEntity
+import com.example.koadex.navigate.koalandroidAtTecMxUser
+import com.example.koadex.navigate.sampleUser
+import com.example.koadex.navigate.siAtTecMxUser
 import com.example.koadex.ui.form.FormsPredeterminedViewModel
 import kotlinx.coroutines.launch
 
@@ -113,6 +120,7 @@ fun Botton_inicio_sesion(navController: NavHostController, modifier: Modifier = 
                 onClick = {
                     coroutineScope.launch {
                         viewModel.inicializarTablasPredeterminadas()
+                        viewModel.inicializarUsuariosPredeterminados()
                         navController.navigate("InicioSesion") // Navigate to InicioSesion
                     }
                 },

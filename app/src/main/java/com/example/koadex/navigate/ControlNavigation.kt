@@ -76,7 +76,8 @@ import java.util.Locale
 fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modifier) {
     val navController = rememberNavController()
 
-    var user = remember { mutableStateOf(sampleUser) }
+    var user = sampleUser
+    val checkUserLogged = remember { mutableStateOf(false) }
     val model: NavigationModel = viewModel(factory = AppViewModelProvider.Factory)
 
     NavHost(navController = navController, startDestination = "InicioCarga") {
@@ -85,23 +86,24 @@ fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modi
         }
         composable("InicioSesion") {
             val newUser = InicioSesion(navController = navController, account = account, model = model)
-            user = remember { mutableStateOf(newUser) }
+            user = newUser
+            checkUserLogged.value = true
         }
 
         composable("Koadex") {
             Koadex(navController = navController)
         }
         composable("Principal") {
-            Principal(navController = navController, user = user.value)
+            Principal(navController = navController, user = user)
         }
         composable("Registro") {
-            Registro(navController = navController, model = model)
+            Registro(navController = navController, account = account, model = model)
         }
         /*composable("SeleccionForm") {
             SeleccionForm(navController = navController)
         }*/
         composable("Configuracion"){
-            Configuracion(navController = navController)
+            Configuracion(navController = navController, user = user)
         }
 
         composable("OlvidoContrasena"){
@@ -113,15 +115,15 @@ fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modi
 
         // Perfiles
         composable("PerfilScreen") {
-            PerfilScreen(navController = navController, user = user.value)
+            PerfilScreen(navController = navController, user = user)
         }
         composable("EditProfileScreen") {
-            EditProfileScreen(navController = navController, user = user.value)
+            EditProfileScreen(navController = navController, user = user, navModel = model)
         }
 
         //Tipos de formulario
         composable("FormularioGeneral") {
-            FormularioGeneral(navController = navController)
+            FormularioGeneral(navController = navController, user = user)
         }
         composable("TiposForms") {
             FormularioSeleccion(navController = navController)
@@ -214,9 +216,46 @@ fun getCurrentDate(): String {
     return date
 }
 
+
+// Usuarios predeterminados
+
 ///////////////////////////
 val sampleUser = UserEntity(
-    name = "Koalandroidcito",
+    name = "Test",
+    email = "test@example.mx",
+    phone = "+00 012 345 6789",
+    password = "clave123",
+    startDate = getCurrentDate(),
+    totalForms = 0,
+    uploadedForms = 0,
+    locallyStoredForms = 0,
+    posts = 0,
+    following = 0,
+    followers = 0,
+    isloggedIn = false,
+    idZone = 0,
+    profilePicture = R.drawable.profilepicture // Recurso de imagen predeterminado
+)
+
+val siAtTecMxUser = UserEntity(
+    name = "si",
+    email = "si@tec.mx",
+    phone = "+00 012 345 6789",
+    password = "123qwe@@",
+    startDate = getCurrentDate(),
+    totalForms = 0,
+    uploadedForms = 0,
+    locallyStoredForms = 0,
+    posts = 0,
+    following = 0,
+    followers = 0,
+    isloggedIn = false,
+    idZone = 0,
+    profilePicture = R.drawable.profilepicture // Recurso de imagen predeterminado
+)
+
+val koalandroidAtTecMxUser = UserEntity(
+    name = "Koalandroid",
     email = "koalandroid@tec.mx",
     phone = "+00 012 345 6789",
     password = "KoalAndroid*2025",

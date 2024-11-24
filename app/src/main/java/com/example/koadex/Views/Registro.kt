@@ -1,5 +1,6 @@
 package com.example.koadex.Views
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,6 +35,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.auth0.android.Auth0
+import com.auth0.android.authentication.AuthenticationAPIClient
+import com.auth0.android.authentication.AuthenticationException
+import com.auth0.android.callback.Callback
+import com.auth0.android.request.AuthenticationRequest
+import com.auth0.android.request.HttpMethod
+import com.auth0.android.request.RequestOptions
+import com.auth0.android.request.ServerResponse
+import com.auth0.android.request.SignUpRequest
+import com.auth0.android.result.Credentials
 import com.example.koadex.AppViewModelProvider
 import com.example.koadex.R
 import com.example.koadex.ViewModels.NavigationModel
@@ -45,16 +56,18 @@ import kotlinx.coroutines.launch
 @Composable
 fun Registro(
     navController: NavHostController,
-    modifier: Modifier = Modifier,
-    model: NavigationModel
+    account: Auth0,
+    model: NavigationModel,
+    modifier: Modifier = Modifier
 ) {
-    RegistroFondo(navController, modifier, model)
+    RegistroFondo(navController, model, account, modifier)
 }
 @Composable
 fun RegistroFondo(
     navController: NavHostController,
-    modifier: Modifier = Modifier,
-    model: NavigationModel
+    model: NavigationModel,
+    account: Auth0,
+    modifier: Modifier = Modifier
 ) {
     val fondo = painterResource(R.drawable.login)
     Box (
@@ -68,25 +81,45 @@ fun RegistroFondo(
             modifier = Modifier
                 .fillMaxSize()
         )
-        RegistroContenido(navController, modifier, model)
+        RegistroContenido(navController, model, account, modifier)
     }
 }
 
 @Composable
 fun RegistroContenido(
     navController: NavHostController,
-    modifier: Modifier = Modifier,
-    model: NavigationModel
+    model: NavigationModel,
+    account: Auth0,
+    modifier: Modifier = Modifier
 ) {
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(start = 16.dp, top = 50.dp, end = 16.dp, bottom = 16.dp)
     ) {
         val user = sampleUser
+        val registerError = remember { mutableStateOf("") }
         val coroutineScope = rememberCoroutineScope()
         val insertUser = { newUser: UserEntity ->
             coroutineScope.launch {
                 model.insertUser(newUser)
+
+                val authentication = AuthenticationAPIClient(account)
+                authentication
+                    .signUp(newUser.email, newUser.password,newUser.name,"Username-Password-Authentication")
+                    .setConnection("Username-Password-Authentication")
+                    .validateClaims()
+                    .setScope("openid profile email")
+                    .start(object : Callback<Credentials, AuthenticationException> {
+                        override fun onSuccess(result: Credentials) {
+                            onSuccess(result)
+                        }
+
+                        override fun onFailure(error: AuthenticationException) {
+                            // Imprime el error completo en los logs para ver más detalles
+                            Log.e("AuthError", "Error de autenticación: ${error.getDescription()}")
+                            registerError.value = error.message ?: "Error desconocido"
+                        }
+                    })
             }
         }
 
@@ -188,5 +221,9 @@ fun RegistroContenido(
                 fontSize = 22.sp
             )
         }
+        Spacer(
+            Modifier.padding(10.dp)
+        )
+        Text(text = registerError.value)
     }
 }

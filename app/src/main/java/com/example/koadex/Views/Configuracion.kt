@@ -37,7 +37,7 @@ fun Configuracion(
 ) {
     // Estado para manejar las notificaciones
     var showLogoutDialog by remember { mutableStateOf(false) }
-    var notificacionesActivas by remember {
+    val notificacionesActivas by remember {
         mutableStateOf(Configuracion.getInstance().notificacionesActivas)
     }
     val scrollState = rememberScrollState()
@@ -70,7 +70,7 @@ fun Configuracion(
             )
         },
         bottomBar = {
-            La_navegacion(navController, false, false, true)
+            La_navegacion(navController, firstSelected = false, secondSelected = false, thirdSelected = true)
         },
         containerColor = Color.White
     ) { innerPadding ->
@@ -236,7 +236,7 @@ private fun Preferencias_perfil(
         label = "Seguridad",
         value = "Cambiar contraseña",
         navController = navController,
-        destino = "Perfil"
+        destino = "EditProfileScreen"
     )
 }
 

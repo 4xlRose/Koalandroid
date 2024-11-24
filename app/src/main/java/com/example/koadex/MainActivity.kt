@@ -21,22 +21,23 @@ import androidx.navigation.NavController
 import androidx.compose.material3.MaterialTheme
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.room.util.newStringBuilder
 import com.auth0.android.Auth0
 
 
 class MainActivity : ComponentActivity() {
-
-
     private lateinit var account: Auth0
 
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
         account = Auth0.getInstance(
             "tplWesPliZAjIckkDPfCQETXZ9IDkJ8T",
             "dev-qk6i0qseg2txot3r.us.auth0.com"
         )
+
         //Solicitar permisos
         if (!arePermissionsGranted()) {
             ActivityCompat.requestPermissions(

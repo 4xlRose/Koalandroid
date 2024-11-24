@@ -59,7 +59,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.koadex.AppViewModelProvider
-import com.example.koadex.clases.User
 
 /*
 import com.example.koadex.ui.form.GeneralFormDetails
@@ -74,10 +73,10 @@ import com.example.koadex.data.UserEntity
 import com.example.koadex.data.WeatherEntity
 import com.example.koadex.navigate.sampleUser
 import com.example.koadex.ui.form.FormGeneralDBViewModel
+import com.example.koadex.ui.form.FormGeneralDBViewModel.UserDetails
+import com.example.koadex.ui.form.FormGeneralDBViewModel.UserUiState
 import com.example.koadex.ui.form.GeneralFormUiState
 import com.example.koadex.ui.form.GeneralFormsDetails
-import com.example.koadex.ui.form.UserDetails
-import com.example.koadex.ui.form.UserUiState
 
 
 // TEST
@@ -85,16 +84,18 @@ import com.example.koadex.utils.DateValidator
 import kotlinx.coroutines.flow.Flow
 
 import kotlinx.coroutines.launch
-import kotlin.reflect.KSuspendFunction1
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun FormularioGeneral(
     navController: NavHostController,
     modifier: Modifier = Modifier,
+    user: UserEntity,
     viewModel: FormGeneralDBViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+    viewModel.getUser(user)
     val coroutineScope = rememberCoroutineScope()
+
     FormularioGeneralEntry(
         navController = navController,
         formUiState = viewModel.formGeneralUiState,
@@ -110,7 +111,7 @@ fun FormularioGeneral(
             }
         },
         onDateChange = { newDate ->
-            viewModel.updateGeneraFormUiState(viewModel.formGeneralUiState.formsDetails)
+            //viewModel.updateGeneraFormUiState(viewModel.formGeneralUiState.formsDetails)
         },
         modifier = modifier
     )
@@ -299,7 +300,6 @@ fun FormularioGeneralEntry(
                     .fillMaxWidth(),
                 onClick = {
                     onSaveClick()
-
                 },
                 // enabled = formUiState.isEntryValid
             ) {
@@ -320,6 +320,7 @@ fun FormInputForm(
     modifier: Modifier,
     enabled: Boolean = true
 ) {
+    formDetails.idUser = userDetails.id
     var dateText by remember { mutableStateOf(formDetails.date) }
 
     // Variables para el TEST
@@ -346,7 +347,6 @@ fun FormInputForm(
             value = userDetails.name,
             label = { Text("Nombre") },
             onValueChange = {
-                onFormValueChange(formDetails.copy(idUser = userDetails.id))
                 onUserValueChange(userDetails.copy(name = it))
                             },
             modifier = Modifier
