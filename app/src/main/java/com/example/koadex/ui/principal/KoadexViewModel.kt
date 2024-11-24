@@ -43,7 +43,7 @@ import kotlinx.coroutines.flow.Flow
 
 class KoadexViewModel(private val formsRepository: FormRepository) : ViewModel() {
 
-    // Original state for FormEntity
+    // lo que estaba con FormEntity
     val koadexUiState: StateFlow<KoadexUiState> =
         formsRepository.getAllForms().map { KoadexUiState(it) }
             .stateIn(
@@ -52,9 +52,9 @@ class KoadexViewModel(private val formsRepository: FormRepository) : ViewModel()
                 initialValue = KoadexUiState()
             )
 
-    // New state for GeneralFormEntity
+    // Lo mismo pero con GeneralFormEntity
     val koadexGeneralUiState: StateFlow<KoadexGeneralUiState> =
-        formsRepository.getAllGeneralForms().map { KoadexGeneralUiState(it) }
+        formsRepository.getFullDatabase().map { KoadexGeneralUiState(it) }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
