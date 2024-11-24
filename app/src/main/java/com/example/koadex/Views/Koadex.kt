@@ -63,34 +63,59 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.graphics.vector.ImageVector
+
 import com.example.koadex.AppViewModelProvider
 import com.example.koadex.data.FormEntity
 import com.example.koadex.data.GeneralFormEntity
 import com.example.koadex.ui.principal.KoadexViewModel
 
-@Preview(showBackground = true, showSystemUi = true)
+import androidx.compose.ui.text.TextStyle
+import androidx.navigation.compose.rememberNavController
+import com.example.koadex.clases.User
+import com.example.koadex.navigate.sampleUser
+
+
+@Preview(showBackground = true, showSystemUi = true, device = "spec:width=500dp,height=800dp")
 @Composable
 fun KoadexPreview() {
-    var form_example = FormEntity(
+    var form_example = GeneralFormEntity(
         id = 1,
-        name = "Juan",
-        date = "12/03/2023",
-        place = "Monterrey",
-        hour = "12:00",
-        weather = "Soleado",
-        season = "Verano"
+        date = "2023-07-01",
+        hour = "12:00:00",
+        idUser = 1,
+        idWeather = 1,
+        idSeason = 1,
+        place = "Ciudad de México"
     )
+    var formList = listOf(form_example)
 
-    FormInfo(form_example)
+    var selected by remember { mutableStateOf("Todos") }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+        ,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ){
+        TopNavBar(rememberNavController())
+        selected = Filtro_seleccion(selected)
+
+        //FormInfo(form_example)
+    }
+
 }
 
 @Composable
 fun Koadex(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
+
+    viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    user: User = sampleUser
 
 ) {
+    var current_scroll by remember { mutableStateOf(0f) }
+
     Scaffold(
         modifier = Modifier.fillMaxSize()
             .background(Color.White)
@@ -139,9 +164,13 @@ fun KoadexPantalla(modifier: Modifier,
 @Composable
 fun KoadexContenido(
     formList: List<FormEntity>,
+    new_formList: List<GeneralFormEntity> = listOf(),
     modifier: Modifier = Modifier
 ) {
-    Column {
+    Column (
+        modifier = Modifier
+            .padding(bottom = 110.dp)
+    ){
         var selected by remember { mutableStateOf("Todos") }
 
         Spacer(modifier = Modifier.height(110.dp))
@@ -169,7 +198,9 @@ fun KoadexContenido(
         }
     }
 }
-
+/*
+* Funcion para la barra de filtros
+*/
 @Composable
 private fun Filtro_seleccion(selected: String): String {
     var selected1 by remember { mutableStateOf(selected) } // Remember the selected
@@ -222,30 +253,45 @@ private fun Filtro_seleccion(selected: String): String {
     return selected1
 }
 
+/*
+*  Funcion para la lista de formularios y las tarjetas
+*/
 @Composable
 fun FormList(
     formList: List<FormEntity>,
     modifier: Modifier = Modifier,
-    filter: String = "Todos"
+    filter: String = "Todos",
+    new_formList: List<GeneralFormEntity> = listOf()
 ) {
+    var form_example = GeneralFormEntity(
+        id = 99,
+        date = "2023-07-01",
+        hour = "12:00:00",
+        idUser = 1,
+        idWeather = 1,
+        idSeason = 1,
+        place = "Ciudad de México"
+    )
     LazyColumn(modifier = modifier) {
         items(items = formList) { item ->
             FormInfo(
-                form = item,
+                form_old = item,
+                new_form = form_example,
                 modifier = Modifier
             )
         }
     }
+
 }
-
-
-
 
 @Composable
 fun FormInfo(
-    form: FormEntity,
+    form_old: FormEntity,
+    new_form: GeneralFormEntity ,
     modifier: Modifier = Modifier
 ) {
+    val form = form_old
+
     Card(
         modifier = modifier
             .padding(horizontal = 16.dp, vertical = 8.dp)
@@ -254,6 +300,10 @@ fun FormInfo(
         colors = CardDefaults.cardColors(
             containerColor = colorResource(R.color.verde_1)
         )
+        ,
+        onClick = {
+            // Acción al hacer clic en el formulario
+        }
     ) {
         Column(
             modifier = Modifier
@@ -266,6 +316,7 @@ fun FormInfo(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+
                 Text(
                     text = "ID: ${form.id}",
                     color = colorResource(R.color.green_100),
@@ -297,6 +348,7 @@ fun FormInfo(
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(
                                 text = form.hour,
+                                //text = Get_hour(form),
                                 color = Color.White,
                                 fontSize = 12.sp
                             )
@@ -322,13 +374,15 @@ fun FormInfo(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Nombre del formulario
-            Text(
-                text = form.name,
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                fontSize = 24.sp
-            )
+
+                Text(
+                    text = Get_name(form),
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp
+                )
+
+
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -351,7 +405,8 @@ fun FormInfo(
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = form.place,
+                        text = form.name,
+                        //text = Get_place(form),
                         color = colorResource(R.color.green_100),
                         fontSize = 14.sp,
                         maxLines = 1
@@ -367,6 +422,7 @@ fun FormInfo(
                 ) {
                     Text(
                         text = form.date,
+                        //text = Get_date(form),
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
                         color = colorResource(R.color.verde_oscuro_1),
                         fontSize = 12.sp,
@@ -377,6 +433,64 @@ fun FormInfo(
         }
     }
 }
+
+@Composable
+private fun Get_name(form: FormEntity): String {
+    // aca se implementa la funcionalidad de regresar un nombre en funcion de un id
+    return form.name
+}
+
+@Composable
+private fun Get_name2(form: GeneralFormEntity): String {
+    // aca se implementa la funcionalidad de regresar un nombre en funcion de un id
+    return form.place
+}
+
+@Composable
+private fun Get_date(form: GeneralFormEntity): String {
+    return form.date
+}
+
+@Composable
+private fun Get_hour(form: GeneralFormEntity): String {
+    return form.hour
+}
+
+@Composable
+private fun Get_place(form: GeneralFormEntity): String {
+    return form.place
+}
+
+@Composable
+private fun Get_weather(form: GeneralFormEntity): String {
+    val nuber = form.idWeather
+
+    val diccionario = mapOf(
+        1 to "Soleado",
+        2 to "Nublado",
+        3 to "Lluvioso"
+    )
+    return diccionario[nuber] ?: ""
+}
+
+@Composable
+private fun Get_season(form: GeneralFormEntity): String {
+    val nuber = form.idSeason
+
+    val diccionario = mapOf(
+        1 to "Verano",
+        2 to "Primavera",
+        3 to "Invierno",
+        4 to "Otoño"
+    )
+    return diccionario[nuber] ?: ""
+}
+
+
+
+/*
+* Funciones para la barra de navegacion
+*/
 @Composable
 fun TopNavBar(navController: NavHostController) {
     val context = LocalContext.current.applicationContext
@@ -457,6 +571,9 @@ fun TopNavBar(navController: NavHostController) {
     }
 }
 
+/*
+* Funciones para el menu de 3 botones
+*/
 @Composable
 private fun Dropdown_(showMenu: Boolean): Boolean {
     var showMenu1 by remember { mutableStateOf(showMenu) }
