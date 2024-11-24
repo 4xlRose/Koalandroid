@@ -42,6 +42,9 @@ fun FormularioFaunaBusquedaLibre(navController: NavHostController, modifier: Mod
     val FaunaBViewModel = FormularioFaunaBusquedaLibreViewModel()
     val viewModel = FomularioEspecies_ViewModel()
     val green700 = colorResource(id = R.color.green_700)
+    var nombreComun by remember { mutableStateOf("") } // Estado para Nombre Común
+    var nombreCientifico by remember { mutableStateOf("") } // Estado para Nombre Científico
+    var observaciones by remember { mutableStateOf("") } // Estado para Observaciones
 
     //Estado de scroll
     val scrollState = rememberScrollState()
@@ -79,7 +82,8 @@ fun FormularioFaunaBusquedaLibre(navController: NavHostController, modifier: Mod
 
             // Zona
             Text("Zona", style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.align(Alignment.Start))
+                modifier = Modifier.align(Alignment.Start),
+                color = Color.Black)
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 FaunaBViewModel.ZonaButton("Bosque", zonaSeleccionada == "Bosque", R.drawable.ic_bosque) { zonaSeleccionada = "Bosque" }
                 FaunaBViewModel.ZonaButton("Arreglo Agroforestal", zonaSeleccionada == "Arreglo Agroforestal", R.drawable.ic_agroforestal) { zonaSeleccionada = "Arreglo Agroforestal" }
@@ -91,7 +95,8 @@ fun FormularioFaunaBusquedaLibre(navController: NavHostController, modifier: Mod
 
             // Tipo de Animal
             Text("Tipo de Animal", style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.align(Alignment.Start))
+                modifier = Modifier.align(Alignment.Start),
+                color = Color.Black)
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 FaunaBViewModel.TipoAnimalButton("Mamífero", tipoAnimalSeleccionado == "Mamífero", R.drawable.ic_mamifero) { tipoAnimalSeleccionado = "Mamífero" }
                 FaunaBViewModel.TipoAnimalButton("Ave", tipoAnimalSeleccionado == "Ave", R.drawable.ic_ave) { tipoAnimalSeleccionado = "Ave" }
@@ -104,14 +109,16 @@ fun FormularioFaunaBusquedaLibre(navController: NavHostController, modifier: Mod
 
             // Campos de texto
             OutlinedTextField(
-                value = "", onValueChange = { /* Actualizar estado */ },
-                label = { Text("Nombre Común") },
+                value = nombreComun,
+                onValueChange = { nombreComun = it }, // Actualizar el estado
+                label = { Text("Nombre Común", color = Color.DarkGray) },
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
-                value = "", onValueChange = { /* Actualizar estado */ },
-                label = { Text("Nombre Científico") },
+                value = nombreCientifico,
+                onValueChange = { nombreCientifico = it }, // Actualizar el estado
+                label = { Text("Nombre Científico", color = Color.DarkGray) },
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -119,7 +126,8 @@ fun FormularioFaunaBusquedaLibre(navController: NavHostController, modifier: Mod
 
             // Número de Individuos
             Text("Número de Individuos", style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.align(Alignment.Start))
+                modifier = Modifier.align(Alignment.Start),
+                color = Color.Black)
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalAlignment = Alignment.CenterVertically
@@ -145,7 +153,8 @@ fun FormularioFaunaBusquedaLibre(navController: NavHostController, modifier: Mod
 
             // Tipo de Observación
             Text("Tipo de Observación", style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.align(Alignment.Start))
+                modifier = Modifier.align(Alignment.Start),
+                color = Color.Black)
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 FaunaBViewModel.TipoObservacionButton("La vio", tipoObservacionSeleccionada == "La vio", R.drawable.ic_la_vio) { tipoObservacionSeleccionada = "La vio" }
                 FaunaBViewModel.TipoObservacionButton("Huella", tipoObservacionSeleccionada == "Huella", R.drawable.ic_huella) { tipoObservacionSeleccionada = "Huella" }
@@ -158,7 +167,8 @@ fun FormularioFaunaBusquedaLibre(navController: NavHostController, modifier: Mod
 
             // Altura de Observación
             Text("Altura de Observación", style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.align(Alignment.Start))
+                modifier = Modifier.align(Alignment.Start),
+                color = Color.Black)
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 FaunaBViewModel.AlturaButton("< 1mt Baja", alturaObservacion == "< 1mt Baja") { alturaObservacion = "< 1mt Baja" }
                 FaunaBViewModel.AlturaButton("1-3 mt Media", alturaObservacion == "1-3 mt Media") { alturaObservacion = "1-3 mt Media" }
@@ -169,7 +179,8 @@ fun FormularioFaunaBusquedaLibre(navController: NavHostController, modifier: Mod
 
             // Evidencias
             Text("Evidencias", style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.align(Alignment.Start))
+                modifier = Modifier.align(Alignment.Start),
+                color = Color.Black)
             viewModel.Botones_captura(green700)
 
 
@@ -177,8 +188,9 @@ fun FormularioFaunaBusquedaLibre(navController: NavHostController, modifier: Mod
 
             // Observaciones
             OutlinedTextField(
-                value = "", onValueChange = { /* Actualizar estado */ },
-                label = { Text("Observaciones") },
+                value = observaciones,
+                onValueChange = { observaciones = it }, // Actualizar el estado
+                label = { Text("Observaciones", color = Color.DarkGray) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(100.dp)
@@ -187,6 +199,9 @@ fun FormularioFaunaBusquedaLibre(navController: NavHostController, modifier: Mod
             Spacer(modifier = Modifier.height(16.dp))
 
             viewModel.Atras_enviar(navController, green700)
+
+            Spacer(modifier = Modifier.height(50.dp))
+
         }
     }
 }

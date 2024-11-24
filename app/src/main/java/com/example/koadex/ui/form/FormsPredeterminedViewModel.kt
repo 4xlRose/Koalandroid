@@ -86,7 +86,7 @@ class FormsPredeterminedViewModel(private val formRepository: FormRepository) : 
             CoverageEntity(7,"CT"),
             CoverageEntity(8,"VH"),
             CoverageEntity(9,"TD"),
-            CoverageEntity(10,"if"),
+            CoverageEntity(10,"If"),
 
             )
         formRepository.insertCoberturatipoBegin(ListaCobertura)
@@ -109,28 +109,28 @@ class FormsPredeterminedViewModel(private val formRepository: FormRepository) : 
 
     suspend fun inicializarCuadranteS() {
         var Lista = listOf(
-            SuperQuadrantEntity(1,'A'),
-            SuperQuadrantEntity(2,'B'),
+            SuperQuadrantEntity(1,"A"),
+            SuperQuadrantEntity(2,"B"),
         )
         formRepository.insertCuadranteSBegin(Lista)
     }
 
     suspend fun inicializarCuadranteI() {
         var Lista = listOf(
-            MidQuadrantEntity(1,'C'),
-            MidQuadrantEntity(2,'D'),
-            MidQuadrantEntity(3,'E'),
-            MidQuadrantEntity(4,'F'),
-            MidQuadrantEntity(5,'G'),
+            MidQuadrantEntity(1,"C"),
+            MidQuadrantEntity(2,"D"),
+            MidQuadrantEntity(3,"E"),
+            MidQuadrantEntity(4,"F"),
+            MidQuadrantEntity(5,"G"),
         )
         formRepository.insertCuadranteIBegin(Lista)
     }
     suspend fun inicializarCuadranteB() {
         var Lista = listOf(
-            SubQuadrantEntity(1,'1'),
-            SubQuadrantEntity(2,'2'),
-            SubQuadrantEntity(3,'3'),
-            SubQuadrantEntity(4,'4')
+            SubQuadrantEntity(1,"1"),
+            SubQuadrantEntity(2,"2"),
+            SubQuadrantEntity(3,"3"),
+            SubQuadrantEntity(4,"4")
         )
         formRepository.insertCuadranteBBegin(Lista)
     }
