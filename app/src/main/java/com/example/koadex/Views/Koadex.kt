@@ -2,11 +2,13 @@ package com.example.koadex.Views
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -70,6 +72,7 @@ import com.example.koadex.data.GeneralFormEntity
 import com.example.koadex.ui.principal.KoadexViewModel
 
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.compose.rememberNavController
 import com.example.koadex.clases.User
 import com.example.koadex.navigate.sampleUser
@@ -92,6 +95,15 @@ fun KoadexPreview() {
         idSeason = 1,
         place = "Ciudad de México"
     )
+    var form_example2 = FormEntity(
+        id = 1,
+        name = "Juan",
+        date = "2023-07-01",
+        place = "Ciudad de México",
+        hour = "12:00:00",
+        weather = "Soleado",
+        season = "Verano"
+    )
     var formList = listOf(form_example)
 
     var selected by remember { mutableStateOf("Todos") }
@@ -105,7 +117,7 @@ fun KoadexPreview() {
         TopNavBar(rememberNavController())
         selected = Filtro_seleccion(selected)
 
-        //FormInfo(form_example)
+        FormInfo(form_old = form_example2,new_form = form_example)
     }
 
 }
@@ -139,7 +151,8 @@ fun Koadex(
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
                 .background(Color.White),
-            viewModel
+            viewModel,
+            navController
 
         )
     }
@@ -147,8 +160,10 @@ fun Koadex(
 }
 
 @Composable
-fun KoadexPantalla(modifier: Modifier,
-                   viewModel: KoadexViewModel
+fun KoadexPantalla(
+    modifier: Modifier,
+    viewModel: KoadexViewModel,
+    navController: NavHostController
 
 ) {
     val koadexUiState by viewModel.koadexUiState.collectAsState()
@@ -162,7 +177,12 @@ fun KoadexPantalla(modifier: Modifier,
 
     ) {
 
-        KoadexContenido(formList = koadexUiState.koadexList, General_formList = koadexGeneralUiState.koadexGeneralList, modifier)
+        KoadexContenido(
+            formList = koadexUiState.koadexList,
+            General_formList = koadexGeneralUiState.koadexGeneralList,
+            navController,
+            modifier
+        )
 
     }
 }
@@ -171,11 +191,12 @@ fun KoadexPantalla(modifier: Modifier,
 fun KoadexContenido(
     formList: List<FormEntity>,
     General_formList: List<GeneralFormEntity> = listOf(),
+    navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
     Column (
         modifier = Modifier
-            .padding(bottom = 110.dp)
+            //.padding(bottom = 24.dp)
     ){
         var selected by remember { mutableStateOf("Todos") }
         var forms_number : Int = General_formList.size
@@ -185,30 +206,104 @@ fun KoadexContenido(
         // Opciones de selección
         selected = Filtro_seleccion(selected)
 
-        Spacer(modifier = Modifier.height(16.dp))
+        //Spacer(modifier = Modifier.height(16.dp))
 
         // Lista de formularios
         Column(
-            modifier = modifier,
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+            ,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            if (0 == 1) {
-                No_forms(General_formList)
+            if (forms_number == 0) {
+                No_forms(General_formList, navController)
             } else {
-                FormList(formList = formList, modifier = modifier, filter = selected, new_formList = General_formList)
+                FormList(formList = formList, filter = selected, new_formList = General_formList)
             }
         }
     }
 }
 
+// Funcion para la pantalla sin formularios (solo es un boton que lleva a la pantalla de formulario general)
 @Composable
 private fun No_forms(
-    form_list: List<GeneralFormEntity> = listOf()
+    form_list: List<GeneralFormEntity> = listOf(),
+    navigation: NavHostController = rememberNavController()
 ) {
-    Text(
-        text = "No hay formularios guardados ${form_list.size}",
-        modifier = Modifier.fillMaxSize()
-    )
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.7f)
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        // Círculo con icono
+        Box(
+            modifier = Modifier
+                .size(80.dp)
+                .background(
+                    color = colorResource(R.color.verde_1).copy(alpha = 0.1f),
+                    shape = CircleShape
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Default.Edit,
+                contentDescription = "No forms icon",
+                modifier = Modifier.size(40.dp),
+                tint = colorResource(R.color.verde_1)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // Título
+        Text(
+            text = "No hay formularios guardados",
+            style = TextStyle(
+                fontSize = 20.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color.Black
+            ),
+            textAlign = TextAlign.Center
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Mensaje descriptivo
+        Text(
+            text = "Comienza creando un nuevo formulario para ver tus registros aquí",
+            style = TextStyle(
+                fontSize = 16.sp,
+                color = Gray300
+            ),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(horizontal = 32.dp)
+        )
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        // Botón de acción
+        Button(
+            onClick = {
+                navigation.navigate("FormularioGeneral")
+            },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorResource(R.color.verde_1)
+            ),
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .fillMaxWidth(0.7f)
+                .height(48.dp)
+        ) {
+            Text(
+                text = "Crear Formulario",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Medium
+            )
+        }
+    }
 }
 
 /*
@@ -276,7 +371,16 @@ fun FormList(
     filter: String = "Todos",
     new_formList: List<GeneralFormEntity> = listOf()
 ) {
-    var form_example = FormEntity(
+    var form_example = GeneralFormEntity(
+        id = 1,
+        date = "2023-07-01",
+        hour = "12:00:00",
+        idUser = 1,
+        idWeather = 1,
+        idSeason = 1,
+        place = "Ciudad de México"
+    )
+    var form_example2 = FormEntity(
         id = 1,
         name = "Juan",
         date = "2023-07-01",
@@ -285,15 +389,27 @@ fun FormList(
         weather = "Soleado",
         season = "Verano"
     )
-    LazyColumn(modifier = modifier) {
-        items(items = new_formList) { item ->
-            FormInfo(
-                form_old = form_example,
-                new_form = item,
-                modifier = Modifier
-            )
-        }
+
+    Column(
+        modifier = Modifier
+            .padding(bottom = 100.dp)
+    ){
+    for (current_form in new_formList) {
+        FormInfo(form_old = form_example2,new_form = current_form)
     }
+    }
+
+    // para calar el scroll
+    /*
+        FormInfo(form_old = form_example2,new_form = form_example)
+        FormInfo(form_old = form_example2,new_form = form_example)
+        FormInfo(form_old = form_example2,new_form = form_example)
+        FormInfo(form_old = form_example2,new_form = form_example)
+        FormInfo(form_old = form_example2,new_form = form_example)
+        FormInfo(form_old = form_example2,new_form = form_example)
+        FormInfo(form_old = form_example2,new_form = form_example)
+        FormInfo(form_old = form_example2,new_form = form_example)
+     */
 
 }
 
@@ -303,7 +419,7 @@ fun FormInfo(
     new_form: GeneralFormEntity ,
     modifier: Modifier = Modifier
 ) {
-    val form = form_old
+    val form = new_form
 
     Card(
         modifier = modifier
@@ -360,7 +476,7 @@ fun FormInfo(
                             )
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(
-                                text = form.hour,
+                                text = Get_hour(form),
                                 //text = Get_hour(form),
                                 color = Color.White,
                                 fontSize = 12.sp
@@ -380,8 +496,6 @@ fun FormInfo(
                         )
                     }
 
-
-
                 }
             }
 
@@ -389,7 +503,7 @@ fun FormInfo(
 
 
                 Text(
-                    text = Get_name(form),
+                    text = Get_name2(form),
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
                     fontSize = 24.sp
@@ -418,7 +532,7 @@ fun FormInfo(
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = form.name,
+                        text = Get_place(form),
                         //text = Get_place(form),
                         color = colorResource(R.color.green_100),
                         fontSize = 14.sp,
@@ -434,8 +548,7 @@ fun FormInfo(
                     shape = RoundedCornerShape(8.dp)
                 ) {
                     Text(
-                        text = form.date,
-                        //text = Get_date(form),
+                        text = Get_date(form),
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
                         color = colorResource(R.color.verde_oscuro_1),
                         fontSize = 12.sp,
@@ -460,7 +573,7 @@ private fun Get_id(form: GeneralFormEntity): Int {
 @Composable
 private fun Get_name2(form: GeneralFormEntity): String {
     // aca se implementa la funcionalidad de regresar un nombre en funcion de un id
-    return form.place
+    return "Juan"
 }
 
 @Composable
@@ -475,7 +588,7 @@ private fun Get_hour(form: GeneralFormEntity): String {
 
 @Composable
 private fun Get_place(form: GeneralFormEntity): String {
-    return form.place
+    return "Ciudad de México"
 }
 
 @Composable
