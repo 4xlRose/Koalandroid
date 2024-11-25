@@ -1,20 +1,13 @@
 package com.example.koadex.ui.test
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import org.junit.Test
+import androidx.compose.runtime.Composable
 
-class VerificacionCampo {
-    @Composable
-    @Test
-    fun Inhabilitacion() {
-        var isFileSelected by remember { mutableStateOf(false) }
+object VerificacionCampo {
+    var isFileSelected = mutableStateOf(false)
 
-        fun Verificacion() {
-            isFileSelected = true
-        }
+    fun Verificacion() {
+        isFileSelected.value = true
     }
 }
