@@ -17,6 +17,7 @@ import androidx.room.RoomDatabase
     CheckListEntity::class, CheckEntity::class, WeatherFormEntity::class, FormEntity::class
 ],
     version = 11,
+
     exportSchema = false
 )
 abstract class FormDatabase : RoomDatabase() {

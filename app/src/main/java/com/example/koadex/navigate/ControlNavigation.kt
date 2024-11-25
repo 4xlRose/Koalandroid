@@ -56,12 +56,17 @@ import com.example.koadex.Views.PerfilScreen
 import com.example.koadex.clases.User
 import com.example.koadex.Views.PerfilScreen
 
-
+/*
+*
+*  koalandroid@tec.mx
+*  KoalAndroid*2025
+*
+*/
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modifier) {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "InicioCarga") {
+    NavHost(navController = navController, startDestination = "Principal") {
         composable("InicioCarga") {
             InicioCarga(navController = navController)
         }

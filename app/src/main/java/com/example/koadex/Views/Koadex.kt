@@ -7,14 +7,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -59,6 +58,7 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Help
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.runtime.collectAsState
@@ -67,30 +67,71 @@ import com.example.koadex.AppViewModelProvider
 import com.example.koadex.data.FormEntity
 import com.example.koadex.data.GeneralFormEntity
 import com.example.koadex.ui.principal.KoadexViewModel
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
+import androidx.navigation.compose.rememberNavController
+import com.example.koadex.clases.User
+import com.example.koadex.navigate.sampleUser
+/*
+*
+*  koalandroid@tec.mx
+*  KoalAndroid*2025
+*
+*/
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(
+    showBackground = true,
+    showSystemUi = true,
+    device = "spec:width=500dp,height=800dp")
 @Composable
 fun KoadexPreview() {
-    var form_example = FormEntity(
+    var form_example = GeneralFormEntity(
+        id = 1,
+        date = "2023-07-01",
+        hour = "12:00:00",
+        idUser = 1,
+        idWeather = 1,
+        idSeason = 1,
+        place = "Ciudad de México"
+    )
+    var form_example2 = FormEntity(
         id = 1,
         name = "Juan",
-        date = "12/03/2023",
-        place = "Monterrey",
-        hour = "12:00",
+        date = "2023-07-01",
+        place = "Ciudad de México",
+        hour = "12:00:00",
         weather = "Soleado",
         season = "Verano"
     )
+    var formList = listOf(form_example)
 
-    FormInfo(form_example)
+    var selected by remember { mutableStateOf("Todos") }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+        ,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ){
+        TopNavBar(rememberNavController())
+        selected = Filtro_seleccion(selected)
+
+        FormInfo(form_old = form_example2,new_form = form_example)
+    }
+
 }
 
 @Composable
 fun Koadex(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
+
+    viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    user: User = sampleUser
 
 ) {
+    var current_scroll by remember { mutableStateOf(0f) }
+
     Scaffold(
         modifier = Modifier.fillMaxSize()
             .background(Color.White)
@@ -109,7 +150,8 @@ fun Koadex(
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
                 .background(Color.White),
-            viewModel
+            viewModel,
+            navController
 
         )
     }
@@ -117,11 +159,14 @@ fun Koadex(
 }
 
 @Composable
-fun KoadexPantalla(modifier: Modifier,
-                   viewModel: KoadexViewModel
+fun KoadexPantalla(
+    modifier: Modifier,
+    viewModel: KoadexViewModel,
+    navController: NavHostController
 
 ) {
     val koadexUiState by viewModel.koadexUiState.collectAsState()
+    val koadexGeneralUiState by viewModel.koadexGeneralUiState.collectAsState()
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -131,7 +176,13 @@ fun KoadexPantalla(modifier: Modifier,
 
     ) {
 
-        KoadexContenido(formList = koadexUiState.koadexList)
+        KoadexContenido(
+            formList = koadexUiState.koadexList,
+            General_formList = koadexGeneralUiState.koadexGeneralList,
+            navController,
+            modifier,
+
+        )
 
     }
 }
@@ -139,37 +190,130 @@ fun KoadexPantalla(modifier: Modifier,
 @Composable
 fun KoadexContenido(
     formList: List<FormEntity>,
-    modifier: Modifier = Modifier
+    General_formList: List<GeneralFormEntity> = listOf(),
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
+
 ) {
-    Column {
+    Column (
+        modifier = Modifier
+            //.padding(bottom = 24.dp)
+    ){
         var selected by remember { mutableStateOf("Todos") }
+        var forms_number : Int = General_formList.size
 
         Spacer(modifier = Modifier.height(110.dp))
 
         // Opciones de selección
         selected = Filtro_seleccion(selected)
 
-        Spacer(modifier = Modifier.height(16.dp))
+        //Spacer(modifier = Modifier.height(16.dp))
 
         // Lista de formularios
         Column(
-            modifier = modifier,
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+            ,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            if (formList != null) {
-                if (formList.isEmpty()) {
-                    Text(
-                        text = "No hay formularios guardados",
-                        modifier = Modifier.fillMaxSize()
-                    )
-                } else {
-                    FormList(formList, modifier, selected)
-                }
+            if (forms_number == 0) {
+                No_forms(General_formList, navController)
+            } else {
+                FormList(
+                    formList = formList,
+                    filter = selected,
+                    new_formList = General_formList)
             }
         }
     }
 }
 
+// Funcion para la pantalla sin formularios
+// (solo es un boton que lleva a la pantalla de formulario general)
+@Composable
+private fun No_forms(
+    form_list: List<GeneralFormEntity> = listOf(),
+    navigation: NavHostController = rememberNavController()
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.7f)
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        // Círculo con icono
+        Box(
+            modifier = Modifier
+                .size(80.dp)
+                .background(
+                    color = colorResource(R.color.verde_1).copy(alpha = 0.1f),
+                    shape = CircleShape
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Default.Edit,
+                contentDescription = "No forms icon",
+                modifier = Modifier.size(40.dp),
+                tint = colorResource(R.color.verde_1)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // Título
+        Text(
+            text = "No hay formularios guardados",
+            style = TextStyle(
+                fontSize = 20.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color.Black
+            ),
+            textAlign = TextAlign.Center
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Mensaje descriptivo
+        Text(
+            text = "Comienza creando un nuevo formulario para ver tus registros aquí",
+            style = TextStyle(
+                fontSize = 16.sp,
+                color = Gray300
+            ),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(horizontal = 32.dp)
+        )
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        // Botón de acción
+        Button(
+            onClick = {
+                navigation.navigate("FormularioGeneral")
+            },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorResource(R.color.verde_1)
+            ),
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .fillMaxWidth(0.7f)
+                .height(48.dp)
+        ) {
+            Text(
+                text = "Crear Formulario",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Medium
+            )
+        }
+    }
+}
+
+/*
+* Funcion para la barra de filtros
+*/
 @Composable
 private fun Filtro_seleccion(selected: String): String {
     var selected1 by remember { mutableStateOf(selected) } // Remember the selected
@@ -222,161 +366,321 @@ private fun Filtro_seleccion(selected: String): String {
     return selected1
 }
 
+/*
+*  Funcion para la lista de formularios y las tarjetas
+*/
 @Composable
 fun FormList(
     formList: List<FormEntity>,
     modifier: Modifier = Modifier,
-    filter: String = "Todos"
+    filter: String = "Todos",
+    new_formList: List<GeneralFormEntity> = listOf()
 ) {
-    LazyColumn(modifier = modifier) {
-        items(items = formList) { item ->
-            FormInfo(
-                form = item,
+    // ejemplos de formularios
+    var form_example = GeneralFormEntity(
+        id = 1,
+        date = "2023-07-01",
+        hour = "12:00:00",
+        idUser = 1,
+        idWeather = 1,
+        idSeason = 1,
+        place = "Ciudad de México"
+    )
+    var form_example2 = FormEntity(
+        id = 1,
+        name = "Juan",
+        date = "2023-07-01",
+        place = "Ciudad de México",
+        hour = "12:00:00",
+        weather = "Soleado",
+        season = "Verano"
+    )
+
+    Column(
+        modifier = Modifier
+            .padding(bottom = 100.dp)
+    ){
+    for (current_form in new_formList) {
+        FormInfo(form_old = form_example2,new_form = current_form)
+    }
+    }
+
+    // para calar el scroll
+    /*
+        FormInfo(form_old = form_example2,new_form = form_example)
+        FormInfo(form_old = form_example2,new_form = form_example)
+        FormInfo(form_old = form_example2,new_form = form_example)
+        FormInfo(form_old = form_example2,new_form = form_example)
+        FormInfo(form_old = form_example2,new_form = form_example)
+        FormInfo(form_old = form_example2,new_form = form_example)
+        FormInfo(form_old = form_example2,new_form = form_example)
+        FormInfo(form_old = form_example2,new_form = form_example)
+     */
+
+}
+
+@Composable
+fun FormInfo(
+    form_old: FormEntity,
+    new_form: GeneralFormEntity,
+    modifier: Modifier = Modifier
+) {
+    var isExpanded by remember { mutableStateOf(false) }
+    val form = new_form
+
+    Column {
+        Card(
+            modifier = modifier
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .fillMaxWidth(),
+            shape = RoundedCornerShape(16.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = colorResource(R.color.verde_1)
+            ),
+            onClick = { isExpanded = !isExpanded }
+        ) {
+            Column(
                 modifier = Modifier
-            )
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
+                // ID, hora y botón de edición
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "ID: ${Get_id(form)}",
+                        color = colorResource(R.color.green_100),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 14.sp
+                    )
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        // Hora
+                        Card(
+                            colors = CardDefaults.cardColors(
+                                containerColor = colorResource(R.color.verde_oscuro_1)
+                            ),
+                            shape = RoundedCornerShape(8.dp)
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.Schedule,
+                                    contentDescription = "Clock Icon",
+                                    tint = Color.White,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Text(
+                                    text = Get_hour(form),
+                                    color = Color.White,
+                                    fontSize = 12.sp
+                                )
+                            }
+                        }
+
+                        IconButton(
+                            onClick = { /* Acción de edición */ },
+                            modifier = Modifier.size(29.dp)
+                        ){
+                            Icon(
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = "Editar",
+                                tint = Color.White,
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Text(
+                    text = Get_name2(form),
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Lugar y fecha
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    // Lugar
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.LocationOn,
+                            contentDescription = "Location",
+                            tint = colorResource(R.color.green_100),
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = Get_place(form),
+                            color = colorResource(R.color.green_100),
+                            fontSize = 14.sp,
+                            maxLines = 1
+                        )
+                    }
+
+                    // Fecha
+                    Card(
+                        colors = CardDefaults.cardColors(
+                            containerColor = colorResource(R.color.green_100)
+                        ),
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
+                        Text(
+                            text = Get_date(form),
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                            color = colorResource(R.color.verde_oscuro_1),
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+                }
+            }
+        }
+
+        // Resumen expandible
+        if (isExpanded) {
+            resumen_Formulario(form)
         }
     }
 }
 
-
-
-
 @Composable
-fun FormInfo(
-    form: FormEntity,
-    modifier: Modifier = Modifier
-) {
+fun resumen_Formulario(form: GeneralFormEntity) {
     Card(
-        modifier = modifier
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-            .fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .padding(bottom = 8.dp),
         colors = CardDefaults.cardColors(
-            containerColor = colorResource(R.color.verde_1)
-        )
+            containerColor = colorResource(R.color.verde_oscuro_1)
+        ),
+        shape = RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            // ID, hora y botón de edición
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "ID: ${form.id}",
-                    color = colorResource(R.color.green_100),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp
-                )
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    // Hora
-                    Card(
-                        colors = CardDefaults.cardColors(
-                            containerColor = colorResource(R.color.verde_oscuro_1)
-                        ),
-                        shape = RoundedCornerShape(8.dp)
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Schedule,
-                                contentDescription = "Clock Icon",
-                                tint = Color.White,
-                                modifier = Modifier.size(16.dp)
-                            )
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Text(
-                                text = form.hour,
-                                color = Color.White,
-                                fontSize = 12.sp
-                            )
-                        }
-                    }
-
-                    IconButton(
-                        onClick = { /* Acción de edición */ },
-                        modifier = Modifier.size(29.dp)
-                    ){
-                        Icon(
-                            imageVector = Icons.Default.Edit,
-                            contentDescription = "Editar",
-                            tint = Color.White,
-                            modifier = Modifier.size(20.dp)
-                        )
-                    }
-
-
-
-                }
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            // Nombre del formulario
             Text(
-                text = form.name,
+                text = "Resumen del Formulario",
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
-                fontSize = 24.sp
+                fontSize = 18.sp
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Divider(
+                color = colorResource(R.color.green_100),
+                thickness = 1.dp,
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
 
-            // Lugar y fecha
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                // Lugar
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.LocationOn,
-                        contentDescription = "Location",
-                        tint = colorResource(R.color.green_100),
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        text = form.place,
-                        color = colorResource(R.color.green_100),
-                        fontSize = 14.sp,
-                        maxLines = 1
-                    )
-                }
-
-                // Fecha
-                Card(
-                    colors = CardDefaults.cardColors(
-                        containerColor = colorResource(R.color.green_100)
-                    ),
-                    shape = RoundedCornerShape(8.dp)
-                ) {
-                    Text(
-                        text = form.date,
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                        color = colorResource(R.color.verde_oscuro_1),
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Medium
-                    )
-                }
-            }
+            ResumenItem("Temporada:", Get_season(form))
+            ResumenItem("Clima:", Get_weather(form))
+            ResumenItem("Fecha:", Get_date(form))
+            ResumenItem("Hora:", Get_hour(form))
+            ResumenItem("Ubicación:", Get_place(form))
         }
     }
 }
+
+@Composable
+private fun ResumenItem(label: String, value: String) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = label,
+            color = colorResource(R.color.green_100),
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+            Text(
+                text = value,
+                color = Color.White,
+                fontSize = 14.sp
+            )
+
+
+    }
+}
+@Composable
+fun Get_id(form: GeneralFormEntity): Int {
+    return form.id
+}
+@Composable
+fun Get_name2(form: GeneralFormEntity): String {
+    // aca se implementa la funcionalidad de regresar un nombre en funcion de un id
+    return "Juan"
+}
+
+@Composable
+fun Get_date(form: GeneralFormEntity): String {
+    return form.date
+}
+
+@Composable
+fun Get_hour(form: GeneralFormEntity): String {
+    return form.hour
+}
+
+@Composable
+fun Get_place(form: GeneralFormEntity): String {
+    return "Ciudad de México"
+}
+
+@Composable
+fun Get_weather(form: GeneralFormEntity): String {
+    val nuber = form.idWeather
+
+    val diccionario = mapOf(
+        1 to "Soleado",
+        2 to "Nublado",
+        3 to "Lluvioso"
+    )
+    return diccionario[nuber] ?: "Sin registro de clima"
+}
+
+@Composable
+fun Get_season(form: GeneralFormEntity): String {
+    val nuber = form.idSeason
+
+    val diccionario = mapOf(
+        1 to "Verano",
+        2 to "Primavera",
+        3 to "Invierno",
+        4 to "Otoño"
+    )
+    return diccionario[nuber] ?: "Sin registro de temporada"
+}
+
+
+
+/*
+* Funciones para la barra de navegacion
+*/
 @Composable
 fun TopNavBar(navController: NavHostController) {
     val context = LocalContext.current.applicationContext
@@ -457,6 +761,9 @@ fun TopNavBar(navController: NavHostController) {
     }
 }
 
+/*
+* Funciones para el menu de 3 botones
+*/
 @Composable
 private fun Dropdown_(showMenu: Boolean): Boolean {
     var showMenu1 by remember { mutableStateOf(showMenu) }
