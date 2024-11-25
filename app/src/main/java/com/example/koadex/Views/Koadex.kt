@@ -73,7 +73,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.navigation.compose.rememberNavController
 import com.example.koadex.clases.User
 import com.example.koadex.navigate.sampleUser
-
+/*
+*
+*  koalandroid@tec.mx
+*  KoalAndroid*2025
+*
+*/
 
 @Preview(showBackground = true, showSystemUi = true, device = "spec:width=500dp,height=800dp")
 @Composable
@@ -147,6 +152,7 @@ fun KoadexPantalla(modifier: Modifier,
 
 ) {
     val koadexUiState by viewModel.koadexUiState.collectAsState()
+    val koadexGeneralUiState by viewModel.koadexGeneralUiState.collectAsState()
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -156,7 +162,7 @@ fun KoadexPantalla(modifier: Modifier,
 
     ) {
 
-        KoadexContenido(formList = koadexUiState.koadexList)
+        KoadexContenido(formList = koadexUiState.koadexList, General_formList = koadexGeneralUiState.koadexGeneralList, modifier)
 
     }
 }
@@ -164,7 +170,7 @@ fun KoadexPantalla(modifier: Modifier,
 @Composable
 fun KoadexContenido(
     formList: List<FormEntity>,
-    new_formList: List<GeneralFormEntity> = listOf(),
+    General_formList: List<GeneralFormEntity> = listOf(),
     modifier: Modifier = Modifier
 ) {
     Column (
@@ -172,6 +178,7 @@ fun KoadexContenido(
             .padding(bottom = 110.dp)
     ){
         var selected by remember { mutableStateOf("Todos") }
+        var forms_number : Int = General_formList.size
 
         Spacer(modifier = Modifier.height(110.dp))
 
@@ -185,19 +192,25 @@ fun KoadexContenido(
             modifier = modifier,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            if (formList != null) {
-                if (formList.isEmpty()) {
-                    Text(
-                        text = "No hay formularios guardados",
-                        modifier = Modifier.fillMaxSize()
-                    )
-                } else {
-                    FormList(formList, modifier, selected)
-                }
+            if (0 == 1) {
+                No_forms(General_formList)
+            } else {
+                FormList(formList = formList, modifier = modifier, filter = selected, new_formList = General_formList)
             }
         }
     }
 }
+
+@Composable
+private fun No_forms(
+    form_list: List<GeneralFormEntity> = listOf()
+) {
+    Text(
+        text = "No hay formularios guardados ${form_list.size}",
+        modifier = Modifier.fillMaxSize()
+    )
+}
+
 /*
 * Funcion para la barra de filtros
 */
@@ -263,20 +276,20 @@ fun FormList(
     filter: String = "Todos",
     new_formList: List<GeneralFormEntity> = listOf()
 ) {
-    var form_example = GeneralFormEntity(
-        id = 99,
+    var form_example = FormEntity(
+        id = 1,
+        name = "Juan",
         date = "2023-07-01",
+        place = "Ciudad de México",
         hour = "12:00:00",
-        idUser = 1,
-        idWeather = 1,
-        idSeason = 1,
-        place = "Ciudad de México"
+        weather = "Soleado",
+        season = "Verano"
     )
     LazyColumn(modifier = modifier) {
-        items(items = formList) { item ->
+        items(items = new_formList) { item ->
             FormInfo(
-                form_old = item,
-                new_form = form_example,
+                form_old = form_example,
+                new_form = item,
                 modifier = Modifier
             )
         }
@@ -440,6 +453,10 @@ private fun Get_name(form: FormEntity): String {
     return form.name
 }
 
+@Composable
+private fun Get_id(form: GeneralFormEntity): Int {
+    return form.id
+}
 @Composable
 private fun Get_name2(form: GeneralFormEntity): String {
     // aca se implementa la funcionalidad de regresar un nombre en funcion de un id
