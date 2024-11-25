@@ -6,14 +6,31 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.room.PrimaryKey
 import com.example.koadex.data.FormRepository
+import com.example.koadex.data.GeneralFormEntity
 import com.example.koadex.data.WeatherEntity
 import com.example.koadex.data.WeatherFormEntity
+import kotlinx.coroutines.flow.Flow
 
 class FormWeatherDBViewModel (private val formRepository: FormRepository) : ViewModel() {
     var formWeatherUiState by mutableStateOf(WeatherFormUiState())
 
     fun updateWeatherUiState(formWeather: WeatherFormDetails) {
         formWeatherUiState = WeatherFormUiState(formWeatherDetails = formWeather)
+    }
+
+    suspend fun saveWeatherForm() {
+        formRepository.insertWeatherForm(formWeatherUiState.formWeatherDetails.toEntity())
+    }
+
+    // Actualizar el ID de la Zona
+    fun updateZoneTypeId(zoneTypeId: Int) {
+        formWeatherUiState = formWeatherUiState.copy(
+            formWeatherDetails = formWeatherUiState.formWeatherDetails.copy(idZoneType = zoneTypeId)
+        )
+    }
+
+    fun id_General() : Flow<GeneralFormEntity> {
+        return formRepository.getLastGeneralForm()
     }
 }
 

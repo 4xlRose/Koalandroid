@@ -1,6 +1,7 @@
 
 package com.example.koadex.data
 
+import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -19,6 +20,7 @@ class OfflineFormRepository (private val formDao: FormDao) : FormRepository {
     override fun getFullDatabase(): Flow<List<GeneralFormEntity>>  = formDao.getFullDatabase()
     override suspend fun insertIntoListForms(listForms: List<GeneralFormEntity>) = formDao.insertIntoListForms(listForms)
 
+    override fun getLastGeneralForm(): Flow<GeneralFormEntity> = formDao.getLastGeneralForm()
     // Usuario
     override suspend fun insertUser(user: UserEntity) = formDao.insertUser(user)
     override suspend fun updateUser(user: UserEntity) = formDao.updateUser(user)

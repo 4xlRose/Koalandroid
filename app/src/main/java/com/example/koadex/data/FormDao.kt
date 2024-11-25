@@ -33,6 +33,9 @@ interface FormDao {
     @Query("SELECT * FROM general_form")
     fun getFullDatabase(): Flow<List<GeneralFormEntity>>
 
+    @Query("SELECT * FROM general_form order by id desc limit 1")
+    fun getLastGeneralForm(): Flow<GeneralFormEntity>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertIntoListForms(listForms: List<GeneralFormEntity>)
 

@@ -381,4 +381,12 @@ class FomularioEspecies_ViewModel :
         }
     }
 
+    // Constantes para los IDs de las zonas
+    object ZoneTypeIds {
+        const val bosque = 1
+        const val arreglo = 2
+        const val transitorio = 3
+        const val permanente = 4
+    }
+
 }
