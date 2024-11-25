@@ -208,9 +208,9 @@ fun FormularioClimaEntry(
             onFormValueChange = onFormValueChange
         )
 
-        //viewModel.Atras_enviar(navController, green700)
+        viewModel.Atras_enviar(navController, green700)
 
-        // Submit button -PARA PRUEBAS-
+        /*// Submit button -PARA PRUEBAS-
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
@@ -231,7 +231,7 @@ fun FormularioClimaEntry(
             ) {
                 Text("SIGUIENTE", fontWeight = FontWeight.Bold, color = Color.White)
             }
-        }
+        }*/
 
         Spacer(modifier = Modifier.height(50.dp))
 
@@ -299,35 +299,28 @@ fun ClimaInputForm(
     onFormValueChange: (WeatherFormDetails) -> Unit
 ) {
     /*val (pluviosidad, setPluviosidad) = remember { mutableStateOf("") }
-    val (temperaturaMaxima, setTemperaturaMaxima) = remember { mutableStateOf("") }*/
+    val (temperaturaMaxima, setTemperaturaMaxima) = remember { mutableStateOf("") }
     val (temperaturaMinima, setTemperaturaMinima) = remember { mutableStateOf("") }
     val (humedadMaxima, setHumedadMaxima) = remember { mutableStateOf("") }
     val (humedadMinima, setHumedadMinima) = remember { mutableStateOf("") }
     val (nivelQuebrada, setNivelQuebrada) = remember { mutableStateOf("") }
-    val (observaciones, setObservaciones) = remember { mutableStateOf("") }
+    val (observaciones, setObservaciones) = remember { mutableStateOf("") }*/
     val actionButtonColors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4E7029))
     val viewModel = FomularioEspecies_ViewModel()
     val green700 = colorResource(id = R.color.green_700)
 
     // Variables temporales para el texto ingresado
     val rainfallText = remember { mutableStateOf("") } // Maneja el texto ingresado
+    val maxTemperatureText = remember { mutableStateOf("") }
+    val maxHumidityText = remember { mutableStateOf("") }
+    val minTemperatureText = remember { mutableStateOf("") }
+    val minHumidityText = remember { mutableStateOf("") }
+    val streamMtLevelText = remember { mutableStateOf("") }
 
     Column(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        /*OutlinedTextField(
-            value =  if (formWeatherDetails.rainfall == 0.0) "" else formWeatherDetails.rainfall.toString(),
-            label = { Text("Pluviosidad (mm)") },
-            onValueChange = { newValue ->
-                val rainfall = newValue.toDoubleOrNull() // Comprobar si el valor es valido antes de actualizar
-                if (rainfall != null || newValue.isEmpty()) {
-                    onFormValueChange(formWeatherDetails.copy(rainfall = rainfall ?: 0.0))
-                }
-            },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled
-        )*/
 
         OutlinedTextField(
             value = rainfallText.value, // Usa el texto ingresado temporalmente
@@ -344,36 +337,68 @@ fun ClimaInputForm(
         )
 
         OutlinedTextField(
-            value = formWeatherDetails.maxTemperature.toString(),
+            value = maxTemperatureText.value,
             label = { Text("Temperatura máxima") },
-            onValueChange = { onFormValueChange(formWeatherDetails.copy(maxTemperature = it.toDoubleOrNull() ?: 0.0)) },
+            onValueChange = { newValue ->
+                if (newValue.isEmpty() || newValue.matches(Regex("^\\d*(\\.\\d*)?$"))) {
+                    maxTemperatureText.value = newValue
+                    val maxTemperature = newValue.toDoubleOrNull() ?: 0.0
+                    onFormValueChange(formWeatherDetails.copy(maxTemperature = maxTemperature))
+                }
+            },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled
+
         )
         OutlinedTextField(
-            value = temperaturaMinima,
+            value = minTemperatureText.value,
             label = { Text("Temperatura mínima") },
-            onValueChange = setTemperaturaMinima,
+            onValueChange = { newValue ->
+                if (newValue.isEmpty() || newValue.matches(Regex("^\\d*(\\.\\d*)?$"))) {
+                    minTemperatureText.value = newValue
+                    val minTemperature = newValue.toDoubleOrNull() ?: 0.0
+                    onFormValueChange(formWeatherDetails.copy(minTemperature = minTemperature))
+                }
+            },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled
         )
         OutlinedTextField(
-            value = humedadMaxima,
+            value = maxHumidityText.value,
             label = { Text("Humedad máxima") },
-            onValueChange = setHumedadMaxima,
-            modifier = Modifier.fillMaxWidth()
-        )
-        OutlinedTextField(
-            value = humedadMinima,
-            label = { Text("Humedad mínima") },
-            onValueChange = setHumedadMinima,
+            onValueChange = { newValue ->
+                if (newValue.isEmpty() || newValue.matches(Regex("^\\d*(\\.\\d*)?$"))) {
+                    maxHumidityText.value = newValue
+                    val maxHumidity = newValue.toDoubleOrNull() ?: 0.0
+                    onFormValueChange(formWeatherDetails.copy(maxHumidity = maxHumidity))
+                }
+            },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled
         )
         OutlinedTextField(
-            value = nivelQuebrada,
+            value = minHumidityText.value,
+            label = { Text("Humedad mínima") },
+            onValueChange = { newValue ->
+                if (newValue.isEmpty() || newValue.matches(Regex("^\\d*(\\.\\d*)?$"))) {
+                    minHumidityText.value = newValue
+                    val minHumidity = newValue.toDoubleOrNull() ?: 0.0
+                    onFormValueChange(formWeatherDetails.copy(minHumidity = minHumidity))
+                }
+            },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = enabled
+        )
+        OutlinedTextField(
+            value = streamMtLevelText.value,
             label = { Text("Nivel Quebrada (mt)") },
-            onValueChange = setNivelQuebrada,
+            onValueChange = { newValue ->
+                if (newValue.isEmpty() || newValue.matches(Regex("^\\d*(\\.\\d*)?$"))) {
+                    streamMtLevelText.value = newValue
+                    val streamMtLevel = newValue.toDoubleOrNull() ?: 0.0
+                    onFormValueChange(formWeatherDetails.copy(streamMtLevel = streamMtLevel))
+                }
+            },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled
         )

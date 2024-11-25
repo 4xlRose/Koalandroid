@@ -45,6 +45,7 @@ data class WeatherFormDetails(
     var maxTemperature: Double = 0.0, // decimal(2)
     var maxHumidity: Double = 0.0, // decimal(2)
     var minTemperature: Double = 0.0, // decimal(2)
+    var minHumidity: Double = 0.0, // decimal(2)
     var streamMtLevel: Double = 0.0 // decimal(2)
 )
 
@@ -55,5 +56,6 @@ fun WeatherFormDetails.toEntity() : WeatherFormEntity = WeatherFormEntity(
     maxTemperature = maxTemperature,
     maxHumidity = maxHumidity,
     minTemperature = minTemperature,
+    minHumidity = minHumidity, // decimal(2)
     streamMtLevel = streamMtLevel
 )
