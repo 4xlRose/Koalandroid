@@ -61,7 +61,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.koadex.AppViewModelProvider
-import com.example.koadex.clases.User
 
 /*
 import com.example.koadex.ui.form.GeneralFormDetails
@@ -73,7 +72,6 @@ import com.example.koadex.ui.form.WeatherDetails
 import com.example.koadex.data.SeasonEntity
 import com.example.koadex.data.UserEntity
 import com.example.koadex.data.WeatherEntity
-import com.example.koadex.navigate.sampleUser
 import com.example.koadex.ui.form.FormGeneralDBViewModel
 import com.example.koadex.ui.form.GeneralFormUiState
 import com.example.koadex.ui.form.GeneralFormsDetails
@@ -83,18 +81,38 @@ import com.example.koadex.ui.form.UserUiState
 // TEST
 import com.example.koadex.utils.DateValidator
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.stateIn
 
 import kotlinx.coroutines.launch
-import kotlin.reflect.KSuspendFunction1
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun FormularioGeneral(
     navController: NavHostController,
     modifier: Modifier = Modifier,
+    user: UserEntity,
     viewModel: FormGeneralDBViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+    viewModel.updateUserUiState(
+        viewModel.userUiState.userDetails.copy(
+            id = user.id,
+            name = user.name,
+            email = user.email,
+            password = user.password,
+            phone = user.phone,
+            startDate = user.startDate,
+            idZone = user.idZone,
+            uploadedForms = user.uploadedForms,
+            locallyStoredForms = user.locallyStoredForms,
+            posts = user.posts,
+            following = user.following,
+            followers = user.followers,
+            isloggedIn = user.isloggedIn,
+            profilePicture = user.profilePicture
+        )
+    )
     val coroutineScope = rememberCoroutineScope()
+
     FormularioGeneralEntry(
         navController = navController,
         formUiState = viewModel.formGeneralUiState,
@@ -106,11 +124,27 @@ fun FormularioGeneral(
         onSaveClick = {
             coroutineScope.launch {
                 viewModel.saveGeneralForm()
+
+                viewModel.updateFormStateUiState(
+                    formState = viewModel.formStateUiState.formStateDetails.copy(
+                        idUser = user.id,
+                        idGeneralForm = viewModel.getLatestFormId()
+                    )
+                )
+                viewModel.saveFormState()
+
+                viewModel.updateUserUiState(
+                    user = viewModel.userUiState.userDetails.copy(
+                        locallyStoredForms = user.locallyStoredForms + 1
+                    )
+                )
+                viewModel.saveUser()
+
                 navController.navigate("TiposForms")
             }
         },
         onDateChange = { newDate ->
-            viewModel.updateGeneraFormUiState(viewModel.formGeneralUiState.formsDetails)
+            //viewModel.formGeneralUiState.formsDetails.date = newDate
         },
         modifier = modifier
     )
@@ -130,6 +164,7 @@ fun FormularioGeneralEntry(
     onSaveClick: () -> Unit,
     modifier: Modifier
 ) {
+
     val textModifier = Modifier // Define it here
         .fillMaxWidth()
         .padding(10.dp)
@@ -183,7 +218,6 @@ fun FormularioGeneralEntry(
             formDetails = formUiState.formsDetails,
             onFormValueChange = onFormValueChange,
             userDetails = userUiState.userDetails,
-            onUserValueChange = onUserValueChange,
             onDateChange = { newDate ->
                 onFormValueChange(formUiState.formsDetails.copy(date = newDate))
             },
@@ -210,7 +244,7 @@ fun FormularioGeneralEntry(
                 .fillMaxWidth()
                 .padding(top = 10.dp)
         ) {
-            var weatherID by remember { mutableIntStateOf(formUiState.formsDetails.idWeather) }
+            val weatherID by remember { mutableIntStateOf(formUiState.formsDetails.idWeather) }
             val weather = getWeatherById(weatherID).collectAsState(initial = null).value
             val buttonSize = 80.dp
 
@@ -269,7 +303,6 @@ fun FormularioGeneralEntry(
                 type = "verano",
                 currentSeason = season?.season ?: "verano",
                 onSeasonChange = {
-
                     onFormValueChange(formUiState.formsDetails.copy(idSeason = seasonID))
                 },
                 buttonSize = buttonSize
@@ -302,7 +335,6 @@ fun FormularioGeneralEntry(
                     .fillMaxWidth(),
                 onClick = {
                     onSaveClick()
-
                 },
                 // enabled = formUiState.isEntryValid
             ) {
@@ -318,11 +350,11 @@ fun FormInputForm(
     formDetails: GeneralFormsDetails,
     onFormValueChange: (GeneralFormsDetails) -> Unit,
     userDetails: UserDetails,
-    onUserValueChange: (UserDetails) -> Unit,
     onDateChange: (String) -> Unit,
     modifier: Modifier,
     enabled: Boolean = true
 ) {
+    formDetails.idUser = userDetails.id
     var dateText by remember { mutableStateOf(formDetails.date) }
 
     // Variables para el TEST
@@ -349,8 +381,7 @@ fun FormInputForm(
             value = userDetails.name,
             label = { Text("Nombre", color = Color.DarkGray) },
             onValueChange = {
-                onFormValueChange(formDetails.copy(idUser = userDetails.id))
-                onUserValueChange(userDetails.copy(name = it))
+                //onUserValueChange(userDetails.copy(name = it))
                             },
             modifier = Modifier
                 .padding(10.dp)

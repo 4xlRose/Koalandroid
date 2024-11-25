@@ -14,6 +14,7 @@ import androidx.compose.material3.ButtonDefaults
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +29,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 import androidx.navigation.NavHostController
+import com.auth0.android.Auth0
+import com.auth0.android.authentication.AuthenticationAPIClient
 import com.example.koadex.AppViewModelProvider
 import com.example.koadex.R
 import com.example.koadex.ui.form.FormsPredeterminedViewModel

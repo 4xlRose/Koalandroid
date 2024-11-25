@@ -9,29 +9,18 @@ import androidx.room.Query
 import androidx.room.Update
 import com.example.koadex.clases.User
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 
 @Dao
 interface FormDao {
 
-    /*Borrar después de actualizar el koadex con la nueva tabla de formularios general*/
-
-    @Query("SELECT * FROM forms ORDER BY id DESC")
-    fun getAllForms(): Flow<List<FormEntity>>
-
-    @Query("SELECT * from forms WHERE id = :id")
-    fun getForm(id: Int): Flow<FormEntity>
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(form: FormEntity)
-
-    @Update
-    suspend fun update(form: FormEntity)
-
-    @Delete
-    suspend fun delete(form: FormEntity)
     // Métodos de Lista de Formularios
     @Query("SELECT * FROM general_form")
-    fun getFullDatabase(): Flow<List<GeneralFormEntity>>
+    fun getAllForms(): Flow<List<GeneralFormEntity>>
+
+    @Query("SELECT * FROM general_form WHERE id = :id")
+    fun getForm(id: Int): Flow<GeneralFormEntity?>
 
     @Query("SELECT * FROM general_form order by id desc limit 1")
     fun getLastGeneralForm(): Flow<GeneralFormEntity>
@@ -43,6 +32,9 @@ interface FormDao {
     // Métodos de Formulario General
     @Query("SELECT * from general_form WHERE id = :id")
     fun getFormById(id: Int): Flow<GeneralFormEntity>
+
+    @Query("SELECT MAX(id) FROM general_form")
+    suspend fun getLatestFormId(): Int
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertGeneralForm(form: GeneralFormEntity)
@@ -64,11 +56,44 @@ interface FormDao {
     @Delete
     suspend fun deleteUser(user: UserEntity)
 
+    @Query("DELETE FROM user") // Use with resetUserTable()
+    suspend fun deleteAllUsers()
+
+    @Query("UPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'user'") // Resets Auto Increment if there is 1 user left
+    suspend fun resetUserTable()
+
     @Query("SELECT * FROM user")
     fun getAllUsers(): Flow<List<UserEntity>>
 
     @Query("SELECT * FROM user WHERE id = :id")
     fun getUserById(id: Int): Flow<UserEntity?>
+
+    @Query("SELECT * FROM user WHERE email = :email")
+    fun getUserByEmail(email: String): Flow<UserEntity?>
+
+
+
+    // Estado de Formularios
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertFormState(form: FormStateEntity)
+
+    @Query("SELECT * FROM form_state")
+    fun getAllFormStates(): Flow<List<FormStateEntity>>
+
+    @Query("SELECT * FROM form_state WHERE idGeneralForm = :id")
+    fun getFormStateByFormId(id: Int): Flow<FormStateEntity?>
+
+    @Update
+    suspend fun updateFormState(form: FormStateEntity)
+
+    @Delete
+    suspend fun deleteFormState(form: FormStateEntity)
+
+    @Query("DELETE FROM form_state")
+    suspend fun deleteAllFormStates()
+
+    @Query("UPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'form_state'")
+    suspend fun resetFormStateTable()
 
 
     // Clima

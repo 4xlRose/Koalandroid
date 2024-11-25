@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -26,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,19 +37,24 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import com.example.koadex.clases.User
+import com.example.koadex.data.UserEntity
+import kotlinx.coroutines.launch
 
 class PerfilScreenViewModel: ViewModel() {
 
     @Composable
-    fun ProfileHeader(user: User) {
+    fun ProfileHeader(user: UserEntity) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -76,13 +83,13 @@ class PerfilScreenViewModel: ViewModel() {
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = user.username,
+                    text = user.name,
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White
                 )
                 Text(
-                    text = "Activo desde Ene. 2024",
+                    text = "Activo desde " + user.startDate,
                     fontSize = 14.sp,
                     color = Color.White
                 )
@@ -90,24 +97,38 @@ class PerfilScreenViewModel: ViewModel() {
         }
     }
 
+    /*
+    fun formatDate(date: String): String {
+        val months = listOf(
+            "Ene.", "Feb.", "Mar.", "Abr.", "May.", "Jun.",
+            "Jul.", "Ago.", "Sep.", "Oct.", "Nov.", "Dic."
+        )
+        val parts = date.split("-")
+        val day = parts[2].toInt()
+        val month = parts[1].toInt()
+        val year = parts[0].toInt()
+
+        return "$day de ${months[month - 1]} $year"
+    }*/
+
     @Composable
-    fun ProfileInfo() {
+    fun ProfileInfo(user: UserEntity) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
         ) {
-            ProfileInfoRow(Icons.Default.Email, "samanthasmith@gmail.com")
+            ProfileInfoRow(Icons.Default.Email, user.email)
             Divider(color = Color.Gray, thickness = 0.5.dp)
-            ProfileInfoRow(Icons.Default.Visibility, "Contraseña")
+            ProfileInfoRow(Icons.Default.Visibility, user.password, true)
             Divider(color = Color.Gray, thickness = 0.5.dp)
-            ProfileInfoRow(Icons.Default.Phone, "+57 312 345 6789")
+            ProfileInfoRow(Icons.Default.Phone, user.phone)
             Divider(color = Color.Gray, thickness = 0.5.dp)
         }
     }
 
     @Composable
-    fun ProfileInfoRow(icon: ImageVector, infoText: String) {
+    fun ProfileInfoRow(icon: ImageVector, infoText: String, isPassword: Boolean = false) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -121,12 +142,17 @@ class PerfilScreenViewModel: ViewModel() {
                 tint = Color.Black
             )
             Spacer(modifier = Modifier.width(16.dp))
-            Text(text = infoText, fontSize = 16.sp, color = Color.Black)
+            
+            Text(
+                text = infoText,
+                fontSize = 16.sp,
+                color = Color.Black
+            )
         }
     }
 
     @Composable
-    fun ProfileTextField(label: String, value: String, isPassword: Boolean = false) {
+    fun ProfileTextField(label: String, value: String, isPassword: Boolean = false): String {
         var text by remember { mutableStateOf(value) }
 
         OutlinedTextField(
@@ -136,15 +162,13 @@ class PerfilScreenViewModel: ViewModel() {
                 text = label,
                 color = Color(0xFF4E7029),
                 style = TextStyle(fontWeight = FontWeight.Bold)
-            )
-            },
+            )},
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 3.dp),
             visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None
         )
+        return text
     }
-
-
 }

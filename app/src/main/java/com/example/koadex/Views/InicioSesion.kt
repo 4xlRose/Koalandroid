@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,6 +37,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.auth0.android.Auth0
 import com.auth0.android.authentication.AuthenticationAPIClient
@@ -43,6 +45,10 @@ import com.auth0.android.authentication.AuthenticationException
 import com.auth0.android.callback.Callback
 import com.auth0.android.result.Credentials
 import com.example.koadex.R
+import com.example.koadex.ViewModels.NavigationModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+
 /*
 *
 *  koalandroid@tec.mx
@@ -50,16 +56,24 @@ import com.example.koadex.R
 *
 */
 @Composable
-fun InicioSesion(navController: NavHostController, account: Auth0, modifier: Modifier = Modifier) {
-    IniciarSesionFondo(navController,account, modifier)
+fun InicioSesion(navController: NavHostController,
+                 account: Auth0,
+                 model: NavigationModel,
+                 modifier: Modifier = Modifier
+) {
+    IniciarSesionFondo(navController,account, model, modifier)
 }
 
 @Composable
-fun IniciarSesionFondo(navController: NavHostController,account: Auth0, modifier: Modifier = Modifier) {
+fun IniciarSesionFondo(navController: NavHostController,
+                       account: Auth0,
+                       model: NavigationModel,
+                       modifier: Modifier = Modifier
+) {
     var loggedIn by remember { mutableStateOf(false) }
     var credentials by remember { mutableStateOf<Credentials?>(null) }
-
     val fondo = painterResource(R.drawable.login)
+
     Box (
         modifier = Modifier
     ) {
@@ -71,18 +85,19 @@ fun IniciarSesionFondo(navController: NavHostController,account: Auth0, modifier
                 .fillMaxSize()
         )
         if (loggedIn) {
-            Principal(navController)
+            Principal(navController, model.loggedUser)
         } else {
             IniciarSesionLogInContenido(
                 navController = navController,
                 account = account,
+                model = model,
                 onLoginSuccess = {
                     credentials = it
                     loggedIn = true
                 },
-                modifier = Modifier)
+                modifier = Modifier
+            )
         }
-
     }
 }
 
@@ -90,10 +105,11 @@ fun IniciarSesionFondo(navController: NavHostController,account: Auth0, modifier
 fun IniciarSesionLogInContenido(
     navController: NavHostController,
     account: Auth0,
+    model: NavigationModel,
     onLoginSuccess: (Credentials) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var username by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
 
@@ -135,8 +151,8 @@ fun IniciarSesionLogInContenido(
             fontWeight = FontWeight.Bold
         )
         OutlinedTextField(
-            value = username,
-            onValueChange = { username = it},
+            value = email,
+            onValueChange = { email = it},
             label = { Text( stringResource(R.string.email),
                 color = Color.Black) },
             modifier = modifier
@@ -186,10 +202,15 @@ fun IniciarSesionLogInContenido(
             )
         }
 
-
         Button(
             onClick = {
-                loginWithUsernamePassword(account, username, password, onLoginSuccess, onError = { message ->
+                loginWithUsernamePassword(
+                    account = account,
+                    model = model,
+                    username = email,
+                    password = password,
+                    onSuccess = onLoginSuccess,
+                    onError = { message ->
                     errorMessage = message // Actualiza el mensaje de error si ocurre un problema
                 })
             },
@@ -220,20 +241,27 @@ fun IniciarSesionLogInContenido(
                 color = Color.White
             )
         }
-
-
     }
 }
 
 private fun loginWithUsernamePassword(
-    auth0: Auth0,
+    account: Auth0,
+    model: NavigationModel,
     username: String,
     password: String,
     onSuccess: (Credentials) -> Unit,
-    onError: (String) -> Unit
+    onError: (String) -> Unit,
 ) {
 
-    val authentication = AuthenticationAPIClient(auth0)
+    val authentication = AuthenticationAPIClient(account)
+    val coroutineScope = CoroutineScope(model.viewModelScope.coroutineContext)
+    val processUser = { email: String ->
+        coroutineScope.launch {
+            model.getUserByEmail(email).collect { user ->
+                model.loggedUser = user ?: model.loggedUser
+            }
+        }
+    }
 
     authentication
         .login(username, password, "Username-Password-Authentication")
@@ -242,6 +270,12 @@ private fun loginWithUsernamePassword(
         .setScope("openid profile email")
         .start(object : Callback<Credentials, AuthenticationException> {
             override fun onSuccess(result: Credentials) {
+                model.loggedUser.name = username.slice(IntRange(0, (username.indexOf('@') - 1)))
+                model.loggedUser.email = username
+                model.loggedUser.password = password
+                model.loggedUser.isloggedIn = true
+
+                processUser(model.loggedUser.email)
                 onSuccess(result)
             }
 
@@ -252,5 +286,4 @@ private fun loginWithUsernamePassword(
             }
         })
 }
-
 

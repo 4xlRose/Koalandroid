@@ -7,9 +7,11 @@ import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 
 interface FormRepository {
-    /*Borrar después de actualizar koadex con la nueva tabla formulario general*/
 
-    fun getAllForms(): Flow<List<FormEntity>>
+    // Usuario
+    /*Borrar después de actualizar koadex con la nueva tabla formulario general*/
+    fun getAllForms(): Flow<List<GeneralFormEntity>>
+    //fun getAllForms(): Flow<List<FormEntity>>
 
     fun getForm(id: Int): Flow<FormEntity?>
 
@@ -27,13 +29,25 @@ interface FormRepository {
     suspend fun insertUser(user: UserEntity)
     suspend fun updateUser(user: UserEntity)
     suspend fun deleteUser(user: UserEntity)
+    suspend fun deleteAllUsers()
+    suspend fun resetUserTable()
     fun getAllUsers(): Flow<List<UserEntity>>
     fun getUserById(id: Int): Flow<UserEntity?>
+    fun getUserByEmail(email: String): Flow<UserEntity?>
+
+    // Estado de Formularios
+    suspend fun insertFormState(form: FormStateEntity)
+    fun getAllFormStates(): Flow<List<FormStateEntity>>
+    fun getFormStateByFormId(id: Int): Flow<FormStateEntity?>
+    suspend fun updateFormState(form: FormStateEntity)
+    suspend fun deleteFormState(form: FormStateEntity)
+    suspend fun deleteAllFormStates()
+    suspend fun resetFormStateTable()
+
 
     //Clima
     fun getWeatherById(id: Int): Flow<WeatherEntity?>
     suspend fun inserWeatherBegin(weathers: List<WeatherEntity>)
-
 
     //Epoca
     fun getSeasonById(id: Int): Flow<SeasonEntity?>
@@ -79,7 +93,9 @@ interface FormRepository {
     suspend fun insertHabitatBegin(habitat: List<HabitatEntity>)
     fun getHabitat(id: Int): Flow<HabitatEntity?>
 
+    // Formularios
     fun getFormById(id: Int): Flow<GeneralFormEntity?>
+    suspend fun getLatestFormId(): Int
     suspend fun insertGeneralForm(form: GeneralFormEntity)
     suspend fun updateGeneralForm(form: GeneralFormEntity)
     suspend fun deleteGeneralForm(form: GeneralFormEntity)

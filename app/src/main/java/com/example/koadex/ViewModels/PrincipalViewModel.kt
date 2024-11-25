@@ -47,6 +47,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.koadex.R
 import com.example.koadex.clases.User
+import com.example.koadex.data.UserEntity
 import com.example.koadex.navigate.La_navegacion
 import com.example.koadex.navigate.sampleUser
 
@@ -58,7 +59,7 @@ class PrincipalViewModel : ViewModel(
     @Composable
     public fun Bienvenida_Agregar_formulario(
         `intro-base`: String,
-        user: User,
+        user: UserEntity,
         navController: NavHostController,
         buttonColor: Color = Color(0xFF4E7029)
     ) {
@@ -85,7 +86,7 @@ class PrincipalViewModel : ViewModel(
 
                 ) {
                     Text(
-                        text = `intro-base` + " ${user.username}",
+                        text = `intro-base` + " ${user.name}",
                         fontSize = 48.sp,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center,
@@ -122,7 +123,7 @@ class PrincipalViewModel : ViewModel(
 
     ////// LA ADVERTENCIA /////
     @Composable
-    public fun Advertencia(user: User) {
+    public fun Advertencia(user: UserEntity) {
 
         val rojo_1 = colorResource(R.color.rojo_1)
         val rojo_2 = colorResource(R.color.rojo_2)
@@ -193,7 +194,7 @@ class PrincipalViewModel : ViewModel(
 
                     // Botón de perfil a la derecha
                     IconButton(
-                        onClick = { navigation.navigate("Profile") },
+                        onClick = { navigation.navigate("PerfilScreen") },
                         modifier = Modifier
                             .size(40.dp)
                             .clip(CircleShape)
@@ -216,7 +217,7 @@ class PrincipalViewModel : ViewModel(
     ////// CIRCULAR PROGRESS INDICATOR /////
     @Composable
     public fun Contador_formularios(
-        user: User,
+        user: UserEntity,
         `formulario-base`: String
     ) {
         Column(
@@ -226,7 +227,7 @@ class PrincipalViewModel : ViewModel(
                 .fillMaxHeight()
                 .padding(16.dp)
         ) {
-            if (user.totalForms > 0) {
+            if (user.locallyStoredForms + user.uploadedForms > 0) {
 
                 Text(
                     text = "${user.uploadedForms + user.locallyStoredForms} " + `formulario-base`,
@@ -252,7 +253,7 @@ class PrincipalViewModel : ViewModel(
     }
     @Composable
     public fun CircularProgressIndicator(
-        user: User,
+        user: UserEntity,
         modifier: Modifier = Modifier
     ) {
 

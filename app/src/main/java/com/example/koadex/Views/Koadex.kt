@@ -64,9 +64,13 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.koadex.AppViewModelProvider
-import com.example.koadex.data.FormEntity
+import com.example.koadex.data.FormStateEntity
 import com.example.koadex.data.GeneralFormEntity
+import com.example.koadex.data.UserEntity
 import com.example.koadex.ui.principal.KoadexViewModel
+
+/*
+@Preview(showBackground = true, showSystemUi = true)
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.compose.rememberNavController
@@ -120,6 +124,7 @@ fun KoadexPreview() {
     }
 
 }
+*/
 
 @Composable
 fun Koadex(
@@ -140,7 +145,7 @@ fun Koadex(
             TopNavBar(navController)
         },
         bottomBar = {
-            La_navegacion(navController, false, true, false)
+            La_navegacion(navController, firstSelected = false, secondSelected = true, thirdSelected = false)
         }
 
     ) {
@@ -159,6 +164,14 @@ fun Koadex(
 }
 
 @Composable
+/*Hugo
+fun KoadexPantalla(modifier: Modifier,
+                   viewModel: KoadexViewModel
+) {
+    val koadexUiState by viewModel.koadexUiState.collectAsState()
+    val userList by viewModel.getAllUsers.collectAsState(initial = null)
+    val formStates by viewModel.getAllFormStates.collectAsState(initial = null)
+*/
 fun KoadexPantalla(
     modifier: Modifier,
     viewModel: KoadexViewModel,
@@ -178,17 +191,27 @@ fun KoadexPantalla(
 
         KoadexContenido(
             formList = koadexUiState.koadexList,
+/*Hugo
+            userList = userList,
+            formStates = formStates,
+        )
+*/
             General_formList = koadexGeneralUiState.koadexGeneralList,
             navController,
             modifier,
 
         )
-
     }
 }
 
 @Composable
 fun KoadexContenido(
+/*Hugo
+    formList: List<GeneralFormEntity>,
+    userList: List<UserEntity>?,
+    formStates: List<FormStateEntity>?,
+    modifier: Modifier = Modifier
+*/
     formList: List<FormEntity>,
     General_formList: List<GeneralFormEntity> = listOf(),
     navController: NavHostController,
@@ -216,6 +239,21 @@ fun KoadexContenido(
             ,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+/*Hugo
+            if (formList.isEmpty()) {
+                Text(
+                    text = "No hay formularios guardados",
+                    modifier = Modifier.fillMaxSize()
+                )
+            } else {
+                FormList(
+                    formList = formList,
+                    userList = userList,
+                    formStates = formStates,
+                    modifier = modifier,
+                    filter = selected
+                )
+*/
             if (forms_number == 0) {
                 No_forms(General_formList, navController)
             } else {
@@ -366,16 +404,41 @@ private fun Filtro_seleccion(selected: String): String {
     return selected1
 }
 
+
 /*
 *  Funcion para la lista de formularios y las tarjetas
 */
 @Composable
 fun FormList(
-    formList: List<FormEntity>,
+    formList: List<GeneralFormEntity>,
+    userList: List<UserEntity>?,
+    formStates: List<FormStateEntity>?,
     modifier: Modifier = Modifier,
     filter: String = "Todos",
     new_formList: List<GeneralFormEntity> = listOf()
 ) {
+/*Hugo
+    LazyColumn(modifier = modifier) {
+        items(items = formList) { item ->
+            val user = userList?.find { it.id == item.idUser }
+            val state = formStates?.find { it.idGeneralForm == item.id }
+
+            val cardShowing = when (filter) {
+                "Todos" -> true
+                "Guardados" -> item.id == state?.idGeneralForm && user?.id == state.idUser && !state.isUploaded
+                "Subidos" -> item.id == state?.idGeneralForm && user?.id == state.idUser && state.isUploaded
+                else -> false
+            }
+
+            FormInfo(
+                form = item,
+                user = user,
+                cardShowing = cardShowing
+            )
+        }
+    }
+}
+*/
     // ejemplos de formularios
     var form_example = GeneralFormEntity(
         id = 1,
@@ -405,6 +468,16 @@ fun FormList(
     }
     }
 
+/*Hugo
+@Composable
+fun FormInfo(
+    form: GeneralFormEntity,
+    user: UserEntity?,
+    cardShowing: Boolean,
+    modifier: Modifier = Modifier
+) {
+    if(cardShowing) {
+*/
     // para calar el scroll
     /*
         FormInfo(form_old = form_example2,new_form = form_example)
@@ -451,6 +524,9 @@ fun FormInfo(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
+                        //Hugo
+                        //text = "ID: ${form.id}",
+
                         text = "ID: ${Get_id(form)}",
                         color = colorResource(R.color.green_100),
                         fontWeight = FontWeight.Bold,
@@ -467,6 +543,31 @@ fun FormInfo(
                                 containerColor = colorResource(R.color.verde_oscuro_1)
                             ),
                             shape = RoundedCornerShape(8.dp)
+/*Hugo
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.Schedule,
+                                    contentDescription = "Clock Icon",
+                                    tint = Color.White,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Text(
+                                    text = form.hour,
+                                    color = Color.White,
+                                    fontSize = 12.sp
+                                )
+                            }
+                        }
+
+                        IconButton(
+                            onClick = { /* Acción de edición */ },
+                            modifier = Modifier.size(29.dp)
+*/
                         ) {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
@@ -498,6 +599,68 @@ fun FormInfo(
                                 modifier = Modifier.size(20.dp)
                             )
                         }
+/*Hugo
+
+
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // Nombre del formulario
+                Text(
+                    text = user?.name ?: "Desconocido",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Lugar y fecha
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    // Lugar
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.LocationOn,
+                            contentDescription = "Location",
+                            tint = colorResource(R.color.green_100),
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = form.place,
+                            color = colorResource(R.color.green_100),
+                            fontSize = 14.sp,
+                            maxLines = 1
+                        )
+                    }
+
+                    // Fecha
+                    Card(
+                        colors = CardDefaults.cardColors(
+                            containerColor = colorResource(R.color.green_100)
+                        ),
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
+                        Text(
+                            text = form.date,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                            color = colorResource(R.color.verde_oscuro_1),
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+                }
+            }
+*/
                     }
                 }
 

@@ -1,5 +1,6 @@
 package com.example.koadex.Views
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,15 +33,42 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.auth0.android.Auth0
+import com.auth0.android.authentication.AuthenticationAPIClient
+import com.auth0.android.authentication.AuthenticationException
+import com.auth0.android.callback.Callback
+import com.auth0.android.request.AuthenticationRequest
+import com.auth0.android.request.HttpMethod
+import com.auth0.android.request.RequestOptions
+import com.auth0.android.request.ServerResponse
+import com.auth0.android.request.SignUpRequest
+import com.auth0.android.result.Credentials
+import com.example.koadex.AppViewModelProvider
 import com.example.koadex.R
+import com.example.koadex.ViewModels.NavigationModel
+import com.example.koadex.data.UserEntity
+import com.example.koadex.navigate.sampleUser
+import com.example.koadex.ui.form.FormGeneralDBViewModel
+import kotlinx.coroutines.launch
 
 @Composable
-fun Registro(navController: NavHostController, modifier: Modifier = Modifier) {
-    RegistroFondo(navController, modifier)
+fun Registro(
+    navController: NavHostController,
+    account: Auth0,
+    model: NavigationModel,
+    modifier: Modifier = Modifier
+) {
+    RegistroFondo(navController, model, account, modifier)
 }
 @Composable
-fun RegistroFondo(navController: NavHostController, modifier: Modifier =Modifier) {
+fun RegistroFondo(
+    navController: NavHostController,
+    model: NavigationModel,
+    account: Auth0,
+    modifier: Modifier = Modifier
+) {
     val fondo = painterResource(R.drawable.login)
     Box (
         modifier = Modifier
@@ -52,16 +81,48 @@ fun RegistroFondo(navController: NavHostController, modifier: Modifier =Modifier
             modifier = Modifier
                 .fillMaxSize()
         )
-        RegistroContenido(navController, modifier)
+        RegistroContenido(navController, model, account, modifier)
     }
 }
 
 @Composable
-fun RegistroContenido(navController: NavHostController, modifier: Modifier = Modifier) {
+fun RegistroContenido(
+    navController: NavHostController,
+    model: NavigationModel,
+    account: Auth0,
+    modifier: Modifier = Modifier
+) {
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(start = 16.dp, top = 50.dp, end = 16.dp, bottom = 16.dp)
     ) {
+        val user = sampleUser
+        val registerError = remember { mutableStateOf("") }
+        val coroutineScope = rememberCoroutineScope()
+        val insertUser = { newUser: UserEntity ->
+            coroutineScope.launch {
+                model.insertUser(newUser)
+
+                val authentication = AuthenticationAPIClient(account)
+                authentication
+                    .signUp(newUser.email, newUser.password,newUser.name,"Username-Password-Authentication")
+                    .setConnection("Username-Password-Authentication")
+                    .validateClaims()
+                    .setScope("openid profile email")
+                    .start(object : Callback<Credentials, AuthenticationException> {
+                        override fun onSuccess(result: Credentials) {
+                            onSuccess(result)
+                        }
+
+                        override fun onFailure(error: AuthenticationException) {
+                            // Imprime el error completo en los logs para ver más detalles
+                            Log.e("AuthError", "Error de autenticación: ${error.getDescription()}")
+                            registerError.value = error.message ?: "Error desconocido"
+                        }
+                    })
+            }
+        }
+
         IconButton(
             onClick = {
                 navController.navigate("InicioSesion")
@@ -99,7 +160,10 @@ fun RegistroContenido(navController: NavHostController, modifier: Modifier = Mod
         var text3 by remember { mutableStateOf("Pepe") }
         OutlinedTextField(
             value = text3,
-            onValueChange = { text3 = it },
+            onValueChange = {
+                text3 = it
+                user.name = it
+            },
             label = { Text(
                 "Nombre",
                 color = Color.Black) },
@@ -109,7 +173,10 @@ fun RegistroContenido(navController: NavHostController, modifier: Modifier = Mod
         var text1 by remember { mutableStateOf("example@gmail.com") }
         OutlinedTextField(
             value = text1,
-            onValueChange = { text1 = it },
+            onValueChange = {
+                text1 = it
+                user.email = it
+                            },
             label = { Text(
                 "Email",
                 color = Color.Black) },
@@ -121,6 +188,7 @@ fun RegistroContenido(navController: NavHostController, modifier: Modifier = Mod
             value = text2,
             onValueChange = {
                 text2 = it
+                user.password = it
             },
             label = {
                 Text(
@@ -131,12 +199,12 @@ fun RegistroContenido(navController: NavHostController, modifier: Modifier = Mod
                 .fillMaxWidth()
         )
 
-
         Spacer(
             Modifier.padding(90.dp)
         )
         Button(
             onClick = {
+                insertUser(user)
                 navController.navigate("InicioSesion")
             },
 
@@ -153,7 +221,9 @@ fun RegistroContenido(navController: NavHostController, modifier: Modifier = Mod
                 fontSize = 22.sp
             )
         }
-
-
+        Spacer(
+            Modifier.padding(10.dp)
+        )
+        Text(text = registerError.value)
     }
 }

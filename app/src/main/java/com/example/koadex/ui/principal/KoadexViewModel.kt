@@ -3,7 +3,6 @@ package com.example.koadex.ui.principal
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.koadex.data.FormEntity
 import com.example.koadex.data.FormRepository
 import com.example.koadex.data.GeneralFormEntity
 import kotlinx.coroutines.flow.Flow
@@ -21,6 +20,10 @@ class KoadexViewModel(formsRespository: FormRepository) : ViewModel() {
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
                 initialValue = KoadexUiState()
             )
+
+    val getAllUsers = formsRespository.getAllUsers()
+    val getAllFormStates = formsRespository.getAllFormStates()
+
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L
     }
@@ -95,4 +98,5 @@ interface FormRepository {
     fun getAllForms(): Flow<List<FormEntity>>
     fun getAllGeneralForms(): Flow<List<GeneralFormEntity>>
 }
+data class KoadexUiState(val koadexList: List<GeneralFormEntity> = listOf())
 */

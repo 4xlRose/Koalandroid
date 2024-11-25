@@ -1,12 +1,15 @@
 package com.example.koadex.ui.form
 
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.koadex.R
 import com.example.koadex.data.FormRepository
+import com.example.koadex.data.FormStateEntity
 import com.example.koadex.data.GeneralFormEntity
 import com.example.koadex.data.SeasonEntity
 import com.example.koadex.data.UserEntity
@@ -19,6 +22,10 @@ class FormGeneralDBViewModel (private val formRepository: FormRepository) : View
     var formGeneralUiState by mutableStateOf(GeneralFormUiState())
         private  set
 
+    suspend fun getLatestFormId(): Int {
+        return formRepository.getLatestFormId()
+    }
+
     fun updateGeneraFormUiState(formGeneral: GeneralFormsDetails) {
         formGeneralUiState = GeneralFormUiState(
             formsDetails = formGeneral
@@ -29,31 +36,33 @@ class FormGeneralDBViewModel (private val formRepository: FormRepository) : View
         formRepository.insertGeneralForm(formGeneralUiState.formsDetails.toEntity())
     }
 
-    //Usuario
+    // Usuario
     var userUiState by mutableStateOf(UserUiState())
         private  set
 
-
-
-    suspend fun insertUser(user: UserEntity) {
-        formRepository.insertUser(user)
-    }
-    suspend fun updateUser(user: UserEntity) {
-        formRepository.updateUser(user)
-    }
-    suspend fun deleteUser(user: UserEntity) {
-        formRepository.deleteUser(user)
-    }
-    fun getAllUsers(): Flow<List<UserEntity>> {
-        return formRepository.getAllUsers()
-    }
-    fun getUserById(id: Int): Flow<UserEntity?> {
-        return formRepository.getUserById(id)
-    }
     fun updateUserUiState(user: UserDetails) {
         userUiState = UserUiState(
             userDetails = user
         )
+    }
+
+    suspend fun saveUser() {
+        formRepository.updateUser(userUiState.userDetails.toEntity())
+    }
+
+
+    // Formularios locales
+    var formStateUiState by mutableStateOf(FormStateUiState())
+        private  set
+
+    fun updateFormStateUiState(formState: FormStateDetails) {
+        formStateUiState = FormStateUiState(
+            formStateDetails = formState
+        )
+    }
+
+    suspend fun saveFormState() {
+        formRepository.insertFormState(formStateUiState.formStateDetails.toEntity())
     }
 
 
@@ -65,7 +74,7 @@ class FormGeneralDBViewModel (private val formRepository: FormRepository) : View
     }
 }
 
-/*General form*/
+/*Data classes*/
 data class GeneralFormUiState(
     var formsDetails: GeneralFormsDetails = GeneralFormsDetails()
 )
@@ -87,7 +96,7 @@ fun GeneralFormsDetails.toEntity() : GeneralFormEntity = GeneralFormEntity(
     place = place
 )
 
-/*User*/
+
 data class UserUiState(
     var userDetails: UserDetails = UserDetails()
 )
@@ -96,9 +105,9 @@ data class UserDetails(
     var name: String = "",
     var email: String = "",
     var password: String = "",
+    var phone: String = "",
     var startDate: String = "",
     var idZone: Int = 0, // Foreign Key
-    var totalForms: Int = 0,
     var uploadedForms: Int = 0,
     var locallyStoredForms: Int = 0,
     var posts: Int = 0,
@@ -112,9 +121,9 @@ fun UserDetails.toEntity() : UserEntity = UserEntity(
     name = name,
     email = email,
     password = password,
+    phone = phone,
     startDate = startDate,
     idZone = idZone,
-    totalForms = totalForms,
     uploadedForms = uploadedForms,
     locallyStoredForms = locallyStoredForms,
     posts = posts,
@@ -122,4 +131,20 @@ fun UserDetails.toEntity() : UserEntity = UserEntity(
     followers = followers,
     isloggedIn = isloggedIn,
     profilePicture = profilePicture
+)
+
+data class FormStateUiState(
+    var formStateDetails: FormStateDetails = FormStateDetails()
+)
+data class FormStateDetails(
+    val id: Int = 0,
+    val idUser: Int = 0,
+    val idGeneralForm: Int = 0,
+    val isUploaded: Boolean = false
+)
+fun FormStateDetails.toEntity() : FormStateEntity = FormStateEntity(
+    id = id,
+    idUser = idUser,
+    idGeneralForm = idGeneralForm,
+    isUploaded = isUploaded
 )

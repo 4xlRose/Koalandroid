@@ -17,26 +17,26 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.koadex.R
 import com.example.koadex.ViewModels.PrincipalViewModel
-import com.example.koadex.clases.User
+import com.example.koadex.data.UserEntity
 import com.example.koadex.navigate.sampleUser
+
 @Composable
 fun Principal(
     navController: NavHostController,
-    modifier: Modifier = Modifier,
-    user: User = sampleUser
+    user: UserEntity,
 ) {
-    var `intro-base` = stringResource(id = R.string.Intro_homepage)
-    var `formulario-base` = stringResource(id = R.string.Formularios_base)
+    val introBase = stringResource(id = R.string.Intro_homepage)
+    val formularioBase = stringResource(id = R.string.Formularios_base)
 
-    val principal_vm = PrincipalViewModel()
+    val principalViewModel = PrincipalViewModel()
     val scrollState = rememberScrollState()
 
     Scaffold(
         topBar = {
-            principal_vm.Logo_perfil(navController)
+            principalViewModel.Logo_perfil(navController)
         },
         bottomBar = {
-            principal_vm.nav_Bar(navController)
+            principalViewModel.nav_Bar(navController)
         },
         containerColor = Color.White
     ) { innerPadding ->
@@ -46,7 +46,7 @@ fun Principal(
                 .fillMaxSize()
                 .verticalScroll(scrollState)
         ) {
-            principal_vm.Bienvenida_Agregar_formulario(`intro-base`, user, navController)
+            principalViewModel.Bienvenida_Agregar_formulario(introBase, user, navController)
 
             Spacer(modifier = Modifier.height(40.dp))
 
@@ -60,7 +60,7 @@ fun Principal(
 
             // Warning message if needed
             if (user.locallyStoredForms > 0) {
-                principal_vm.Advertencia(user)
+                principalViewModel.Advertencia(user)
             } else {
                 Spacer(modifier = Modifier.height(16.dp))
             }
@@ -72,7 +72,7 @@ fun Principal(
                     .fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
-                principal_vm.Contador_formularios(user, `formulario-base`)
+                principalViewModel.Contador_formularios(user, formularioBase)
             }
         }
     }
