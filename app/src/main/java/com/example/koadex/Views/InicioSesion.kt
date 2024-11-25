@@ -43,7 +43,12 @@ import com.auth0.android.authentication.AuthenticationException
 import com.auth0.android.callback.Callback
 import com.auth0.android.result.Credentials
 import com.example.koadex.R
-
+/*
+*
+*  koalandroid@tec.mx
+*  KoalAndroid*2025
+*
+*/
 @Composable
 fun InicioSesion(navController: NavHostController, account: Auth0, modifier: Modifier = Modifier) {
     IniciarSesionFondo(navController,account, modifier)
