@@ -9,6 +9,8 @@ import androidx.room.Query
 import androidx.room.Update
 import com.example.koadex.clases.User
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 
 @Dao
 interface FormDao {
@@ -27,6 +29,9 @@ interface FormDao {
     // Métodos de Formulario General
     @Query("SELECT * from general_form WHERE id = :id")
     fun getFormById(id: Int): Flow<GeneralFormEntity>
+
+    @Query("SELECT MAX(id) FROM general_form")
+    suspend fun getLatestFormId(): Int
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertGeneralForm(form: GeneralFormEntity)
@@ -54,7 +59,6 @@ interface FormDao {
     @Query("UPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'user'") // Resets Auto Increment if there is 1 user left
     suspend fun resetUserTable()
 
-
     @Query("SELECT * FROM user")
     fun getAllUsers(): Flow<List<UserEntity>>
 
@@ -63,6 +67,30 @@ interface FormDao {
 
     @Query("SELECT * FROM user WHERE email = :email")
     fun getUserByEmail(email: String): Flow<UserEntity?>
+
+
+
+    // Estado de Formularios
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertFormState(form: FormStateEntity)
+
+    @Query("SELECT * FROM form_state")
+    fun getAllFormStates(): Flow<List<FormStateEntity>>
+
+    @Query("SELECT * FROM form_state WHERE idGeneralForm = :id")
+    fun getFormStateByFormId(id: Int): Flow<FormStateEntity?>
+
+    @Update
+    suspend fun updateFormState(form: FormStateEntity)
+
+    @Delete
+    suspend fun deleteFormState(form: FormStateEntity)
+
+    @Query("DELETE FROM form_state")
+    suspend fun deleteAllFormStates()
+
+    @Query("UPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'form_state'")
+    suspend fun resetFormStateTable()
 
 
     // Clima

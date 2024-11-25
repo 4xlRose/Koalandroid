@@ -7,8 +7,6 @@ class OfflineFormRepository (private val formDao: FormDao) : FormRepository {
 
     /*Borrar después de actualizar el koadex con la nueva tabla de formularios general*/
     override fun getAllForms(): Flow<List<GeneralFormEntity>> = formDao.getAllForms()
-    override fun getForm(id: Int): Flow<GeneralFormEntity?> = formDao.getForm(id)
-    override suspend fun insertIntoListForms(listForms: List<GeneralFormEntity>) = formDao.insertIntoListForms(listForms)
 
     // Usuario
     override suspend fun insertUser(user: UserEntity) = formDao.insertUser(user)
@@ -19,6 +17,16 @@ class OfflineFormRepository (private val formDao: FormDao) : FormRepository {
     override fun getAllUsers(): Flow<List<UserEntity>> = formDao.getAllUsers()
     override fun getUserById(id: Int): Flow<UserEntity?> = formDao.getUserById(id)
     override fun getUserByEmail(email: String): Flow<UserEntity?> = formDao.getUserByEmail(email)
+
+    // Estado de Formularios
+    override suspend fun insertFormState(form: FormStateEntity) = formDao.insertFormState(form)
+    override fun getAllFormStates(): Flow<List<FormStateEntity>> = formDao.getAllFormStates()
+    override fun getFormStateByFormId(id: Int): Flow<FormStateEntity?> = formDao.getFormStateByFormId(id)
+    override suspend fun updateFormState(form: FormStateEntity) = formDao.updateFormState(form)
+    override suspend fun deleteFormState(form: FormStateEntity) = formDao.deleteFormState(form)
+    override suspend fun deleteAllFormStates() = formDao.deleteAllFormStates()
+    override suspend fun resetFormStateTable() = formDao.resetFormStateTable()
+
 
     //Clima
     override fun getWeatherById(id: Int): Flow<WeatherEntity?> = formDao.getWeatherById(id)
@@ -55,6 +63,7 @@ class OfflineFormRepository (private val formDao: FormDao) : FormRepository {
     //Cuadrante superior
     override suspend fun insertCuadranteSBegin(cuadranteS: List<SuperQuadrantEntity>) = formDao.insertCuadranteSBegin(cuadranteS)
     override fun getCuadranteS(id: Int): Flow<SuperQuadrantEntity?> = formDao.getCuadranteS(id)
+
     //Cuadrante intermedio
     override suspend fun insertCuadranteIBegin(cuadranteI: List<MidQuadrantEntity>) = formDao.insertCuadranteIBegin(cuadranteI)
     override fun getCuadranteI(id: Int): Flow<MidQuadrantEntity?> = formDao.getCuadranteI(id)
@@ -70,6 +79,7 @@ class OfflineFormRepository (private val formDao: FormDao) : FormRepository {
 
     //General
     override fun getFormById(id: Int): Flow<GeneralFormEntity?> = formDao.getFormById(id)
+    override suspend fun getLatestFormId(): Int = formDao.getLatestFormId()
     override suspend fun insertGeneralForm(form: GeneralFormEntity) = formDao.insertGeneralForm(form)
     override suspend fun updateGeneralForm(form: GeneralFormEntity) = formDao.updateGeneralForm(form)
     override suspend fun deleteGeneralForm(form: GeneralFormEntity) = formDao.deleteGeneralForm(form)

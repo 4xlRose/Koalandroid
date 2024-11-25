@@ -6,19 +6,6 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.example.koadex.R
 
-/*Borrar después de actualizar koadex con la nueva tabla formulario general*/
-@Entity(tableName = "forms")
-data class FormEntity(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
-    val name: String = "",
-    val date: String = "",
-    val place: String = "",
-    val hour: String = "",
-    val weather: String = "",
-    val season: String = ""
-)
-
 @Entity(tableName = "general_form"/*,
     foreignKeys = [
         ForeignKey(
@@ -104,15 +91,37 @@ data class UserEntity(
     var password: String = "", //Se agrega
     var startDate: String = "", //Se agrega
     var idZone: Int, // Foreign Key //1
-    var totalForms: Int, //predeterminado 0
     var uploadedForms: Int, // predeterminado 0
     var locallyStoredForms: Int, // predeterminado 0
     var posts: Int = 0, // 0
     var following: Int = 0, // 0
     var followers: Int = 0, // 0
-    var isloggedIn: Boolean = true, //
+    var isloggedIn: Boolean = false, //
     // la foto de perfil
     var profilePicture: Int = R.drawable.profilepicture
+)
+
+@Entity(tableName = "form_state"/*,
+    foreignKeys = [
+        ForeignKey(
+            entity = UserEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["idUser"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = GeneralFormEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["idGeneralForm"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]*/)
+data class FormStateEntity(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+    var idUser: Int, // Foreign Key
+    var idGeneralForm: Int, // Foreign Key
+    var isUploaded: Boolean
 )
 
 @Entity(tableName = "weather")

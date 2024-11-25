@@ -227,7 +227,7 @@ class PrincipalViewModel : ViewModel(
                 .fillMaxHeight()
                 .padding(16.dp)
         ) {
-            if (user.totalForms > 0) {
+            if (user.locallyStoredForms + user.uploadedForms > 0) {
 
                 Text(
                     text = "${user.uploadedForms + user.locallyStoredForms} " + `formulario-base`,

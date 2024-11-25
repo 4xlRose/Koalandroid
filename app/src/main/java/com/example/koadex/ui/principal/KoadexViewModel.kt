@@ -20,6 +20,7 @@ class KoadexViewModel(formsRespository: FormRepository) : ViewModel() {
             )
 
     val getAllUsers = formsRespository.getAllUsers()
+    val getAllFormStates = formsRespository.getAllFormStates()
 
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L

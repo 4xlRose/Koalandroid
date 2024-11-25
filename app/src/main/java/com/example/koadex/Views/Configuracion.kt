@@ -24,8 +24,10 @@ import com.example.koadex.clases.User
 import com.example.koadex.navigate.La_navegacion
 import com.example.koadex.clases.Configuracion
 import androidx.compose.material.icons.filled.ArrowBack
+import com.example.koadex.ViewModels.NavigationModel
 import com.example.koadex.data.UserEntity
 import com.example.koadex.navigate.sampleUser
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,7 +35,7 @@ import com.example.koadex.navigate.sampleUser
 fun Configuracion(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    user: UserEntity = sampleUser
+    model: NavigationModel
 ) {
     // Estado para manejar las notificaciones
     var showLogoutDialog by remember { mutableStateOf(false) }
@@ -106,8 +108,10 @@ fun Configuracion(
 
             // Logout Confirmation Dialog
             if (showLogoutDialog) {
-                user.isloggedIn = false
-                Alerta_cerrar_sesion(showLogoutDialog, navController)
+                Alerta_cerrar_sesion(
+                    showLogoutDialog = showLogoutDialog,
+                    model = model,
+                    navController = navController)
             }
         }
     }
@@ -116,6 +120,7 @@ fun Configuracion(
 @Composable
 private fun Alerta_cerrar_sesion(
     showLogoutDialog: Boolean,
+    model: NavigationModel,
     navController: NavHostController
 ) {
     var showLogoutDialog1 = showLogoutDialog
@@ -134,11 +139,20 @@ private fun Alerta_cerrar_sesion(
             Text("¿Estás seguro de que quieres cerrar sesión?")
         },
         confirmButton = {
+            val coroutineScope = rememberCoroutineScope()
+            val saveUser = { user: UserEntity ->
+                coroutineScope.launch {
+                    model.updateUser(user)
+                }
+            }
             TextButton(
                 onClick = {
                     // Implement logout logic here
                     // For example:
                     // viewModel.logout()
+                    model.loggedUser.isloggedIn = false
+                    saveUser(model.loggedUser)
+
                     navController.navigate("InicioSesion") {
                         // Clear the back stack
                         popUpTo(0) { inclusive = true }
@@ -312,8 +326,9 @@ private fun ProfileItem(
     }
 }
 
+/*
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun ConfiguracionPreview() {
     Configuracion(rememberNavController(), user = sampleUser)
-}
+}*/

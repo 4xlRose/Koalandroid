@@ -26,7 +26,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.koadex.ViewModels.NavigationModel
 import com.example.koadex.ViewModels.PerfilScreenViewModel
 import com.example.koadex.data.UserEntity
-import com.example.koadex.navigate.sampleUser
 import kotlinx.coroutines.launch
 
 

@@ -20,7 +20,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,30 +37,25 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.auth0.android.Auth0
 import com.auth0.android.authentication.AuthenticationAPIClient
 import com.auth0.android.authentication.AuthenticationException
 import com.auth0.android.callback.Callback
 import com.auth0.android.result.Credentials
-import com.auth0.android.result.UserProfile
 import com.example.koadex.R
 import com.example.koadex.ViewModels.NavigationModel
-import com.example.koadex.data.UserEntity
-import com.example.koadex.navigate.sampleUser
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 @Composable
 fun InicioSesion(navController: NavHostController,
                  account: Auth0,
                  model: NavigationModel,
                  modifier: Modifier = Modifier
-): UserEntity {
-    val user = IniciarSesionFondo(navController,account, model, modifier)
-    return user
+) {
+    IniciarSesionFondo(navController,account, model, modifier)
 }
 
 @Composable
@@ -69,10 +63,9 @@ fun IniciarSesionFondo(navController: NavHostController,
                        account: Auth0,
                        model: NavigationModel,
                        modifier: Modifier = Modifier
-): UserEntity {
+) {
     var loggedIn by remember { mutableStateOf(false) }
     var credentials by remember { mutableStateOf<Credentials?>(null) }
-    val user = remember { mutableStateOf(sampleUser) }
     val fondo = painterResource(R.drawable.login)
 
     Box (
@@ -86,18 +79,12 @@ fun IniciarSesionFondo(navController: NavHostController,
                 .fillMaxSize()
         )
         if (loggedIn) {
-            val userFlow = model.getUserByEmail(credentials?.user?.name ?: "")
-            val newUser = userFlow.collectAsState(initial = null)
-
-            user.value = newUser.value ?: sampleUser
-            user.value = user.value.copy(isloggedIn = true)
-
-            Principal(navController, user.value)
-
+            Principal(navController, model.loggedUser)
         } else {
             IniciarSesionLogInContenido(
                 navController = navController,
                 account = account,
+                model = model,
                 onLoginSuccess = {
                     credentials = it
                     loggedIn = true
@@ -106,13 +93,13 @@ fun IniciarSesionFondo(navController: NavHostController,
             )
         }
     }
-    return user.value
 }
 
 @Composable
 fun IniciarSesionLogInContenido(
     navController: NavHostController,
     account: Auth0,
+    model: NavigationModel,
     onLoginSuccess: (Credentials) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -208,9 +195,16 @@ fun IniciarSesionLogInContenido(
                 Modifier.padding(50.dp)
             )
         }
+
         Button(
             onClick = {
-                loginWithUsernamePassword(account, email, password, onLoginSuccess, onError = { message ->
+                loginWithUsernamePassword(
+                    account = account,
+                    model = model,
+                    username = email,
+                    password = password,
+                    onSuccess = onLoginSuccess,
+                    onError = { message ->
                     errorMessage = message // Actualiza el mensaje de error si ocurre un problema
                 })
             },
@@ -244,26 +238,24 @@ fun IniciarSesionLogInContenido(
     }
 }
 
-
-private suspend fun getCloudUser(
-    auth0: Auth0,
-    credentials: Credentials?
-) {
-    val authentication = AuthenticationAPIClient(auth0)
-    authentication
-        .userInfo(credentials?.idToken ?: "")
-        .await()
-}
-
 private fun loginWithUsernamePassword(
-    auth0: Auth0,
+    account: Auth0,
+    model: NavigationModel,
     username: String,
     password: String,
     onSuccess: (Credentials) -> Unit,
-    onError: (String) -> Unit
+    onError: (String) -> Unit,
 ) {
 
-    val authentication = AuthenticationAPIClient(auth0)
+    val authentication = AuthenticationAPIClient(account)
+    val coroutineScope = CoroutineScope(model.viewModelScope.coroutineContext)
+    val processUser = { email: String ->
+        coroutineScope.launch {
+            model.getUserByEmail(email).collect { user ->
+                model.loggedUser = user ?: model.loggedUser
+            }
+        }
+    }
 
     authentication
         .login(username, password, "Username-Password-Authentication")
@@ -272,6 +264,12 @@ private fun loginWithUsernamePassword(
         .setScope("openid profile email")
         .start(object : Callback<Credentials, AuthenticationException> {
             override fun onSuccess(result: Credentials) {
+                model.loggedUser.name = username.slice(IntRange(0, (username.indexOf('@') - 1)))
+                model.loggedUser.email = username
+                model.loggedUser.password = password
+                model.loggedUser.isloggedIn = true
+
+                processUser(model.loggedUser.email)
                 onSuccess(result)
             }
 
@@ -282,5 +280,4 @@ private fun loginWithUsernamePassword(
             }
         })
 }
-
 

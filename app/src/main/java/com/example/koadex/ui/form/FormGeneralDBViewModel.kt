@@ -1,12 +1,15 @@
 package com.example.koadex.ui.form
 
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.koadex.R
 import com.example.koadex.data.FormRepository
+import com.example.koadex.data.FormStateEntity
 import com.example.koadex.data.GeneralFormEntity
 import com.example.koadex.data.SeasonEntity
 import com.example.koadex.data.UserEntity
@@ -19,6 +22,10 @@ class FormGeneralDBViewModel (private val formRepository: FormRepository) : View
     var formGeneralUiState by mutableStateOf(GeneralFormUiState())
         private  set
 
+    suspend fun getLatestFormId(): Int {
+        return formRepository.getLatestFormId()
+    }
+
     fun updateGeneraFormUiState(formGeneral: GeneralFormsDetails) {
         formGeneralUiState = GeneralFormUiState(
             formsDetails = formGeneral
@@ -30,58 +37,32 @@ class FormGeneralDBViewModel (private val formRepository: FormRepository) : View
     }
 
     // Usuario
-    data class UserUiState(
-        var userDetails: UserDetails = UserDetails()
-    )
-    data class UserDetails(
-        val id: Int = 0,
-        var name: String = "",
-        var email: String = "",
-        var password: String = "",
-        var startDate: String = "",
-        var idZone: Int = 0, // Foreign Key
-        var totalForms: Int = 0,
-        var uploadedForms: Int = 0,
-        var locallyStoredForms: Int = 0,
-        var posts: Int = 0,
-        var following: Int = 0,
-        var followers: Int = 0,
-        var isloggedIn: Boolean = true,
-        var profilePicture: Int = R.drawable.profilepicture
-    )
-
     var userUiState by mutableStateOf(UserUiState())
         private  set
-
-    private fun entityToDetails(user: UserEntity): UserDetails {
-        return UserDetails(
-            id = user.id,
-            name = user.name,
-            email = user.email,
-            password = user.password,
-            startDate = user.startDate,
-            idZone = user.idZone,
-            totalForms = user.totalForms,
-            uploadedForms = user.uploadedForms,
-            locallyStoredForms = user.locallyStoredForms,
-            posts = user.posts,
-            following = user.following,
-            followers = user.followers,
-            isloggedIn = user.isloggedIn,
-            profilePicture = user.profilePicture
-        )
-    }
-
-    fun getUser(user: UserEntity) {
-        userUiState = UserUiState(
-            userDetails = entityToDetails(user)
-        )
-    }
 
     fun updateUserUiState(user: UserDetails) {
         userUiState = UserUiState(
             userDetails = user
         )
+    }
+
+    suspend fun saveUser() {
+        formRepository.updateUser(userUiState.userDetails.toEntity())
+    }
+
+
+    // Formularios locales
+    var formStateUiState by mutableStateOf(FormStateUiState())
+        private  set
+
+    fun updateFormStateUiState(formState: FormStateDetails) {
+        formStateUiState = FormStateUiState(
+            formStateDetails = formState
+        )
+    }
+
+    suspend fun saveFormState() {
+        formRepository.insertFormState(formStateUiState.formStateDetails.toEntity())
     }
 
 
@@ -93,7 +74,7 @@ class FormGeneralDBViewModel (private val formRepository: FormRepository) : View
     }
 }
 
-/*General form*/
+/*Data classes*/
 data class GeneralFormUiState(
     var formsDetails: GeneralFormsDetails = GeneralFormsDetails()
 )
@@ -113,4 +94,57 @@ fun GeneralFormsDetails.toEntity() : GeneralFormEntity = GeneralFormEntity(
     idWeather = idWeather,
     idSeason = idSeason,
     place = place
+)
+
+
+data class UserUiState(
+    var userDetails: UserDetails = UserDetails()
+)
+data class UserDetails(
+    val id: Int = 0,
+    var name: String = "",
+    var email: String = "",
+    var password: String = "",
+    var phone: String = "",
+    var startDate: String = "",
+    var idZone: Int = 0, // Foreign Key
+    var uploadedForms: Int = 0,
+    var locallyStoredForms: Int = 0,
+    var posts: Int = 0,
+    var following: Int = 0,
+    var followers: Int = 0,
+    var isloggedIn: Boolean = true,
+    var profilePicture: Int = R.drawable.profilepicture
+)
+fun UserDetails.toEntity() : UserEntity = UserEntity(
+    id = id,
+    name = name,
+    email = email,
+    password = password,
+    phone = phone,
+    startDate = startDate,
+    idZone = idZone,
+    uploadedForms = uploadedForms,
+    locallyStoredForms = locallyStoredForms,
+    posts = posts,
+    following = following,
+    followers = followers,
+    isloggedIn = isloggedIn,
+    profilePicture = profilePicture
+)
+
+data class FormStateUiState(
+    var formStateDetails: FormStateDetails = FormStateDetails()
+)
+data class FormStateDetails(
+    val id: Int = 0,
+    val idUser: Int = 0,
+    val idGeneralForm: Int = 0,
+    val isUploaded: Boolean = false
+)
+fun FormStateDetails.toEntity() : FormStateEntity = FormStateEntity(
+    id = id,
+    idUser = idUser,
+    idGeneralForm = idGeneralForm,
+    isUploaded = isUploaded
 )
