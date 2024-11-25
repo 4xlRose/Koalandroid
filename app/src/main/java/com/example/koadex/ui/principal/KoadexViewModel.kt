@@ -33,6 +33,7 @@ class KoadexViewModel(formsRespository: FormRepository) : ViewModel() {
                 initialValue = KoadexGeneralUiState()
             )
 }
+
 data class KoadexUiState(val koadexList: List<FormEntity> = listOf()){
 
 }

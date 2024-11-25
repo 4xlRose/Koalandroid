@@ -2,7 +2,6 @@ package com.example.koadex.Views
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,8 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -65,12 +62,10 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.graphics.vector.ImageVector
-
 import com.example.koadex.AppViewModelProvider
 import com.example.koadex.data.FormEntity
 import com.example.koadex.data.GeneralFormEntity
 import com.example.koadex.ui.principal.KoadexViewModel
-
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.compose.rememberNavController
@@ -181,7 +176,8 @@ fun KoadexPantalla(
             formList = koadexUiState.koadexList,
             General_formList = koadexGeneralUiState.koadexGeneralList,
             navController,
-            modifier
+            modifier,
+
         )
 
     }
@@ -192,7 +188,8 @@ fun KoadexContenido(
     formList: List<FormEntity>,
     General_formList: List<GeneralFormEntity> = listOf(),
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+
 ) {
     Column (
         modifier = Modifier
@@ -371,6 +368,7 @@ fun FormList(
     filter: String = "Todos",
     new_formList: List<GeneralFormEntity> = listOf()
 ) {
+    // ejemplos de formularios
     var form_example = GeneralFormEntity(
         id = 1,
         date = "2023-07-01",
@@ -447,7 +445,7 @@ fun FormInfo(
             ) {
 
                 Text(
-                    text = "ID: ${form.id}",
+                    text = "ID: ${Get_id(form)}",
                     color = colorResource(R.color.green_100),
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp
@@ -561,38 +559,32 @@ fun FormInfo(
 }
 
 @Composable
-private fun Get_name(form: FormEntity): String {
-    // aca se implementa la funcionalidad de regresar un nombre en funcion de un id
-    return form.name
-}
-
-@Composable
-private fun Get_id(form: GeneralFormEntity): Int {
+fun Get_id(form: GeneralFormEntity): Int {
     return form.id
 }
 @Composable
-private fun Get_name2(form: GeneralFormEntity): String {
+fun Get_name2(form: GeneralFormEntity): String {
     // aca se implementa la funcionalidad de regresar un nombre en funcion de un id
     return "Juan"
 }
 
 @Composable
-private fun Get_date(form: GeneralFormEntity): String {
+fun Get_date(form: GeneralFormEntity): String {
     return form.date
 }
 
 @Composable
-private fun Get_hour(form: GeneralFormEntity): String {
+fun Get_hour(form: GeneralFormEntity): String {
     return form.hour
 }
 
 @Composable
-private fun Get_place(form: GeneralFormEntity): String {
+fun Get_place(form: GeneralFormEntity): String {
     return "Ciudad de México"
 }
 
 @Composable
-private fun Get_weather(form: GeneralFormEntity): String {
+fun Get_weather(form: GeneralFormEntity): String {
     val nuber = form.idWeather
 
     val diccionario = mapOf(
@@ -604,7 +596,7 @@ private fun Get_weather(form: GeneralFormEntity): String {
 }
 
 @Composable
-private fun Get_season(form: GeneralFormEntity): String {
+fun Get_season(form: GeneralFormEntity): String {
     val nuber = form.idSeason
 
     val diccionario = mapOf(
