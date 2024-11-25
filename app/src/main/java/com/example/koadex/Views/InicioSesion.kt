@@ -49,6 +49,12 @@ import com.example.koadex.ViewModels.NavigationModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+/*
+*
+*  koalandroid@tec.mx
+*  KoalAndroid*2025
+*
+*/
 @Composable
 fun InicioSesion(navController: NavHostController,
                  account: Auth0,

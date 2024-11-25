@@ -61,7 +61,8 @@ fun FormularioSeleccion(
 {
     Scaffold(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .background(Color.White),
         topBar = {
             TopAppBar(
                 title = { Text("Formulario",
@@ -81,7 +82,9 @@ fun FormularioSeleccion(
     ) { paddingValues ->
         FormularioSeleccionScreen(
             navController = navController,
-            modifier = Modifier.padding(paddingValues)
+            modifier = Modifier
+                .padding(paddingValues)
+                .background(Color.White)
         )
     }
 }
@@ -91,12 +94,12 @@ fun FormularioSeleccionScreen(
     navController: androidx.navigation.NavController,
     modifier: Modifier = Modifier
 ) {
-    // Estado que rastrea el texto del botón seleccionado
     var selectedButton by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color.White)
             .verticalScroll(rememberScrollState())
             .padding(top = 80.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -188,7 +191,7 @@ fun FormularioSeleccionScreen(
             )
         }
 
-        Spacer(modifier = Modifier.weight(1f)) // Espacio flexible al final
+        Spacer(modifier = Modifier.height(60.dp))
     }
 }
 
@@ -205,7 +208,7 @@ fun OptionButton(
         modifier = modifier
             .height(90.dp)
             .fillMaxWidth()
-            .background(if (isSelected) Color(0xFF97B96E) else Color.Transparent), // Fondo dinámico
+            .background(if (isSelected) Color(0xFF97B96E) else Color.White), // Fondo dinámico
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.outlinedButtonColors(
             containerColor = Color.White

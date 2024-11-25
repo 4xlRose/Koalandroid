@@ -101,7 +101,7 @@ fun FormularioEspecies(
                 OutlinedTextField(
                     value = transectoNumber,
                     onValueChange = { transectoNumber = it },
-                    label = { Text("Número de Transecto") },
+                    label = { Text("Número de Transecto", color = Color.DarkGray) },
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -118,14 +118,14 @@ fun FormularioEspecies(
                 OutlinedTextField(
                     value = commonName,
                     onValueChange = { commonName = it },
-                    label = { Text("Nombre Común") },
+                    label = { Text("Nombre Común", color = Color.DarkGray) },
                     modifier = Modifier.fillMaxWidth()
                 )
 
                 OutlinedTextField(
                     value = scientificName,
                     onValueChange = { scientificName = it },
-                    label = { Text("Nombre Científico") },
+                    label = { Text("Nombre Científico", color = Color.DarkGray) },
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -134,7 +134,8 @@ fun FormularioEspecies(
                 // Número de individuos
                 Text("Número de Individuos",
                     style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.align(Alignment.Start))
+                    modifier = Modifier.align(Alignment.Start),
+                    color = Color.Black)
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     verticalAlignment = Alignment.CenterVertically
@@ -166,14 +167,15 @@ fun FormularioEspecies(
                 Spacer(modifier = Modifier.padding(vertical = 5.dp))
 
                 Text("Evidencias", style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.align(Alignment.Start))
+                    modifier = Modifier.align(Alignment.Start),
+                    color = Color.Black)
                 viewModel.Botones_captura(green700)
 
                 // Campo de observaciones
                 OutlinedTextField(
                     value = observations,
                     onValueChange = { observations = it },
-                    label = { Text("Observaciones") },
+                    label = { Text("Observaciones", color = Color.DarkGray) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(100.dp)
@@ -182,6 +184,9 @@ fun FormularioEspecies(
                 Spacer(modifier = Modifier.padding(vertical = 10.dp))
 
                 viewModel.Atras_enviar(navController, green700)
+
+                Spacer(modifier = Modifier.height(50.dp))
+
             }
         }
     }
