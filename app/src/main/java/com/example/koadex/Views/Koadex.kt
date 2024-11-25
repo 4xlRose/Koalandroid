@@ -58,6 +58,7 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Help
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.runtime.collectAsState
@@ -78,7 +79,10 @@ import com.example.koadex.navigate.sampleUser
 *
 */
 
-@Preview(showBackground = true, showSystemUi = true, device = "spec:width=500dp,height=800dp")
+@Preview(
+    showBackground = true,
+    showSystemUi = true,
+    device = "spec:width=500dp,height=800dp")
 @Composable
 fun KoadexPreview() {
     var form_example = GeneralFormEntity(
@@ -215,13 +219,17 @@ fun KoadexContenido(
             if (forms_number == 0) {
                 No_forms(General_formList, navController)
             } else {
-                FormList(formList = formList, filter = selected, new_formList = General_formList)
+                FormList(
+                    formList = formList,
+                    filter = selected,
+                    new_formList = General_formList)
             }
         }
     }
 }
 
-// Funcion para la pantalla sin formularios (solo es un boton que lleva a la pantalla de formulario general)
+// Funcion para la pantalla sin formularios
+// (solo es un boton que lleva a la pantalla de formulario general)
 @Composable
 private fun No_forms(
     form_list: List<GeneralFormEntity> = listOf(),
@@ -414,91 +422,86 @@ fun FormList(
 @Composable
 fun FormInfo(
     form_old: FormEntity,
-    new_form: GeneralFormEntity ,
+    new_form: GeneralFormEntity,
     modifier: Modifier = Modifier
 ) {
+    var isExpanded by remember { mutableStateOf(false) }
     val form = new_form
 
-    Card(
-        modifier = modifier
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-            .fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = colorResource(R.color.verde_1)
-        )
-        ,
-        onClick = {
-            // Acción al hacer clic en el formulario
-        }
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
+    Column {
+        Card(
+            modifier = modifier
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .fillMaxWidth(),
+            shape = RoundedCornerShape(16.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = colorResource(R.color.verde_1)
+            ),
+            onClick = { isExpanded = !isExpanded }
         ) {
-            // ID, hora y botón de edición
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
             ) {
-
-                Text(
-                    text = "ID: ${Get_id(form)}",
-                    color = colorResource(R.color.green_100),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp
-                )
-
+                // ID, hora y botón de edición
                 Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Hora
-                    Card(
-                        colors = CardDefaults.cardColors(
-                            containerColor = colorResource(R.color.verde_oscuro_1)
-                        ),
-                        shape = RoundedCornerShape(8.dp)
+                    Text(
+                        text = "ID: ${Get_id(form)}",
+                        color = colorResource(R.color.green_100),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 14.sp
+                    )
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                        // Hora
+                        Card(
+                            colors = CardDefaults.cardColors(
+                                containerColor = colorResource(R.color.verde_oscuro_1)
+                            ),
+                            shape = RoundedCornerShape(8.dp)
                         ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.Schedule,
+                                    contentDescription = "Clock Icon",
+                                    tint = Color.White,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Text(
+                                    text = Get_hour(form),
+                                    color = Color.White,
+                                    fontSize = 12.sp
+                                )
+                            }
+                        }
+
+                        IconButton(
+                            onClick = { /* Acción de edición */ },
+                            modifier = Modifier.size(29.dp)
+                        ){
                             Icon(
-                                imageVector = Icons.Filled.Schedule,
-                                contentDescription = "Clock Icon",
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = "Editar",
                                 tint = Color.White,
-                                modifier = Modifier.size(16.dp)
-                            )
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Text(
-                                text = Get_hour(form),
-                                //text = Get_hour(form),
-                                color = Color.White,
-                                fontSize = 12.sp
+                                modifier = Modifier.size(20.dp)
                             )
                         }
                     }
-
-                    IconButton(
-                        onClick = { /* Acción de edición */ },
-                        modifier = Modifier.size(29.dp)
-                    ){
-                        Icon(
-                            imageVector = Icons.Default.Edit,
-                            contentDescription = "Editar",
-                            tint = Color.White,
-                            modifier = Modifier.size(20.dp)
-                        )
-                    }
-
                 }
-            }
 
-            Spacer(modifier = Modifier.height(12.dp))
-
+                Spacer(modifier = Modifier.height(12.dp))
 
                 Text(
                     text = Get_name2(form),
@@ -507,57 +510,122 @@ fun FormInfo(
                     fontSize = 24.sp
                 )
 
+                Spacer(modifier = Modifier.height(8.dp))
 
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // Lugar y fecha
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                // Lugar
+                // Lugar y fecha
                 Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.LocationOn,
-                        contentDescription = "Location",
-                        tint = colorResource(R.color.green_100),
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        text = Get_place(form),
-                        //text = Get_place(form),
-                        color = colorResource(R.color.green_100),
-                        fontSize = 14.sp,
-                        maxLines = 1
-                    )
-                }
+                    // Lugar
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.LocationOn,
+                            contentDescription = "Location",
+                            tint = colorResource(R.color.green_100),
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = Get_place(form),
+                            color = colorResource(R.color.green_100),
+                            fontSize = 14.sp,
+                            maxLines = 1
+                        )
+                    }
 
-                // Fecha
-                Card(
-                    colors = CardDefaults.cardColors(
-                        containerColor = colorResource(R.color.green_100)
-                    ),
-                    shape = RoundedCornerShape(8.dp)
-                ) {
-                    Text(
-                        text = Get_date(form),
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                        color = colorResource(R.color.verde_oscuro_1),
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Medium
-                    )
+                    // Fecha
+                    Card(
+                        colors = CardDefaults.cardColors(
+                            containerColor = colorResource(R.color.green_100)
+                        ),
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
+                        Text(
+                            text = Get_date(form),
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                            color = colorResource(R.color.verde_oscuro_1),
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
                 }
             }
+        }
+
+        // Resumen expandible
+        if (isExpanded) {
+            resumen_Formulario(form)
         }
     }
 }
 
+@Composable
+fun resumen_Formulario(form: GeneralFormEntity) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .padding(bottom = 8.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = colorResource(R.color.verde_oscuro_1)
+        ),
+        shape = RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(
+                text = "Resumen del Formulario",
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp
+            )
+
+            Divider(
+                color = colorResource(R.color.green_100),
+                thickness = 1.dp,
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
+
+            ResumenItem("Temporada:", Get_season(form))
+            ResumenItem("Clima:", Get_weather(form))
+            ResumenItem("Fecha:", Get_date(form))
+            ResumenItem("Hora:", Get_hour(form))
+            ResumenItem("Ubicación:", Get_place(form))
+        }
+    }
+}
+
+@Composable
+private fun ResumenItem(label: String, value: String) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = label,
+            color = colorResource(R.color.green_100),
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+            Text(
+                text = value,
+                color = Color.White,
+                fontSize = 14.sp
+            )
+
+
+    }
+}
 @Composable
 fun Get_id(form: GeneralFormEntity): Int {
     return form.id
@@ -592,7 +660,7 @@ fun Get_weather(form: GeneralFormEntity): String {
         2 to "Nublado",
         3 to "Lluvioso"
     )
-    return diccionario[nuber] ?: ""
+    return diccionario[nuber] ?: "Sin registro de clima"
 }
 
 @Composable
@@ -605,7 +673,7 @@ fun Get_season(form: GeneralFormEntity): String {
         3 to "Invierno",
         4 to "Otoño"
     )
-    return diccionario[nuber] ?: ""
+    return diccionario[nuber] ?: "Sin registro de temporada"
 }
 
 
