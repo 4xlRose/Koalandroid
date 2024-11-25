@@ -441,5 +441,6 @@ data class WeatherFormEntity(
     var maxTemperature: Double = 0.0, // decimal(2)
     var maxHumidity: Double = 0.0, // decimal(2)
     var minTemperature: Double = 0.0, // decimal(2)
+    var minHumidity: Double = 0.0, // decimal(2)
     var streamMtLevel: Double = 0.0 // decimal(2)
 )

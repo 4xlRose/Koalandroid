@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,7 +33,12 @@ import androidx.navigation.compose.rememberNavController
 import com.example.koadex.AppViewModelProvider
 import com.example.koadex.R
 import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
+import com.example.koadex.ui.form.FollowUpFormDetails
+import com.example.koadex.ui.form.FollowUpFormUiState
+import com.example.koadex.ui.form.FormFollowDBViewModel
 import com.example.koadex.ui.principal.KoadexViewModel
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,8 +47,10 @@ fun FormularioSeguimiento(
     //activity: MainActivity,
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    //viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: FormFollowDBViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+    val coroutineScope = rememberCoroutineScope()
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -69,7 +77,15 @@ fun FormularioSeguimiento(
         FormularioSeguimientoScreen(
             //activity = activity,
             navController = navController,
-            modifier = Modifier.padding(paddingValues)
+            formUiState = viewModel.formFollowUiState,
+            onFormValueChange = viewModel::updateFollowUpFormUiState,
+            onSaveClick = {
+                coroutineScope.launch {
+                    viewModel.saveFollowForm()
+                    navController.navigate("TiposForms")
+                }
+            },
+            modifier = Modifier.padding(paddingValues),
         )
     }
 }
@@ -79,14 +95,17 @@ fun FormularioSeguimiento(
 fun FormularioSeguimientoScreen(
     //activity: MainActivity,
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    formUiState: FollowUpFormUiState,
+    onFormValueChange: (FollowUpFormDetails) -> Unit,
+    onSaveClick: () -> Unit
 ) {
     val scrollState = rememberScrollState()
     // Estado para los botones seleccionados
-    val coberturaSeleccionada = remember { mutableStateOf(-1) }
+    /*val coberturaSeleccionada = remember { mutableStateOf(-1) }
     val disturbioSeleccionado = remember { mutableStateOf(-1) }
     val seguimientoSeleccionado = remember { mutableStateOf(-1) } // Estado para los botones de Seguimiento
-    val cambioSeleccionado = remember { mutableStateOf(-1) } // Estado para los botones de Cambió
+    val cambioSeleccionado = remember { mutableStateOf(-1) } // Estado para los botones de Cambió*/
     val viewModel = FomularioEspecies_ViewModel()
     val green700 = colorResource(id = R.color.green_700)
     var codigo by remember { mutableStateOf("") } // Estado para Observaciones
@@ -126,21 +145,21 @@ fun FormularioSeguimientoScreen(
                     color = Color.Black)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     OutlinedButton(
-                        onClick = { seguimientoSeleccionado.value = 0 }, // Marca el botón como seleccionado
+                        onClick = { onFormValueChange(formUiState.formsFollowUpDetails.copy(followUp = true)) }, // Marca el botón como seleccionado
                         border = BorderStroke(1.dp, Color.Gray),
                         colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = if (seguimientoSeleccionado.value == 0) Color(0xFF97B96E) else Color.White,
-                            contentColor = if (seguimientoSeleccionado.value == 0) Color.White else Color.Black
+                            containerColor = if (formUiState.formsFollowUpDetails.followUp) Color(0xFF97B96E) else Color.White,
+                            contentColor = if (formUiState.formsFollowUpDetails.followUp) Color.White else Color.Black
                         )
                     ) {
                         Icon(Icons.Default.Check, contentDescription = "Check")
                     }
                     OutlinedButton(
-                        onClick = { seguimientoSeleccionado.value = 1 }, // Marca el botón como seleccionado
+                        onClick = { onFormValueChange(formUiState.formsFollowUpDetails.copy(followUp = false)) }, // Marca el botón como seleccionado
                         border = BorderStroke(1.dp, Color.Gray),
                         colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = if (seguimientoSeleccionado.value == 1) Color(0xFF97B96E) else Color.White,
-                            contentColor = if (seguimientoSeleccionado.value == 1) Color.White else Color.Black
+                            containerColor = if (!formUiState.formsFollowUpDetails.followUp) Color(0xFF97B96E) else Color.White,
+                            contentColor = if (!formUiState.formsFollowUpDetails.followUp) Color.White else Color.Black
                         )
                     ) {
                         Icon(Icons.Default.Close, contentDescription = "Close")
@@ -153,21 +172,21 @@ fun FormularioSeguimientoScreen(
                     color = Color.Black)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     OutlinedButton(
-                        onClick = { cambioSeleccionado.value = 0 }, // Marca el botón como seleccionado
+                        onClick = { onFormValueChange(formUiState.formsFollowUpDetails.copy(change = true)) }, // Marca el botón como seleccionado
                         border = BorderStroke(1.dp, Color.Gray),
                         colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = if (cambioSeleccionado.value == 0) Color(0xFF4E7029) else Color.White,
-                            contentColor = if (cambioSeleccionado.value == 0) Color.White else Color.Black
+                            containerColor = if (formUiState.formsFollowUpDetails.change) Color(0xFF4E7029) else Color.White,
+                            contentColor = if (formUiState.formsFollowUpDetails.change) Color.White else Color.Black
                         )
                     ) {
                         Icon(Icons.Default.Check, contentDescription = "Check")
                     }
                     OutlinedButton(
-                        onClick = { cambioSeleccionado.value = 1 }, // Marca el botón como seleccionado
+                        onClick = { onFormValueChange(formUiState.formsFollowUpDetails.copy(change = false)) }, // Marca el botón como seleccionado
                         border = BorderStroke(1.dp, Color.Gray),
                         colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = if (cambioSeleccionado.value == 1) Color(0xFF4E7029) else Color.White,
-                            contentColor = if (cambioSeleccionado.value == 1) Color.White else Color.Black
+                            containerColor = if (!formUiState.formsFollowUpDetails.change) Color(0xFF4E7029) else Color.White,
+                            contentColor = if (!formUiState.formsFollowUpDetails.change) Color.White else Color.Black
                         )
                     ) {
                         Icon(Icons.Default.Close, contentDescription = "Close")
@@ -185,8 +204,6 @@ fun FormularioSeguimientoScreen(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        val coberturaSeleccionada = remember { mutableIntStateOf(-1) } // Estado compartido
-
         Box(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center
@@ -200,18 +217,18 @@ fun FormularioSeguimientoScreen(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    (0..4).forEach { index -> // Iterar por los botones de la fila
+                    (1..5).forEach { index -> // Iterar por los botones de la fila
                         CoberturaButton(
-                            index = index + 1, // Índice visible comienza en 1
+                            index = index,
                             icon = when (index) {
-                                0 -> R.drawable.bd_cobertura
-                                1 -> R.drawable.ra_cobertura
-                                2 -> R.drawable.rb_cobertura
-                                3 -> R.drawable.pa_cobertura
+                                1 -> R.drawable.bd_cobertura
+                                2 -> R.drawable.ra_cobertura
+                                3 -> R.drawable.rb_cobertura
+                                4 -> R.drawable.pa_cobertura
                                 else -> R.drawable.pl_cobertura
                             },
-                            isSelected = coberturaSeleccionada.intValue == index,
-                            onClick = { coberturaSeleccionada.intValue = index }
+                            isSelected = formUiState.formsFollowUpDetails.idCoverage == index,
+                            onClick = { onFormValueChange(formUiState.formsFollowUpDetails.copy(idCoverage = index)) }
                         )
                     }
                 }
@@ -223,18 +240,18 @@ fun FormularioSeguimientoScreen(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    (5..9).forEach { index -> // Iterar por los botones de la fila
+                    (6..10).forEach { index -> // Iterar por los botones de la fila
                         CoberturaButton(
-                            index = index + 1,
+                            index = index,
                             icon = when (index) {
-                                5 -> R.drawable.cp_cobertura
-                                6 -> R.drawable.ct_cobertura
-                                7 -> R.drawable.vh_cobertura
-                                8 -> R.drawable.td_cobertura
+                                6 -> R.drawable.cp_cobertura
+                                7 -> R.drawable.ct_cobertura
+                                8 -> R.drawable.vh_cobertura
+                                9 -> R.drawable.td_cobertura
                                 else -> R.drawable.if_cobertura
                             },
-                            isSelected = coberturaSeleccionada.intValue == index,
-                            onClick = { coberturaSeleccionada.intValue = index }
+                            isSelected = formUiState.formsFollowUpDetails.idCoverage == index,
+                            onClick = { onFormValueChange(formUiState.formsFollowUpDetails.copy(idCoverage = index)) }
                         )
                     }
                 }
@@ -246,8 +263,8 @@ fun FormularioSeguimientoScreen(
 
         // CAMPO TIPO DE CULTIVO
         OutlinedTextField(
-            value = tipoCultivo,
-            onValueChange = {tipoCultivo = it },
+            value = formUiState.formsFollowUpDetails.cropType,
+            onValueChange = { onFormValueChange(formUiState.formsFollowUpDetails.copy(cropType = it)) },
             label = { Text("Tipos de Cultivo", color = Color.DarkGray) },
             modifier = Modifier.fillMaxWidth()
         )
@@ -277,26 +294,26 @@ fun FormularioSeguimientoScreen(
                     DisturbioButton(
                         icon = R.drawable.inundacion_1,
                         text = "Inundación",
-                        isSelected = disturbioSeleccionado.value == 0,
-                        onClick = { disturbioSeleccionado.value = 0 }
+                        isSelected = formUiState.formsFollowUpDetails.idDisturbance == 1,
+                        onClick = { onFormValueChange(formUiState.formsFollowUpDetails.copy(idDisturbance = 1)) }
                     )
                     DisturbioButton(
                         icon = R.drawable.hoguera_1,
                         text = "Quema",
-                        isSelected = disturbioSeleccionado.value == 1,
-                        onClick = { disturbioSeleccionado.value = 1 }
+                        isSelected = formUiState.formsFollowUpDetails.idDisturbance == 2,
+                        onClick = { onFormValueChange(formUiState.formsFollowUpDetails.copy(idDisturbance = 2)) }
                     )
                     DisturbioButton(
                         icon = R.drawable.tala_de_arboles_1,
                         text = "Tala",
-                        isSelected = disturbioSeleccionado.value == 2,
-                        onClick = { disturbioSeleccionado.value = 2 }
+                        isSelected = formUiState.formsFollowUpDetails.idDisturbance == 3,
+                        onClick = { onFormValueChange(formUiState.formsFollowUpDetails.copy(idDisturbance = 3)) }
                     )
                     DisturbioButton(
                         icon = R.drawable.polvo_1,
                         text = "Erosión",
-                        isSelected = disturbioSeleccionado.value == 3,
-                        onClick = { disturbioSeleccionado.value = 3 }
+                        isSelected = formUiState.formsFollowUpDetails.idDisturbance == 4,
+                        onClick = { onFormValueChange(formUiState.formsFollowUpDetails.copy(idDisturbance = 4)) }
                     )
                 }
 
@@ -309,25 +326,25 @@ fun FormularioSeguimientoScreen(
                     DisturbioButton(
                         icon = R.drawable.mineria_1,
                         text = "Minería",
-                        isSelected = disturbioSeleccionado.value == 4,
-                        onClick = { disturbioSeleccionado.value = 4 }
+                        isSelected = formUiState.formsFollowUpDetails.idDisturbance == 5,
+                        onClick = { onFormValueChange(formUiState.formsFollowUpDetails.copy(idDisturbance = 5)) }
                     )
                     DisturbioButton(
                         icon = R.drawable.camino_1,
                         text = "Carretera",
-                        isSelected = disturbioSeleccionado.value == 5,
-                        onClick = { disturbioSeleccionado.value = 5 }
+                        isSelected = formUiState.formsFollowUpDetails.idDisturbance == 6,
+                        onClick = { onFormValueChange(formUiState.formsFollowUpDetails.copy(idDisturbance = 6)) }
                     )
                     DisturbioButton(
                         icon = R.drawable.algas_marinas_1,
                         text = "Plantas \nacuáticas",
-                        isSelected = disturbioSeleccionado.value == 6,
-                        onClick = { disturbioSeleccionado.value = 6 }
+                        isSelected = formUiState.formsFollowUpDetails.idDisturbance == 7,
+                        onClick = { onFormValueChange(formUiState.formsFollowUpDetails.copy(idDisturbance = 7)) }
                     )
                     DisturbioButton(
                         text = "Otro",
-                        isSelected = disturbioSeleccionado.value == 7,
-                        onClick = { disturbioSeleccionado.value = 7 }
+                        isSelected = formUiState.formsFollowUpDetails.idDisturbance == 8,
+                        onClick = { onFormValueChange(formUiState.formsFollowUpDetails.copy(idDisturbance = 8)) }
                     )
                 }
             }
@@ -358,6 +375,29 @@ fun FormularioSeguimientoScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         viewModel.Atras_enviar(navController, green700)
+
+        /*// Submit button -PARA PRUEBAS-
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Button(
+                shape = RoundedCornerShape(6.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF4E7029)
+                ),
+                modifier = Modifier
+                    .padding(40.dp)
+                    .fillMaxWidth(),
+                onClick = {
+                    onSaveClick()
+
+                },
+                // enabled = formUiState.isEntryValid
+            ) {
+                Text("SIGUIENTE", fontWeight = FontWeight.Bold, color = Color.White)
+            }
+        }*/
 
         Spacer(modifier = Modifier.height(50.dp))
 
