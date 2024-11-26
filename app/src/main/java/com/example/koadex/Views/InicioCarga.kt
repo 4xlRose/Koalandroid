@@ -36,7 +36,6 @@ import com.example.koadex.R
 import com.example.koadex.ui.form.FormsPredeterminedViewModel
 import kotlinx.coroutines.launch
 
-
 @Composable
 fun InicioCarga(navController: NavHostController, modifier: Modifier = Modifier) {
     Fondo_vista(modifier = Modifier)
