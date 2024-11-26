@@ -159,14 +159,14 @@ fun FormularioEspecies(
                 ) {
                     IconButton(
                         onClick = {
-                            if (numIndividuos > 1) numIndividuos--
-                        }
-                    ) {
+                            //if (numIndividuos > 1) numIndividuos--
+                            viewModel.updateQuantity((formUiState.formsEspecieDetails.quantity - 1).coerceAtLeast(1)) }) {
                         Icon(Icons.Filled.Remove, contentDescription = "Disminuir")
                     }
-                    Text(text = numIndividuos.toString(), style = MaterialTheme.typography.titleMedium)
+                    //Text(text = numIndividuos.toString(), style = MaterialTheme.typography.titleMedium)
+                    Text("${formUiState.formsEspecieDetails.quantity}")
                     IconButton(
-                        onClick = { numIndividuos++ }
+                        onClick = { viewModel.updateQuantity(formUiState.formsEspecieDetails.quantity + 1) }
                     ) {
                         Icon(Icons.Filled.Add, contentDescription = "Aumentar")
                     }
