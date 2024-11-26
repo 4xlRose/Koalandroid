@@ -57,7 +57,7 @@ import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
 import com.example.koadex.ui.principal.KoadexViewModel
 
 val isFileSelectedFCT: MutableState<Boolean> = mutableStateOf(false)
-var CameraPermision: Boolean = false
+var CameraPermision: MutableState<Boolean> = mutableStateOf(false)
 
 
 @RequiresApi(Build.VERSION_CODES.P)
@@ -110,7 +110,7 @@ fun FormularioScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController
 ) {
-    if (CameraPermision) {
+    if (CameraPermision.value) {
         CameraWindow(activity)
     } else {
         var codigo by remember { mutableStateOf("") }
@@ -527,7 +527,7 @@ public fun Botones_capturaFCT(green700: Color) {
 @Composable
 public fun Boton_abrir_camaraFCT(green700: Color) {
     Button(
-        onClick = { CameraPermision = true; isFileSelectedFCT.value = true },
+        onClick = { CameraPermision.value = true; isFileSelectedFCT.value = true },
         colors = ButtonDefaults.buttonColors(containerColor = green700)
     ) {
         Icon(Icons.Default.Camera, contentDescription = "Tomar foto", tint = Color.White)
