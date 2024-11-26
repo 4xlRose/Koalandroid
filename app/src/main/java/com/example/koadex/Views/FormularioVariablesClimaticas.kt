@@ -20,6 +20,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Camera
+import androidx.compose.material.icons.filled.FileOpen
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,6 +34,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -65,6 +68,7 @@ import com.example.koadex.ui.form.WeatherFormDetails
 import com.example.koadex.ui.form.WeatherFormUiState
 import kotlinx.coroutines.flow.Flow
 
+val isFileSelectedFVC: MutableState<Boolean> = mutableStateOf(false)
 
 @RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -403,7 +407,7 @@ fun ClimaInputForm(
             enabled = enabled
         )
         Text("Evidencias", style = MaterialTheme.typography.titleMedium)
-        viewModel.Botones_captura(green700)
+        Botones_capturaFVC(green700)
 
         // Observaciones
         OutlinedTextField(
@@ -421,4 +425,39 @@ fun ClimaInputForm(
 @Composable
 fun VariableClimaticasPreview(){
     FormularioVariablesClimaticas(navController = rememberNavController())
+}
+
+@Composable
+public fun Botones_capturaFVC(green700: Color) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Boton_seleccionar_archivoFVC(green700)
+        Boton_abrir_camaraFVC(green700)
+    }
+}
+
+@Composable
+public fun Boton_abrir_camaraFVC(green700: Color) {
+    Button(
+        onClick = { /* Handle photo capture */ isFileSelectedFVC.value = true },
+        colors = ButtonDefaults.buttonColors(containerColor = green700)
+    ) {
+        Icon(Icons.Default.Camera, contentDescription = "Tomar foto", tint = Color.White)
+        Spacer(modifier = Modifier.width(10.dp))
+        Text("Tomar foto", color = Color.White)
+    }
+}
+
+@Composable
+public fun Boton_seleccionar_archivoFVC(green700: Color) {
+    Button(
+        onClick = { /* Handle file selection */ isFileSelectedFVC.value = true},
+        colors = ButtonDefaults.buttonColors(containerColor = green700)
+    ) {
+        Icon(Icons.Default.FileOpen, contentDescription = "Seleccionar archivo", tint = Color.White)
+        Spacer(modifier = Modifier.width(10.dp))
+        Text("Elige archivo", color = Color.White)
+    }
 }
