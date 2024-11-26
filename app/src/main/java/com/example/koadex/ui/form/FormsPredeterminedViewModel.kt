@@ -1,14 +1,6 @@
 package com.example.koadex.ui.form
 
-import android.util.Log
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.ViewModel
-import com.auth0.android.Auth0
-import com.auth0.android.authentication.AuthenticationAPIClient
-import com.auth0.android.authentication.AuthenticationException
-import com.auth0.android.callback.Callback
-import com.auth0.android.result.Credentials
 import com.example.koadex.R
 import com.example.koadex.data.AnimalTypeEntity
 import com.example.koadex.data.CoverageEntity
@@ -25,68 +17,67 @@ import com.example.koadex.data.UserEntity
 import com.example.koadex.data.WeatherEntity
 import com.example.koadex.data.ZoneTypeEntity
 import com.example.koadex.navigate.getCurrentDate
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
 class FormsPredeterminedViewModel(private val formRepository: FormRepository) : ViewModel() {
     //Guardar el clima
     private suspend fun inicializarClimas() {
-        var ListaClimas = listOf(
+        val listaClimas = listOf(
             WeatherEntity(1,"Soleado"),
             WeatherEntity(2,"Nublado"),
             WeatherEntity(3,"Lluvioso"))
-        formRepository.inserWeatherBegin(ListaClimas)
+        formRepository.inserWeatherBegin(listaClimas)
     }
     private suspend fun inicializarEpocas() {
-        var ListaEpocas = listOf(
+        val listaEpocas = listOf(
             SeasonEntity(1,"Verano"),
             //SeasonEntity(2,"Primavera"),
             SeasonEntity(3,"Invierno"),
             //SeasonEntity(4,"Otoño")
             )
-        formRepository.insertSeasonBegin(ListaEpocas)
+        formRepository.insertSeasonBegin(listaEpocas)
     }
 
     private suspend fun inicializarZonaTipo() {
-        var ListaZonaTipo = listOf(
+        val listaZonaTipo = listOf(
             ZoneTypeEntity(1,"Bosque"),
             ZoneTypeEntity(2,"Arreglo Agroforestal"),
             ZoneTypeEntity(3,"Cultivos Transitorios"),
             ZoneTypeEntity(4,"Cultivos Permanentes"))
-        formRepository.insertZonasTiposBegin(ListaZonaTipo)
+        formRepository.insertZonasTiposBegin(listaZonaTipo)
     }
 
     private suspend fun inicializarAnimalTipo() {
-        var ListaAnimalTipo = listOf(
+        val listaAnimalTipo = listOf(
             AnimalTypeEntity(1,"Mamífero"),
             AnimalTypeEntity(2,"Ave"),
             AnimalTypeEntity(3,"Reptil"),
             AnimalTypeEntity(4,"Anfibio"),
             AnimalTypeEntity(5,"Insecto"))
 
-        formRepository.insertAnimaltipoBegin(ListaAnimalTipo)
+        formRepository.insertAnimaltipoBegin(listaAnimalTipo)
     }
     private suspend fun inicializarObservTipo() {
-        var ListaObserTipo = listOf(
+        val listaObserTipo = listOf(
             ObservTypeEntity(1,"La vió"),
             ObservTypeEntity(2,"Huella"),
             ObservTypeEntity(3,"Rastro"),
             ObservTypeEntity(4,"Cacería"),
             ObservTypeEntity(5,"Les dijeron"))
 
-        formRepository.insertObservaciontipoBegin(ListaObserTipo)
+        formRepository.insertObservaciontipoBegin(listaObserTipo)
     }
     private suspend fun inicializaraltTipo() {
-        var ListaAltura = listOf(
+        val listaAltura = listOf(
             HeightTypeEntity(1,"< 1 mt Baja>"),
             HeightTypeEntity(2,"1-3 mt Media"),
             HeightTypeEntity(3,"> 3 mt Alta")
         )
 
-        formRepository.insertAlturatipoBegin(ListaAltura)
+        formRepository.insertAlturatipoBegin(listaAltura)
     }
     private suspend fun inicializarCobertura() {
-        var ListaCobertura = listOf(
+        val listaCobertura = listOf(
             CoverageEntity(1,"BD"),
             CoverageEntity(2,"RA"),
             CoverageEntity(3,"RB"),
@@ -99,10 +90,10 @@ class FormsPredeterminedViewModel(private val formRepository: FormRepository) : 
             CoverageEntity(10,"If"),
 
             )
-        formRepository.insertCoberturatipoBegin(ListaCobertura)
+        formRepository.insertCoberturatipoBegin(listaCobertura)
     }
     private suspend fun inicializarDisturbio() {
-        var Lista = listOf(
+        val lista = listOf(
             DisturbanceEntity(1,"Inundación"),
             DisturbanceEntity(2,"Quema"),
             DisturbanceEntity(3,"Tala"),
@@ -113,44 +104,44 @@ class FormsPredeterminedViewModel(private val formRepository: FormRepository) : 
             DisturbanceEntity(8,"Otro")
 
         )
-        formRepository.insertDisturbioatipoBegin(Lista)
+        formRepository.insertDisturbioatipoBegin(lista)
     }
 
 
     private suspend fun inicializarCuadranteS() {
-        var Lista = listOf(
+        val lista = listOf(
             SuperQuadrantEntity(1,"A"),
             SuperQuadrantEntity(2,"B"),
         )
-        formRepository.insertCuadranteSBegin(Lista)
+        formRepository.insertCuadranteSBegin(lista)
     }
 
     private suspend fun inicializarCuadranteI() {
-        var Lista = listOf(
+        val lista = listOf(
             MidQuadrantEntity(1,"C"),
             MidQuadrantEntity(2,"D"),
             MidQuadrantEntity(3,"E"),
             MidQuadrantEntity(4,"F"),
             MidQuadrantEntity(5,"G"),
         )
-        formRepository.insertCuadranteIBegin(Lista)
+        formRepository.insertCuadranteIBegin(lista)
     }
     private suspend fun inicializarCuadranteB() {
-        var Lista = listOf(
+        val lista = listOf(
             SubQuadrantEntity(1,"1"),
             SubQuadrantEntity(2,"2"),
             SubQuadrantEntity(3,"3"),
             SubQuadrantEntity(4,"4")
         )
-        formRepository.insertCuadranteBBegin(Lista)
+        formRepository.insertCuadranteBBegin(lista)
     }
     private suspend fun inicializarHabitat() {
-        var Lista = listOf(
+        val lista = listOf(
             HabitatEntity(1,"Arbusto < 1 mt"),
             HabitatEntity(2,"Arbolito 1-3 mt"),
             HabitatEntity(3,"Árbol > 3 mt")
         )
-        formRepository.insertHabitatBegin(Lista)
+        formRepository.insertHabitatBegin(lista)
     }
 
     private suspend fun inicializarUsuariosPredeterminados() {

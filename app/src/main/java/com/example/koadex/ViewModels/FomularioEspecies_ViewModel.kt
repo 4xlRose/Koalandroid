@@ -52,10 +52,7 @@ import com.example.koadex.R
 
 import java.io.File
 
-class FomularioEspecies_ViewModel :
-    ViewModel(
-
-    ) {
+class FomularioEspecies_ViewModel : ViewModel() {
 
     val isFileSelected: MutableState<Boolean> = mutableStateOf(false)
 
