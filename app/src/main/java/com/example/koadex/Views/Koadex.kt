@@ -63,10 +63,15 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
+import androidx.navigation.compose.rememberNavController
 import com.example.koadex.AppViewModelProvider
+import com.example.koadex.clases.User
 import com.example.koadex.data.FormStateEntity
 import com.example.koadex.data.GeneralFormEntity
 import com.example.koadex.data.UserEntity
+import com.example.koadex.navigate.sampleUser
 import com.example.koadex.ui.principal.KoadexViewModel
 
 /*
@@ -132,7 +137,7 @@ fun Koadex(
     modifier: Modifier = Modifier,
 
     viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    user: User = sampleUser
+    user: UserEntity = sampleUser
 
 ) {
     var current_scroll by remember { mutableStateOf(0f) }
@@ -190,7 +195,7 @@ fun KoadexPantalla(
     ) {
 
         KoadexContenido(
-            formList = koadexUiState.koadexList,
+            //formList = koadexUiState.koadexList,
 /*Hugo
             userList = userList,
             formStates = formStates,
@@ -212,7 +217,7 @@ fun KoadexContenido(
     formStates: List<FormStateEntity>?,
     modifier: Modifier = Modifier
 */
-    formList: List<FormEntity>,
+    //formList: List<FormEntity>,
     General_formList: List<GeneralFormEntity> = listOf(),
     navController: NavHostController,
     modifier: Modifier = Modifier,
@@ -258,7 +263,7 @@ fun KoadexContenido(
                 No_forms(General_formList, navController)
             } else {
                 FormList(
-                    formList = formList,
+                    //formList = formList,
                     filter = selected,
                     new_formList = General_formList)
             }
@@ -410,9 +415,9 @@ private fun Filtro_seleccion(selected: String): String {
 */
 @Composable
 fun FormList(
-    formList: List<GeneralFormEntity>,
-    userList: List<UserEntity>?,
-    formStates: List<FormStateEntity>?,
+    //formList: List<GeneralFormEntity>,
+    //userList: List<UserEntity>?,
+    //formStates: List<FormStateEntity>?,
     modifier: Modifier = Modifier,
     filter: String = "Todos",
     new_formList: List<GeneralFormEntity> = listOf()
@@ -449,7 +454,7 @@ fun FormList(
         idSeason = 1,
         place = "Ciudad de México"
     )
-    var form_example2 = FormEntity(
+    /*var form_example2 = FormEntity(
         id = 1,
         name = "Juan",
         date = "2023-07-01",
@@ -459,12 +464,15 @@ fun FormList(
         season = "Verano"
     )
 
+     */
+
     Column(
         modifier = Modifier
             .padding(bottom = 100.dp)
     ){
     for (current_form in new_formList) {
-        FormInfo(form_old = form_example2,new_form = current_form)
+        FormInfo(//form_old = form_example2
+        new_form = current_form)
     }
     }
 
@@ -494,7 +502,7 @@ fun FormInfo(
 
 @Composable
 fun FormInfo(
-    form_old: FormEntity,
+    //form_old: FormEntity,
     new_form: GeneralFormEntity,
     modifier: Modifier = Modifier
 ) {

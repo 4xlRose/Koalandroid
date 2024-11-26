@@ -13,11 +13,11 @@ interface FormRepository {
     fun getAllForms(): Flow<List<GeneralFormEntity>>
     //fun getAllForms(): Flow<List<FormEntity>>
 
-    fun getForm(id: Int): Flow<FormEntity?>
+    //fun getForm(id: Int): Flow<FormEntity?>
 
-    suspend fun insertForm(form: FormEntity)
-    suspend fun updateForm(form: FormEntity)
-    suspend fun deleteForm(form: FormEntity)
+    //suspend fun insertForm(form: FormEntity)
+    //suspend fun updateForm(form: FormEntity)
+    //suspend fun deleteForm(form: FormEntity)
 
 
 
