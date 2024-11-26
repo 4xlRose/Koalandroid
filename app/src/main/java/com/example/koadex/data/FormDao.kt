@@ -245,4 +245,5 @@ interface FormDao {
 
     @Update
     suspend fun updateWeatherForm(form: WeatherFormEntity)
+
 }

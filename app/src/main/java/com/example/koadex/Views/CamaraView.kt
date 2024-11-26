@@ -93,13 +93,18 @@ fun CameraWindow(activity: MainActivity) {
                     .size(45.dp)
                     .background(MaterialTheme.colorScheme.primary)
                     .clickable {
-                        Intent(
-                            Intent.ACTION_VIEW,
-                            Uri.parse(
-                                "content://media/internal/images/media"
+                        if ((activity as MainActivity).arePermissionsGranted()) {
+                            cameraViewModel.takePhoto(
+                                context = activity,
+                                onImageSaved = { file ->
+                                    // Manejar la imagen guardada (opcional)
+                                    println("Foto guardada en: ${file.absolutePath}")
+                                },
+                                onError = { exception ->
+                                    // Manejar error
+                                    println("Error al guardar la foto: ${exception.message}")
+                                }
                             )
-                        ).also {
-                            activity.startActivity(it)
                         }
                     },
                 contentAlignment = Alignment.Center

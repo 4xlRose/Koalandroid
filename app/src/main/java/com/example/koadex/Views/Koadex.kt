@@ -161,7 +161,8 @@ fun Koadex(
                 .verticalScroll(rememberScrollState())
                 .background(Color.White),
             viewModel,
-            navController
+            navController,
+            user = user
 
         )
     }
@@ -180,10 +181,9 @@ fun KoadexPantalla(modifier: Modifier,
 fun KoadexPantalla(
     modifier: Modifier,
     viewModel: KoadexViewModel,
-    navController: NavHostController
-
+    navController: NavHostController,
+    user: UserEntity
 ) {
-    val koadexUiState by viewModel.koadexUiState.collectAsState()
     val koadexGeneralUiState by viewModel.koadexGeneralUiState.collectAsState()
 
     Column(modifier = Modifier
@@ -193,7 +193,6 @@ fun KoadexPantalla(
         horizontalAlignment = Alignment.CenterHorizontally,
 
     ) {
-
         KoadexContenido(
             //formList = koadexUiState.koadexList,
 /*Hugo
@@ -204,6 +203,7 @@ fun KoadexPantalla(
             General_formList = koadexGeneralUiState.koadexGeneralList,
             navController,
             modifier,
+            user = user
 
         )
     }
@@ -221,6 +221,7 @@ fun KoadexContenido(
     General_formList: List<GeneralFormEntity> = listOf(),
     navController: NavHostController,
     modifier: Modifier = Modifier,
+    user: UserEntity
 
 ) {
     Column (
@@ -231,7 +232,7 @@ fun KoadexContenido(
         var forms_number : Int = General_formList.size
 
         Spacer(modifier = Modifier.height(110.dp))
-
+        Text(user.name, fontSize = 30.sp, fontWeight = FontWeight.Bold)
         // Opciones de selección
         selected = Filtro_seleccion(selected)
 
