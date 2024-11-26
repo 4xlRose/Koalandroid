@@ -112,6 +112,7 @@ fun RegistroContenido(
                     .start(object : Callback<Credentials, AuthenticationException> {
                         override fun onSuccess(result: Credentials) {
                             onSuccess(result)
+                            return
                         }
 
                         override fun onFailure(error: AuthenticationException) {
@@ -126,15 +127,13 @@ fun RegistroContenido(
         IconButton(
             onClick = {
                 navController.navigate("InicioSesion")
-            },
-
-            ) {
+            }
+        ) {
             Icon(
                 Icons.Filled.KeyboardArrowLeft, contentDescription = "Izquierda",
                 tint = Color.White,
                 modifier = Modifier
                     .size(size = 50.dp)
-
             )
         }
         Spacer(

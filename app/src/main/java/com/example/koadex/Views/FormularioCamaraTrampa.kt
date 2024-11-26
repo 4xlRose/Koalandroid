@@ -41,6 +41,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.FileOpen
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.SwitchCamera
@@ -54,6 +55,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.koadex.AppViewModelProvider
 import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
 import com.example.koadex.ui.principal.KoadexViewModel
+
+val isFileSelectedFCT: MutableState<Boolean> = mutableStateOf(false)
+
 
 @RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -428,7 +432,7 @@ fun FormularioScreen(
             Text("Evidencias", style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.align(Alignment.Start),
                 color = Color.Black)
-            viewModel.Botones_captura(green700)
+            Botones_capturaFCT(green700)
 
             // Observaciones
             OutlinedTextField(
@@ -507,4 +511,39 @@ fun EvidenciaItem(
 @Composable
 fun FormularioCamaraTrampaPreview() {
     FormularioCamaraTrampa(activity = MainActivity(), modifier = Modifier, navController = rememberNavController())
+}
+
+@Composable
+public fun Botones_capturaFCT(green700: Color) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Boton_seleccionar_archivoFCT(green700)
+        Boton_abrir_camaraFCT(green700)
+    }
+}
+
+@Composable
+public fun Boton_abrir_camaraFCT(green700: Color) {
+    Button(
+        onClick = { /* Handle photo capture */ isFileSelectedFCT.value = true },
+        colors = ButtonDefaults.buttonColors(containerColor = green700)
+    ) {
+        Icon(Icons.Default.Camera, contentDescription = "Tomar foto", tint = Color.White)
+        Spacer(modifier = Modifier.width(10.dp))
+        Text("Tomar foto", color = Color.White)
+    }
+}
+
+@Composable
+public fun Boton_seleccionar_archivoFCT(green700: Color) {
+    Button(
+        onClick = { /* Handle file selection */ isFileSelectedFCT.value = true},
+        colors = ButtonDefaults.buttonColors(containerColor = green700)
+    ) {
+        Icon(Icons.Default.FileOpen, contentDescription = "Seleccionar archivo", tint = Color.White)
+        Spacer(modifier = Modifier.width(10.dp))
+        Text("Elige archivo", color = Color.White)
+    }
 }

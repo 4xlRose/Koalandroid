@@ -8,12 +8,9 @@ class OfflineFormRepository (private val formDao: FormDao) : FormRepository {
 
     /*Borrar después de actualizar el koadex con la nueva tabla de formularios general*/
     override fun getAllForms(): Flow<List<GeneralFormEntity>> = formDao.getAllForms()
-    
-
     override suspend fun insertIntoListForms(listForms: List<GeneralFormEntity>) = formDao.insertIntoListForms(listForms)
-
-
     override fun getLastGeneralForm(): Flow<GeneralFormEntity> = formDao.getLastGeneralForm()
+
     // Usuario
     override suspend fun insertUser(user: UserEntity) = formDao.insertUser(user)
     override suspend fun updateUser(user: UserEntity) = formDao.updateUser(user)
