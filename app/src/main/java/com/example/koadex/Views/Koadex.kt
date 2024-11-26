@@ -68,28 +68,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.compose.rememberNavController
 import com.example.koadex.AppViewModelProvider
-import com.example.koadex.clases.User
-import com.example.koadex.data.FormStateEntity
+
 import com.example.koadex.data.GeneralFormEntity
 import com.example.koadex.data.UserEntity
 import com.example.koadex.navigate.sampleUser
 import com.example.koadex.ui.principal.KoadexViewModel
 
-/*
-@Preview(showBackground = true, showSystemUi = true)
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextAlign
-import androidx.navigation.compose.rememberNavController
-import com.example.koadex.clases.User
-import com.example.koadex.navigate.sampleUser
-/*
-*
-*  koalandroid@tec.mx
-*  KoalAndroid*2025
-*
-* */
-|
- */
 
 @Preview(
     showBackground = true,

@@ -1,6 +1,5 @@
 package com.example.koadex.Views
 
-
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
@@ -8,9 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-
 import androidx.compose.foundation.layout.Row
-
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,7 +22,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -43,32 +39,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
 import androidx.navigation.NavHostController
-
 import com.example.koadex.R
-
-
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.rememberNavController
 import com.example.koadex.AppViewModelProvider
-
-/*
-import com.example.koadex.ui.form.GeneralFormDetails
-import com.example.koadex.ui.form.GeneralFormUiState
-import com.example.koadex.ui.form.SeasonDetails
-import com.example.koadex.ui.form.WeatherDetails
-*/
-
 import com.example.koadex.data.SeasonEntity
 import com.example.koadex.data.UserEntity
 import com.example.koadex.data.WeatherEntity
@@ -77,12 +58,8 @@ import com.example.koadex.ui.form.GeneralFormUiState
 import com.example.koadex.ui.form.GeneralFormsDetails
 import com.example.koadex.ui.form.UserDetails
 import com.example.koadex.ui.form.UserUiState
-
-// TEST
 import com.example.koadex.utils.DateValidator
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.stateIn
-
 import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.O)

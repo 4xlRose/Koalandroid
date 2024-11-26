@@ -8,6 +8,8 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.koadex.ViewModels.NavigationModel
 import com.example.koadex.ui.form.FormFollowDBViewModel
+import com.example.koadex.ui.form.FormFollowPointCountDBViewModel
+import com.example.koadex.ui.form.FormFreeSearchDBViewModel
 
 import com.example.koadex.ui.form.FormGeneralDBViewModel
 import com.example.koadex.ui.form.FormQuadrantDBViewModel
@@ -46,6 +48,12 @@ object AppViewModelProvider {
         }
         initializer {
             NavigationModel(formApplication().container.formsRepository)
+        }
+        initializer {
+            FormFollowPointCountDBViewModel(formApplication().container.formsRepository)
+        }
+        initializer {
+            FormFreeSearchDBViewModel(formApplication().container.formsRepository)
         }
     }
 }

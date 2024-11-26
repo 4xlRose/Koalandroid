@@ -99,7 +99,9 @@ class FomularioEspecies_ViewModel : ViewModel() {
     @Composable
     public fun Boton_abrir_camara(green700: Color) {
         Button(
-            onClick = { /* Handle photo capture */ isFileSelected.value = true },
+            onClick = { /* Handle photo capture */
+
+                isFileSelected.value = true },
             colors = ButtonDefaults.buttonColors(containerColor = green700)
         ) {
             Icon(Icons.Default.Camera, contentDescription = "Tomar foto", tint = Color.White)

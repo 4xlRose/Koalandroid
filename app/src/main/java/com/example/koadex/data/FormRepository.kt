@@ -116,4 +116,14 @@ interface FormRepository {
     suspend fun insertWeatherForm(form: WeatherFormEntity)
     suspend fun updateWeatherForm(form: WeatherFormEntity)
     suspend fun deleteWeatherForm(form: WeatherFormEntity)
+
+
+    suspend fun insertFormCountingPoint(form: FormCountingPointEntity)
+    suspend fun updateFormCountingPoint(form: FormCountingPointEntity)
+    suspend fun deleteFormCountingPoint(form: FormCountingPointEntity)
+
+    suspend fun insertFormFreeSearch(form: FormFreeSearchEntity)
+    suspend fun updateFormFreeSearch(form: FormFreeSearchEntity)
+    suspend fun deleteFormFreeSearch(form: FormFreeSearchEntity)
+
 }

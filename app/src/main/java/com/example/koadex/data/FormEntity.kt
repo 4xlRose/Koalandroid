@@ -457,3 +457,36 @@ data class WeatherFormEntity(
     var evidences: String = "", // <- AGREGO MARIA
     var observations: String = "" // <- AGREGO MARIA
 )
+
+@Entity(tableName = "counting_form")
+data class FormCountingPointEntity(
+    @PrimaryKey
+    val id: Int = 0,
+    var idGeneralForm: Int,
+    var idZoneType: Int,
+    var idAnimalType: Int,
+    var animalName: String = "",
+    var scientificName: String = "",
+    var quantity: Int = 0,
+    var idObservType: Int,
+    var idHeightType: Int,
+    var evidences: String,
+    var observations: String
+)
+
+@Entity(tableName = "freesearch")
+data class FormFreeSearchEntity(
+    @PrimaryKey
+    val id: Int = 0,
+    var idGeneralForm: Int,
+    var idZoneType: Int,
+    var idAnimalType: Int,
+    var animalName: String = "",
+    var scientificName: String = "",
+    var quantity: Int = 0,
+    var idObservType: Int,
+    var idHeightType: Int,
+    var evidences: String,
+    var observations: String
+)
+

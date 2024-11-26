@@ -5,10 +5,8 @@ import android.content.Context
 import android.os.Build
 import android.provider.MediaStore
 import androidx.annotation.RequiresApi
-import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.view.CameraController
-import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import java.io.File
 

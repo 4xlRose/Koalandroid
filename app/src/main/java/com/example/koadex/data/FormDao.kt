@@ -246,4 +246,25 @@ interface FormDao {
     @Update
     suspend fun updateWeatherForm(form: WeatherFormEntity)
 
+    //Métodos de Formulario Conteo
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertFormCountingPoint(form: FormCountingPointEntity)
+
+    @Delete
+    suspend fun deleteFormCountingPoint(form: FormCountingPointEntity)
+
+    @Update
+    suspend fun updateFormCountingPoint(form: FormCountingPointEntity)
+
+    //Métodos de Formulario de Búsqueda libre
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertFormFreeSearch(form: FormFreeSearchEntity)
+
+    @Delete
+    suspend fun deleteFormFreeSearch(form: FormFreeSearchEntity)
+
+    @Update
+    suspend fun updateFormFreeSearch(form: FormFreeSearchEntity)
 }
+

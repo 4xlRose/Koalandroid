@@ -13,7 +13,6 @@ class OfflineFormRepository (private val formDao: FormDao) : FormRepository {
     override suspend fun insertIntoListForms(listForms: List<GeneralFormEntity>) = formDao.insertIntoListForms(listForms)
 
 
-    override suspend fun insertIntoListForms(listForms: List<GeneralFormEntity>) = formDao.insertIntoListForms(listForms)
 
     override fun getLastGeneralForm(): Flow<GeneralFormEntity> = formDao.getLastGeneralForm()
     // Usuario
@@ -117,5 +116,18 @@ class OfflineFormRepository (private val formDao: FormDao) : FormRepository {
     override suspend fun insertWeatherForm(form: WeatherFormEntity) = formDao.insertWeatherForm(form)
     override suspend fun updateWeatherForm(form: WeatherFormEntity) = formDao.updateWeatherForm(form)
     override suspend fun deleteWeatherForm(form: WeatherFormEntity) = formDao.deleteWeatherForm(form)
+
+    //Punto de conteo
+    override suspend fun insertFormCountingPoint(form: FormCountingPointEntity) = formDao.insertFormCountingPoint(form)
+    override suspend fun updateFormCountingPoint(form: FormCountingPointEntity) = formDao.updateFormCountingPoint(form)
+    override suspend fun deleteFormCountingPoint(form: FormCountingPointEntity) = formDao.deleteFormCountingPoint(form)
+
+
+    //Busqueda libre
+
+    override suspend fun insertFormFreeSearch(form: FormFreeSearchEntity) = formDao.insertFormFreeSearch(form)
+    override suspend fun deleteFormFreeSearch(form: FormFreeSearchEntity) = formDao.deleteFormFreeSearch(form)
+    override suspend fun updateFormFreeSearch(form: FormFreeSearchEntity) = formDao.updateFormFreeSearch(form)
+
 }
 
