@@ -81,7 +81,7 @@ class funciones_especies {
     public fun Boton_abrir_camara(green700: Color) {
         Button(
             onClick = { /* Handle photo capture */ },
-            colors = ButtonDefaults.buttonColors(containerColor = green700)
+            colors = ButtonDefaults.buttonColors(containerColor = green700,contentColor = Color.White)
         ) {
             Icon(Icons.Default.Camera, contentDescription = "Tomar foto")
             Spacer(modifier = Modifier.width(10.dp))
@@ -93,7 +93,7 @@ class funciones_especies {
     public fun Boton_seleccionar_archivo(green700: Color) {
         Button(
             onClick = { /* Handle file selection */ },
-            colors = ButtonDefaults.buttonColors(containerColor = green700)
+            colors = ButtonDefaults.buttonColors(containerColor = green700,contentColor = Color.White)
         ) {
             Icon(Icons.Default.FileOpen, contentDescription = "Seleccionar archivo")
             Spacer(modifier = Modifier.width(10.dp))

@@ -29,7 +29,7 @@ class KoadexViewModel(formsRespository: FormRepository) : ViewModel() {
     }
 
     val koadexGeneralUiState: StateFlow<KoadexGeneralUiState> =
-        formsRespository.getFullDatabase().map { KoadexGeneralUiState(it) }
+        formsRespository.getAllForms().map { KoadexGeneralUiState(it) }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
@@ -37,7 +37,7 @@ class KoadexViewModel(formsRespository: FormRepository) : ViewModel() {
             )
 }
 
-data class KoadexUiState(val koadexList: List<FormEntity> = listOf()){
+data class KoadexUiState(val koadexList: List<GeneralFormEntity> = listOf()){
 
 }
 
@@ -45,7 +45,7 @@ data class KoadexGeneralUiState(val koadexGeneralList: List<GeneralFormEntity> =
 }
 
 interface FormRepository {
-    fun getAllForms(): Flow<List<FormEntity>>
+    fun getAllForms(): Flow<List<GeneralFormEntity>>
     fun getAllGeneralForms(): Flow<List<GeneralFormEntity>>
 }
 /*

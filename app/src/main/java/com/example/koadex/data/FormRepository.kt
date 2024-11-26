@@ -21,9 +21,6 @@ interface FormRepository {
 
 
 
-
-
-    fun getFullDatabase(): Flow<List<GeneralFormEntity>>
     suspend fun insertIntoListForms(listForms: List<GeneralFormEntity>)
     fun getLastGeneralForm(): Flow<GeneralFormEntity>
     suspend fun insertUser(user: UserEntity)

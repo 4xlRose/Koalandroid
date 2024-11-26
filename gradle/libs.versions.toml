@@ -49,6 +49,7 @@ junitKtx = "1.2.1"
 uiTestAndroid = "1.7.4"
 compilercommon = "3.2.0-alpha11"
 
+
 [libraries]
 androidx-core = { module = "androidx.test:core", version.ref = "core" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
