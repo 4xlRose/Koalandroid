@@ -106,6 +106,7 @@ fun CameraWindow(activity: MainActivity) {
                                 }
                             )
                         }
+                        CameraPermision = false
                     },
                 contentAlignment = Alignment.Center
             ) {
