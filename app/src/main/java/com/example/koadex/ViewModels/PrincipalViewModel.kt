@@ -222,6 +222,7 @@ class PrincipalViewModel : ViewModel(
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
+
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
@@ -241,7 +242,13 @@ class PrincipalViewModel : ViewModel(
                         .padding(20.dp)
                 )
             } else {
-                no_forms_available()
+                Box(
+                    modifier = Modifier
+
+                )
+                {
+                    no_forms_available()
+                }
             }
         }
     }
@@ -256,7 +263,9 @@ class PrincipalViewModel : ViewModel(
         val gris_1 = Color.Gray.copy(alpha = 0.5f)
         val progress = user.uploadedForms.toFloat() / (user.uploadedForms + user.locallyStoredForms)
 
-        Box(modifier = modifier) {
+        Box(
+            modifier = modifier,
+        ) {
             Canvas(modifier = Modifier.fillMaxSize()) {
                 val strokeWidth = 30.dp.toPx()
                 val diameter = size.minDimension - strokeWidth
@@ -314,7 +323,8 @@ class PrincipalViewModel : ViewModel(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(16.dp)
+            ,
             colors = CardDefaults.cardColors(containerColor = rojo_1.copy(alpha = 0.2f)),
             shape = RoundedCornerShape(8.dp)
         ) {
