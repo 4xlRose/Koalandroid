@@ -441,7 +441,7 @@ public fun Botones_capturaFVC(green700: Color) {
 @Composable
 public fun Boton_abrir_camaraFVC(green700: Color) {
     Button(
-        onClick = { /* Handle photo capture */ isFileSelectedFVC.value = true },
+        onClick = { /* CameraPermision.value = true; */ isFileSelectedFVC.value = true },
         colors = ButtonDefaults.buttonColors(containerColor = green700)
     ) {
         Icon(Icons.Default.Camera, contentDescription = "Tomar foto", tint = Color.White)
