@@ -226,7 +226,7 @@ fun KoadexContenido(
         var forms_number : Int = General_formList.size
 
         Spacer(modifier = Modifier.height(110.dp))
-        Text(user.name, fontSize = 30.sp, fontWeight = FontWeight.Bold)
+        //Text(user.name, fontSize = 30.sp, fontWeight = FontWeight.Bold)
         // Opciones de selección
         selected = Filtro_seleccion(selected)
 
