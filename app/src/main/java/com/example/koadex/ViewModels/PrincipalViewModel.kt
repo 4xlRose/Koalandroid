@@ -228,7 +228,6 @@ class PrincipalViewModel : ViewModel(
                 .padding(16.dp)
         ) {
             if (user.locallyStoredForms + user.uploadedForms > 0) {
-
                 Text(
                     text = "${user.uploadedForms + user.locallyStoredForms} " + `formulario-base`,
                     fontSize = 24.sp,
@@ -241,13 +240,8 @@ class PrincipalViewModel : ViewModel(
                     modifier = Modifier
                         .padding(20.dp)
                 )
-            }else {
-                Text(
-                    text = "No hay formularios disponibles",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
+            } else {
+                no_forms_available()
             }
         }
     }
@@ -256,10 +250,10 @@ class PrincipalViewModel : ViewModel(
         user: UserEntity,
         modifier: Modifier = Modifier
     ) {
-
         val verde_1 = colorResource(R.color.verde_1)
         val verde_oscuro_1 = colorResource(R.color.verde_oscuro_1)
         val rojo_1 = colorResource(R.color.rojo_1)
+        val gris_1 = Color.Gray.copy(alpha = 0.5f)
         val progress = user.uploadedForms.toFloat() / (user.uploadedForms + user.locallyStoredForms)
 
         Box(modifier = modifier) {
@@ -269,7 +263,18 @@ class PrincipalViewModel : ViewModel(
                 val radius = diameter / 2
                 val center = Offset(size.width / 2, size.height / 2)
 
-                // Draw progress arc
+                // Draw total forms progress arc in gray
+                drawArc(
+                    color = gris_1,
+                    startAngle = -90f,
+                    sweepAngle = 360f,
+                    useCenter = false,
+                    topLeft = Offset(center.x - radius, center.y - radius),
+                    size = Size(diameter, diameter),
+                    style = Stroke(width = strokeWidth, cap = StrokeCap.Round)
+                )
+
+                // Draw uploaded forms progress arc in green
                 drawArc(
                     color = verde_1,
                     startAngle = -90f,
@@ -285,26 +290,53 @@ class PrincipalViewModel : ViewModel(
                 modifier = Modifier
                     .align(Alignment.Center)
                     .fillMaxWidth()
-                    .fillMaxHeight()
-                ,
+                    .fillMaxHeight(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
-
             ) {
-                if(user.uploadedForms > 0) {
+                if (user.uploadedForms > 0) {
                     Text("${user.uploadedForms} Forms", fontWeight = FontWeight.Bold)
                     Text("Subidos", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = verde_1)
                     Spacer(modifier = Modifier.height(8.dp))
                 }
 
-                if(user.locallyStoredForms > 0) {
+                if (user.locallyStoredForms > 0) {
                     Text("${user.locallyStoredForms} Forms", fontWeight = FontWeight.Bold)
-                    Text("Guardados", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = rojo_1)
+                    Text("Sin subir", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = rojo_1)
                 }
             }
         }
     }
+    @Composable
+    fun no_forms_available() {
+        val rojo_1 = colorResource(R.color.rojo_1)
 
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            colors = CardDefaults.cardColors(containerColor = rojo_1.copy(alpha = 0.2f)),
+            shape = RoundedCornerShape(8.dp)
+        ) {
+            Row(
+                modifier = Modifier.padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    Icons.Default.Warning,
+                    contentDescription = "Warning",
+                    tint = rojo_1
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "¡No hay formularios disponibles!",
+                    color = rojo_1,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+    }
     @Composable
     public  fun nav_Bar(navController: NavHostController){
         La_navegacion(navController, true, false, false)
