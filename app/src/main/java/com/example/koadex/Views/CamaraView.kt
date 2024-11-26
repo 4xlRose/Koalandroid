@@ -94,7 +94,7 @@ fun CameraWindow(activity: MainActivity) {
                     .background(MaterialTheme.colorScheme.primary)
                     .clickable {
                         if ((activity as MainActivity).arePermissionsGranted()) {
-                            cameraViewModel.takePhoto(
+                            cameraViewModel.takePhoto2(
                                 context = activity,
                                 onImageSaved = { file ->
                                     // Manejar la imagen guardada (opcional)

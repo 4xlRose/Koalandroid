@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.MoreVert
@@ -86,7 +87,9 @@ import com.example.koadex.navigate.sampleUser
 *  koalandroid@tec.mx
 *  KoalAndroid*2025
 *
-*/
+* */
+|
+ */
 
 @Preview(
     showBackground = true,
@@ -103,7 +106,7 @@ fun KoadexPreview() {
         idSeason = 1,
         place = "Ciudad de México"
     )
-    var form_example2 = FormEntity(
+    /*var form_example2 = FormEntity(
         id = 1,
         name = "Juan",
         date = "2023-07-01",
@@ -111,7 +114,8 @@ fun KoadexPreview() {
         hour = "12:00:00",
         weather = "Soleado",
         season = "Verano"
-    )
+    )*/
+
     var formList = listOf(form_example)
 
     var selected by remember { mutableStateOf("Todos") }
@@ -125,11 +129,13 @@ fun KoadexPreview() {
         TopNavBar(rememberNavController())
         selected = Filtro_seleccion(selected)
 
-        FormInfo(form_old = form_example2,new_form = form_example)
+        FormInfo(
+            //form_old = form_example2,
+            new_form = form_example)
     }
 
 }
-*/
+
 
 @Composable
 fun Koadex(
@@ -472,8 +478,10 @@ fun FormList(
             .padding(bottom = 100.dp)
     ){
     for (current_form in new_formList) {
-        FormInfo(//form_old = form_example2
-        new_form = current_form)
+        FormInfo(
+            //form_old = form_example2
+            new_form = current_form
+        )
     }
     }
 
@@ -487,17 +495,6 @@ fun FormInfo(
 ) {
     if(cardShowing) {
 */
-    // para calar el scroll
-    /*
-        FormInfo(form_old = form_example2,new_form = form_example)
-        FormInfo(form_old = form_example2,new_form = form_example)
-        FormInfo(form_old = form_example2,new_form = form_example)
-        FormInfo(form_old = form_example2,new_form = form_example)
-        FormInfo(form_old = form_example2,new_form = form_example)
-        FormInfo(form_old = form_example2,new_form = form_example)
-        FormInfo(form_old = form_example2,new_form = form_example)
-        FormInfo(form_old = form_example2,new_form = form_example)
-     */
 
 }
 
@@ -596,7 +593,17 @@ fun FormInfo(
                                 )
                             }
                         }
-
+                        IconButton(
+                            onClick = { /* Acción de edición */ },
+                            modifier = Modifier.size(29.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = "Borrar",
+                                tint = Color.White,
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
                         IconButton(
                             onClick = { /* Acción de edición */ },
                             modifier = Modifier.size(29.dp)
@@ -820,7 +827,7 @@ fun Get_hour(form: GeneralFormEntity): String {
 
 @Composable
 fun Get_place(form: GeneralFormEntity): String {
-    return "Ciudad de México"
+    return form.place
 }
 
 @Composable
@@ -1019,120 +1026,3 @@ private fun MenuOption(
         modifier = Modifier.padding(horizontal = 8.dp)
     )
 }
-
-/*
-@Composable
-fun BottomNavBar() {
-    var navBarSelect by remember { mutableStateOf("Búsqueda") }
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(140.dp)
-            .background(Green100),
-        verticalAlignment = Alignment.Top,
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(15.dp)
-                .fillMaxSize(),
-            horizontalArrangement = Arrangement.SpaceAround
-        ) {
-            val buttonSize = 40.dp
-            val textSize = 15.sp
-
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .width(100.dp)
-                    .clip(RoundedCornerShape(20.dp, 20.dp))
-            ) {
-                val text = "Inicio"
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = if (navBarSelect == text)
-                        Modifier
-                            .background(Color.White)
-                            .fillMaxWidth()
-                    else
-                        Modifier.background(Color.Transparent)
-                ) {
-                    IconToggleButton(
-                        modifier = Modifier.size(buttonSize),
-                        checked = false,
-                        onCheckedChange = { navBarSelect = text }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.Home,
-                            contentDescription = text,
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    }
-                }
-                Text(text = text, fontSize = textSize)
-            }
-
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .width(100.dp)
-                    .clip(RoundedCornerShape(20.dp, 20.dp))
-            ) {
-                val text = "Búsqueda"
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = if (navBarSelect == text)
-                        Modifier
-                            .background(Color(0xB4D68F))
-                            .fillMaxWidth()
-                    else
-                        Modifier.background(Color.Transparent)
-                ) {
-                    IconToggleButton(
-                        modifier = Modifier.size(buttonSize),
-                        checked = false,
-                        onCheckedChange = { navBarSelect = text }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.Search,
-                            contentDescription = text,
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    }
-                }
-                Text(text = text, fontSize = textSize)
-            }
-
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .width(100.dp)
-                    .clip(RoundedCornerShape(20.dp, 20.dp))
-            ) {
-                val text = "Configuración"
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = if (navBarSelect == text)
-                        Modifier
-                            .background(Color.White)
-                            .fillMaxWidth()
-                    else
-                        Modifier.background(Color.Transparent)
-                ) {
-                    IconToggleButton(
-                        modifier = Modifier.size(buttonSize),
-                        checked = false,
-                        onCheckedChange = { navBarSelect = text }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.Settings,
-                            contentDescription = text,
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    }
-                }
-                Text(text = text, fontSize = textSize)
-            }
-        }
-    }
-}
-*/

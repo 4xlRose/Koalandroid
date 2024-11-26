@@ -21,6 +21,8 @@ class CameraViewModel: ViewModel() {
         this.imageCapture = imageCapture
     }
 
+
+
     /*@RequiresApi(Build.VERSION_CODES.P)
     fun takePhoto(
         context: Context,
@@ -54,6 +56,25 @@ class CameraViewModel: ViewModel() {
 
     @RequiresApi(Build.VERSION_CODES.P)
     fun takePhoto(
+        context: Context,
+        onImageSaved: (File) -> Unit,
+        onError: (ImageCaptureException) -> Unit
+    ) {
+        // Create a ContentValues object to describe the image metadata
+        val values = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, "IMG_${System.currentTimeMillis()}.jpg")
+            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+            put(
+                MediaStore.Images.Media.RELATIVE_PATH,
+                "Pictures/CameraExample"
+            ) // Store in "Pictures/CameraExample" directory
+        }
+
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    fun takePhoto2(
         context: Context,
         onImageSaved: (File) -> Unit,
         onError: (ImageCaptureException) -> Unit
