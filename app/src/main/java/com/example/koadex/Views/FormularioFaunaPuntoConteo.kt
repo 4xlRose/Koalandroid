@@ -24,11 +24,16 @@ import androidx.navigation.compose.rememberNavController
 import com.example.koadex.R
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.filled.Camera
+import androidx.compose.material.icons.filled.FileOpen
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
 import com.example.koadex.ViewModels.FormularioFaunaBusquedaLibreViewModel
 import com.example.koadex.ViewModels.FormularioFaunaPuntoConteoViewModel
+
+val isFileSelectedFPC: MutableState<Boolean> = mutableStateOf(false)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -191,7 +196,7 @@ fun FormularioFaunaPuntoConteo(navController: NavHostController, modifier: Modif
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.align(Alignment.Start),
                 color = Color.Black)
-            viewModel.Botones_captura(green700)
+            Botones_capturaFPC(green700)
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -219,4 +224,39 @@ fun FormularioFaunaPuntoConteo(navController: NavHostController, modifier: Modif
 @Composable
 fun PreviewFormularioPuntoConteo() {
     FormularioFaunaPuntoConteo(navController = rememberNavController(), modifier = Modifier)
+}
+
+@Composable
+public fun Botones_capturaFPC(green700: Color) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Boton_seleccionar_archivoFPC(green700)
+        Boton_abrir_camaraFPC(green700)
+    }
+}
+
+@Composable
+public fun Boton_abrir_camaraFPC(green700: Color) {
+    Button(
+        onClick = { /* Handle photo capture */ isFileSelectedFPC.value = true },
+        colors = ButtonDefaults.buttonColors(containerColor = green700)
+    ) {
+        Icon(Icons.Default.Camera, contentDescription = "Tomar foto", tint = Color.White)
+        Spacer(modifier = Modifier.width(10.dp))
+        Text("Tomar foto", color = Color.White)
+    }
+}
+
+@Composable
+public fun Boton_seleccionar_archivoFPC(green700: Color) {
+    Button(
+        onClick = { /* Handle file selection */ isFileSelectedFPC.value = true},
+        colors = ButtonDefaults.buttonColors(containerColor = green700)
+    ) {
+        Icon(Icons.Default.FileOpen, contentDescription = "Seleccionar archivo", tint = Color.White)
+        Spacer(modifier = Modifier.width(10.dp))
+        Text("Elige archivo", color = Color.White)
+    }
 }

@@ -112,7 +112,7 @@ fun IniciarSesionLogInContenido(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
-
+    val green700 = colorResource(id = R.color.green_700)
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(start = 16.dp, top = 50.dp, end = 16.dp, bottom = 16.dp)
@@ -122,7 +122,7 @@ fun IniciarSesionLogInContenido(
                 navController.navigate("InicioCarga")
             },
 
-        ) {
+            ) {
             Icon(
                 Icons.Filled.KeyboardArrowLeft, contentDescription = "Izquierda",
                 tint = Color.White,
@@ -152,13 +152,17 @@ fun IniciarSesionLogInContenido(
         )
         OutlinedTextField(
             value = email,
-            onValueChange = { email = it},
-            label = { Text( stringResource(R.string.email),
-                color = Color.Black) },
+            onValueChange = { email = it },
+            label = {
+                Text(
+                    stringResource(R.string.email),
+                    color = Color.Black
+                )
+            },
             modifier = modifier
                 .fillMaxWidth(),
 
-        )
+            )
 
         OutlinedTextField(
             value = password,
@@ -168,78 +172,80 @@ fun IniciarSesionLogInContenido(
             label = {
                 Text(
                     stringResource(R.string.contrasena),
-                    color = Color.Black)
+                    color = Color.Black
+                )
             },
             visualTransformation = PasswordVisualTransformation(),
             modifier = modifier
                 .fillMaxWidth()
         )
-        TextButton(onClick = {
-            navController.navigate("OlvidoContrasena")
-        },
+        TextButton(
+            onClick = {
+                navController.navigate("OlvidoContrasena")
+            },
             modifier = modifier
                 .align(Alignment.End),
 
-        ) {
-            Text(text = stringResource(R.string.olvidaste_contrasena),
+            ) {
+            Text(
+                text = stringResource(R.string.olvidaste_contrasena),
                 fontSize = 15.sp,
                 color = Color(0xff4e7029),
                 textAlign = TextAlign.End,
                 modifier = modifier
-                    .fillMaxWidth())
+                    .fillMaxWidth()
+            )
         }
         // Mostrar mensaje de error si existe
-        if(errorMessage.isNotEmpty())
+        if (errorMessage.isNotEmpty())
             errorMessage?.let {
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(text = "Error: $it", color = Color.Red)
-                Spacer(
-                    Modifier.padding(30.dp)
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(text = "Usuario o contraseña incorrectos", color = Color.Red)
+
+            } else {
+            Text(text = "                                ")
+        }
+        Column(modifier = Modifier
+            .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally) {
+            Button(
+                onClick = {
+                    loginWithUsernamePassword(
+                        account = account,
+                        model = model,
+                        username = email,
+                        password = password,
+                        onSuccess = onLoginSuccess,
+                        onError = { message ->
+                            errorMessage =
+                                message // Actualiza el mensaje de error si ocurre un problema
+                        })
+                },
+                modifier = Modifier.padding(5.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = green700,contentColor = Color.White)
+                ,
+            ) {
+                Text(
+                    text = stringResource(R.string.entrar),
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
                 )
-        } else {
-            Spacer(
-                Modifier.padding(50.dp)
-            )
-        }
+            }
+            Button(
+                onClick = {
+                    navController.navigate("Registro")
+                },
 
-        Button(
-            onClick = {
-                loginWithUsernamePassword(
-                    account = account,
-                    model = model,
-                    username = email,
-                    password = password,
-                    onSuccess = onLoginSuccess,
-                    onError = { message ->
-                    errorMessage = message // Actualiza el mensaje de error si ocurre un problema
-                })
-            },
-            modifier = Modifier.padding(5.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = colorResource(id = R.color.verde_1)
-            ),
-        ) {
-            Text(
-                text = stringResource(R.string.entrar),
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
-        }
-        Button(
-            onClick = {
-                navController.navigate("Registro")
-            },
+                modifier = Modifier.padding(5.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = green700,contentColor = Color.White)
 
-            modifier = Modifier.padding(5.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = colorResource(id = R.color.verde_1)
-            )
-        ) {
-            Text(
-                text = stringResource(R.string.registrarse),
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
+            ) {
+                Text(
+                    text = stringResource(R.string.registrarse),
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
+            }
         }
     }
 }
@@ -276,6 +282,7 @@ private fun loginWithUsernamePassword(
                 model.loggedUser.isloggedIn = true
 
                 processUser(model.loggedUser.email)
+                println("Logged as " + model.loggedUser.email)
                 onSuccess(result)
             }
 

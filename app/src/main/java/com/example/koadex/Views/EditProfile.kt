@@ -91,6 +91,7 @@ fun EditProfileScreen(
 
         val couroutineScope = rememberCoroutineScope()
         val userUpdate = {
+            navModel.loggedUser = user
             couroutineScope.launch {
                 navModel.updateUser(user)
             }
