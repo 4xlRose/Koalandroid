@@ -282,6 +282,7 @@ private fun loginWithUsernamePassword(
                 model.loggedUser.isloggedIn = true
 
                 processUser(model.loggedUser.email)
+                println("Logged as " + model.loggedUser.email)
                 onSuccess(result)
             }
 

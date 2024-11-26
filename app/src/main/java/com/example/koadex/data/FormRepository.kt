@@ -7,9 +7,6 @@ import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 
 interface FormRepository {
-
-    // Usuario
-    /*Borrar después de actualizar koadex con la nueva tabla formulario general*/
     fun getAllForms(): Flow<List<GeneralFormEntity>>
     //fun getAllForms(): Flow<List<FormEntity>>
 
@@ -20,9 +17,10 @@ interface FormRepository {
     //suspend fun deleteForm(form: FormEntity)
 
 
-
     suspend fun insertIntoListForms(listForms: List<GeneralFormEntity>)
     fun getLastGeneralForm(): Flow<GeneralFormEntity>
+
+    // Usuario
     suspend fun insertUser(user: UserEntity)
     suspend fun updateUser(user: UserEntity)
     suspend fun deleteUser(user: UserEntity)
