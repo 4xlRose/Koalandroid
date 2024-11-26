@@ -1,5 +1,3 @@
-@file:JvmName("FormularioFaunaPuntoConteoKt")
-
 package com.example.koadex.Views
 
 import androidx.compose.foundation.background
@@ -27,17 +25,27 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.FileOpen
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.koadex.AppViewModelProvider
 import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
 import com.example.koadex.ViewModels.FormularioFaunaBusquedaLibreViewModel
 import com.example.koadex.ViewModels.FormularioFaunaPuntoConteoViewModel
+import com.example.koadex.ui.form.FormFollowPointCountDBViewModel
 
 val isFileSelectedFPC: MutableState<Boolean> = mutableStateOf(false)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FormularioFaunaPuntoConteo(navController: NavHostController, modifier: Modifier = Modifier) {
+fun FormularioFaunaPuntoConteo(navController: NavHostController, modifier: Modifier = Modifier,
+                               viewModel: FormFollowPointCountDBViewModel = viewModel(factory = AppViewModelProvider.Factory)) {
+    var onFormChange = viewModel::updateCountingPointFormUiState
+    var formUiState = viewModel.formCountingPointUiState
+    var formDetails = formUiState.formsCountingPointDetails
+    var coroutineScope = rememberCoroutineScope()
+
     var numIndividuos by remember { mutableStateOf(1) }
     var alturaObservacion by remember { mutableStateOf("") }
     var tipoAnimalSeleccionado by remember { mutableStateOf("") }
@@ -47,8 +55,7 @@ fun FormularioFaunaPuntoConteo(navController: NavHostController, modifier: Modif
     val FaunaBViewModel = FormularioFaunaBusquedaLibreViewModel()
     val viewModel = FomularioEspecies_ViewModel()
     val green700 = colorResource(id = R.color.green_700)
-    var nombreComun by remember { mutableStateOf("") } // Estado para Nombre Común
-    var nombreCientifico by remember { mutableStateOf("") } // Estado para Nombre Científico
+
     var observaciones by remember { mutableStateOf("") } // Estado para Observaciones
 
 
@@ -96,6 +103,7 @@ fun FormularioFaunaPuntoConteo(navController: NavHostController, modifier: Modif
                 FaunaBViewModel.ZonaButton("Arreglo Agroforestal", zonaSeleccionada == "Arreglo Agroforestal", R.drawable.ic_agroforestal) { zonaSeleccionada = "Arreglo Agroforestal" }
                 FaunaBViewModel.ZonaButton("Cultivos Transitorios", zonaSeleccionada == "Cultivos Transitorios", R.drawable.ic_cultivostransitorios) { zonaSeleccionada = "Cultivos Transitorios" }
                 FaunaBViewModel.ZonaButton("Cultivos Permanentes", zonaSeleccionada == "Cultivos Permanentes", R.drawable.ic_cultivospermanentes) { zonaSeleccionada = "Cultivos Permanentes" }
+
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -117,15 +125,15 @@ fun FormularioFaunaPuntoConteo(navController: NavHostController, modifier: Modif
 
             // Campos de texto
             OutlinedTextField(
-                value = nombreComun,
-                onValueChange = { nombreComun = it }, // Actualizar el estado
+                value = formDetails.animalName,
+                onValueChange = { onFormChange( formUiState.formsCountingPointDetails.copy(animalName = it))  }, // Actualizar el estado
                 label = { Text("Nombre Común", color = Color.DarkGray ) },
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
-                value = nombreCientifico,
-                onValueChange = { nombreCientifico = it }, // Actualizar el estado
+                value = formDetails.scientificName,
+                onValueChange = { onFormChange( formUiState.formsCountingPointDetails.copy(scientificName = it)) }, // Actualizar el estado
                 label = { Text("Nombre Científico", color = Color.DarkGray) },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -202,7 +210,7 @@ fun FormularioFaunaPuntoConteo(navController: NavHostController, modifier: Modif
 
             // Observaciones
             OutlinedTextField(
-                value = observaciones,
+                value = formDetails.observations,
                 onValueChange = { observaciones = it }, // Actualizar el estado
                 label = { Text("Observaciones", color = Color.DarkGray) },
                 modifier = Modifier
