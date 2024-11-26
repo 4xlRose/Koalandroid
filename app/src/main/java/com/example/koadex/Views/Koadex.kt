@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -59,15 +60,19 @@ import com.example.koadex.ui.theme.Green700
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Help
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.zIndex
 import androidx.navigation.compose.rememberNavController
 import com.example.koadex.AppViewModelProvider
 import com.example.koadex.clases.User
@@ -75,7 +80,9 @@ import com.example.koadex.data.FormStateEntity
 import com.example.koadex.data.GeneralFormEntity
 import com.example.koadex.data.UserEntity
 import com.example.koadex.navigate.sampleUser
+import com.example.koadex.ui.principal.KoadexGeneralUiState
 import com.example.koadex.ui.principal.KoadexViewModel
+import kotlinx.coroutines.launch
 
 /*
 @Preview(showBackground = true, showSystemUi = true)
@@ -203,6 +210,7 @@ fun KoadexPantalla(
             General_formList = koadexGeneralUiState.koadexGeneralList,
             navController = navController,
             modifier = modifier,
+            viewModel = viewModel
         )
     }
 }
@@ -215,8 +223,8 @@ fun KoadexContenido(
     General_formList: List<GeneralFormEntity> = listOf(),
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    user: UserEntity
-
+    user: UserEntity,
+    viewModel: KoadexViewModel
 ) {
     Column (
         modifier = Modifier
@@ -248,6 +256,7 @@ fun KoadexContenido(
                     new_formList = General_formList,
                     userList = userList,
                     formStates = formStates,
+                    viewModel = viewModel
                 )
             }
         }
@@ -264,8 +273,10 @@ private fun No_forms(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.7f)
-            .padding(16.dp),
+            .fillMaxHeight()
+            .padding(16.dp)
+
+        ,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -402,7 +413,8 @@ fun FormList(
     userList: List<UserEntity>?,
     formStates: List<FormStateEntity>?,
     filter: String = "Todos",
-    new_formList: List<GeneralFormEntity> = listOf()
+    new_formList: List<GeneralFormEntity> = listOf(),
+    viewModel: KoadexViewModel
 ) {
     Column (
         modifier = Modifier
@@ -422,7 +434,8 @@ fun FormList(
             FormInfo(
                 new_form = item,
                 user = user,
-                cardShowing = cardShowing
+                cardShowing = cardShowing,
+                viewModel = viewModel
             )
         })
     }
@@ -446,11 +459,38 @@ fun FormInfo(
     user: UserEntity? = sampleUser,
     modifier: Modifier = Modifier,
     cardShowing: Boolean,
+    viewModel: KoadexViewModel
 ) {
+
+    val koadexGeneralUiState by viewModel.koadexGeneralUiState.collectAsState()
+
+    val UserUIState by viewModel.getUserById(user?.id ?: 0).collectAsState(initial = null)
+
+
+    val showDeleteWarning = remember { mutableStateOf(false) }
+    val deleteform = remember { mutableStateOf(false) }
+
     if (cardShowing) {
         var isExpanded by remember { mutableStateOf(false) }
         val form = new_form
 
+        if (showDeleteWarning.value == true) {
+            val coroutineScope = rememberCoroutineScope()
+            deleteFormWarning(
+                onConfirmDelete = {
+                    coroutineScope.launch {
+                        koadexGeneralUiState.deleteForm(form)
+                        isExpanded = !isExpanded
+
+                    }
+                    showDeleteWarning.value = false
+
+                },
+                onDismiss = {
+                    showDeleteWarning.value = false
+                }
+            )
+        }
         Column {
             Card(
                 modifier = modifier
@@ -467,7 +507,7 @@ fun FormInfo(
                         .fillMaxWidth()
                         .padding(16.dp)
                 ) {
-                    // ID, hora y botón de edición
+                    // ID, hora y botón de edición y eliminación
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -512,8 +552,13 @@ fun FormInfo(
                                     )
                                 }
                             }
-                            IconButton(
-                                onClick = { /* Acción de edición */ },
+                            // Botones de edición y eliminación
+
+                            IconButton( // Borrar
+                                onClick = {
+                                    showDeleteWarning.value = true
+
+                                },
                                 modifier = Modifier.size(29.dp)
                             ) {
                                 Icon(
@@ -523,7 +568,7 @@ fun FormInfo(
                                     modifier = Modifier.size(20.dp)
                                 )
                             }
-                            IconButton(
+                            IconButton( // Editar
                                 onClick = { /* Acción de edición */ },
                                 modifier = Modifier.size(29.dp)
                             ) {
@@ -610,7 +655,10 @@ fun resumen_Formulario(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
-            .padding(bottom = 8.dp),
+            .padding(bottom = 8.dp)
+            .offset(y = (-20).dp)
+            .zIndex(zIndex = -1f)
+        ,
         colors = CardDefaults.cardColors(
             containerColor = colorResource(R.color.verde_oscuro_1)
         ),
@@ -647,6 +695,51 @@ fun resumen_Formulario(
     }
 }
 
+@Composable
+fun deleteFormWarning(
+    onConfirmDelete: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text(
+                text = "Eliminar Formulario",
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
+            )
+        },
+        text = {
+            Text(
+                text = "¿Estás seguro de que quieres eliminar este formulario? Esta acción no se puede deshacer.",
+                color = Gray300
+            )
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onConfirmDelete()
+                    onDismiss()
+                },
+                colors = ButtonDefaults.textButtonColors(
+                    contentColor = Color.Red
+                )
+            ) {
+                Text("Eliminar")
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = onDismiss
+            ) {
+                Text("Cancelar")
+            }
+        },
+        containerColor = Color.White,
+        iconContentColor = colorResource(R.color.verde_1),
+        textContentColor = Color.Black
+    )
+}
 @Composable
 private fun ResumenItem(label: String, value: String) {
     Row(

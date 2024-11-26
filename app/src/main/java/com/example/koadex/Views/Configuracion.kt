@@ -90,7 +90,6 @@ fun Configuracion(
 
             Button(
                 onClick = {
-
                     showLogoutDialog = true
                 },
                 modifier = Modifier

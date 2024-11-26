@@ -19,6 +19,7 @@ interface FormRepository {
 
     suspend fun insertIntoListForms(listForms: List<GeneralFormEntity>)
     fun getLastGeneralForm(): Flow<GeneralFormEntity>
+    suspend fun deleteForm(form: GeneralFormEntity)
 
     // Usuario
     suspend fun insertUser(user: UserEntity)
@@ -38,6 +39,7 @@ interface FormRepository {
     suspend fun deleteFormState(form: FormStateEntity)
     suspend fun deleteAllFormStates()
     suspend fun resetFormStateTable()
+
 
 
     //Clima
