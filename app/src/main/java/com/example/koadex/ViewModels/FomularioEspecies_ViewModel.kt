@@ -226,8 +226,11 @@ class FomularioEspecies_ViewModel : ViewModel() {
                 ObservationTypeButton(
                     text = text,
                     iconRes = when (id) {
-                        1, 2, 3 -> R.drawable.ic_ave // Usa unos iconos para estos IDs
-                        else -> R.drawable.ic_reptil // Usa otros iconos para otros IDs
+                        1 -> R.drawable.ic_la_vio
+                        2 -> R.drawable.ic_huella
+                        3 -> R.drawable.ic_rastro
+                        4 -> R.drawable.ic_caceria
+                        else -> R.drawable.ic_les_dijeron
                     },
                     selected = selectedObservationType == id, // Comparar con el ID actual
                     selectedColor = green100,
