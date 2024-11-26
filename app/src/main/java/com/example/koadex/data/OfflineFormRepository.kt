@@ -12,9 +12,6 @@ class OfflineFormRepository (private val formDao: FormDao) : FormRepository {
 
     override suspend fun insertIntoListForms(listForms: List<GeneralFormEntity>) = formDao.insertIntoListForms(listForms)
 
-
-    override suspend fun insertIntoListForms(listForms: List<GeneralFormEntity>) = formDao.insertIntoListForms(listForms)
-
     override fun getLastGeneralForm(): Flow<GeneralFormEntity> = formDao.getLastGeneralForm()
     // Usuario
     override suspend fun insertUser(user: UserEntity) = formDao.insertUser(user)
