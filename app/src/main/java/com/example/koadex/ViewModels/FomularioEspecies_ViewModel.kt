@@ -134,8 +134,8 @@ class FomularioEspecies_ViewModel : ViewModel() {
 
     @Composable
     fun Tipo_de_animal(
-        selectedAnimalType: String?,
-        onAnimalTypeSelected: (String) -> Unit,
+        selectedAnimalType: Int?,
+        onAnimalTypeSelected: (Int) -> Unit,
         primaryGreen: Color
     ) {
         Row(
@@ -151,13 +151,13 @@ class FomularioEspecies_ViewModel : ViewModel() {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            animalTypes.forEach { animalType ->
+            animalTypes.forEachIndexed { index, animalType ->
                 AnimalTypeButton(
                     text = animalType.name,
                     iconRes = animalType.icon,
-                    selected = selectedAnimalType == animalType.name,
+                    selected = selectedAnimalType == index + 1,
                     selectedColor = primaryGreen,
-                    onClick = { onAnimalTypeSelected(animalType.name) }
+                    onClick = { onAnimalTypeSelected(index + 1) }
                 )
             }
         }
@@ -198,8 +198,8 @@ class FomularioEspecies_ViewModel : ViewModel() {
     /// PARA LAS OBSERVACIONES
     @Composable
     public fun Tipo_observacion(
-        selectedObservationType: String?,
-        onObservationTypeSelected: (String) -> Unit,
+        selectedObservationType: Int?,
+        onObservationTypeSelected: (Int) -> Unit,
         green100: Color,
         green700: Color
     ) {
@@ -211,15 +211,29 @@ class FomularioEspecies_ViewModel : ViewModel() {
         }
         Spacer(modifier = Modifier.padding(vertical = 3.dp))
         Row(
-            modifier = Modifier.
-            fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            ObservationTypeButton("La vió", R.drawable.ic_ave, selectedObservationType, green100) { onObservationTypeSelected("La vió") }
-            ObservationTypeButton("Huella", R.drawable.ic_ave, selectedObservationType, green100) { onObservationTypeSelected("Huella") }
-            ObservationTypeButton("Rastro", R.drawable.ic_ave, selectedObservationType, green100) { onObservationTypeSelected("Rastro") }
-            ObservationTypeButton("Cacería", R.drawable.ic_reptil, selectedObservationType, green100) { onObservationTypeSelected("Cacería") }
-            ObservationTypeButton("Les dijeron", R.drawable.ic_reptil, selectedObservationType, green100) { onObservationTypeSelected("Les dijeron") }
+            val observationTypes = listOf(
+                Pair(1, "La vió"),
+                Pair(2, "Huella"),
+                Pair(3, "Rastro"),
+                Pair(4, "Cacería"),
+                Pair(5, "Les dijeron")
+            )
+
+            observationTypes.forEach { (id, text) ->
+                ObservationTypeButton(
+                    text = text,
+                    iconRes = when (id) {
+                        1, 2, 3 -> R.drawable.ic_ave // Usa unos iconos para estos IDs
+                        else -> R.drawable.ic_reptil // Usa otros iconos para otros IDs
+                    },
+                    selected = selectedObservationType == id, // Comparar con el ID actual
+                    selectedColor = green100,
+                    onClick = { onObservationTypeSelected(id) } // Pasar el ID como argumento
+                )
+            }
         }
     }
 
@@ -229,7 +243,7 @@ class FomularioEspecies_ViewModel : ViewModel() {
     fun ObservationTypeButton(
         text: String,
         iconRes: Int,
-        selected: String?,
+        selected: Boolean,
         selectedColor: Color,
         onClick: () -> Unit
     ) {
@@ -237,7 +251,7 @@ class FomularioEspecies_ViewModel : ViewModel() {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .background(
-                    if (selected == text) Color(0xFF97B96E) else Color.White,
+                    if (selected) Color(0xFF97B96E) else Color.White,
                     shape = RoundedCornerShape(8.dp)
                 )
                 .border(

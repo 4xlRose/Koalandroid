@@ -16,7 +16,7 @@ import androidx.room.RoomDatabase
     HabitatEntity::class, RouteFormEntity::class, CameraEntity::class,
     CheckListEntity::class, CheckEntity::class, WeatherFormEntity::class
 ],
-    version = 9,
+    version = 11,
     exportSchema = false
 )
 abstract class FormDatabase : RoomDatabase() {

@@ -364,8 +364,8 @@ fun FormularioSeguimientoScreen(
 
         // Observaciones
         OutlinedTextField(
-            value = observaciones,
-            onValueChange = { observaciones = it }, // Actualizar el estado
+            value = formUiState.formsFollowUpDetails.observations,
+            onValueChange = { onFormValueChange(formUiState.formsFollowUpDetails.copy(observations = it)) },
             label = { Text("Observaciones", color = Color.DarkGray) },
             modifier = Modifier
                 .fillMaxWidth()
