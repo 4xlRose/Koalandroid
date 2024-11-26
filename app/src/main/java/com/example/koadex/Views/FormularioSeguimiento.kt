@@ -126,7 +126,7 @@ fun FormularioSeguimientoScreen(
 
         Spacer(modifier = Modifier.height(60.dp))
 
-        // Campo de Código
+        /*// Campo de Código
         OutlinedTextField(
             value = codigo,
             onValueChange = { codigo = it},
@@ -134,7 +134,7 @@ fun FormularioSeguimientoScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))*/
 
         // SECCION SEGUIMIENTO Y CAMBIO
         Row(

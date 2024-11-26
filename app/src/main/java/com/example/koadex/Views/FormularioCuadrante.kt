@@ -56,9 +56,17 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.koadex.AppViewModelProvider
 import com.example.koadex.R
 import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
+import com.example.koadex.ui.form.FormQuadrantDBViewModel
+import com.example.koadex.ui.form.FormRouteFormDBViewModel
+import com.example.koadex.ui.form.QuadrantFormDetails
+import com.example.koadex.ui.form.QuadrantFormUiState
+import com.example.koadex.ui.form.RouteFormDetails
+import com.example.koadex.ui.form.RouteFormUiState
 import com.example.koadex.ui.principal.KoadexViewModel
+import kotlinx.coroutines.launch
 
 val isFileSelectedFC: MutableState<Boolean> = mutableStateOf(false)
 
@@ -69,8 +77,10 @@ fun FormularioCuadrante(
     //activity: MainActivity,
     navController: NavHostController,
     //modifier: Modifier = Modifier,
-    //viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: FormQuadrantDBViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+
+    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -97,7 +107,15 @@ fun FormularioCuadrante(
         FormularioCuadranteScreen(
             /*activity = activity,*/
             modifier = Modifier.padding(paddingValues),
-            navController = navController
+            navController = navController,
+            formUiState = viewModel.formQuadrantUiState,
+            onFormValueChange = viewModel::updateQuadranteUiState,
+            onSaveClick = {
+                coroutineScope.launch {
+                    viewModel.saveQuadrantForm()
+                    navController.navigate("TiposForms")
+                }
+            }
         )
     }
 }
@@ -106,7 +124,10 @@ fun FormularioCuadrante(
 fun FormularioCuadranteScreen(
     /*activity: MainActivity,*/
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    formUiState: QuadrantFormUiState,
+    onFormValueChange: (QuadrantFormDetails) -> Unit,
+    onSaveClick: () -> Unit
 ) {
     var codigo by remember { mutableStateOf("") }
     var nombreComun by remember { mutableStateOf("") }
@@ -148,7 +169,7 @@ fun FormularioCuadranteScreen(
 
             Spacer(modifier = Modifier.height(30.dp))
 
-            // Código
+            /*// Código
             OutlinedTextField(
                 value = codigo,
                 onValueChange = { codigo = it },
@@ -156,7 +177,7 @@ fun FormularioCuadranteScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))*/
 
             Row(
                 modifier = Modifier
