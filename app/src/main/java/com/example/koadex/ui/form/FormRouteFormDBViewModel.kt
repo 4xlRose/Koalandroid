@@ -19,6 +19,13 @@ class FormRouteFormDBViewModel (private val formRepository: FormRepository) : Vi
     suspend fun saveRouteFrom() {
         formRepository.insertRouteForm(formRouteUiState.formsRouteDetails.toEntity())
     }
+
+    // Actualizar el ID de la Zona
+    fun updateZoneTypeId(zoneTypeId: Int) {
+        formRouteUiState = formRouteUiState.copy(
+            formsRouteDetails = formRouteUiState.formsRouteDetails.copy(idZoneType = zoneTypeId)
+        )
+    }
 }
 
 /*Formulario Ruta*/

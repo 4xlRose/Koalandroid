@@ -35,7 +35,8 @@ data class FollowUpFormDetails(
     var idCoverage: Int = 0, // Foreign Key
     var cropType: String = "",
     var idDisturbance: Int = 0, // Foreign Key
-    var evidences: String = ""
+    var evidences: String = "",
+    var observations: String = "" // <- AGREGO MARIA
 )
 
 fun FollowUpFormDetails.toEntity() : FollowUpFormEntity = FollowUpFormEntity (
@@ -45,5 +46,6 @@ fun FollowUpFormDetails.toEntity() : FollowUpFormEntity = FollowUpFormEntity (
     idCoverage = idCoverage,
     cropType = cropType,
     idDisturbance = idDisturbance,
-    evidences = evidences
+    evidences = evidences,
+    observations = observations // <- AGREGO MARIA
 )
