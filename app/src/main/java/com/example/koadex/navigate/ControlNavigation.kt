@@ -92,7 +92,7 @@ fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modi
         }
 
         composable("Koadex") {
-            Koadex(navController = navController)
+            Koadex(navController = navController, user = model.loggedUser)
         }
         composable("Principal") {
             Principal(navController = navController, user = model.loggedUser)
