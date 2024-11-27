@@ -64,6 +64,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.TextButton
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
@@ -71,6 +72,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.zIndex
 import androidx.navigation.compose.rememberNavController
 import com.example.koadex.AppViewModelProvider
+import com.example.koadex.ViewModels.NavigationModel
 import com.example.koadex.data.FormStateEntity
 import com.example.koadex.data.GeneralFormEntity
 import com.example.koadex.data.UserEntity
@@ -143,7 +145,7 @@ fun KoadexPreview() {
 fun Koadex(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-
+    navModel: NavigationModel,
     viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory),
     user: UserEntity = sampleUser
 
@@ -168,9 +170,10 @@ fun Koadex(
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
                 .background(Color.White),
-            viewModel,
-            navController,
-            user = user
+            viewModel = viewModel,
+            navController = navController,
+            user = user,
+            navModel = navModel
 
         )
     }
@@ -182,7 +185,8 @@ fun KoadexPantalla(
     modifier: Modifier,
     viewModel: KoadexViewModel,
     navController: NavHostController,
-    user: UserEntity
+    user: UserEntity,
+    navModel: NavigationModel
 ) {
     val koadexGeneralUiState by viewModel.getAllForms.collectAsState()
     val userList by viewModel.getAllUsers.collectAsState(initial = null)
@@ -203,7 +207,8 @@ fun KoadexPantalla(
             General_formList = koadexGeneralUiState.koadexGeneralList,
             navController = navController,
             modifier = modifier,
-            viewModel = viewModel
+            viewModel = viewModel,
+            navModel = navModel
         )
     }
 }
@@ -217,7 +222,8 @@ fun KoadexContenido(
     navController: NavHostController,
     modifier: Modifier = Modifier,
     currentUser: UserEntity,
-    viewModel: KoadexViewModel
+    viewModel: KoadexViewModel,
+    navModel: NavigationModel
 ) {
     Column (
         modifier = Modifier
@@ -245,12 +251,14 @@ fun KoadexContenido(
             } else {
                 FormList(
                     //formList = formList,
+                    navController = navController,
                     filter = selected,
                     new_formList = General_formList,
                     userList = userList,
                     currentUser = currentUser,
                     formStates = formStates,
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    navModel = navModel
                 )
             }
         }
@@ -404,12 +412,14 @@ private fun Filtro_seleccion(selected: String): String {
 @Composable
 fun FormList(
     //formList: List<GeneralFormEntity>,
+    navController: NavHostController,
     userList: List<UserEntity>?,
     currentUser: UserEntity,
     formStates: List<FormStateEntity>?,
     filter: String = "Todos",
     new_formList: List<GeneralFormEntity> = listOf(),
-    viewModel: KoadexViewModel
+    viewModel: KoadexViewModel,
+    navModel: NavigationModel
 ) {
     Column (
         modifier = Modifier
@@ -427,11 +437,13 @@ fun FormList(
             }
 
             FormInfo(
+                navController = navController,
                 new_form = item,
                 user = user,
                 loggedUser = currentUser,
                 cardShowing = cardShowing,
-                viewModel = viewModel
+                viewModel = viewModel,
+                navModel = navModel
             )
         })
     }
@@ -441,13 +453,18 @@ fun FormList(
 @Composable
 fun FormInfo(
     //form_old: FormEntity,
+    navController: NavHostController,
     new_form: GeneralFormEntity,
     user: UserEntity? = sampleUser,
     loggedUser: UserEntity,
     modifier: Modifier = Modifier,
     cardShowing: Boolean,
-    viewModel: KoadexViewModel
+    viewModel: KoadexViewModel,
+    navModel: NavigationModel
 ) {
+    LaunchedEffect(Unit) {
+        navModel.savedFormId = 0
+    }
     val showDeleteWarning = remember { mutableStateOf(false) }
 
     if (cardShowing) {
@@ -550,7 +567,10 @@ fun FormInfo(
                                     )
                                 }
                                 IconButton( // Editar
-                                    onClick = { /* Acción de edición */ },
+                                    onClick = {
+                                        navModel.savedFormId = form.id
+                                        navController.navigate("FormularioGeneral")
+                                              },
                                     modifier = Modifier.size(29.dp)
                                 ) {
                                     Icon(
@@ -665,11 +685,16 @@ fun resumen_Formulario(
                 modifier = Modifier.padding(vertical = 8.dp)
             )
 
-            val season = model.getSeasonById(form.idSeason).collectAsState(initial = null).value?.type ?: "Sin registro de temporada"
-            val weather = model.getWeatherById(form.idWeather).collectAsState(initial = null).value?.type ?: "Sin registro de clima"
+            val season = model.getSeasonById(form.idSeason).collectAsState(initial = null)
+            season.value?.let {
+                ResumenItem("Temporada:", it.type)
+            }
 
-            ResumenItem("Temporada:", season)
-            ResumenItem("Clima:", weather)
+            val weather = model.getWeatherById(form.idWeather).collectAsState(initial = null)
+            weather.value?.let {
+                ResumenItem("Clima:", it.type)
+            }
+
             ResumenItem("Fecha:", form.date)
             ResumenItem("Hora:", form.hour)
             ResumenItem("Ubicación:", form.place)

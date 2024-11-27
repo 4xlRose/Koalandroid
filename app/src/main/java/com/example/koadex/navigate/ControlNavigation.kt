@@ -93,10 +93,10 @@ fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modi
         }
 
         composable("Koadex") {
-            Koadex(navController = navController, user = model.loggedUser)
+            Koadex(navController = navController, user = model.loggedUser, navModel = model)
         }
         composable("Principal") {
-            Principal(navController = navController, user = model.loggedUser)
+            Principal(navController = navController, user = model.loggedUser, navModel = model)
         }
         composable("Registro") {
             Registro(navController = navController, account = account, model = model)
@@ -122,7 +122,7 @@ fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modi
 
         //Tipos de formulario
         composable("FormularioGeneral") {
-            FormularioGeneral(navController = navController, user = model.loggedUser)
+            FormularioGeneral(navController = navController, user = model.loggedUser, savedId = model.savedFormId)
         }
         composable("TiposForms") {
             FormularioSeleccion(navController = navController, user = model.loggedUser)

@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.koadex.R
+import com.example.koadex.ViewModels.NavigationModel
 import com.example.koadex.ViewModels.PrincipalViewModel
 import com.example.koadex.data.UserEntity
 import com.example.koadex.navigate.sampleUser
@@ -23,8 +24,12 @@ import com.example.koadex.navigate.sampleUser
 @Composable
 fun Principal(
     navController: NavHostController,
+    navModel: NavigationModel,
     user: UserEntity,
 ) {
+    LaunchedEffect(Unit) {
+        navModel.savedFormId = 0
+    }
     val introBase = stringResource(id = R.string.Intro_homepage)
     val formularioBase = stringResource(id = R.string.Formularios_base)
 
@@ -89,6 +94,7 @@ fun Principal(
     }
 }
 
+/*
 @Preview(showBackground = true)
 @Composable
 fun PreviewPrincipal() {
@@ -96,4 +102,4 @@ fun PreviewPrincipal() {
         navController = rememberNavController(),
         user = sampleUser
     )
-}
+}*/
