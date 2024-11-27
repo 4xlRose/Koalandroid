@@ -95,7 +95,7 @@ fun FormularioSeguimiento(
         )
     }
 }
-//@Preview(device = "spec:width=800px,height=1340px,dpi=300", showBackground = true)
+
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun FormularioSeguimientoScreen(
@@ -131,6 +131,7 @@ fun FormularioSeguimientoScreen(
 
             Spacer(modifier = Modifier.height(60.dp))
 
+
             // Campo de Código
             OutlinedTextField(
                 value = codigo,
@@ -139,7 +140,17 @@ fun FormularioSeguimientoScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+
+        /*// Campo de Código
+        OutlinedTextField(
+            value = codigo,
+            onValueChange = { codigo = it},
+            label = { Text("Código", color = Color.DarkGray) },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))*/
+
 
             // SECCION SEGUIMIENTO Y CAMBIO
             Row(

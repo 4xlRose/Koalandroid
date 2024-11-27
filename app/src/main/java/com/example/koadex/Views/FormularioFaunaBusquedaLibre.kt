@@ -1,10 +1,9 @@
-@file:JvmName("FormularioFaunaBusquedaLibreKt")
-
 package com.example.koadex.Views
 
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -27,14 +26,12 @@ import androidx.navigation.compose.rememberNavController
 import com.example.koadex.R
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.filled.Camera
-import androidx.compose.material.icons.filled.FileOpen
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import com.example.koadex.MainActivity
 import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
 import com.example.koadex.ViewModels.FormularioFaunaBusquedaLibreViewModel
+
 
 val isFileSelectedFBL: MutableState<Boolean> = mutableStateOf(false)
 
@@ -64,6 +61,29 @@ fun FormularioFaunaBusquedaLibre(activity: MainActivity, navController: NavHostC
 
         //Estado de scroll
         val scrollState = rememberScrollState()
+
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFFFFFFF))
+    ) {
+        // Barra superior
+        TopAppBar(
+            title = { Text("Formulario",
+                color = Color.White,
+                fontWeight = FontWeight.Bold) },
+            navigationIcon = {
+                IconButton(onClick = { navController.navigate("TiposForms") }) {
+                    Icon(Icons.Filled.ArrowBack,
+                        contentDescription = "Atrás",
+                        tint = Color.White
+                    )
+                }
+            },
+            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF4E7029))
+        )
+
 
         Column(
             modifier = Modifier
@@ -276,6 +296,7 @@ fun FormularioFaunaBusquedaLibre(activity: MainActivity, navController: NavHostC
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+
                 // Evidencias
                 Text(
                     "Evidencias", style = MaterialTheme.typography.titleMedium,
@@ -284,6 +305,9 @@ fun FormularioFaunaBusquedaLibre(activity: MainActivity, navController: NavHostC
                 )
 
                 Botones_capturaFBL(green700)
+
+            viewModel.Botones_captura(green700)
+
 
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -352,3 +376,4 @@ fun Boton_seleccionar_archivoFBL(green700: Color) {
         Text("Elige archivo", color = Color.White)
     }
 }
+

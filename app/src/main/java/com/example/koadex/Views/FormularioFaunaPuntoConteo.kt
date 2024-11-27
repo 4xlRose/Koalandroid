@@ -1,5 +1,3 @@
-@file:JvmName("FormularioFaunaPuntoConteoKt")
-
 package com.example.koadex.Views
 
 import android.os.Build
@@ -26,12 +24,14 @@ import androidx.navigation.compose.rememberNavController
 import com.example.koadex.R
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.filled.Camera
-import androidx.compose.material.icons.filled.FileOpen
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
+
 import com.example.koadex.MainActivity
+
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.koadex.AppViewModelProvider
+
 import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
 import com.example.koadex.ViewModels.FormularioFaunaBusquedaLibreViewModel
 import com.example.koadex.ViewModels.FormularioFaunaPuntoConteoViewModel
@@ -41,7 +41,7 @@ val isFileSelectedFPC: MutableState<Boolean> = mutableStateOf(false)
 @RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FormularioFaunaPuntoConteo(activity: MainActivity,navController: NavHostController, modifier: Modifier = Modifier) {
+fun FormularioFaunaPuntoConteo(activity: MainActivity,navController: NavHostController, modifier: Modifier = Modifier,viewModel: FormularioFaunaPuntoConteoViewModel = viewModel(factory = AppViewModelProvider.Factory)) {
     if (CameraPermision.value) {
         CameraWindow(activity)
     } else {
@@ -61,6 +61,14 @@ fun FormularioFaunaPuntoConteo(activity: MainActivity,navController: NavHostCont
 
         //Estado de scroll
         val scrollState = rememberScrollState()
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFFFFFFF))
+    ) {
+        // Barra superior
+
 
         Column(
             modifier = Modifier
@@ -280,6 +288,7 @@ fun FormularioFaunaPuntoConteo(activity: MainActivity,navController: NavHostCont
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+
                 // Evidencias
                 Text(
                     "Evidencias",
@@ -288,6 +297,7 @@ fun FormularioFaunaPuntoConteo(activity: MainActivity,navController: NavHostCont
                     color = Color.Black
                 )
                 Botones_capturaFPC(green700)
+
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -316,6 +326,7 @@ fun FormularioFaunaPuntoConteo(activity: MainActivity,navController: NavHostCont
 @Preview(device = "spec:width=800px,height=1340px,dpi=300")
 @Composable
 fun PreviewFormularioPuntoConteo() {
+
     FormularioFaunaPuntoConteo(activity = MainActivity(),navController = rememberNavController(), modifier = Modifier)
 }
 
@@ -353,3 +364,4 @@ public fun Boton_seleccionar_archivoFPC(green700: Color) {
         Text("Elige archivo", color = Color.White)
     }
 }
+
