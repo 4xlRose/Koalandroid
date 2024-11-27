@@ -7,6 +7,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.koadex.ViewModels.FormularioFaunaBusquedaLibreViewModel
+import com.example.koadex.ViewModels.FormularioFaunaPuntoConteoViewModel
 import com.example.koadex.ViewModels.NavigationModel
 import com.example.koadex.ui.form.FormBusquedaLibreDBViewModel
 import com.example.koadex.ui.form.FormFollowDBViewModel
@@ -57,9 +58,11 @@ object AppViewModelProvider {
         initializer {
             FormPuntoConteoDBViewModel(formApplication().container.formsRepository)
         }
-
         initializer {
             FormularioFaunaBusquedaLibreViewModel()
+        }
+        initializer {
+            FormularioFaunaPuntoConteoViewModel()
         }
     }
 }

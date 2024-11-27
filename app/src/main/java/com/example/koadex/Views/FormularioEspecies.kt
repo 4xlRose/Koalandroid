@@ -35,7 +35,6 @@ import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
 import com.example.koadex.clases.User
 import com.example.koadex.data.UserEntity
 import com.example.koadex.navigate.sampleUser
-import com.example.koadex.ui.form.FormFollowDBViewModel
 import com.example.koadex.ui.form.FormSpecieDBViewModel
 import com.example.koadex.ui.theme.KoadexTheme
 import kotlinx.coroutines.launch
@@ -178,16 +177,25 @@ fun FormularioEspecies(
 
                     Spacer(modifier = Modifier.padding(vertical = 5.dp))
 
-                    // Número de individuos
-                    Text(
-                        "Número de Individuos",
-                        style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.align(Alignment.Start),
-                        color = Color.Black
-                    )
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                // Número de individuos
+                Text("Número de Individuos",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.align(Alignment.Start),
+                    color = Color.Black)
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    IconButton(
+                        onClick = {
+                            //if (numIndividuos > 1) numIndividuos--
+                            viewModel.updateQuantity((formUiState.formsEspecieDetails.quantity - 1).coerceAtLeast(1)) }) {
+                        Icon(Icons.Filled.Remove, contentDescription = "Disminuir")
+                    }
+                    //Text(text = numIndividuos.toString(), style = MaterialTheme.typography.titleMedium, color = Color.Black)
+                    Text("${formUiState.formsEspecieDetails.quantity}")
+                    IconButton(
+                        onClick = { viewModel.updateQuantity(formUiState.formsEspecieDetails.quantity + 1) }
                     ) {
                         IconButton(
                             onClick = {

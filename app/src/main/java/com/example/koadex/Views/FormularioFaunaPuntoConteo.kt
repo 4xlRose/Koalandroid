@@ -1,5 +1,6 @@
 package com.example.koadex.Views
 
+import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -24,6 +25,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.koadex.R
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.FileOpen
 import androidx.compose.runtime.MutableState
@@ -38,12 +40,18 @@ import com.example.koadex.AppViewModelProvider
 import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
 import com.example.koadex.ViewModels.FormularioFaunaBusquedaLibreViewModel
 import com.example.koadex.ViewModels.FormularioFaunaPuntoConteoViewModel
+import com.example.koadex.ui.form.FormPuntoConteoDBViewModel
+import kotlinx.coroutines.launch
 val isFileSelectedFPC: MutableState<Boolean> = mutableStateOf(false)
 
 @RequiresApi(Build.VERSION_CODES.P)
+@SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FormularioFaunaPuntoConteo(activity: MainActivity,navController: NavHostController, modifier: Modifier = Modifier) {
+fun FormularioFaunaPuntoConteo(
+    activity: MainActivity,navController: NavHostController,
+    modifier: Modifier = Modifier,
+    viewModelPC: FormPuntoConteoDBViewModel = viewModel(factory = AppViewModelProvider.Factory)) {
     if (CameraPermision.value) {
         CameraWindow(activity)
     } else {
@@ -54,15 +62,19 @@ fun FormularioFaunaPuntoConteo(activity: MainActivity,navController: NavHostCont
         var tipoObservacionSeleccionada by remember { mutableStateOf("") }
         val actionButtonColors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4E7029))
         val FaunaBViewModel = FormularioFaunaBusquedaLibreViewModel()
-        val viewModel = FomularioEspecies_ViewModel()
+        val viewModelFE = FomularioEspecies_ViewModel()
         val green700 = colorResource(id = R.color.green_700)
         var nombreComun by remember { mutableStateOf("") } // Estado para Nombre Común
         var nombreCientifico by remember { mutableStateOf("") } // Estado para Nombre Científico
         var observaciones by remember { mutableStateOf("") } // Estado para Observaciones
 
-
+        val FaunaPCViewModel = FormularioFaunaPuntoConteoViewModel()
         //Estado de scroll
         val scrollState = rememberScrollState()
+
+        val coroutineScope = rememberCoroutineScope()
+        val puntoConteoUiState = viewModelPC.puntoConteoUiState
+        val puntoConteoDetails = puntoConteoUiState.puntoConteoDetails
 
         Column(
             modifier = Modifier
@@ -70,226 +82,204 @@ fun FormularioFaunaPuntoConteo(activity: MainActivity,navController: NavHostCont
                 .background(Color(0xFFFFFFFF))
         ) {
             // Barra superior
+            TopAppBar(
+                title = { Text("Formulario",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold) },
+                navigationIcon = {
+                    IconButton(onClick = { navController.navigate("TiposForms") }) {
+                        Icon(Icons.Filled.ArrowBack,
+                            contentDescription = "Atrás",
+                            tint = Color.White
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF4E7029))
+            )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0xFFFFFFFF))
+        ) {
+            Spacer(modifier = Modifier.padding(vertical = 5.dp))
+
+            // Zona
+            Text("Zona",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.align(Alignment.Start),
+                color = Color.Black)
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                FaunaPCViewModel.ZonaButton("Bosque", puntoConteoDetails.idZoneType == 1, R.drawable.ic_bosque) {
+                    viewModelPC.updatePuntoConteoUiState(puntoConteoDetails.copy(idZoneType = 1))
+                }
+                FaunaPCViewModel.ZonaButton("Agroforestal", puntoConteoDetails.idZoneType == 2, R.drawable.ic_agroforestal) {
+                    viewModelPC.updatePuntoConteoUiState(puntoConteoDetails.copy(idZoneType = 2))
+                }
+                FaunaPCViewModel.ZonaButton("Cultivos Transitorios", puntoConteoDetails.idZoneType == 3, R.drawable.ic_cultivostransitorios) {
+                    viewModelPC.updatePuntoConteoUiState(puntoConteoDetails.copy(idZoneType = 3))
+                }
+                FaunaPCViewModel.ZonaButton("Cultivos Permanentes", puntoConteoDetails.idZoneType == 4, R.drawable.ic_cultivospermanentes) {
+                    viewModelPC.updatePuntoConteoUiState(puntoConteoDetails.copy(idZoneType = 4))
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Tipo de Animal
+            Text("Tipo de Animal",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.align(Alignment.Start),
+                color = Color.Black)
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                FaunaPCViewModel.TipoAnimalButton("Mamífero", puntoConteoDetails.idAnimalType == 1, R.drawable.ic_mamifero) {
+                    viewModelPC.updatePuntoConteoUiState(puntoConteoDetails.copy(idAnimalType = 1))
+                }
+                FaunaPCViewModel.TipoAnimalButton("Ave", puntoConteoDetails.idAnimalType == 2, R.drawable.ic_ave) {
+                    viewModelPC.updatePuntoConteoUiState(puntoConteoDetails.copy(idAnimalType = 2))
+                }
+                FaunaPCViewModel.TipoAnimalButton("Reptil", puntoConteoDetails.idAnimalType == 3, R.drawable.ic_reptil) {
+                    viewModelPC.updatePuntoConteoUiState(puntoConteoDetails.copy(idAnimalType = 3))
+                }
+                FaunaPCViewModel.TipoAnimalButton("Anfibio", puntoConteoDetails.idAnimalType == 4, R.drawable.ic_anfibio) {
+                    viewModelPC.updatePuntoConteoUiState(puntoConteoDetails.copy(idAnimalType = 4))
+                }
+                FaunaPCViewModel.TipoAnimalButton("Insecto", puntoConteoDetails.idAnimalType == 5, R.drawable.ic_insecto) {
+                    viewModelPC.updatePuntoConteoUiState(puntoConteoDetails.copy(idAnimalType = 5))
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Campos de texto
+            OutlinedTextField(
+                value = puntoConteoDetails.animalName,
+                onValueChange = { newValue ->
+                    viewModelPC.updatePuntoConteoUiState(puntoConteoDetails.copy(animalName = newValue))
+                },
+                label = { Text("Nombre Común", color = Color.DarkGray ) },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            OutlinedTextField(
+                value = puntoConteoDetails.scientificName,
+                onValueChange = { newValue ->
+                    viewModelPC.updatePuntoConteoUiState(puntoConteoDetails.copy(scientificName = newValue))
+                },
+                label = { Text("Nombre Científico", color = Color.DarkGray) },
+                modifier = Modifier.fillMaxWidth()
+            )
 
 
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color(0xFFFFFFFF))
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Número de Individuos
+            Text("Número de Individuos",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.align(Alignment.Start),
+                color = Color.Black)
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                // Barra superior
-                TopAppBar(
-                    title = {
-                        Text(
-                            "Formulario",
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold
-                        )
-                    },
-                    navigationIcon = {
-                        IconButton(onClick = { navController.navigate("TiposForms") }) {
-                            Icon(
-                                Icons.Filled.ArrowBack,
-                                contentDescription = "Atrás",
-                                tint = Color.White
-                            )
-                        }
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF4E7029))
-                )
-
-                // Contenido desplazable
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(scrollState) // Habilitar scroll
-                        .padding(horizontal = 32.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Spacer(modifier = Modifier.padding(vertical = 5.dp))
-
-                    // Zona
-                    Text(
-                        "Zona",
-                        style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.align(Alignment.Start),
-                        color = Color.Black
-                    )
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        FaunaBViewModel.ZonaButton(
-                            "Bosque",
-                            zonaSeleccionada == "Bosque",
-                            R.drawable.ic_bosque
-                        ) { zonaSeleccionada = "Bosque" }
-                        FaunaBViewModel.ZonaButton(
-                            "Arreglo Agroforestal",
-                            zonaSeleccionada == "Arreglo Agroforestal",
-                            R.drawable.ic_agroforestal
-                        ) { zonaSeleccionada = "Arreglo Agroforestal" }
-                        FaunaBViewModel.ZonaButton(
-                            "Cultivos Transitorios",
-                            zonaSeleccionada == "Cultivos Transitorios",
-                            R.drawable.ic_cultivostransitorios
-                        ) { zonaSeleccionada = "Cultivos Transitorios" }
-                        FaunaBViewModel.ZonaButton(
-                            "Cultivos Permanentes",
-                            zonaSeleccionada == "Cultivos Permanentes",
-                            R.drawable.ic_cultivospermanentes
-                        ) { zonaSeleccionada = "Cultivos Permanentes" }
+                IconButton(onClick = {
+                    if (puntoConteoDetails.quantity > 1) {
+                        viewModelPC.updatePuntoConteoUiState(puntoConteoDetails.copy(quantity = puntoConteoDetails.quantity - 1))
                     }
+                }) {
+                    Icon(Icons.Filled.Remove, contentDescription = "Disminuir")
+                }
+                Text(text = puntoConteoDetails.quantity.toString(), style = MaterialTheme.typography.titleMedium)
+                IconButton(onClick = {
+                    viewModelPC.updatePuntoConteoUiState(puntoConteoDetails.copy(quantity = puntoConteoDetails.quantity + 1))
+                }) {
+                    Icon(Icons.Filled.Add, contentDescription = "Aumentar")
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Tipo de Observación
+            Text("Tipo de Observación",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.align(Alignment.Start),
+                color = Color.Black)
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                FaunaPCViewModel.TipoObservacionButton("La vio", puntoConteoDetails.idObservType == 1, R.drawable.ic_la_vio) {
+                    viewModelPC.updatePuntoConteoUiState(puntoConteoDetails.copy(idObservType = 1))
+                }
+                FaunaPCViewModel.TipoObservacionButton("Huella", puntoConteoDetails.idObservType == 2, R.drawable.ic_huella) {
+                    viewModelPC.updatePuntoConteoUiState(puntoConteoDetails.copy(idObservType = 2))
+                }
+                FaunaPCViewModel.TipoObservacionButton("Rastro", puntoConteoDetails.idObservType == 3, R.drawable.ic_rastro) {
+                    viewModelPC.updatePuntoConteoUiState(puntoConteoDetails.copy(idObservType = 3))
+                }
+                FaunaPCViewModel.TipoObservacionButton("Cacería", puntoConteoDetails.idObservType == 4, R.drawable.ic_caceria) {
+                    viewModelPC.updatePuntoConteoUiState(puntoConteoDetails.copy(idObservType = 4))
+                }
+                FaunaPCViewModel.TipoObservacionButton("Les Dijeron", puntoConteoDetails.idObservType == 5, R.drawable.ic_les_dijeron) {
+                    viewModelPC.updatePuntoConteoUiState(puntoConteoDetails.copy(idObservType = 5))
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Altura de Observación
+            Text("Altura de Observación",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.align(Alignment.Start),
+                color = Color.Black)
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                FaunaPCViewModel.AlturaButton("< 1mt Baja", puntoConteoDetails.idHeightType == 1) {
+                    viewModelPC.updatePuntoConteoUiState(puntoConteoDetails.copy(idHeightType = 1))
+                }
+                FaunaPCViewModel.AlturaButton("1-3 mt Media", puntoConteoDetails.idHeightType == 2) {
+                    viewModelPC.updatePuntoConteoUiState(puntoConteoDetails.copy(idHeightType = 2))
+                }
+                FaunaPCViewModel.AlturaButton(">3mt Alta", puntoConteoDetails.idHeightType == 3) {
+                    viewModelPC.updatePuntoConteoUiState(puntoConteoDetails.copy(idAnimalType = 3))
+                }
+            }
+
+
+            // Evidencias
+            Text("Evidencias",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.align(Alignment.Start),
+                color = Color.Black)
+            viewModelFE.Botones_captura(green700)
+
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Tipo de Animal
-                    Text(
-                        "Tipo de Animal",
-                        style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.align(Alignment.Start),
-                        color = Color.Black
-                    )
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        FaunaBViewModel.TipoAnimalButton(
-                            "Mamífero",
-                            tipoAnimalSeleccionado == "Mamífero",
-                            R.drawable.ic_mamifero
-                        ) { tipoAnimalSeleccionado = "Mamífero" }
-                        FaunaBViewModel.TipoAnimalButton(
-                            "Ave",
-                            tipoAnimalSeleccionado == "Ave",
-                            R.drawable.ic_ave
-                        ) { tipoAnimalSeleccionado = "Ave" }
-                        FaunaBViewModel.TipoAnimalButton(
-                            "Reptil",
-                            tipoAnimalSeleccionado == "Reptil",
-                            R.drawable.ic_reptil
-                        ) { tipoAnimalSeleccionado = "Reptil" }
-                        FaunaBViewModel.TipoAnimalButton(
-                            "Anfibio",
-                            tipoAnimalSeleccionado == "Anfibio",
-                            R.drawable.ic_anfibio
-                        ) { tipoAnimalSeleccionado = "Anfibio" }
-                        FaunaBViewModel.TipoAnimalButton(
-                            "Insecto",
-                            tipoAnimalSeleccionado == "Insecto",
-                            R.drawable.ic_insecto
-                        ) { tipoAnimalSeleccionado = "Insecto" }
+            // Observaciones
+            OutlinedTextField(
+                value = puntoConteoDetails.observations,
+                onValueChange = { newValue ->
+                    viewModelPC.updatePuntoConteoUiState(puntoConteoDetails.copy(observations = newValue))
+                },
+                label = { Text("Observaciones", color = Color.DarkGray) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp)
+            )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+            viewModelFE.Atras_enviar(navController, green700)
+/*
+            // Botón para guardar el formulario
+            Button(
+                onClick = {
+                    coroutineScope.launch {
+                        viewModel.savePuntoConteo()
+                        navController.popBackStack() // Navegar hacia atrás despues de guardar
                     }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    // Campos de texto
-                    OutlinedTextField(
-                        value = nombreComun,
-                        onValueChange = { nombreComun = it }, // Actualizar el estado
-                        label = { Text("Nombre Común", color = Color.DarkGray) },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    OutlinedTextField(
-                        value = nombreCientifico,
-                        onValueChange = { nombreCientifico = it }, // Actualizar el estado
-                        label = { Text("Nombre Científico", color = Color.DarkGray) },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    // Número de Individuos
-                    Text(
-                        "Número de Individuos",
-                        style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.align(Alignment.Start),
-                        color = Color.Black
-                    )
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        IconButton(
-                            onClick = {
-                                if (numIndividuos > 1) numIndividuos--
-                            }
-                        ) {
-                            Icon(Icons.Filled.Remove, contentDescription = "Disminuir")
-                        }
-                        Text(
-                            text = numIndividuos.toString(),
-                            style = MaterialTheme.typography.titleMedium,
-                            color = Color.Black
-                        )
-                        IconButton(
-                            onClick = {
-                                numIndividuos++
-                            }
-                        ) {
-                            Icon(Icons.Filled.Add, contentDescription = "Aumentar")
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    // Tipo de Observación
-                    Text(
-                        "Tipo de Observación",
-                        style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.align(Alignment.Start),
-                        color = Color.Black
-                    )
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        FaunaBViewModel.TipoObservacionButton(
-                            "La vio",
-                            tipoObservacionSeleccionada == "La vio",
-                            R.drawable.ic_la_vio
-                        ) { tipoObservacionSeleccionada = "La vio" }
-                        FaunaBViewModel.TipoObservacionButton(
-                            "Huella",
-                            tipoObservacionSeleccionada == "Huella",
-                            R.drawable.ic_huella
-                        ) { tipoObservacionSeleccionada = "Huella" }
-                        FaunaBViewModel.TipoObservacionButton(
-                            "Rastro",
-                            tipoObservacionSeleccionada == "Rastro",
-                            R.drawable.ic_rastro
-                        ) { tipoObservacionSeleccionada = "Rastro" }
-                        FaunaBViewModel.TipoObservacionButton(
-                            "Cacería",
-                            tipoObservacionSeleccionada == "Cacería",
-                            R.drawable.ic_caceria
-                        ) { tipoObservacionSeleccionada = "Cacería" }
-                        FaunaBViewModel.TipoObservacionButton(
-                            "Les Dijeron",
-                            tipoObservacionSeleccionada == "Les Dijeron",
-                            R.drawable.ic_les_dijeron
-                        ) { tipoObservacionSeleccionada = "Les Dijeron" }
-                    }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    // Altura de Observación
-                    Text(
-                        "Altura de Observación",
-                        style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.align(Alignment.Start),
-                        color = Color.Black
-                    )
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        FaunaBViewModel.AlturaButton(
-                            "< 1mt Baja",
-                            alturaObservacion == "< 1mt Baja"
-                        ) { alturaObservacion = "< 1mt Baja" }
-                        FaunaBViewModel.AlturaButton(
-                            "1-3 mt Media",
-                            alturaObservacion == "1-3 mt Media"
-                        ) { alturaObservacion = "1-3 mt Media" }
-                        FaunaBViewModel.AlturaButton(
-                            ">3mt Alta",
-                            alturaObservacion == ">3mt Alta"
-                        ) { alturaObservacion = ">3mt Alta" }
-                    }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
+                },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4E7029))
+            ) {
+                Text("Guardar", color = Color.White)
+            }
 
                     // Evidencias
                     Text(
@@ -316,14 +306,14 @@ fun FormularioFaunaPuntoConteo(activity: MainActivity,navController: NavHostCont
                     Spacer(modifier = Modifier.height(16.dp))
 
                     viewModel.Atras_enviar(navController, green700)
-
+*/
                     Spacer(modifier = Modifier.height(50.dp))
 
                 }
             }
         }
     }
-}
+
 
 
 @RequiresApi(Build.VERSION_CODES.P)
@@ -348,7 +338,8 @@ public fun Botones_capturaFPC(green700: Color) {
 @Composable
 public fun Boton_abrir_camaraFPC(green700: Color) {
     Button(
-        onClick = { CameraPermision.value = true; isFileSelectedFPC.value = true },
+        onClick = { CameraPermision.value = true
+            isFileSelectedFPC.value = true },
         colors = ButtonDefaults.buttonColors(containerColor = green700)
     ) {
         Icon(Icons.Default.Camera, contentDescription = "Tomar foto", tint = Color.White)

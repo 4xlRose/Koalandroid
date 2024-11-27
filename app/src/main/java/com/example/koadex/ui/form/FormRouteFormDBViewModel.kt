@@ -39,7 +39,7 @@ data class RouteFormDetails(
     var nameCamara: String = "",
     var placaCamara: String = "",
     var  guayaPlate: Int = 0,
-    var fecha: Int = 0,
+    var fecha: String = "",
     var instalada: Int = 0,
     var memoria: Int = 0,
     var pruebaGateo: Int = 0,
@@ -87,7 +87,7 @@ data class RouteFormDetails(
         result = 31 * result + nameCamara.hashCode()
         result = 31 * result + placaCamara.hashCode()
         result = 31 * result + guayaPlate
-        result = 31 * result + fecha
+        result = 31 * result + fecha.hashCode()
         result = 31 * result + instalada
         result = 31 * result + memoria
         result = 31 * result + pruebaGateo
