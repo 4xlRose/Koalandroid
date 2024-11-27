@@ -56,6 +56,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.koadex.MainActivity
 import com.example.koadex.R
 import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
 import com.example.koadex.ui.principal.KoadexViewModel
@@ -66,7 +67,7 @@ val isFileSelectedFC: MutableState<Boolean> = mutableStateOf(false)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormularioCuadrante(
-    //activity: MainActivity,
+    activity: MainActivity,
     navController: NavHostController,
     //modifier: Modifier = Modifier,
     //viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
@@ -95,7 +96,7 @@ fun FormularioCuadrante(
         }
     ) { paddingValues ->
         FormularioCuadranteScreen(
-            /*activity = activity,*/
+            activity = activity,
             modifier = Modifier.padding(paddingValues),
             navController = navController
         )
@@ -104,325 +105,337 @@ fun FormularioCuadrante(
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun FormularioCuadranteScreen(
-    /*activity: MainActivity,*/
+    activity: MainActivity,
     modifier: Modifier = Modifier,
     navController: NavHostController
 ) {
-    var codigo by remember { mutableStateOf("") }
-    var nombreComun by remember { mutableStateOf("") }
-    var nombreCientifico by remember { mutableStateOf("") }
-    var placa by remember { mutableStateOf("") }
-    var circunferencia by remember { mutableStateOf("") }
-    var distancia by remember { mutableStateOf("") }
-    var estaturaBiometrica by remember { mutableStateOf("") }
-    var altura by remember { mutableStateOf("") }
-    var observaciones by remember { mutableStateOf("") }
+    if (CameraPermision.value) {
+        CameraWindow(activity)
+    } else {
+        var codigo by remember { mutableStateOf("") }
+        var nombreComun by remember { mutableStateOf("") }
+        var nombreCientifico by remember { mutableStateOf("") }
+        var placa by remember { mutableStateOf("") }
+        var circunferencia by remember { mutableStateOf("") }
+        var distancia by remember { mutableStateOf("") }
+        var estaturaBiometrica by remember { mutableStateOf("") }
+        var altura by remember { mutableStateOf("") }
+        var observaciones by remember { mutableStateOf("") }
 
-    // Estados para las selecciones
-    var cuadranteSeleccionado by remember { mutableStateOf("") }
-    var subCuadranteSeleccionado by remember { mutableStateOf("") }
-    var habitoCrecimientoSeleccionado by remember { mutableStateOf("") }
+        // Estados para las selecciones
+        var cuadranteSeleccionado by remember { mutableStateOf("") }
+        var subCuadranteSeleccionado by remember { mutableStateOf("") }
+        var habitoCrecimientoSeleccionado by remember { mutableStateOf("") }
 
-    val viewModel = FomularioEspecies_ViewModel()
-    val green700 = colorResource(id = R.color.green_700)
+        val viewModel = FomularioEspecies_ViewModel()
+        val green700 = colorResource(id = R.color.green_700)
 
-    val actionButtonColors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4E7029))
-    val scrollState = rememberScrollState()
+        val actionButtonColors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4E7029))
+        val scrollState = rememberScrollState()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFFFFFFF))
-            .padding(32.dp)
-            .background(Color.White)
-    ) {
-        Spacer(modifier = Modifier.height(15.dp))
-
-        // Contenido desplazable
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(scrollState),
-            horizontalAlignment = Alignment.Start
+                .background(Color(0xFFFFFFFF))
+                .padding(32.dp)
+                .background(Color.White)
         ) {
+            Spacer(modifier = Modifier.height(15.dp))
 
-            Spacer(modifier = Modifier.height(40.dp))
-
-            // Código
-            OutlinedTextField(
-                value = codigo,
-                onValueChange = { codigo = it },
-                label = { Text("Código") },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Row(
+            // Contenido desplazable
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(4.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+                    .fillMaxSize()
+                    .verticalScroll(scrollState),
+                horizontalAlignment = Alignment.Start
             ) {
-                // CUADRANTE Y SUBCUADRANTE
-                Column(
-                    modifier = Modifier.weight(1f),
-                    horizontalAlignment = Alignment.CenterHorizontally
+
+                Spacer(modifier = Modifier.height(40.dp))
+
+                // Código
+                OutlinedTextField(
+                    value = codigo,
+                    onValueChange = { codigo = it },
+                    label = { Text("Código") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(4.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text("Cuadrante",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = Color.Black)
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Row(
-                        horizontalArrangement = Arrangement.Start,
-                        modifier = Modifier.fillMaxWidth()
+                    // CUADRANTE Y SUBCUADRANTE
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        // A y B
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            modifier = Modifier.padding(end = 8.dp)
+                        Text(
+                            "Cuadrante",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = Color.Black
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        Row(
+                            horizontalArrangement = Arrangement.Start,
+                            modifier = Modifier.fillMaxWidth()
                         ) {
-                            BotonCuadranteAB(
-                                text = "A",
-                                isSelected = cuadranteSeleccionado == "A",
-                                onClick = { cuadranteSeleccionado = "A" }
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
-                            BotonCuadranteAB(
-                                text = "B",
-                                isSelected = cuadranteSeleccionado == "B",
-                                onClick = { cuadranteSeleccionado = "B" }
-                            )
+                            // A y B
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                modifier = Modifier.padding(end = 8.dp)
+                            ) {
+                                BotonCuadranteAB(
+                                    text = "A",
+                                    isSelected = cuadranteSeleccionado == "A",
+                                    onClick = { cuadranteSeleccionado = "A" }
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                                BotonCuadranteAB(
+                                    text = "B",
+                                    isSelected = cuadranteSeleccionado == "B",
+                                    onClick = { cuadranteSeleccionado = "B" }
+                                )
+                            }
+
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                modifier = Modifier.padding(vertical = 33.dp)
+                            ) {
+                                Text(
+                                    text = "-",
+                                    fontSize = 50.sp,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.padding(1.dp)
+                                )
+                            }
+
+                            // C a G
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                modifier = Modifier.padding(start = 15.dp)
+                            ) {
+                                //Spacer(modifier = Modifier.height(6.dp))
+
+                                BotonCuadranteCG(
+                                    text = "C",
+                                    isSelected = cuadranteSeleccionado == "C",
+                                    onClick = { cuadranteSeleccionado = "C" }
+                                )
+                                Spacer(modifier = Modifier.height(4.dp))
+                                BotonCuadranteCG(
+                                    text = "D",
+                                    isSelected = cuadranteSeleccionado == "D",
+                                    onClick = { cuadranteSeleccionado = "D" }
+                                )
+                                Spacer(modifier = Modifier.height(4.dp))
+                                BotonCuadranteCG(
+                                    text = "E",
+                                    isSelected = cuadranteSeleccionado == "E",
+                                    onClick = { cuadranteSeleccionado = "E" }
+                                )
+                                Spacer(modifier = Modifier.height(4.dp))
+                                BotonCuadranteCG(
+                                    text = "F",
+                                    isSelected = cuadranteSeleccionado == "F",
+                                    onClick = { cuadranteSeleccionado = "F" }
+                                )
+                                Spacer(modifier = Modifier.height(4.dp))
+                                BotonCuadranteCG(
+                                    text = "G",
+                                    isSelected = cuadranteSeleccionado == "G",
+                                    onClick = { cuadranteSeleccionado = "G" }
+                                )
+                            }
                         }
 
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            modifier = Modifier.padding(vertical = 33.dp)
-                        ){
-                            Text(
-                                text = "-",
-                                fontSize = 50.sp,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.padding(1.dp)
-                            )
-                        }
+                        Spacer(modifier = Modifier.height(4.dp))
 
-                        // C a G
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            modifier = Modifier.padding(start = 15.dp)
+                        // Subcuadrante
+                        Text(
+                            "Sub-Cuadrante",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = Color.Black
+                        )
+                        //Spacer(modifier = Modifier.height(8.dp))
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceEvenly,
+                            modifier = Modifier.fillMaxWidth()
                         ) {
-                            //Spacer(modifier = Modifier.height(6.dp))
-
-                            BotonCuadranteCG(
-                                text = "C",
-                                isSelected = cuadranteSeleccionado == "C",
-                                onClick = { cuadranteSeleccionado = "C" }
+                            BotonSubCuadrante(
+                                text = "1",
+                                isSelected = subCuadranteSeleccionado == "1",
+                                onClick = { subCuadranteSeleccionado = "1" }
                             )
-                            Spacer(modifier = Modifier.height(4.dp))
-                            BotonCuadranteCG(
-                                text = "D",
-                                isSelected = cuadranteSeleccionado == "D",
-                                onClick = { cuadranteSeleccionado = "D" }
+                            BotonSubCuadrante(
+                                text = "2",
+                                isSelected = subCuadranteSeleccionado == "2",
+                                onClick = { subCuadranteSeleccionado = "2" }
                             )
-                            Spacer(modifier = Modifier.height(4.dp))
-                            BotonCuadranteCG(
-                                text = "E",
-                                isSelected = cuadranteSeleccionado == "E",
-                                onClick = { cuadranteSeleccionado = "E" }
+                            BotonSubCuadrante(
+                                text = "3",
+                                isSelected = subCuadranteSeleccionado == "3",
+                                onClick = { subCuadranteSeleccionado = "3" }
                             )
-                            Spacer(modifier = Modifier.height(4.dp))
-                            BotonCuadranteCG(
-                                text = "F",
-                                isSelected = cuadranteSeleccionado == "F",
-                                onClick = { cuadranteSeleccionado = "F" }
-                            )
-                            Spacer(modifier = Modifier.height(4.dp))
-                            BotonCuadranteCG(
-                                text = "G",
-                                isSelected = cuadranteSeleccionado == "G",
-                                onClick = { cuadranteSeleccionado = "G" }
+                            BotonSubCuadrante(
+                                text = "4",
+                                isSelected = subCuadranteSeleccionado == "4",
+                                onClick = { subCuadranteSeleccionado = "4" }
                             )
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(4.dp))
-
-                    // Subcuadrante
-                    Text("Sub-Cuadrante",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = Color.Black)
-                    //Spacer(modifier = Modifier.height(8.dp))
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        modifier = Modifier.fillMaxWidth()
+                    // HABITOS DE CRECIMIENTO
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        BotonSubCuadrante(
-                            text = "1",
-                            isSelected = subCuadranteSeleccionado == "1",
-                            onClick = { subCuadranteSeleccionado = "1" }
+                        Spacer(modifier = Modifier.height(30.dp)) // Me apoyo para centrar
+                        Text(
+                            "Hábito de crecimiento",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = Color.Black
                         )
-                        BotonSubCuadrante(
-                            text = "2",
-                            isSelected = subCuadranteSeleccionado == "2",
-                            onClick = { subCuadranteSeleccionado = "2" }
-                        )
-                        BotonSubCuadrante(
-                            text = "3",
-                            isSelected = subCuadranteSeleccionado == "3",
-                            onClick = { subCuadranteSeleccionado = "3" }
-                        )
-                        BotonSubCuadrante(
-                            text = "4",
-                            isSelected = subCuadranteSeleccionado == "4",
-                            onClick = { subCuadranteSeleccionado = "4" }
-                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 4.dp),
+                            horizontalArrangement = Arrangement.SpaceEvenly,
+                        ) {
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            CrecimientoBoton(
+                                icon = R.drawable.arbusto,
+                                text = "Arbusto",
+                                altura = "< 1mt",
+                                isSelected = habitoCrecimientoSeleccionado == "Arbusto",
+                                onClick = { habitoCrecimientoSeleccionado = "Arbusto" }
+                            )
+
+                            CrecimientoBoton(
+                                icon = R.drawable.arbolito,
+                                text = "Arbolito",
+                                altura = "1-3 mt",
+                                isSelected = habitoCrecimientoSeleccionado == "Arbolito",
+                                onClick = { habitoCrecimientoSeleccionado = "Arbolito" }
+                            )
+
+                            CrecimientoBoton(
+                                icon = R.drawable.arbol,
+                                text = "Árbol",
+                                altura = "> 3mt",
+                                isSelected = habitoCrecimientoSeleccionado == "Árbol",
+                                onClick = { habitoCrecimientoSeleccionado = "Árbol" }
+                            )
+                        }
                     }
                 }
 
-                // HABITOS DE CRECIMIENTO
-                Column(
-                    modifier = Modifier.weight(1f),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                Spacer(modifier = Modifier.height(10.dp))
+
+                // CAMPOS DE INFORMACION
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
-                    Spacer(modifier = Modifier.height(30.dp)) // Me apoyo para centrar
-                    Text("Hábito de crecimiento",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = Color.Black)
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 4.dp),
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                    ) {
-                        Spacer(modifier = Modifier.height(16.dp))
+                    OutlinedTextField(
+                        value = nombreComun,
+                        onValueChange = { nombreComun = it },
+                        label = { Text("Nombre Común", color = Color.DarkGray) }, //Especie
+                        modifier = Modifier.weight(1f)//.padding(start = 2.dp)
+                    )
 
-                        CrecimientoBoton(
-                            icon = R.drawable.arbusto,
-                            text = "Arbusto",
-                            altura = "< 1mt",
-                            isSelected = habitoCrecimientoSeleccionado == "Arbusto",
-                            onClick = { habitoCrecimientoSeleccionado = "Arbusto" }
-                        )
-
-                        CrecimientoBoton(
-                            icon = R.drawable.arbolito,
-                            text = "Arbolito",
-                            altura = "1-3 mt",
-                            isSelected = habitoCrecimientoSeleccionado == "Arbolito",
-                            onClick = { habitoCrecimientoSeleccionado = "Arbolito" }
-                        )
-
-                        CrecimientoBoton(
-                            icon = R.drawable.arbol,
-                            text = "Árbol",
-                            altura = "> 3mt",
-                            isSelected = habitoCrecimientoSeleccionado == "Árbol",
-                            onClick = { habitoCrecimientoSeleccionado = "Árbol" }
-                        )
-                    }
+                    OutlinedTextField(
+                        value = nombreCientifico,
+                        onValueChange = { nombreCientifico = it },
+                        label = { Text("Nombre Científico") },
+                        modifier = Modifier.weight(1f)//.padding(end = 2.dp)
+                    )
                 }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                OutlinedTextField(
+                    value = placa,
+                    onValueChange = { placa = it },
+                    label = { Text("Placa") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(5.dp)
+                ) {
+                    OutlinedTextField(
+                        value = circunferencia,
+                        onValueChange = { circunferencia = it },
+                        label = { Text("Circunferencia(CL)") }, //en cm
+                        modifier = Modifier.weight(1f)//.padding(start = 2.dp)
+                    )
+
+                    OutlinedTextField(
+                        value = distancia,
+                        onValueChange = { distancia = it },
+                        label = { Text("Distancia en mt") },
+                        modifier = Modifier.weight(1f)//.padding(end = 2.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(5.dp)
+                ) {
+                    OutlinedTextField(
+                        value = estaturaBiometrica,
+                        onValueChange = { estaturaBiometrica = it },
+                        label = { Text("Estatura Biométrica") }, // en mt
+                        modifier = Modifier.weight(1f)//.padding(start = 2.dp)
+                    )
+                    OutlinedTextField(
+                        value = altura,
+                        onValueChange = { altura = it },
+                        label = { Text("Altura en mt") },
+                        modifier = Modifier.weight(1f)//.padding(end = 2.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Evidencias
+                Text(
+                    "Evidencias", style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.align(Alignment.Start),
+                    color = Color.Black
+                )
+                Botones_capturaFC(green700)
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Observaciones
+                OutlinedTextField(
+                    value = observaciones,
+                    onValueChange = { observaciones = it },
+                    label = { Text("Observaciones") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(100.dp)
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Botones de acción
+                viewModel.Atras_enviar(navController, green700)
+
+                Spacer(modifier = Modifier.height(50.dp))
+
             }
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            // CAMPOS DE INFORMACION
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(6.dp)
-            ) {
-                OutlinedTextField(
-                    value = nombreComun,
-                    onValueChange = { nombreComun = it },
-                    label = { Text("Nombre Común", color = Color.DarkGray) }, //Especie
-                    modifier = Modifier.weight(1f)//.padding(start = 2.dp)
-                )
-
-                OutlinedTextField(
-                    value = nombreCientifico,
-                    onValueChange = { nombreCientifico = it },
-                    label = { Text("Nombre Científico") },
-                    modifier = Modifier.weight(1f)//.padding(end = 2.dp)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            OutlinedTextField(
-                value = placa,
-                onValueChange = { placa = it },
-                label = { Text("Placa") },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(5.dp)
-            ) {
-                OutlinedTextField(
-                    value = circunferencia,
-                    onValueChange = { circunferencia = it },
-                    label = { Text("Circunferencia(CL)") }, //en cm
-                    modifier = Modifier.weight(1f)//.padding(start = 2.dp)
-                )
-
-                OutlinedTextField(
-                    value = distancia,
-                    onValueChange = { distancia = it },
-                    label = { Text("Distancia en mt") },
-                    modifier = Modifier.weight(1f)//.padding(end = 2.dp)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(5.dp)
-            ) {
-                OutlinedTextField(
-                    value = estaturaBiometrica,
-                    onValueChange = { estaturaBiometrica = it },
-                    label = { Text("Estatura Biométrica") }, // en mt
-                    modifier = Modifier.weight(1f)//.padding(start = 2.dp)
-                )
-                OutlinedTextField(
-                    value = altura,
-                    onValueChange = { altura = it },
-                    label = { Text("Altura en mt") },
-                    modifier = Modifier.weight(1f)//.padding(end = 2.dp)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Evidencias
-            Text("Evidencias", style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.align(Alignment.Start),
-                color = Color.Black)
-            Botones_capturaFC(green700)
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Observaciones
-            OutlinedTextField(
-                value = observaciones,
-                onValueChange = { observaciones = it },
-                label = { Text("Observaciones") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(100.dp)
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Botones de acción
-            viewModel.Atras_enviar(navController, green700)
-
-            Spacer(modifier = Modifier.height(50.dp))
-
         }
     }
 }
@@ -616,7 +629,7 @@ private fun Boton_seleccionar_archivo(green700: Color) {
 @Preview(device = "spec:width=800px,height=1340px,dpi=300")
 @Composable
 fun FormularioCuadrantePreview() {
-    FormularioCuadrante(navController = rememberNavController())
+    FormularioCuadrante(activity = MainActivity(), navController = rememberNavController())
 }
 
 @Composable
@@ -633,7 +646,7 @@ public fun Botones_capturaFC(green700: Color) {
 @Composable
 public fun Boton_abrir_camaraFC(green700: Color) {
     Button(
-        onClick = { /* Handle photo capture */ isFileSelectedFC.value = true },
+        onClick = { CameraPermision.value = true; isFileSelectedFC.value = true },
         colors = ButtonDefaults.buttonColors(containerColor = green700)
     ) {
         Icon(Icons.Default.Camera, contentDescription = "Tomar foto", tint = Color.White)

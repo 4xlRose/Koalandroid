@@ -457,3 +457,33 @@ data class WeatherFormEntity(
     var evidences: String = "", // <- AGREGO MARIA
     var observations: String = "" // <- AGREGO MARIA
 )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
