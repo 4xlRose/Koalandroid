@@ -67,7 +67,7 @@ dependencies{
     implementation(libs.androidx.junit.ktx)
 
     implementation(libs.androidx.ui.test.android)
-
+    implementation(libs.play.services.location)
 
 
     /*Room*/

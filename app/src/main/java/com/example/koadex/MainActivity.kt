@@ -76,6 +76,7 @@ class MainActivity : ComponentActivity() {
             Manifest.permission.CAMERA
         )
     }
+
 }
 
 
