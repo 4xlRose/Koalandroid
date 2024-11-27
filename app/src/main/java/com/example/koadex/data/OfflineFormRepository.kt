@@ -34,10 +34,12 @@ class OfflineFormRepository (private val formDao: FormDao) : FormRepository {
 
     //Clima
     override fun getWeatherById(id: Int): Flow<WeatherEntity?> = formDao.getWeatherById(id)
+    override fun getWeatherByName(name: String): Flow<WeatherEntity?> = formDao.getWeatherByName(name)
     override suspend fun inserWeatherBegin(weathers: List<WeatherEntity>) = formDao.insertWeatherBegin(weathers)
 
     //Epoca
     override fun getSeasonById(id: Int): Flow<SeasonEntity?> = formDao.getSeasonById(id)
+    override fun getSeasonByName(name: String): Flow<SeasonEntity?> = formDao.getSeasonByName(name)
     override suspend fun insertSeasonBegin(seasons: List<SeasonEntity>) = formDao.insertSeasonBegin(seasons)
 
     //Zona tipo

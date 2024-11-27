@@ -12,8 +12,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.koadex.AppViewModelProvider
 import com.example.koadex.navigate.La_navegacion
 import com.example.koadex.ViewModels.PerfilScreenViewModel
 import com.example.koadex.data.UserEntity
@@ -27,7 +29,7 @@ fun PerfilScreen(
     user: UserEntity
 ) {
 
-    val ProfileViewModel = PerfilScreenViewModel()
+    val ProfileViewModel: PerfilScreenViewModel = viewModel(factory = AppViewModelProvider.Factory)
 
     Scaffold(
         topBar = {

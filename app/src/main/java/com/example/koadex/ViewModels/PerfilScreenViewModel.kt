@@ -48,10 +48,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import com.example.koadex.clases.User
+import com.example.koadex.data.FormRepository
 import com.example.koadex.data.UserEntity
 import kotlinx.coroutines.launch
 
-class PerfilScreenViewModel: ViewModel() {
+class PerfilScreenViewModel(formsRepository: FormRepository): ViewModel() {
+    val updateUser: suspend (UserEntity) -> Unit = formsRepository::updateUser
 
     @Composable
     fun ProfileHeader(user: UserEntity) {
@@ -142,9 +144,10 @@ class PerfilScreenViewModel: ViewModel() {
                 tint = Color.Black
             )
             Spacer(modifier = Modifier.width(16.dp))
-            
+
+            val transformedText = if (isPassword) "•".repeat(infoText.length) else infoText
             Text(
-                text = infoText,
+                text = transformedText,
                 fontSize = 16.sp,
                 color = Color.Black
             )
@@ -167,7 +170,7 @@ class PerfilScreenViewModel: ViewModel() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 3.dp),
-            visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None
+            visualTransformation = if (isPassword) PasswordVisualTransformation(mask = '•') else VisualTransformation.None
         )
         return text
     }
