@@ -321,6 +321,7 @@ fun FormularioFaunaPuntoConteo(activity: MainActivity,navController: NavHostCont
         }
     }
 }
+    }
 
 @RequiresApi(Build.VERSION_CODES.P)
 @Preview(device = "spec:width=800px,height=1340px,dpi=300")
@@ -356,7 +357,7 @@ public fun Boton_abrir_camaraFPC(green700: Color) {
 @Composable
 public fun Boton_seleccionar_archivoFPC(green700: Color) {
     Button(
-        onClick = { /* Handle file selection */ isFileSelectedFPC.value = true},
+        onClick = { /* Handle file selection */ isFileSelectedFPC.value = true },
         colors = ButtonDefaults.buttonColors(containerColor = green700)
     ) {
         Icon(Icons.Default.FileOpen, contentDescription = "Seleccionar archivo", tint = Color.White)
@@ -364,4 +365,3 @@ public fun Boton_seleccionar_archivoFPC(green700: Color) {
         Text("Elige archivo", color = Color.White)
     }
 }
-

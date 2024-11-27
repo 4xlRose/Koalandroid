@@ -26,6 +26,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.koadex.R
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.filled.Camera
+import androidx.compose.material.icons.filled.FileOpen
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import com.example.koadex.MainActivity
@@ -63,28 +66,6 @@ fun FormularioFaunaBusquedaLibre(activity: MainActivity, navController: NavHostC
         val scrollState = rememberScrollState()
 
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFFFFFFF))
-    ) {
-        // Barra superior
-        TopAppBar(
-            title = { Text("Formulario",
-                color = Color.White,
-                fontWeight = FontWeight.Bold) },
-            navigationIcon = {
-                IconButton(onClick = { navController.navigate("TiposForms") }) {
-                    Icon(Icons.Filled.ArrowBack,
-                        contentDescription = "Atrás",
-                        tint = Color.White
-                    )
-                }
-            },
-            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF4E7029))
-        )
-
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -111,223 +92,251 @@ fun FormularioFaunaBusquedaLibre(activity: MainActivity, navController: NavHostC
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF4E7029))
             )
 
-            // Contenido desplazable
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .verticalScroll(scrollState) // Habilitar scroll
-                    .padding(horizontal = 32.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .background(Color(0xFFFFFFFF))
             ) {
-                Spacer(modifier = Modifier.padding(vertical = 5.dp))
-
-                // Zona
-                Text(
-                    "Zona", style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.align(Alignment.Start),
-                    color = Color.Black
-                )
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    FaunaBViewModel.ZonaButton(
-                        "Bosque",
-                        zonaSeleccionada == "Bosque",
-                        R.drawable.ic_bosque
-                    ) { zonaSeleccionada = "Bosque" }
-                    FaunaBViewModel.ZonaButton(
-                        "Arreglo Agroforestal",
-                        zonaSeleccionada == "Arreglo Agroforestal",
-                        R.drawable.ic_agroforestal
-                    ) { zonaSeleccionada = "Arreglo Agroforestal" }
-                    FaunaBViewModel.ZonaButton(
-                        "Cultivos Transitorios",
-                        zonaSeleccionada == "Cultivos Transitorios",
-                        R.drawable.ic_cultivostransitorios
-                    ) { zonaSeleccionada = "Cultivos Transitorios" }
-                    FaunaBViewModel.ZonaButton(
-                        "Cultivos Permanentes",
-                        zonaSeleccionada == "Cultivos Permanentes",
-                        R.drawable.ic_cultivospermanentes
-                    ) { zonaSeleccionada = "Cultivos Permanentes" }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Tipo de Animal
-                Text(
-                    "Tipo de Animal", style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.align(Alignment.Start),
-                    color = Color.Black
-                )
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    FaunaBViewModel.TipoAnimalButton(
-                        "Mamífero",
-                        tipoAnimalSeleccionado == "Mamífero",
-                        R.drawable.ic_mamifero
-                    ) { tipoAnimalSeleccionado = "Mamífero" }
-                    FaunaBViewModel.TipoAnimalButton(
-                        "Ave",
-                        tipoAnimalSeleccionado == "Ave",
-                        R.drawable.ic_ave
-                    ) { tipoAnimalSeleccionado = "Ave" }
-                    FaunaBViewModel.TipoAnimalButton(
-                        "Reptil",
-                        tipoAnimalSeleccionado == "Reptil",
-                        R.drawable.ic_reptil
-                    ) { tipoAnimalSeleccionado = "Reptil" }
-                    FaunaBViewModel.TipoAnimalButton(
-                        "Anfibio",
-                        tipoAnimalSeleccionado == "Anfibio",
-                        R.drawable.ic_anfibio
-                    ) { tipoAnimalSeleccionado = "Anfibio" }
-                    FaunaBViewModel.TipoAnimalButton(
-                        "Insecto",
-                        tipoAnimalSeleccionado == "Insecto",
-                        R.drawable.ic_insecto
-                    ) { tipoAnimalSeleccionado = "Insecto" }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Campos de texto
-                OutlinedTextField(
-                    value = nombreComun,
-                    onValueChange = { nombreComun = it }, // Actualizar el estado
-                    label = { Text("Nombre Común", color = Color.DarkGray) },
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                OutlinedTextField(
-                    value = nombreCientifico,
-                    onValueChange = { nombreCientifico = it }, // Actualizar el estado
-                    label = { Text("Nombre Científico", color = Color.DarkGray) },
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Número de Individuos
-                Text(
-                    "Número de Individuos", style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.align(Alignment.Start),
-                    color = Color.Black
-                )
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    IconButton(
-                        onClick = {
-                            if (numIndividuos > 1) numIndividuos--
+                // Barra superior
+                TopAppBar(
+                    title = {
+                        Text(
+                            "Formulario",
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold
+                        )
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = { navController.navigate("TiposForms") }) {
+                            Icon(
+                                Icons.Filled.ArrowBack,
+                                contentDescription = "Atrás",
+                                tint = Color.White
+                            )
                         }
-                    ) {
-                        Icon(Icons.Filled.Remove, contentDescription = "Disminuir")
-                    }
-                    Text(
-                        text = numIndividuos.toString(),
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    IconButton(
-                        onClick = {
-                            numIndividuos++
-                        }
-                    ) {
-                        Icon(Icons.Filled.Add, contentDescription = "Aumentar")
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Tipo de Observación
-                Text(
-                    "Tipo de Observación", style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.align(Alignment.Start),
-                    color = Color.Black
-                )
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    FaunaBViewModel.TipoObservacionButton(
-                        "La vio",
-                        tipoObservacionSeleccionada == "La vio",
-                        R.drawable.ic_la_vio
-                    ) { tipoObservacionSeleccionada = "La vio" }
-                    FaunaBViewModel.TipoObservacionButton(
-                        "Huella",
-                        tipoObservacionSeleccionada == "Huella",
-                        R.drawable.ic_huella
-                    ) { tipoObservacionSeleccionada = "Huella" }
-                    FaunaBViewModel.TipoObservacionButton(
-                        "Rastro",
-                        tipoObservacionSeleccionada == "Rastro",
-                        R.drawable.ic_rastro
-                    ) { tipoObservacionSeleccionada = "Rastro" }
-                    FaunaBViewModel.TipoObservacionButton(
-                        "Cacería",
-                        tipoObservacionSeleccionada == "Cacería",
-                        R.drawable.ic_caceria
-                    ) { tipoObservacionSeleccionada = "Cacería" }
-                    FaunaBViewModel.TipoObservacionButton(
-                        "Les Dijeron",
-                        tipoObservacionSeleccionada == "Les Dijeron",
-                        R.drawable.ic_les_dijeron
-                    ) { tipoObservacionSeleccionada = "Les Dijeron" }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Altura de Observación
-                Text(
-                    "Altura de Observación", style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.align(Alignment.Start),
-                    color = Color.Black
-                )
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    FaunaBViewModel.AlturaButton(
-                        "< 1mt Baja",
-                        alturaObservacion == "< 1mt Baja"
-                    ) { alturaObservacion = "< 1mt Baja" }
-                    FaunaBViewModel.AlturaButton(
-                        "1-3 mt Media",
-                        alturaObservacion == "1-3 mt Media"
-                    ) { alturaObservacion = "1-3 mt Media" }
-                    FaunaBViewModel.AlturaButton(
-                        ">3mt Alta",
-                        alturaObservacion == ">3mt Alta"
-                    ) { alturaObservacion = ">3mt Alta" }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-
-                // Evidencias
-                Text(
-                    "Evidencias", style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.align(Alignment.Start),
-                    color = Color.Black
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF4E7029))
                 )
 
-                Botones_capturaFBL(green700)
-
-            viewModel.Botones_captura(green700)
-
-
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Observaciones
-                OutlinedTextField(
-                    value = observaciones,
-                    onValueChange = { observaciones = it }, // Actualizar el estado
-                    label = { Text("Observaciones", color = Color.DarkGray) },
+                // Contenido desplazable
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(100.dp)
-                )
+                        .fillMaxSize()
+                        .verticalScroll(scrollState) // Habilitar scroll
+                        .padding(horizontal = 32.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Spacer(modifier = Modifier.padding(vertical = 5.dp))
 
-                Spacer(modifier = Modifier.height(16.dp))
+                    // Zona
+                    Text(
+                        "Zona", style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.align(Alignment.Start),
+                        color = Color.Black
+                    )
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        FaunaBViewModel.ZonaButton(
+                            "Bosque",
+                            zonaSeleccionada == "Bosque",
+                            R.drawable.ic_bosque
+                        ) { zonaSeleccionada = "Bosque" }
+                        FaunaBViewModel.ZonaButton(
+                            "Arreglo Agroforestal",
+                            zonaSeleccionada == "Arreglo Agroforestal",
+                            R.drawable.ic_agroforestal
+                        ) { zonaSeleccionada = "Arreglo Agroforestal" }
+                        FaunaBViewModel.ZonaButton(
+                            "Cultivos Transitorios",
+                            zonaSeleccionada == "Cultivos Transitorios",
+                            R.drawable.ic_cultivostransitorios
+                        ) { zonaSeleccionada = "Cultivos Transitorios" }
+                        FaunaBViewModel.ZonaButton(
+                            "Cultivos Permanentes",
+                            zonaSeleccionada == "Cultivos Permanentes",
+                            R.drawable.ic_cultivospermanentes
+                        ) { zonaSeleccionada = "Cultivos Permanentes" }
+                    }
 
-                viewModel.Atras_enviar(navController, green700)
+                    Spacer(modifier = Modifier.height(16.dp))
 
-                Spacer(modifier = Modifier.height(50.dp))
+                    // Tipo de Animal
+                    Text(
+                        "Tipo de Animal", style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.align(Alignment.Start),
+                        color = Color.Black
+                    )
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        FaunaBViewModel.TipoAnimalButton(
+                            "Mamífero",
+                            tipoAnimalSeleccionado == "Mamífero",
+                            R.drawable.ic_mamifero
+                        ) { tipoAnimalSeleccionado = "Mamífero" }
+                        FaunaBViewModel.TipoAnimalButton(
+                            "Ave",
+                            tipoAnimalSeleccionado == "Ave",
+                            R.drawable.ic_ave
+                        ) { tipoAnimalSeleccionado = "Ave" }
+                        FaunaBViewModel.TipoAnimalButton(
+                            "Reptil",
+                            tipoAnimalSeleccionado == "Reptil",
+                            R.drawable.ic_reptil
+                        ) { tipoAnimalSeleccionado = "Reptil" }
+                        FaunaBViewModel.TipoAnimalButton(
+                            "Anfibio",
+                            tipoAnimalSeleccionado == "Anfibio",
+                            R.drawable.ic_anfibio
+                        ) { tipoAnimalSeleccionado = "Anfibio" }
+                        FaunaBViewModel.TipoAnimalButton(
+                            "Insecto",
+                            tipoAnimalSeleccionado == "Insecto",
+                            R.drawable.ic_insecto
+                        ) { tipoAnimalSeleccionado = "Insecto" }
+                    }
 
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // Campos de texto
+                    OutlinedTextField(
+                        value = nombreComun,
+                        onValueChange = { nombreComun = it }, // Actualizar el estado
+                        label = { Text("Nombre Común", color = Color.DarkGray) },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    OutlinedTextField(
+                        value = nombreCientifico,
+                        onValueChange = { nombreCientifico = it }, // Actualizar el estado
+                        label = { Text("Nombre Científico", color = Color.DarkGray) },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // Número de Individuos
+                    Text(
+                        "Número de Individuos", style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.align(Alignment.Start),
+                        color = Color.Black
+                    )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        IconButton(
+                            onClick = {
+                                if (numIndividuos > 1) numIndividuos--
+                            }
+                        ) {
+                            Icon(Icons.Filled.Remove, contentDescription = "Disminuir")
+                        }
+                        Text(
+                            text = numIndividuos.toString(),
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        IconButton(
+                            onClick = {
+                                numIndividuos++
+                            }
+                        ) {
+                            Icon(Icons.Filled.Add, contentDescription = "Aumentar")
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // Tipo de Observación
+                    Text(
+                        "Tipo de Observación", style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.align(Alignment.Start),
+                        color = Color.Black
+                    )
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        FaunaBViewModel.TipoObservacionButton(
+                            "La vio",
+                            tipoObservacionSeleccionada == "La vio",
+                            R.drawable.ic_la_vio
+                        ) { tipoObservacionSeleccionada = "La vio" }
+                        FaunaBViewModel.TipoObservacionButton(
+                            "Huella",
+                            tipoObservacionSeleccionada == "Huella",
+                            R.drawable.ic_huella
+                        ) { tipoObservacionSeleccionada = "Huella" }
+                        FaunaBViewModel.TipoObservacionButton(
+                            "Rastro",
+                            tipoObservacionSeleccionada == "Rastro",
+                            R.drawable.ic_rastro
+                        ) { tipoObservacionSeleccionada = "Rastro" }
+                        FaunaBViewModel.TipoObservacionButton(
+                            "Cacería",
+                            tipoObservacionSeleccionada == "Cacería",
+                            R.drawable.ic_caceria
+                        ) { tipoObservacionSeleccionada = "Cacería" }
+                        FaunaBViewModel.TipoObservacionButton(
+                            "Les Dijeron",
+                            tipoObservacionSeleccionada == "Les Dijeron",
+                            R.drawable.ic_les_dijeron
+                        ) { tipoObservacionSeleccionada = "Les Dijeron" }
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // Altura de Observación
+                    Text(
+                        "Altura de Observación", style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.align(Alignment.Start),
+                        color = Color.Black
+                    )
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        FaunaBViewModel.AlturaButton(
+                            "< 1mt Baja",
+                            alturaObservacion == "< 1mt Baja"
+                        ) { alturaObservacion = "< 1mt Baja" }
+                        FaunaBViewModel.AlturaButton(
+                            "1-3 mt Media",
+                            alturaObservacion == "1-3 mt Media"
+                        ) { alturaObservacion = "1-3 mt Media" }
+                        FaunaBViewModel.AlturaButton(
+                            ">3mt Alta",
+                            alturaObservacion == ">3mt Alta"
+                        ) { alturaObservacion = ">3mt Alta" }
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+
+                    // Evidencias
+                    Text(
+                        "Evidencias", style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.align(Alignment.Start),
+                        color = Color.Black
+                    )
+
+                    Botones_capturaFBL(green700)
+
+                    viewModel.Botones_captura(green700)
+
+
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // Observaciones
+                    OutlinedTextField(
+                        value = observaciones,
+                        onValueChange = { observaciones = it }, // Actualizar el estado
+                        label = { Text("Observaciones", color = Color.DarkGray) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(100.dp)
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    viewModel.Atras_enviar(navController, green700)
+
+                    Spacer(modifier = Modifier.height(50.dp))
+
+                }
             }
         }
     }
