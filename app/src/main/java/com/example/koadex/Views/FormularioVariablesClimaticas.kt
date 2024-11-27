@@ -69,7 +69,8 @@ import com.example.koadex.ui.form.WeatherFormDetails
 import com.example.koadex.ui.form.WeatherFormUiState
 import kotlinx.coroutines.flow.Flow
 
-val isFileSelectedFVC : MutableState<Boolean> = mutableStateOf(false)
+val isFileSelectedFVC: MutableState<Boolean> = mutableStateOf(false)
+
 
 @RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)

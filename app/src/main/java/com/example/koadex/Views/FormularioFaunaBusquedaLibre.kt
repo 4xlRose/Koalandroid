@@ -416,7 +416,8 @@ fun Botones_capturaFBL(
 @Composable
 fun Boton_abrir_camaraFBL(green700: Color) {
     Button(
-        onClick = { CameraPermision.value = true; isFileSelectedFBL.value = true },
+        onClick = { CameraPermision.value = true
+            isFileSelectedFBL.value = true },
         colors = ButtonDefaults.buttonColors(containerColor = green700)
     ) {
         Icon(Icons.Default.Camera, contentDescription = "Tomar foto", tint = Color.White)

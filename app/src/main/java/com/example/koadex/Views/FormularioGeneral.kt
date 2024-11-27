@@ -46,11 +46,22 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import android.annotation.SuppressLint
+import android.content.Context
+import androidx.compose.runtime.*
+import androidx.compose.material3.*
+import androidx.compose.ui.text.input.TextFieldValue
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.tasks.Task
 
 import androidx.navigation.NavHostController
 
 import com.example.koadex.R
 
+
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
 
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
@@ -505,16 +516,15 @@ fun FormInputForm(
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        OutlinedTextField(
-            value = formDetails.place,
-            label = { Text("Localidad", color = Color.DarkGray) },
-            onValueChange = { updateForm(formDetails.copy(place = it)) },
+        LocalidadField(
+            context = LocalContext.current,
+
             modifier = Modifier
                 .padding(10.dp)
                 .fillMaxWidth()
         )
-        // ... (keep location button)
     }
+
     Row(
         modifier = Modifier
             .padding(10.dp)
@@ -600,5 +610,51 @@ fun SeasonButton(
             ),
             contentDescription = null
         )
+    }
+}
+
+@Composable
+fun LocalidadField(
+    context: Context,
+    modifier: Modifier = Modifier
+) {
+    var localidad by remember { mutableStateOf("") }
+    val fusedLocationClient = remember { LocationServices.getFusedLocationProviderClient(context) }
+
+    // Obtener ubicación actual
+    LaunchedEffect(Unit) {
+        fetchLocation(fusedLocationClient) { location ->
+            localidad = location ?: "Ubicación no disponible"
+        }
+    }
+
+    // Campo de texto para mostrar la localidad
+    OutlinedTextField(
+        value = localidad,
+        onValueChange = { localidad = it },
+        label = { Text("Localidad") },
+        readOnly = true,
+        modifier = modifier
+    )
+}
+
+// Función para obtener la ubicación
+@SuppressLint("MissingPermission")
+fun fetchLocation(
+    fusedLocationClient: FusedLocationProviderClient,
+    onLocationFetched: (String?) -> Unit
+) {
+    val locationTask: Task<android.location.Location> = fusedLocationClient.lastLocation
+    locationTask.addOnSuccessListener { location ->
+        if (location != null) {
+            val lat = location.latitude
+            val lng = location.longitude
+            onLocationFetched("Lat: $lat, Lng: $lng")
+        } else {
+            onLocationFetched(null)
+        }
+    }
+    locationTask.addOnFailureListener {
+        onLocationFetched(null)
     }
 }

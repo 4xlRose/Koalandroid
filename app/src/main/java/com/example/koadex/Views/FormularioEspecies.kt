@@ -35,6 +35,7 @@ import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
 import com.example.koadex.clases.User
 import com.example.koadex.data.UserEntity
 import com.example.koadex.navigate.sampleUser
+import com.example.koadex.ui.form.FormFollowDBViewModel
 import com.example.koadex.ui.form.FormSpecieDBViewModel
 import com.example.koadex.ui.theme.KoadexTheme
 import kotlinx.coroutines.launch
@@ -66,14 +67,6 @@ fun FormularioEspecies(
         val green100 = colorResource(id = R.color.green_100)
         val green700 = colorResource(id = R.color.green_700)
 
-        var transectoNumber by remember { mutableStateOf(TextFieldValue()) }
-        var commonName by remember { mutableStateOf(TextFieldValue()) }
-        var scientificName by remember { mutableStateOf(TextFieldValue()) }
-        var individualsCount by remember { mutableStateOf<Int?>(1) }
-        var selectedAnimalType by remember { mutableStateOf<String?>(null) }
-        var selectedObservationType by remember { mutableStateOf<String?>(null) }
-        var observations by remember { mutableStateOf(TextFieldValue()) }
-        var numIndividuos by remember { mutableStateOf(1) }
 
         // ViewModel con las funciones
         val viewModelS = FomularioEspecies_ViewModel()
@@ -177,25 +170,16 @@ fun FormularioEspecies(
 
                     Spacer(modifier = Modifier.padding(vertical = 5.dp))
 
-                // Número de individuos
-                Text("Número de Individuos",
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.align(Alignment.Start),
-                    color = Color.Black)
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    IconButton(
-                        onClick = {
-                            //if (numIndividuos > 1) numIndividuos--
-                            viewModel.updateQuantity((formUiState.formsEspecieDetails.quantity - 1).coerceAtLeast(1)) }) {
-                        Icon(Icons.Filled.Remove, contentDescription = "Disminuir")
-                    }
-                    //Text(text = numIndividuos.toString(), style = MaterialTheme.typography.titleMedium, color = Color.Black)
-                    Text("${formUiState.formsEspecieDetails.quantity}")
-                    IconButton(
-                        onClick = { viewModel.updateQuantity(formUiState.formsEspecieDetails.quantity + 1) }
+                    // Número de individuos
+                    Text(
+                        "Número de Individuos",
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.align(Alignment.Start),
+                        color = Color.Black
+                    )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         IconButton(
                             onClick = {

@@ -64,7 +64,9 @@ object AppViewModelProvider {
         initializer {
             FormularioFaunaPuntoConteoViewModel()
         }
+
     }
+
 }
 
 fun CreationExtras.formApplication(): FormApplication =

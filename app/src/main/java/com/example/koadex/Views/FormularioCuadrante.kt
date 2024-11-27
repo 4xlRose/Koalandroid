@@ -56,11 +56,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-
-import com.example.koadex.MainActivity
-
 import com.example.koadex.AppViewModelProvider
-
+import com.example.koadex.MainActivity
 import com.example.koadex.R
 import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
 import com.example.koadex.ui.form.FormQuadrantDBViewModel
@@ -90,9 +87,13 @@ fun FormularioCuadrante(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
-                title = { Text(text = stringResource(id = R.string.formulario),
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold) },
+                title = {
+                    Text(
+                        text = stringResource(id = R.string.formulario),
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigate("TiposForms") }) {
                         Icon(
@@ -134,30 +135,26 @@ fun FormularioCuadranteScreen(
     onFormValueChange: (QuadrantFormDetails) -> Unit,
     onSaveClick: () -> Unit
 ) {
-    if (CameraPermision.value) {
-        CameraWindow(activity)
-    } else {
-        var codigo by remember { mutableStateOf("") }
-        var nombreComun by remember { mutableStateOf("") }
-        var nombreCientifico by remember { mutableStateOf("") }
-        var placa by remember { mutableStateOf("") }
-        var circunferencia by remember { mutableStateOf("") }
-        var distancia by remember { mutableStateOf("") }
-        var estaturaBiometrica by remember { mutableStateOf("") }
-        var altura by remember { mutableStateOf("") }
-        var observaciones by remember { mutableStateOf("") }
+    var codigo by remember { mutableStateOf("") }
+    var nombreComun by remember { mutableStateOf("") }
+    var nombreCientifico by remember { mutableStateOf("") }
+    var placa by remember { mutableStateOf("") }
+    var circunferencia by remember { mutableStateOf("") }
+    var distancia by remember { mutableStateOf("") }
+    var estaturaBiometrica by remember { mutableStateOf("") }
+    var altura by remember { mutableStateOf("") }
+    var observaciones by remember { mutableStateOf("") }
 
-        // Estados para las selecciones
-        var cuadranteSeleccionado by remember { mutableStateOf("") }
-        var subCuadranteSeleccionado by remember { mutableStateOf("") }
-        var habitoCrecimientoSeleccionado by remember { mutableStateOf("") }
+    // Estados para las selecciones
+    var cuadranteSeleccionado by remember { mutableStateOf("") }
+    var subCuadranteSeleccionado by remember { mutableStateOf("") }
+    var habitoCrecimientoSeleccionado by remember { mutableStateOf("") }
 
-        val viewModel = FomularioEspecies_ViewModel()
-        val green700 = colorResource(id = R.color.green_700)
+    val viewModel = FomularioEspecies_ViewModel()
+    val green700 = colorResource(id = R.color.green_700)
 
-        val actionButtonColors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4E7029))
-        val scrollState = rememberScrollState()
-
+    val actionButtonColors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4E7029))
+    val scrollState = rememberScrollState()
 
     val plateText = remember { mutableStateOf("")}
     val circumferenceText = remember { mutableStateOf("")}
@@ -175,34 +172,14 @@ fun FormularioCuadranteScreen(
         Spacer(modifier = Modifier.height(15.dp))
 
         // Contenido desplazable
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFFFFFFFF))
-                .padding(32.dp)
-                .background(Color.White)
+                .verticalScroll(scrollState),
+            horizontalAlignment = Alignment.Start
         ) {
-            Spacer(modifier = Modifier.height(15.dp))
 
-            // Contenido desplazable
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(scrollState),
-                horizontalAlignment = Alignment.Start
-            ) {
-
-
-                Spacer(modifier = Modifier.height(40.dp))
-
-                // Código
-                OutlinedTextField(
-                    value = codigo,
-                    onValueChange = { codigo = it },
-                    label = { Text("Código") },
-                    modifier = Modifier.fillMaxWidth()
-                )
+            Spacer(modifier = Modifier.height(40.dp))
 
             /*// Código
             OutlinedTextField(
@@ -214,30 +191,30 @@ fun FormularioCuadranteScreen(
 
             Spacer(modifier = Modifier.height(16.dp))*/
 
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(4.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(4.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                // CUADRANTE Y SUBCUADRANTE
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // CUADRANTE Y SUBCUADRANTE
-                    Column(
-                        modifier = Modifier.weight(1f),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            "Cuadrante",
-                            style = MaterialTheme.typography.titleMedium,
-                            color = Color.Black
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
+                    Text("Cuadrante",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color.Black)
+                    Spacer(modifier = Modifier.height(8.dp))
 
-                        Row(
-                            horizontalArrangement = Arrangement.Start,
-                            modifier = Modifier.fillMaxWidth()
+                    Row(
+                        horizontalArrangement = Arrangement.Start,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        // A y B
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.padding(end = 8.dp)
                         ) {
                             BotonCuadranteAB(
                                 text = "A",
@@ -250,45 +227,27 @@ fun FormularioCuadranteScreen(
                                 isSelected = formUiState.formsQuadrantDetails.idSuperQuadrant == 2,
                                 onClick = { onFormValueChange(formUiState.formsQuadrantDetails.copy(idSuperQuadrant = 2)) }
                             )
-
                         }
 
-                        Spacer(modifier = Modifier.height(4.dp))
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.padding(vertical = 33.dp)
+                        ){
+                            Text(
+                                text = "-",
+                                fontSize = 50.sp,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.padding(1.dp)
+                            )
+                        }
 
-                        // Subcuadrante
-                        Text(
-                            "Sub-Cuadrante",
-                            style = MaterialTheme.typography.titleMedium,
-                            color = Color.Black
-                        )
-                        //Spacer(modifier = Modifier.height(8.dp))
-                        Row(
-                            horizontalArrangement = Arrangement.SpaceEvenly,
-                            modifier = Modifier.fillMaxWidth()
+                        // C a G
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.padding(start = 15.dp)
                         ) {
-
-                            BotonSubCuadrante(
-                                text = "1",
-                                isSelected = subCuadranteSeleccionado == "1",
-                                onClick = { subCuadranteSeleccionado = "1" }
-                            )
-                            BotonSubCuadrante(
-                                text = "2",
-                                isSelected = subCuadranteSeleccionado == "2",
-                                onClick = { subCuadranteSeleccionado = "2" }
-                            )
-                            BotonSubCuadrante(
-                                text = "3",
-                                isSelected = subCuadranteSeleccionado == "3",
-                                onClick = { subCuadranteSeleccionado = "3" }
-                            )
-                            BotonSubCuadrante(
-                                text = "4",
-                                isSelected = subCuadranteSeleccionado == "4",
-                                onClick = { subCuadranteSeleccionado = "4" }
-
                             //Spacer(modifier = Modifier.height(6.dp))
-                            )
+
                             BotonCuadranteCG(
                                 text = "C",
                                 isSelected = formUiState.formsQuadrantDetails.idMidQuadrant == 1,
@@ -317,17 +276,21 @@ fun FormularioCuadranteScreen(
                                 text = "G",
                                 isSelected = formUiState.formsQuadrantDetails.idMidQuadrant == 5,
                                 onClick = { onFormValueChange(formUiState.formsQuadrantDetails.copy(idMidQuadrant = 5)) }
-
                             )
                         }
                     }
 
-                    // HABITOS DE CRECIMIENTO
-                    Column(
-                        modifier = Modifier.weight(1f),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
+                    Spacer(modifier = Modifier.height(4.dp))
 
+                    // Subcuadrante
+                    Text("Sub-Cuadrante",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color.Black)
+                    //Spacer(modifier = Modifier.height(8.dp))
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
                         BotonSubCuadrante(
                             text = "1",
                             isSelected = formUiState.formsQuadrantDetails.idSubQuadrant == 1,
@@ -347,44 +310,9 @@ fun FormularioCuadranteScreen(
                             text = "4",
                             isSelected = formUiState.formsQuadrantDetails.idSubQuadrant == 4,
                             onClick = { onFormValueChange(formUiState.formsQuadrantDetails.copy(idSubQuadrant = 4)) }
-
                         )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 4.dp),
-                            horizontalArrangement = Arrangement.SpaceEvenly,
-                        ) {
-                            Spacer(modifier = Modifier.height(16.dp))
-
-                            CrecimientoBoton(
-                                icon = R.drawable.arbusto,
-                                text = "Arbusto",
-                                altura = "< 1mt",
-                                isSelected = habitoCrecimientoSeleccionado == "Arbusto",
-                                onClick = { habitoCrecimientoSeleccionado = "Arbusto" }
-                            )
-
-                            CrecimientoBoton(
-                                icon = R.drawable.arbolito,
-                                text = "Arbolito",
-                                altura = "1-3 mt",
-                                isSelected = habitoCrecimientoSeleccionado == "Arbolito",
-                                onClick = { habitoCrecimientoSeleccionado = "Arbolito" }
-                            )
-
-                            CrecimientoBoton(
-                                icon = R.drawable.arbol,
-                                text = "Árbol",
-                                altura = "> 3mt",
-                                isSelected = habitoCrecimientoSeleccionado == "Árbol",
-                                onClick = { habitoCrecimientoSeleccionado = "Árbol" }
-                            )
-                        }
                     }
                 }
-
 
                 // HABITOS DE CRECIMIENTO
                 Column(
@@ -429,9 +357,15 @@ fun FormularioCuadranteScreen(
                         )
                     }
                 }
+            }
 
-                Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
+            // CAMPOS DE INFORMACION
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
                 OutlinedTextField(
                     value = formUiState.formsQuadrantDetails.specieName,
                     onValueChange = { onFormValueChange(formUiState.formsQuadrantDetails.copy(specieName =  it)) },
@@ -447,14 +381,11 @@ fun FormularioCuadranteScreen(
                 )
             }
 
-
-                Spacer(modifier = Modifier.height(8.dp))
-
+            Spacer(modifier = Modifier.height(8.dp))
 
             OutlinedTextField(
                 value = formUiState.formsQuadrantDetails.placa,
                 onValueChange = { onFormValueChange(formUiState.formsQuadrantDetails.copy(placa = it)) },
-
                 label = { Text("Placa") },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -487,12 +418,10 @@ fun FormularioCuadranteScreen(
                     },
                     label = { Text("Distancia en mt") },
                     modifier = Modifier.weight(1f)//.padding(end = 2.dp)
-
                 )
-                Botones_capturaFC(green700)
+            }
 
-                Spacer(modifier = Modifier.height(16.dp))
-
+            Spacer(modifier = Modifier.height(8.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -522,7 +451,17 @@ fun FormularioCuadranteScreen(
                     label = { Text("Altura en mt") },
                     modifier = Modifier.weight(1f)//.padding(end = 2.dp)
                 )
+            }
 
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Evidencias
+            Text("Evidencias", style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.align(Alignment.Start),
+                color = Color.Black)
+            Botones_capturaFC(green700)
+
+            Spacer(modifier = Modifier.height(16.dp))
 
             // Observaciones
             OutlinedTextField(
@@ -534,9 +473,7 @@ fun FormularioCuadranteScreen(
                     .height(100.dp)
             )
 
-                // Botones de acción
-                viewModel.Atras_enviar(navController, green700)
-
+            Spacer(modifier = Modifier.height(16.dp))
 
             // Botones de acción
             viewModel.Atras_enviar(navController, green700)
@@ -555,15 +492,9 @@ fun FormularioCuadranteScreen(
 
             Spacer(modifier = Modifier.height(50.dp))
 
-
-            }
         }
     }
-    }
-    }
 }
-
-
 
 @Composable
 fun BotonCuadranteAB(
@@ -685,7 +616,6 @@ fun CrecimientoBoton(
         Text(text, style = MaterialTheme.typography.bodySmall)
         Text(altura, style = MaterialTheme.typography.bodySmall)
     }
-
 }
 
 @Composable
@@ -713,9 +643,7 @@ private fun Atras_enviar(
             Text("ENVIAR")
         }
     }
-
 }
-
 
 //////////////// PARA LOS BOTONES DE CAPTURAR //////////////////
 @Composable
@@ -742,7 +670,7 @@ private fun Boton_abrir_camara(green700: Color) {
 }
 
 @Composable
-fun Boton_seleccionar_archivo(green700: Color) {
+private fun Boton_seleccionar_archivo(green700: Color) {
     Button(
         onClick = { /* Handle file selection */ },
         colors = ButtonDefaults.buttonColors(containerColor = green700)
@@ -754,7 +682,7 @@ fun Boton_seleccionar_archivo(green700: Color) {
 }
 
 @RequiresApi(Build.VERSION_CODES.P)
-//@Preview(device = "spec:width=800px,height=1340px,dpi=300")
+@Preview(device = "spec:width=800px,height=1340px,dpi=300")
 @Composable
 fun FormularioCuadrantePreview() {
     FormularioCuadrante(activity = MainActivity(), navController = rememberNavController())
@@ -774,7 +702,7 @@ public fun Botones_capturaFC(green700: Color) {
 @Composable
 public fun Boton_abrir_camaraFC(green700: Color) {
     Button(
-        onClick = { CameraPermision.value = true; isFileSelectedFC.value = true },
+        onClick = { /* Handle photo capture */ isFileSelectedFC.value = true },
         colors = ButtonDefaults.buttonColors(containerColor = green700)
     ) {
         Icon(Icons.Default.Camera, contentDescription = "Tomar foto", tint = Color.White)
