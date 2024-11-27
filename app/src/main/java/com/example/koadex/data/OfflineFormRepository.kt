@@ -120,7 +120,8 @@ class OfflineFormRepository (private val formDao: FormDao) : FormRepository {
     override suspend fun insertBusquedaLibre(form: BusquedaLibreEntity) = formDao.insertBusquedaLibre(form)
     override suspend fun deleteBusquedaLibre(form: BusquedaLibreEntity) = formDao.deleteBusquedaLibre(form)
     override suspend fun updateBusquedaLibre(form: BusquedaLibreEntity) = formDao.updateBusquedaLibre(form)
-    //Punto de conteo
+
+  //Punto de conteo
     override suspend fun insertPuntoConteo(form: PuntoConteoEntity) = formDao.insertPuntoConteo(form)
     override suspend fun updatePuntoConteo(form: PuntoConteoEntity) = formDao.updatePuntoConteo(form)
     override suspend fun deletePuntoConteo(form: PuntoConteoEntity) = formDao.deletePuntoConteo(form)

@@ -453,10 +453,8 @@ fun FormularioCuadranteScreen(
 
             OutlinedTextField(
                 value = formUiState.formsQuadrantDetails.placa,
-                onValueChange = {
-                        onFormValueChange(formUiState.formsQuadrantDetails.copy(placa = it))
-                    }
-                ,
+                onValueChange = { onFormValueChange(formUiState.formsQuadrantDetails.copy(placa = it)) },
+
                 label = { Text("Placa") },
                 modifier = Modifier.fillMaxWidth()
             )

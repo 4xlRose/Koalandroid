@@ -22,6 +22,7 @@ import androidx.lifecycle.ViewModel
 import java.io.InputStream
 
 class FormularioFaunaPuntoConteoViewModel: ViewModel() {
+
     @Composable
     public fun AlturaButton(text: String, isSelected: Boolean, onClick: () -> Unit) {
         Text(

@@ -57,7 +57,6 @@ object AppViewModelProvider {
         initializer {
             FormPuntoConteoDBViewModel(formApplication().container.formsRepository)
         }
-
         initializer {
             FormularioFaunaBusquedaLibreViewModel()
         }
