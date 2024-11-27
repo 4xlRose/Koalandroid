@@ -555,7 +555,7 @@ fun FormularioCuadranteScreen(
                         if (newValue.isEmpty() || newValue.matches(Regex("^\\d*$"))) {
                             plateText.value = newValue
                             val plate = newValue.toIntOrNull() ?: 0
-                            onFormValueChange(formUiState.formsQuadrantDetails.copy(plate = plate))
+                            onFormValueChange(formUiState.formsQuadrantDetails.copy(placa = plate.toString()))
                         }
                     },
                     label = { Text("Placa") },
