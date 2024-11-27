@@ -22,6 +22,10 @@ class FormQuadrantDBViewModel (private val formRepository: FormRepository) : Vie
         formRepository.insertQuadrantForm(formQuadrantUiState.formsQuadrantDetails.toEntity())
 
     }
+
+    suspend fun getLatestFormId(): Int {
+        return formRepository.getLatestSpecieFormId()
+    }
 }
 
 /*Formulario Cuadrante*/

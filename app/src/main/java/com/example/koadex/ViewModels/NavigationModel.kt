@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.auth0.android.result.Credentials
 import com.example.koadex.R
 import com.example.koadex.data.FormRepository
+import com.example.koadex.data.GeneralFormEntity
 import com.example.koadex.data.UserEntity
 import com.example.koadex.navigate.getCurrentDate
 import com.example.koadex.navigate.sampleUser
@@ -28,5 +29,13 @@ class NavigationModel(private val formRepository: FormRepository): ViewModel() {
     }
     fun getUserByEmail(email: String): Flow<UserEntity?> {
         return formRepository.getUserByEmail(email)
+    }
+
+    fun getFormById(id: Int): Flow<GeneralFormEntity?> {
+        return formRepository.getFormById(id)
+    }
+
+    suspend fun updateForm(form: GeneralFormEntity) {
+        formRepository.updateGeneralForm(form)
     }
 }

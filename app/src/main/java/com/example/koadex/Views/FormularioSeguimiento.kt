@@ -36,6 +36,7 @@ import com.example.koadex.AppViewModelProvider
 import com.example.koadex.MainActivity
 import com.example.koadex.R
 import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
+import com.example.koadex.ViewModels.NavigationModel
 import com.example.koadex.ui.form.FollowUpFormDetails
 import com.example.koadex.ui.form.FollowUpFormUiState
 import com.example.koadex.ui.form.FormFollowDBViewModel
@@ -52,6 +53,7 @@ fun FormularioSeguimiento(
     activity: MainActivity,
     navController: NavHostController,
     modifier: Modifier = Modifier,
+    navModel: NavigationModel,
     viewModel: FormFollowDBViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -84,6 +86,7 @@ fun FormularioSeguimiento(
             navController = navController,
             formUiState = viewModel.formFollowUiState,
             onFormValueChange = viewModel::updateFollowUpFormUiState,
+            navModel = navModel,
             onSaveClick = {
                 coroutineScope.launch {
                     viewModel.saveFollowForm()
@@ -101,6 +104,7 @@ fun FormularioSeguimiento(
 fun FormularioSeguimientoScreen(
     activity: MainActivity,
     navController: NavHostController,
+    navModel: NavigationModel,
     modifier: Modifier = Modifier,
     formUiState: FollowUpFormUiState,
     onFormValueChange: (FollowUpFormDetails) -> Unit,
@@ -502,7 +506,7 @@ fun FormularioSeguimientoScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            viewModel.Atras_enviar(navController, green700)
+            viewModel.Atras_enviar(navController, green700, navModel)
 
             /*// Submit button -PARA PRUEBAS-
         Row(
@@ -614,7 +618,7 @@ fun DisturbioButton(
         }
     }
 }
-
+/*
 @RequiresApi(Build.VERSION_CODES.P)
 @Preview(device = "spec:width=800px,height=1340px,dpi=300")
 @Composable
@@ -623,7 +627,7 @@ fun PreviewFormularioSeguimiento(){
         activity = MainActivity(),
         navController = rememberNavController()
     )
-}
+}*/
 
 @Composable
 public fun Botones_capturaFS(green700: Color) {

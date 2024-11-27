@@ -1,5 +1,6 @@
 package com.example.koadex.Views
 
+import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -619,7 +620,7 @@ fun FormInfo(
                             )
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(
-                                text = form.place,
+                                text = "Tomada desde el dispositivo. ${form.place}",
                                 color = colorResource(R.color.green_100),
                                 fontSize = 14.sp,
                                 maxLines = 1
@@ -697,17 +698,20 @@ fun resumen_Formulario(
         observations = "Observaciones",
         heightMt = 10,
         evidences = byteArrayOf()
+
     )
     var RouteFormEntity = RouteFormEntity (
         id = 1,
         idZoneType = 1,
         nameCamara = "1",
+
         guayaPlate = 1,
         routeWidth = 10,
         targetDistance = 10,
         lensHeight = 10,
         idCheckList = 1,
         evidences =byteArrayOf(),
+
         observations = "Observaciones"
     )
     var WeatherFormEntity = WeatherFormEntity (
@@ -720,6 +724,7 @@ fun resumen_Formulario(
         minHumidity = 60.0,
         streamMtLevel = 1.0,
         evidences = byteArrayOf(),
+
         observations = "Observaciones"
     )
     Card(
@@ -764,7 +769,7 @@ fun resumen_Formulario(
                 ResumenItem("Clima:", it.type)
             }
 
-            ResumenItem("Lugar:", form.place)
+            ResumenItem("Lugar:", "Tomada desde el dispositivo. ${form.place}")
             ResumenItem("Fecha:", form.date)
             ResumenItem("Hora:", form.hour)
 

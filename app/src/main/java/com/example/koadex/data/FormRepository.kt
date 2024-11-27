@@ -101,22 +101,32 @@ interface FormRepository {
     suspend fun updateGeneralForm(form: GeneralFormEntity)
     suspend fun deleteGeneralForm(form: GeneralFormEntity)
 
+    fun getSpecieFormById(id: Int): Flow<SpecieFormEntity?>
+    suspend fun getLatestSpecieFormId(): Int
     suspend fun insertSpecieForm(form: SpecieFormEntity)
     suspend fun updateSpecieForm(form: SpecieFormEntity)
     suspend fun deleteSpecieForm(form: SpecieFormEntity)
 
+    fun getFollowUpFormById(id: Int): Flow<FollowUpFormEntity?>
+    suspend fun getLatestFollowUpFormId(): Int
     suspend fun insertFollowUpForm(form: FollowUpFormEntity)
     suspend fun updateFollowUpForm(form: FollowUpFormEntity)
     suspend fun deleteFollowUpForm(form: FollowUpFormEntity)
 
+    fun getQuadrantFormById(id: Int): Flow<QuadrantFormEntity?>
+    suspend fun getLatestQuadrantFormId(): Int
     suspend fun insertQuadrantForm(form: QuadrantFormEntity)
     suspend fun updateQuadrantForm(form: QuadrantFormEntity)
     suspend fun deleteQuadrantForm(form: QuadrantFormEntity)
 
+    fun getRouteFormById(id: Int): Flow<RouteFormEntity?>
+    suspend fun getLatestRouteFormId(): Int
     suspend fun insertRouteForm(form: RouteFormEntity)
     suspend fun updateRouteForm(form: RouteFormEntity)
     suspend fun deleteRouteForm(form: RouteFormEntity)
 
+    fun getWeatherFormById(id: Int): Flow<WeatherFormEntity?>
+    suspend fun getLatestWeatherFormId(): Int
     suspend fun insertWeatherForm(form: WeatherFormEntity)
     suspend fun updateWeatherForm(form: WeatherFormEntity)
     suspend fun deleteWeatherForm(form: WeatherFormEntity)

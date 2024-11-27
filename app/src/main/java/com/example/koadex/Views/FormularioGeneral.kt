@@ -68,6 +68,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.koadex.AppViewModelProvider
+import com.example.koadex.ViewModels.NavigationModel
 
 /*
 import com.example.koadex.ui.form.GeneralFormDetails
@@ -97,7 +98,7 @@ fun FormularioGeneral(
     navController: NavHostController,
     modifier: Modifier = Modifier,
     user: UserEntity,
-    savedId: Int = 0,
+    navModel: NavigationModel,
     viewModel: FormGeneralDBViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     LaunchedEffect(Unit) {
@@ -121,7 +122,7 @@ fun FormularioGeneral(
         )
     }
 
-    val savedForm = viewModel.getFormById(savedId).collectAsState(initial = null).value
+    val savedForm = viewModel.getFormById(navModel.savedFormId).collectAsState(initial = null).value
     val editing = savedForm != null
 
     LaunchedEffect(editing) {
@@ -189,6 +190,7 @@ fun FormularioGeneral(
                 }
 
                 viewModel.saveUser()
+                navModel.savedFormId = viewModel.formGeneralUiState.formsDetails.id
 
                 navController.navigate("TiposForms")
             }

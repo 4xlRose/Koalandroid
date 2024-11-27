@@ -57,6 +57,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.koadex.AppViewModelProvider
 import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
 import com.example.koadex.ViewModels.FormularioCamaraTrampaViewModel
+import com.example.koadex.ViewModels.NavigationModel
 import com.example.koadex.ui.form.FormRouteFormDBViewModel
 import com.example.koadex.ui.form.RouteFormDetails
 import com.example.koadex.ui.form.RouteFormUiState
@@ -75,11 +76,13 @@ var CameraPermision: MutableState<Boolean> = mutableStateOf(false)
 fun FormularioCamaraTrampa(
     activity: MainActivity,
     navController: NavHostController,
+    navModel: NavigationModel,
     modifier: Modifier = Modifier,
     viewModel: FormRouteFormDBViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
 
     val coroutineScope = rememberCoroutineScope()
+    val generalForm = navModel.getFormById(navModel.savedFormId).collectAsState(initial = null).value
 
     Scaffold(
         modifier = Modifier
@@ -116,7 +119,12 @@ fun FormularioCamaraTrampa(
             onSaveClick = {
                 coroutineScope.launch {
                     viewModel.saveRouteFrom()
-                    navController.navigate("TiposForms")
+                    val specieId = viewModel.getLatestFormId()
+                    generalForm?.idRouteForm = specieId
+                    generalForm?.let {
+                        navModel.updateForm(generalForm)
+                    }
+                    navController.navigate("Principal")
                 }
             }
         )
@@ -616,13 +624,13 @@ fun EvidenciaItem(
         }
     }
 }
-
+/*
 @RequiresApi(Build.VERSION_CODES.P)
 @Preview(device = "spec:width=800px,height=1340px,dpi=300")
 @Composable
 fun FormularioCamaraTrampaPreview() {
     FormularioCamaraTrampa(activity = MainActivity(), modifier = Modifier, navController = rememberNavController())
-}
+}*/
 
 @Composable
 fun DateField(

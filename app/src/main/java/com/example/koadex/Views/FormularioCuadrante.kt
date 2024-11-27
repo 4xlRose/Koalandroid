@@ -71,6 +71,7 @@ fun FormularioCuadrante(
     activity: MainActivity,
     navModel: NavigationModel,
     navController: NavController,
+
     //modifier: Modifier = Modifier,
     //viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
@@ -108,10 +109,11 @@ fun FormularioCuadrante(
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun FormularioCuadranteScreen(
-    activity: MainActivity,
+    /*activity: MainActivity,*/
     modifier: Modifier = Modifier,
     navModel: NavigationModel,
     navController: NavController
+
 ) {
     var codigo by remember { mutableStateOf("") }
     var nombreComun by remember { mutableStateOf("") }

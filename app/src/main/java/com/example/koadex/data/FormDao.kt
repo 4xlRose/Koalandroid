@@ -193,6 +193,13 @@ interface FormDao {
 
 
     // Métodos de Formulario de Especie
+
+    @Query("SELECT * from specie_form WHERE id = :id")
+    fun getSpecieFormById(id: Int): Flow<SpecieFormEntity?>
+
+    @Query("SELECT MAX(id) FROM specie_form")
+    suspend fun getLatestSpecieFormId(): Int
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertSpecieForm(form: SpecieFormEntity)
 
@@ -205,6 +212,13 @@ interface FormDao {
 
 
     // Métodos de Formulario de Seguimiento
+
+    @Query("SELECT * from follow_up_form WHERE id = :id")
+    fun getFollowUpFormById(id: Int): Flow<FollowUpFormEntity?>
+
+    @Query("SELECT MAX(id) FROM follow_up_form")
+    suspend fun getLatestFollowUpFormId(): Int
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertFollowUpForm(form: FollowUpFormEntity)
 
@@ -217,6 +231,13 @@ interface FormDao {
 
 
     // Métodos de Formulario Cuadrantes
+
+    @Query("SELECT * from quadrant_form WHERE id = :id")
+    fun getQuadrantFormById(id: Int): Flow<QuadrantFormEntity?>
+
+    @Query("SELECT MAX(id) FROM quadrant_form")
+    suspend fun getLatestQuadrantFormId(): Int
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertQuadrantForm(form: QuadrantFormEntity)
 
@@ -229,6 +250,13 @@ interface FormDao {
 
 
     // Métodos de Formulario Ruta
+
+    @Query("SELECT * from route_form WHERE id = :id")
+    fun getRouteFormById(id: Int): Flow<RouteFormEntity?>
+
+    @Query("SELECT MAX(id) FROM route_form")
+    suspend fun getLatestRouteFormId(): Int
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertRouteForm(form: RouteFormEntity)
 
@@ -241,6 +269,13 @@ interface FormDao {
 
 
     // Métodos de Formulario Clima
+
+    @Query("SELECT * from weather_form WHERE id = :id")
+    fun getWeatherFormById(id: Int): Flow<WeatherFormEntity?>
+
+    @Query("SELECT MAX(id) FROM weather_form")
+    suspend fun getLatestWeatherFormId(): Int
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertWeatherForm(form: WeatherFormEntity)
 
