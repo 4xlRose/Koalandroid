@@ -29,7 +29,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.FileOpen
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import com.example.koadex.MainActivity
@@ -316,8 +315,6 @@ fun FormularioFaunaPuntoConteo(
                 }
             }
         }
-    }
-}
     }
 
 

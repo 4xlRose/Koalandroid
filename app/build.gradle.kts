@@ -137,6 +137,8 @@ dependencies{
     implementation(libs.androidx.camera.extensions)
     implementation(libs.hilt.android)
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+    implementation(kotlin("script-runtime"))
+    implementation(libs.coil.compose)
 
 }
 

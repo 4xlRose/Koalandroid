@@ -65,6 +65,12 @@ fun FormularioFaunaBusquedaLibre(
     viewModelb: FormularioFaunaBusquedaLibreViewModel = viewModel()) {
 
     val onForm = viewModelB::updateBusquedaLibre
+    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+    val imagePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        selectedImageUri = uri
+    }
     if (CameraPermision.value) {
         CameraWindow(activity)
     } else {
@@ -469,8 +475,3 @@ fun convertUriToByteArray(context: Context, uri: Uri): ByteArray? {
     }
     return byteArray
 }
-
-
-
-
-
