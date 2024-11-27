@@ -43,7 +43,8 @@ data class QuadrantFormDetails(
     var distanceMt: Int = 0, // decimal(2)
     var observations: String = "",
     var heightMt: Int = 0, // decimal(2)
-    var evidences: String = ""
+    var evidences: String = "",
+    var plate: Int = 0 // <- AGREGO MARIA
 )
 
 fun QuadrantFormDetails.toEntity() : QuadrantFormEntity = QuadrantFormEntity(
@@ -59,5 +60,6 @@ fun QuadrantFormDetails.toEntity() : QuadrantFormEntity = QuadrantFormEntity(
     distanceMt = distanceMt,
     observations =  observations,
     heightMt = heightMt,
-    evidences = evidences
+    evidences = evidences,
+    plate = plate // <- AGREGO MARIA
 )

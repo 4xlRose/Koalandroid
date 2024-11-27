@@ -93,7 +93,7 @@ fun FormularioSeguimiento(
         )
     }
 }
-//@Preview(device = "spec:width=800px,height=1340px,dpi=300", showBackground = true)
+
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun FormularioSeguimientoScreen(
