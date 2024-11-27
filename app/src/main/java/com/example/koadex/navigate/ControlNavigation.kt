@@ -127,7 +127,7 @@ fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modi
             FormularioGeneral(navController = navController, user = model.loggedUser)
         }
         composable("TiposForms") {
-            FormularioSeleccion(navController = navController)
+            FormularioSeleccion(navController = navController, user = model.loggedUser)
         }
         composable("FormularioEspecies"){
             FormularioEspecies(navController = navController)

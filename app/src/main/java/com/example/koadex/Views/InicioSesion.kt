@@ -77,8 +77,7 @@ fun IniciarSesionFondo(navController: NavHostController,
                        model: NavigationModel,
                        modifier: Modifier = Modifier
 ) {
-    var loggedIn by remember { mutableStateOf(false) }
-    var credentials by remember { mutableStateOf<Credentials?>(null) }
+    val logged = remember { mutableStateOf(false) }
     val fondo = painterResource(R.drawable.login)
 
     Box (
@@ -91,16 +90,14 @@ fun IniciarSesionFondo(navController: NavHostController,
             modifier = Modifier
                 .fillMaxSize()
         )
-        if (loggedIn) {
-            Principal(navController, model.loggedUser)
-        } else {
+        if (!logged.value) {
             IniciarSesionLogInContenido(
                 navController = navController,
                 account = account,
                 model = model,
                 onLoginSuccess = {
-                    credentials = it
-                    loggedIn = true
+                    navController.navigate("Principal")
+                    logged.value = true
                 },
                 modifier = Modifier
             )
@@ -316,6 +313,9 @@ private fun loginWithUsernamePassword(
 
                 processUser(model.loggedUser.email)
                 println("Logged as " + model.loggedUser.email)
+
+                model.accessToken = result.accessToken
+
                 onSuccess(result)
             }
 

@@ -29,7 +29,6 @@ data class FollowUpFormUiState(
 
 data class FollowUpFormDetails(
     val id: Int = 0,
-    var idGeneralForm: Int = 0, // Foreign Key
     var followUp: Boolean = false,
     var change: Boolean = false,
     var idCoverage: Int = 0, // Foreign Key
@@ -40,7 +39,6 @@ data class FollowUpFormDetails(
 )
 
 fun FollowUpFormDetails.toEntity() : FollowUpFormEntity = FollowUpFormEntity (
-    idGeneralForm = idGeneralForm,
     followUp = followUp,
     change = change,
     idCoverage = idCoverage,

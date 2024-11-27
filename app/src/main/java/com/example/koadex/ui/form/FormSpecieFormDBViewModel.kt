@@ -67,7 +67,6 @@ data class SpeciesFormUiState(
 
 data class SpecieFormsDetails(
     val id: Int = 0,
-    var idGeneralForm: Int = 0,
     var transect: String = "",
     var idZoneType: Int = 0,
     var idAnimalType: Int = 0,
@@ -81,7 +80,6 @@ data class SpecieFormsDetails(
 )
 
 fun SpecieFormsDetails.toEntity() : SpecieFormEntity = SpecieFormEntity(
-    idGeneralForm = idGeneralForm,
     transect = transect,
     idZoneType = idZoneType,
     idAnimalType = idAnimalType,
