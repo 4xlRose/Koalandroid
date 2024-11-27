@@ -6,11 +6,13 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.koadex.ViewModels.FormularioFaunaBusquedaLibreViewModel
 import com.example.koadex.ViewModels.NavigationModel
-import com.example.koadex.ViewModels.PerfilScreenViewModel
+import com.example.koadex.ui.form.FormBusquedaLibreDBViewModel
 import com.example.koadex.ui.form.FormFollowDBViewModel
 
 import com.example.koadex.ui.form.FormGeneralDBViewModel
+import com.example.koadex.ui.form.FormPuntoConteoDBViewModel
 import com.example.koadex.ui.form.FormQuadrantDBViewModel
 import com.example.koadex.ui.form.FormRouteFormDBViewModel
 import com.example.koadex.ui.form.FormSpecieDBViewModel
@@ -48,8 +50,16 @@ object AppViewModelProvider {
         initializer {
             NavigationModel(formApplication().container.formsRepository)
         }
+
         initializer {
-            PerfilScreenViewModel(formApplication().container.formsRepository)
+            FormBusquedaLibreDBViewModel(formApplication().container.formsRepository)
+        }
+        initializer {
+            FormPuntoConteoDBViewModel(formApplication().container.formsRepository)
+        }
+
+        initializer {
+            FormularioFaunaBusquedaLibreViewModel()
         }
     }
 }

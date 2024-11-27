@@ -18,10 +18,7 @@ import androidx.room.RoomDatabase
     PuntoConteoEntity::class,BusquedaLibreEntity::class
 ],
 
-
-    version = 12,
-
-    version = 13,
+    version = 15,
 
     exportSchema = false
 )

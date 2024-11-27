@@ -288,7 +288,7 @@ fun FormularioCuadranteScreen(
                                 onClick = { subCuadranteSeleccionado = "4" }
 
                             //Spacer(modifier = Modifier.height(6.dp))
-
+                            )
                             BotonCuadranteCG(
                                 text = "C",
                                 isSelected = formUiState.formsQuadrantDetails.idMidQuadrant == 1,
@@ -452,14 +452,11 @@ fun FormularioCuadranteScreen(
 
 
             OutlinedTextField(
-                value = plateText.value,
-                onValueChange = { newValue ->
-                    if (newValue.isEmpty() || newValue.matches(Regex("^\\d*$"))) {
-                        plateText.value = newValue
-                        val plate = newValue.toIntOrNull() ?: 0
-                        onFormValueChange(formUiState.formsQuadrantDetails.copy(plate = plate))
+                value = formUiState.formsQuadrantDetails.placa,
+                onValueChange = {
+                        onFormValueChange(formUiState.formsQuadrantDetails.copy(placa = it))
                     }
-                },
+                ,
                 label = { Text("Placa") },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -564,7 +561,11 @@ fun FormularioCuadranteScreen(
             }
         }
     }
+    }
+    }
 }
+
+
 
 @Composable
 fun BotonCuadranteAB(
@@ -686,6 +687,7 @@ fun CrecimientoBoton(
         Text(text, style = MaterialTheme.typography.bodySmall)
         Text(altura, style = MaterialTheme.typography.bodySmall)
     }
+
 }
 
 @Composable
@@ -713,7 +715,9 @@ private fun Atras_enviar(
             Text("ENVIAR")
         }
     }
+
 }
+
 
 //////////////// PARA LOS BOTONES DE CAPTURAR //////////////////
 @Composable
@@ -740,7 +744,7 @@ private fun Boton_abrir_camara(green700: Color) {
 }
 
 @Composable
-private fun Boton_seleccionar_archivo(green700: Color) {
+fun Boton_seleccionar_archivo(green700: Color) {
     Button(
         onClick = { /* Handle file selection */ },
         colors = ButtonDefaults.buttonColors(containerColor = green700)
@@ -752,7 +756,7 @@ private fun Boton_seleccionar_archivo(green700: Color) {
 }
 
 @RequiresApi(Build.VERSION_CODES.P)
-@Preview(device = "spec:width=800px,height=1340px,dpi=300")
+//@Preview(device = "spec:width=800px,height=1340px,dpi=300")
 @Composable
 fun FormularioCuadrantePreview() {
     FormularioCuadrante(activity = MainActivity(), navController = rememberNavController())
