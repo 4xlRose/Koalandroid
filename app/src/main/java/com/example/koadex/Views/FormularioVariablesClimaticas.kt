@@ -53,6 +53,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.colorResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.koadex.AppViewModelProvider
+import com.example.koadex.MainActivity
 import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
 import com.example.koadex.data.SeasonEntity
 import com.example.koadex.data.WeatherEntity
@@ -70,7 +71,7 @@ import kotlinx.coroutines.flow.Flow
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormularioVariablesClimaticas(
-    //activity: MainActivity,
+    activity: MainActivity,
     navController: NavHostController,
     //modifier: Modifier = Modifier,
 ) {
@@ -102,7 +103,7 @@ fun FormularioVariablesClimaticas(
     ) { paddingValues ->
         FormularioVariablesClimaticasScreen(
 
-            //activity = activity,
+            activity = activity,
             navController = navController,
             modifier = Modifier
                 .padding(paddingValues)
@@ -115,7 +116,7 @@ fun FormularioVariablesClimaticas(
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun FormularioVariablesClimaticasScreen(
-    //activity: MainActivity,
+    activity: MainActivity,
     navController: NavHostController,
     modifier: Modifier = Modifier,
     viewModel : FormWeatherDBViewModel = viewModel(factory = AppViewModelProvider.Factory)
@@ -132,11 +133,14 @@ fun FormularioVariablesClimaticasScreen(
                 //AGREGAR EL NAV CONTROLLER
             }
         },
+        activity = activity,
         modifier = modifier)
 }
 
+@RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun FormularioClimaEntry(
+    activity: MainActivity,
     navController: NavHostController,
     formUiState: WeatherFormUiState,
     onFormValueChange: (WeatherFormDetails) -> Unit,
@@ -144,73 +148,76 @@ fun FormularioClimaEntry(
     onSaveClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val scrollState = rememberScrollState()
-    val (currentZone, setCurrentZone) = remember { mutableStateOf("") } // Estado para la zona seleccionada
-    val viewModel = FomularioEspecies_ViewModel()
-    val green700 = colorResource(id = R.color.green_700)
+    if (CameraPermision.value) {
+        CameraWindow(activity)
+    } else {
+        val scrollState = rememberScrollState()
+        val (currentZone, setCurrentZone) = remember { mutableStateOf("") } // Estado para la zona seleccionada
+        val viewModel = FomularioEspecies_ViewModel()
+        val green700 = colorResource(id = R.color.green_700)
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(horizontal = 32.dp)
-            .verticalScroll(scrollState)
-            .background(color = Color.White), // Habilitar scroll
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(horizontal = 32.dp)
+                .verticalScroll(scrollState)
+                .background(color = Color.White), // Habilitar scroll
+            verticalArrangement = Arrangement.spacedBy(16.dp),
 
-    ) {
-        Spacer(modifier = Modifier.height(6.dp))
+            ) {
+            Spacer(modifier = Modifier.height(6.dp))
 
-        Text(
-            text = "Zona",
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold
-        )
-
-        // Botones de zona
-        Row(
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            val buttonSize = 80.dp
-            ZoneButton(
-                type = "bosque",
-                currentZone = currentZone,
-                onZoneChange = setCurrentZone,
-                onZoneIdChange =onZoneIdChange,
-                buttonSize = buttonSize,
+            Text(
+                text = "Zona",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
             )
-            ZoneButton(
-                type = "arreglo",
-                currentZone = currentZone,
-                onZoneChange = setCurrentZone,
-                onZoneIdChange =onZoneIdChange,
-                buttonSize = buttonSize
-            )
-            ZoneButton(
-                type = "transitorio",
-                currentZone = currentZone,
-                onZoneChange = setCurrentZone,
-                onZoneIdChange =onZoneIdChange,
-                buttonSize = buttonSize
-            )
-            ZoneButton(
-                type = "permanente",
-                currentZone = currentZone,
-                onZoneChange = setCurrentZone,
-                onZoneIdChange =onZoneIdChange,
-                buttonSize = buttonSize
-            )
-        }
 
-        ClimaInputForm(
-            modifier = Modifier.fillMaxWidth(),
-            formWeatherDetails = formUiState.formWeatherDetails,
-            onFormValueChange = onFormValueChange
-        )
+            // Botones de zona
+            Row(
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                val buttonSize = 80.dp
+                ZoneButton(
+                    type = "bosque",
+                    currentZone = currentZone,
+                    onZoneChange = setCurrentZone,
+                    onZoneIdChange = onZoneIdChange,
+                    buttonSize = buttonSize,
+                )
+                ZoneButton(
+                    type = "arreglo",
+                    currentZone = currentZone,
+                    onZoneChange = setCurrentZone,
+                    onZoneIdChange = onZoneIdChange,
+                    buttonSize = buttonSize
+                )
+                ZoneButton(
+                    type = "transitorio",
+                    currentZone = currentZone,
+                    onZoneChange = setCurrentZone,
+                    onZoneIdChange = onZoneIdChange,
+                    buttonSize = buttonSize
+                )
+                ZoneButton(
+                    type = "permanente",
+                    currentZone = currentZone,
+                    onZoneChange = setCurrentZone,
+                    onZoneIdChange = onZoneIdChange,
+                    buttonSize = buttonSize
+                )
+            }
 
-        viewModel.Atras_enviar(navController, green700)
+            ClimaInputForm(
+                modifier = Modifier.fillMaxWidth(),
+                formWeatherDetails = formUiState.formWeatherDetails,
+                onFormValueChange = onFormValueChange
+            )
 
-        /*// Submit button -PARA PRUEBAS-
+            viewModel.Atras_enviar(navController, green700)
+
+            /*// Submit button -PARA PRUEBAS-
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
@@ -233,8 +240,9 @@ fun FormularioClimaEntry(
             }
         }*/
 
-        Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(50.dp))
 
+        }
     }
 }
 
@@ -420,7 +428,7 @@ fun ClimaInputForm(
 @Preview(device = "spec:width=800px,height=1340px,dpi=300")
 @Composable
 fun VariableClimaticasPreview(){
-    FormularioVariablesClimaticas(navController = rememberNavController())
+    FormularioVariablesClimaticas(activity = MainActivity(),navController = rememberNavController())
 }
 
 
@@ -438,7 +446,7 @@ public fun Botones_capturaFVC(green700: Color) {
 @Composable
 public fun Boton_abrir_camaraFVC(green700: Color) {
     Button(
-        onClick = { /* CameraPermision.value = true; */ isFileSelectedFVC.value = true },
+        onClick = { CameraPermision.value = true; isFileSelectedFVC.value = true },
         colors = ButtonDefaults.buttonColors(containerColor = green700)
     ) {
         Icon(Icons.Default.Camera, contentDescription = "Tomar foto", tint = Color.White)
