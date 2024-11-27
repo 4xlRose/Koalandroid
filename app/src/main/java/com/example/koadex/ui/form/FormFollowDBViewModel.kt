@@ -34,9 +34,39 @@ data class FollowUpFormDetails(
     var idCoverage: Int = 0, // Foreign Key
     var cropType: String = "",
     var idDisturbance: Int = 0, // Foreign Key
-    var evidences: String = "",
+    var evidences: ByteArray = byteArrayOf(),
     var observations: String = "" // <- AGREGO MARIA
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as FollowUpFormDetails
+
+        if (id != other.id) return false
+        if (followUp != other.followUp) return false
+        if (change != other.change) return false
+        if (idCoverage != other.idCoverage) return false
+        if (cropType != other.cropType) return false
+        if (idDisturbance != other.idDisturbance) return false
+        if (!evidences.contentEquals(other.evidences)) return false
+        if (observations != other.observations) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id
+        result = 31 * result + followUp.hashCode()
+        result = 31 * result + change.hashCode()
+        result = 31 * result + idCoverage
+        result = 31 * result + cropType.hashCode()
+        result = 31 * result + idDisturbance
+        result = 31 * result + evidences.contentHashCode()
+        result = 31 * result + observations.hashCode()
+        return result
+    }
+}
 
 fun FollowUpFormDetails.toEntity() : FollowUpFormEntity = FollowUpFormEntity (
     followUp = followUp,

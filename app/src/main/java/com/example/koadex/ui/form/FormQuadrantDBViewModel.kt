@@ -42,7 +42,7 @@ data class QuadrantFormDetails(
     var distanceMt: Int = 0, // decimal(2)
     var observations: String = "",
     var heightMt: Int = 0, // decimal(2)
-    var evidences: String = ""
+    var evidences: ByteArray = byteArrayOf()
 )
 
 fun QuadrantFormDetails.toEntity() : QuadrantFormEntity = QuadrantFormEntity(
