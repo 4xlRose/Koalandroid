@@ -620,7 +620,7 @@ fun FormInfo(
                             )
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(
-                                text = form.place,
+                                text = "Tomada desde el dispositivo. ${form.place}",
                                 color = colorResource(R.color.green_100),
                                 fontSize = 14.sp,
                                 maxLines = 1
@@ -759,7 +759,7 @@ fun resumen_Formulario(
                 ResumenItem("Clima:", it.type)
             }
 
-            ResumenItem("Lugar:", form.place)
+            ResumenItem("Lugar:", "Tomada desde el dispositivo. ${form.place}")
             ResumenItem("Fecha:", form.date)
             ResumenItem("Hora:", form.hour)
 
