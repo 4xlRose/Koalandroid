@@ -3,12 +3,17 @@ package com.example.koadex.ui.principal
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.koadex.data.FollowUpFormEntity
 import com.example.koadex.data.FormRepository
 import com.example.koadex.data.FormStateEntity
 import com.example.koadex.data.GeneralFormEntity
+import com.example.koadex.data.QuadrantFormEntity
+import com.example.koadex.data.RouteFormEntity
 import com.example.koadex.data.SeasonEntity
+import com.example.koadex.data.SpecieFormEntity
 import com.example.koadex.data.UserEntity
 import com.example.koadex.data.WeatherEntity
+import com.example.koadex.data.WeatherFormEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -28,6 +33,28 @@ class KoadexViewModel(formsRepository: FormRepository) : ViewModel() {
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
                 initialValue = KoadexGeneralUiState(formsRepository = formsRepository)
             )
+
+    val getSpecieFormById: (Int) -> Flow<SpecieFormEntity?> = { id ->
+        formsRepository.getSpecieFormById(id)
+    }
+
+    val getFollowUpFormById: (Int) -> Flow<FollowUpFormEntity?> = { id ->
+        formsRepository.getFollowUpFormById(id)
+    }
+
+    val getQuadrantFormById: (Int) -> Flow<QuadrantFormEntity?> = { id ->
+        formsRepository.getQuadrantFormById(id)
+    }
+
+    val getRouteFormById: (Int) -> Flow<RouteFormEntity?> = { id ->
+        formsRepository.getRouteFormById(id)
+    }
+
+    val getWeatherFormById: (Int) -> Flow<WeatherFormEntity?> = { id ->
+        formsRepository.getWeatherFormById(id)
+    }
+
+
 
     val getAllUsers = formsRepository.getAllUsers()
 

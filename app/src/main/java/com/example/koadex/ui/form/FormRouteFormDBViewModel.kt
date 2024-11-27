@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.room.PrimaryKey
 import com.example.koadex.data.FormRepository
 import com.example.koadex.data.RouteFormEntity
 
@@ -25,6 +24,10 @@ class FormRouteFormDBViewModel (private val formRepository: FormRepository) : Vi
         formRouteUiState = formRouteUiState.copy(
             formsRouteDetails = formRouteUiState.formsRouteDetails.copy(idZoneType = zoneTypeId)
         )
+    }
+
+    suspend fun getLatestFormId(): Int {
+        return formRepository.getLatestSpecieFormId()
     }
 }
 

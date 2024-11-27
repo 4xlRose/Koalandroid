@@ -49,7 +49,7 @@ import com.example.koadex.Views.FormularioCamaraTrampa
 import com.example.koadex.Views.FormularioCuadrante
 import com.example.koadex.Views.FormularioEspecies
 import com.example.koadex.Views.FormularioFaunaBusquedaLibre
-
+import com.example.koadex.Views.FormularioFaunaPuntoConteo
 import com.example.koadex.Views.FormularioGeneral
 import com.example.koadex.Views.InicioCarga
 import com.example.koadex.Views.InicioSesion
@@ -62,7 +62,6 @@ import com.example.koadex.Views.FormularioSeguimiento
 import com.example.koadex.Views.FormularioSeleccion
 import com.example.koadex.Views.FormularioVariablesClimaticas
 import com.example.koadex.Views.EditProfileScreen
-import com.example.koadex.Views.FormularioFaunaPuntoConteo
 import com.example.koadex.Views.PerfilScreen
 import com.example.koadex.data.UserEntity
 import com.example.koadex.ui.form.FormGeneralDBViewModel
@@ -82,7 +81,7 @@ import java.util.Locale
 fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     val model: NavigationModel = viewModel(factory = AppViewModelProvider.Factory)
-
+    
     //NavHost(navController = navController, startDestination = "Principal") {
     NavHost(navController = navController, startDestination = "InicioCarga") {
         composable("InicioCarga") {
@@ -101,6 +100,9 @@ fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modi
         composable("Registro") {
             Registro(navController = navController, account = account, model = model)
         }
+        /*composable("SeleccionForm") {
+            SeleccionForm(navController = navController)
+        }*/
         composable("Configuracion"){
             Configuracion(navController = navController, model = model)
         }
@@ -122,31 +124,31 @@ fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modi
 
         //Tipos de formulario
         composable("FormularioGeneral") {
-            FormularioGeneral(navController = navController, user = model.loggedUser, savedId = model.savedFormId)
+            FormularioGeneral(navController = navController, user = model.loggedUser, navModel = model)
         }
         composable("TiposForms") {
             FormularioSeleccion(navController = navController, user = model.loggedUser)
         }
         composable("FormularioEspecies"){
-            FormularioEspecies(activity,navController = navController)
+            FormularioEspecies(navController = navController, navModel = model)
         }
         composable("FormularioFaunaPuntoConteo"){
-            FormularioFaunaPuntoConteo(activity,navController = navController)
+            FormularioFaunaPuntoConteo(navController = navController, activity = activity, navModel = model)
         }
         composable("FormularioFaunaBusquedaLibre"){
-            FormularioFaunaBusquedaLibre(activity,navController = navController)
+            FormularioFaunaBusquedaLibre()
         }
         composable("FormularioCuadrante"){
-            FormularioCuadrante(activity,navController = navController)
+            FormularioCuadrante(navController = navController, navModel = model)
         }
         composable("FormularioSeguimiento"){
-            FormularioSeguimiento(activity,navController = navController)
+            FormularioSeguimiento(navController = navController, activity = activity, navModel = model)
         }
         composable("CamarasTrampa") {
-            FormularioCamaraTrampa(activity,navController = navController)
+            FormularioCamaraTrampa(activity,navController = navController, navModel = model)
         }
         composable("FormularioVariablesClimaticas") {
-            FormularioVariablesClimaticas(activity,navController = navController)
+            FormularioVariablesClimaticas(navController = navController, activity = activity, navModel = model)
         }
     }
 }

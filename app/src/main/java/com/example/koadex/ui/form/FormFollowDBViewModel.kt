@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.room.PrimaryKey
 import com.example.koadex.data.FollowUpFormEntity
 import com.example.koadex.data.FormRepository
 

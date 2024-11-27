@@ -90,40 +90,61 @@ class OfflineFormRepository (private val formDao: FormDao) : FormRepository {
     override suspend fun updateGeneralForm(form: GeneralFormEntity) = formDao.updateGeneralForm(form)
     override suspend fun deleteGeneralForm(form: GeneralFormEntity) = formDao.deleteGeneralForm(form)
 
+    // Sin terminar
+    override suspend fun insertBusquedaLibre(form: BusquedaLibreEntity) {
+        TODO("Not yet implemented")
+    }
+    override suspend fun deleteBusquedaLibre(form: BusquedaLibreEntity) {
+        TODO("Not yet implemented")
+    }
+    override suspend fun updateBusquedaLibre(form: BusquedaLibreEntity) {
+        TODO("Not yet implemented")
+    }
+    override suspend fun insertPuntoConteo(form: PuntoConteoEntity) {
+        TODO("Not yet implemented")
+    }
+    override suspend fun updatePuntoConteo(form: PuntoConteoEntity) {
+        TODO("Not yet implemented")
+    }
+    override suspend fun deletePuntoConteo(form: PuntoConteoEntity) {
+        TODO("Not yet implemented")
+    }
+
+
     //Especies
     override suspend fun insertSpecieForm(form: SpecieFormEntity) = formDao.insertSpecieForm(form)
     override suspend fun updateSpecieForm(form: SpecieFormEntity) = formDao.updateSpecieForm(form)
     override suspend fun deleteSpecieForm(form: SpecieFormEntity) = formDao.deleteSpecieForm(form)
+    override fun getSpecieFormById(id: Int): Flow<SpecieFormEntity?> = formDao.getSpecieFormById(id)
+    override suspend fun getLatestSpecieFormId(): Int = formDao.getLatestSpecieFormId()
 
     //Seguimiento
 
     override suspend fun insertFollowUpForm(form: FollowUpFormEntity) = formDao.insertFollowUpForm(form)
     override suspend fun updateFollowUpForm(form: FollowUpFormEntity) = formDao.updateFollowUpForm(form)
     override suspend fun deleteFollowUpForm(form: FollowUpFormEntity) = formDao.deleteFollowUpForm(form)
+    override fun getFollowUpFormById(id: Int): Flow<FollowUpFormEntity?> = formDao.getFollowUpFormById(id)
+    override suspend fun getLatestFollowUpFormId(): Int = formDao.getLatestFollowUpFormId()
 
     //Cuadrante
     override suspend fun insertQuadrantForm(form: QuadrantFormEntity) = formDao.insertQuadrantForm(form)
     override suspend fun updateQuadrantForm(form: QuadrantFormEntity) = formDao.updateQuadrantForm(form)
     override suspend fun deleteQuadrantForm(form: QuadrantFormEntity) = formDao.deleteQuadrantForm(form)
+    override fun getQuadrantFormById(id: Int): Flow<QuadrantFormEntity?> = formDao.getQuadrantFormById(id)
+    override suspend fun getLatestQuadrantFormId(): Int = formDao.getLatestQuadrantFormId()
 
     //Ruta
     override suspend fun insertRouteForm(form: RouteFormEntity) = formDao.insertRouteForm(form)
     override suspend fun updateRouteForm(form: RouteFormEntity) = formDao.updateRouteForm(form)
     override suspend fun deleteRouteForm(form: RouteFormEntity) = formDao.deleteRouteForm(form)
+    override fun getRouteFormById(id: Int): Flow<RouteFormEntity?> = formDao.getRouteFormById(id)
+    override suspend fun getLatestRouteFormId(): Int = formDao.getLatestRouteFormId()
 
     //Variación climas
     override suspend fun insertWeatherForm(form: WeatherFormEntity) = formDao.insertWeatherForm(form)
     override suspend fun updateWeatherForm(form: WeatherFormEntity) = formDao.updateWeatherForm(form)
     override suspend fun deleteWeatherForm(form: WeatherFormEntity) = formDao.deleteWeatherForm(form)
-
-    //Busqueda libre
-    override suspend fun insertBusquedaLibre(form: BusquedaLibreEntity) = formDao.insertBusquedaLibre(form)
-    override suspend fun deleteBusquedaLibre(form: BusquedaLibreEntity) = formDao.deleteBusquedaLibre(form)
-    override suspend fun updateBusquedaLibre(form: BusquedaLibreEntity) = formDao.updateBusquedaLibre(form)
-
-  //Punto de conteo
-    override suspend fun insertPuntoConteo(form: PuntoConteoEntity) = formDao.insertPuntoConteo(form)
-    override suspend fun updatePuntoConteo(form: PuntoConteoEntity) = formDao.updatePuntoConteo(form)
-    override suspend fun deletePuntoConteo(form: PuntoConteoEntity) = formDao.deletePuntoConteo(form)
+    override fun getWeatherFormById(id: Int): Flow<WeatherFormEntity?> = formDao.getWeatherFormById(id)
+    override suspend fun getLatestWeatherFormId(): Int = formDao.getLatestWeatherFormId()
 }
 

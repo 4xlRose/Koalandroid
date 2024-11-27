@@ -35,9 +35,11 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,8 +49,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.koadex.AppViewModelProvider
 import com.example.koadex.R
+import com.example.koadex.ui.form.FormQuadrantDBViewModel
+import kotlinx.coroutines.launch
 
 import java.io.File
 
@@ -57,16 +63,23 @@ class FomularioEspecies_ViewModel : ViewModel() {
     val isFileSelected: MutableState<Boolean> = mutableStateOf(false)
 
     @Composable
-    public fun Atras_enviar(
+    fun Atras_enviar(
         navController: NavController,
-        green700: Color
+        green700: Color,
+        navModel: NavigationModel,
+        viewModel: FormQuadrantDBViewModel = viewModel(factory = AppViewModelProvider.Factory)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
+            val generalForm = navModel.getFormById(navModel.savedFormId).collectAsState(initial = null).value
+            val coroutineScope = rememberCoroutineScope()
+
             Button(
-                onClick = { navController.popBackStack() },
+                onClick = {
+                    navController.navigate("TiposForms")
+                          },
                 modifier = Modifier.weight(1f),
                 colors = ButtonDefaults.buttonColors(containerColor = green700)
             ) {
@@ -74,7 +87,18 @@ class FomularioEspecies_ViewModel : ViewModel() {
             }
             Spacer(modifier = Modifier.width(8.dp))
             Button(
-                onClick = { /* Handle form submission */ },
+                onClick = {
+                    coroutineScope.launch {
+                        viewModel.saveQuadrantForm()
+
+                        val specieId = viewModel.getLatestFormId()
+                        generalForm?.idQuadrantForm = specieId
+                        generalForm?.let {
+                            navModel.updateForm(generalForm)
+                        }
+                    }
+                    navController.navigate("Principal")
+                          },
                 modifier = Modifier.weight(1f),
                 colors = ButtonDefaults.buttonColors(containerColor = green700),
                 enabled = isFileSelected.value

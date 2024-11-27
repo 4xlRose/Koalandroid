@@ -41,6 +41,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.FileOpen
 import androidx.compose.material.icons.filled.ArrowBack
+import com.example.koadex.ViewModels.NavigationModel
 
 import com.example.koadex.ui.form.FormPuntoConteoDBViewModel
 import kotlinx.coroutines.launch
@@ -52,15 +53,13 @@ val isFileSelectedFPC: MutableState<Boolean> = mutableStateOf(false)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormularioFaunaPuntoConteo(
-    activity: MainActivity,navController: NavHostController,
+    activity: MainActivity, navController: NavHostController,
     modifier: Modifier = Modifier,
-    viewModelPC: FormPuntoConteoDBViewModel = viewModel(factory = AppViewModelProvider.Factory)
-)
-{
+    navModel: NavigationModel,
+    viewModelPC: FormPuntoConteoDBViewModel = viewModel(factory = AppViewModelProvider.Factory)) {
     if (CameraPermision.value) {
         CameraWindow(activity)
-    } else
-    {
+    } else {
         var numIndividuos by remember { mutableStateOf(1) }
         var alturaObservacion by remember { mutableStateOf("") }
         var tipoAnimalSeleccionado by remember { mutableStateOf("") }
@@ -106,8 +105,7 @@ fun FormularioFaunaPuntoConteo(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color(0xFFFFFFFF))
-        )
-        {
+        ) {
             Spacer(modifier = Modifier.padding(vertical = 5.dp))
 
             // Zona
@@ -272,7 +270,7 @@ fun FormularioFaunaPuntoConteo(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-            viewModelFE.Atras_enviar(navController, green700)
+            viewModelFE.Atras_enviar(navController, green700, navModel)
 /*
             // Botón para guardar el formulario
             Button(
@@ -316,20 +314,19 @@ fun FormularioFaunaPuntoConteo(
 */
                     Spacer(modifier = Modifier.height(50.dp))
 
-        }
+                }
+            }
         }
     }
-}
 
-
-
+/*
 @RequiresApi(Build.VERSION_CODES.P)
 //@Preview(device = "spec:width=800px,height=1340px,dpi=300")
 @Composable
 fun PreviewFormularioPuntoConteo() {
 
-    FormularioFaunaPuntoConteo(activity = MainActivity(),navController = rememberNavController(), modifier = Modifier)
-}
+    FormularioFaunaPuntoConteo(activity = MainActivity(),navController = rememberNavController(), modifier = Modifier, navModel = )
+}*/
 
 @Composable
 public fun Botones_capturaFPC(green700: Color) {

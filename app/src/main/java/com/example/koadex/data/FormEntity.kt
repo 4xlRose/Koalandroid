@@ -1,9 +1,6 @@
 package com.example.koadex.data
 
-import android.graphics.Bitmap
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.room.Entity
-import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.example.koadex.R
 
@@ -398,7 +395,7 @@ data class QuadrantFormEntity(
     var distanceMt: Int = 0, // decimal(2)
     var observations: String = "",
     var heightMt: Int = 0, // decimal(2)
-    var evidences: ByteArray? = byteArrayOf()
+    var evidences: ByteArray = byteArrayOf()
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -519,7 +516,7 @@ data class RouteFormEntity(
     var targetDistance: Int = 0, // decimal(2)
     var lensHeight: Int = 0, // decimal(2)
     var idCheckList: Int, // Foreign Key
-    var evidences: ByteArray? = byteArrayOf(),
+    var evidences: ByteArray = byteArrayOf(),
     var observations: String = ""
 ) {
     override fun equals(other: Any?): Boolean {
@@ -635,7 +632,7 @@ data class WeatherFormEntity(
     var minTemperature: Double = 0.0, // decimal(2)
     var minHumidity: Double = 0.0, // decimal(2)
     var streamMtLevel: Double = 0.0, // decimal(2)
-    var evidences: ByteArray? = byteArrayOf(),
+    var evidences: ByteArray = byteArrayOf(),
     var observations: String = ""
 ) {
     override fun equals(other: Any?): Boolean {

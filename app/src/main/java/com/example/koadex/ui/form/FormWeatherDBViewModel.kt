@@ -4,10 +4,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.room.PrimaryKey
 import com.example.koadex.data.FormRepository
 import com.example.koadex.data.GeneralFormEntity
-import com.example.koadex.data.WeatherEntity
 import com.example.koadex.data.WeatherFormEntity
 import kotlinx.coroutines.flow.Flow
 

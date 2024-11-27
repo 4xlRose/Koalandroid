@@ -57,6 +57,10 @@ class FormSpecieDBViewModel (private val formRepository: FormRepository) : ViewM
             )
         )
     }
+
+    suspend fun getLatestFormId(): Int {
+        return formRepository.getLatestSpecieFormId()
+    }
 }
 
 

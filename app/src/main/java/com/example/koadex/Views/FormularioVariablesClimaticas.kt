@@ -58,6 +58,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.koadex.AppViewModelProvider
 import com.example.koadex.MainActivity
 import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
+import com.example.koadex.ViewModels.NavigationModel
 import com.example.koadex.data.SeasonEntity
 import com.example.koadex.data.WeatherEntity
 import com.example.koadex.ui.form.FormGeneralDBViewModel
@@ -78,6 +79,7 @@ val isFileSelectedFVC: MutableState<Boolean> = mutableStateOf(false)
 fun FormularioVariablesClimaticas(
     activity: MainActivity,
     navController: NavHostController,
+    navModel: NavigationModel,
     //modifier: Modifier = Modifier,
 ) {
 
@@ -107,9 +109,9 @@ fun FormularioVariablesClimaticas(
         containerColor = Color.White
     ) { paddingValues ->
         FormularioVariablesClimaticasScreen(
-
             activity = activity,
             navController = navController,
+            navModel = navModel,
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize() // Asegura que el contenido llene todo el espacio
@@ -124,12 +126,14 @@ fun FormularioVariablesClimaticasScreen(
     activity: MainActivity,
     navController: NavHostController,
     modifier: Modifier = Modifier,
+    navModel: NavigationModel,
     viewModel : FormWeatherDBViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
     FormularioClimaEntry(
         navController = navController,
         formUiState = viewModel.formWeatherUiState,
+        navModel = navModel,
         onFormValueChange = viewModel::updateWeatherUiState,
         onZoneIdChange = viewModel::updateZoneTypeId,
         onSaveClick = {
@@ -148,6 +152,7 @@ fun FormularioClimaEntry(
     activity: MainActivity,
     navController: NavHostController,
     formUiState: WeatherFormUiState,
+    navModel: NavigationModel,
     onFormValueChange: (WeatherFormDetails) -> Unit,
     onZoneIdChange: (Int) -> Unit,
     onSaveClick: () -> Unit,
@@ -220,7 +225,7 @@ fun FormularioClimaEntry(
                 onFormValueChange = onFormValueChange
             )
 
-            viewModel.Atras_enviar(navController, green700)
+            viewModel.Atras_enviar(navController, green700, navModel)
 
             /*// Submit button -PARA PRUEBAS-
         Row(
@@ -428,13 +433,13 @@ fun ClimaInputForm(
         )
     }
 }
-
+/*
 @RequiresApi(Build.VERSION_CODES.P)
 @Preview(device = "spec:width=800px,height=1340px,dpi=300")
 @Composable
 fun VariableClimaticasPreview(){
     FormularioVariablesClimaticas(activity = MainActivity(),navController = rememberNavController())
-}
+}*/
 
 
 @Composable
