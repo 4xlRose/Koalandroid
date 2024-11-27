@@ -23,6 +23,9 @@ interface FormDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertIntoListForms(listForms: List<GeneralFormEntity>)
 
+    @Delete()
+    suspend fun deleteForm(form: GeneralFormEntity)
+
 
     // Métodos de Formulario General
     @Query("SELECT * from general_form WHERE id = :id")

@@ -42,7 +42,9 @@ fun EditProfileScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(16.dp)
+            .background(Color.White)
+        ,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Botón de regreso

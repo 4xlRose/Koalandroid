@@ -12,8 +12,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.FileOpen
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -39,6 +41,8 @@ import com.example.koadex.ui.form.FormFollowDBViewModel
 import com.example.koadex.ui.principal.KoadexViewModel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+
+val isFileSelectedFS: MutableState<Boolean> = mutableStateOf(false)
 
 @RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -175,7 +179,7 @@ fun FormularioSeguimientoScreen(
                         onClick = { onFormValueChange(formUiState.formsFollowUpDetails.copy(change = true)) }, // Marca el botón como seleccionado
                         border = BorderStroke(1.dp, Color.Gray),
                         colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = if (formUiState.formsFollowUpDetails.change) Color(0xFF4E7029) else Color.White,
+                            containerColor = if (formUiState.formsFollowUpDetails.change) Color(0xFF97B96E) else Color.White,
                             contentColor = if (formUiState.formsFollowUpDetails.change) Color.White else Color.Black
                         )
                     ) {
@@ -185,7 +189,7 @@ fun FormularioSeguimientoScreen(
                         onClick = { onFormValueChange(formUiState.formsFollowUpDetails.copy(change = false)) }, // Marca el botón como seleccionado
                         border = BorderStroke(1.dp, Color.Gray),
                         colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = if (!formUiState.formsFollowUpDetails.change) Color(0xFF4E7029) else Color.White,
+                            containerColor = if (!formUiState.formsFollowUpDetails.change) Color(0xFF97B96E) else Color.White,
                             contentColor = if (!formUiState.formsFollowUpDetails.change) Color.White else Color.Black
                         )
                     ) {
@@ -357,15 +361,15 @@ fun FormularioSeguimientoScreen(
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.align(Alignment.Start),
             color = Color.Black)
-        viewModel.Botones_captura(green700)
+        Botones_capturaFS(green700)
 
 
         Spacer(modifier = Modifier.height(16.dp))
 
         // Observaciones
         OutlinedTextField(
-            value = observaciones,
-            onValueChange = { observaciones = it }, // Actualizar el estado
+            value = formUiState.formsFollowUpDetails.observations,
+            onValueChange = { onFormValueChange(formUiState.formsFollowUpDetails.copy(observations = it)) },
             label = { Text("Observaciones", color = Color.DarkGray) },
             modifier = Modifier
                 .fillMaxWidth()
@@ -494,4 +498,39 @@ fun PreviewFormularioSeguimiento(){
         //activity = MainActivity(),
         navController = rememberNavController()
     )
+}
+
+@Composable
+public fun Botones_capturaFS(green700: Color) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Boton_seleccionar_archivoFS(green700)
+        Boton_abrir_camaraFS(green700)
+    }
+}
+
+@Composable
+public fun Boton_abrir_camaraFS(green700: Color) {
+    Button(
+        onClick = { /* Handle photo capture */ isFileSelectedFS.value = true },
+        colors = ButtonDefaults.buttonColors(containerColor = green700)
+    ) {
+        Icon(Icons.Default.Camera, contentDescription = "Tomar foto", tint = Color.White)
+        Spacer(modifier = Modifier.width(10.dp))
+        Text("Tomar foto", color = Color.White)
+    }
+}
+
+@Composable
+public fun Boton_seleccionar_archivoFS(green700: Color) {
+    Button(
+        onClick = { /* Handle file selection */ isFileSelectedFS.value = true},
+        colors = ButtonDefaults.buttonColors(containerColor = green700)
+    ) {
+        Icon(Icons.Default.FileOpen, contentDescription = "Seleccionar archivo", tint = Color.White)
+        Spacer(modifier = Modifier.width(10.dp))
+        Text("Elige archivo", color = Color.White)
+    }
 }

@@ -60,6 +60,8 @@ import com.example.koadex.R
 import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
 import com.example.koadex.ui.principal.KoadexViewModel
 
+val isFileSelectedFC: MutableState<Boolean> = mutableStateOf(false)
+
 @RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -144,7 +146,7 @@ fun FormularioCuadranteScreen(
             horizontalAlignment = Alignment.Start
         ) {
 
-            Spacer(modifier = Modifier.height(30.dp))
+            Spacer(modifier = Modifier.height(40.dp))
 
             // Código
             OutlinedTextField(
@@ -400,7 +402,7 @@ fun FormularioCuadranteScreen(
             Text("Evidencias", style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.align(Alignment.Start),
                 color = Color.Black)
-            viewModel.Botones_captura(green700)
+            Botones_capturaFC(green700)
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -615,4 +617,39 @@ private fun Boton_seleccionar_archivo(green700: Color) {
 @Composable
 fun FormularioCuadrantePreview() {
     FormularioCuadrante(navController = rememberNavController())
+}
+
+@Composable
+public fun Botones_capturaFC(green700: Color) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Boton_seleccionar_archivoFC(green700)
+        Boton_abrir_camaraFC(green700)
+    }
+}
+
+@Composable
+public fun Boton_abrir_camaraFC(green700: Color) {
+    Button(
+        onClick = { /* Handle photo capture */ isFileSelectedFC.value = true },
+        colors = ButtonDefaults.buttonColors(containerColor = green700)
+    ) {
+        Icon(Icons.Default.Camera, contentDescription = "Tomar foto", tint = Color.White)
+        Spacer(modifier = Modifier.width(10.dp))
+        Text("Tomar foto", color = Color.White)
+    }
+}
+
+@Composable
+public fun Boton_seleccionar_archivoFC(green700: Color) {
+    Button(
+        onClick = { /* Handle file selection */ isFileSelectedFC.value = true},
+        colors = ButtonDefaults.buttonColors(containerColor = green700)
+    ) {
+        Icon(Icons.Default.FileOpen, contentDescription = "Seleccionar archivo", tint = Color.White)
+        Spacer(modifier = Modifier.width(10.dp))
+        Text("Elige archivo", color = Color.White)
+    }
 }

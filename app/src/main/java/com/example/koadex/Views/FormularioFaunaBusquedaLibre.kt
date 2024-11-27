@@ -2,6 +2,7 @@
 
 package com.example.koadex.Views
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -24,11 +25,17 @@ import androidx.navigation.compose.rememberNavController
 import com.example.koadex.R
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.filled.Camera
+import androidx.compose.material.icons.filled.FileOpen
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
 import com.example.koadex.ViewModels.FormularioFaunaBusquedaLibreViewModel
 
+val isFileSelectedFBL: MutableState<Boolean> = mutableStateOf(false)
+
+@SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormularioFaunaBusquedaLibre(navController: NavHostController, modifier: Modifier = Modifier) {
@@ -37,7 +44,9 @@ fun FormularioFaunaBusquedaLibre(navController: NavHostController, modifier: Mod
     var tipoAnimalSeleccionado by remember { mutableStateOf("") }
     var zonaSeleccionada by remember { mutableStateOf("") }
     var tipoObservacionSeleccionada by remember { mutableStateOf("") }
-    val actionButtonColors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4E7029))
+
+    val isFileSelected: MutableState<Boolean> = mutableStateOf(false)
+
 
     val FaunaBViewModel = FormularioFaunaBusquedaLibreViewModel()
     val viewModel = FomularioEspecies_ViewModel()
@@ -181,7 +190,8 @@ fun FormularioFaunaBusquedaLibre(navController: NavHostController, modifier: Mod
             Text("Evidencias", style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.align(Alignment.Start),
                 color = Color.Black)
-            viewModel.Botones_captura(green700)
+
+            Botones_capturaFBL(green700)
 
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -212,4 +222,39 @@ fun FormularioFaunaBusquedaLibre(navController: NavHostController, modifier: Mod
 @Composable
 fun FormularioFaunaBusquedaLibre() {
     FormularioFaunaBusquedaLibre(navController = rememberNavController(), modifier = Modifier)
+}
+
+@Composable
+fun Botones_capturaFBL(green700: Color) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Boton_seleccionar_archivoFBL(green700)
+        Boton_abrir_camaraFBL(green700)
+    }
+}
+
+@Composable
+fun Boton_abrir_camaraFBL(green700: Color) {
+    Button(
+        onClick = { /* Handle photo capture */ isFileSelectedFBL.value = true },
+        colors = ButtonDefaults.buttonColors(containerColor = green700)
+    ) {
+        Icon(Icons.Default.Camera, contentDescription = "Tomar foto", tint = Color.White)
+        Spacer(modifier = Modifier.width(10.dp))
+        Text("Tomar foto", color = Color.White)
+    }
+}
+
+@Composable
+fun Boton_seleccionar_archivoFBL(green700: Color) {
+    Button(
+        onClick = { /* Handle file selection */ isFileSelectedFBL.value = true},
+        colors = ButtonDefaults.buttonColors(containerColor = green700)
+    ) {
+        Icon(Icons.Default.FileOpen, contentDescription = "Seleccionar archivo", tint = Color.White)
+        Spacer(modifier = Modifier.width(10.dp))
+        Text("Elige archivo", color = Color.White)
+    }
 }

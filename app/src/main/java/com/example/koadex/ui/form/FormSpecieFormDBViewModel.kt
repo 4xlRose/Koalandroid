@@ -23,6 +23,40 @@ class FormSpecieDBViewModel (private val formRepository: FormRepository) : ViewM
     suspend fun saveEspecieForm() {
         formRepository.insertSpecieForm(formEspeciesUiState.formsEspecieDetails.toEntity())
     }
+
+    // Actualizar el ID de la Zona
+    fun updateZoneTypeId(zoneTypeId: Int) {
+        formEspeciesUiState = formEspeciesUiState.copy(
+            formsEspecieDetails = formEspeciesUiState.formsEspecieDetails.copy(idZoneType = zoneTypeId)
+        )
+    }
+
+    // Actualizar tipo de animal
+    fun updateAnimalType(animalType: Int) {
+        formEspeciesUiState = formEspeciesUiState.copy(
+            formsEspecieDetails = formEspeciesUiState.formsEspecieDetails.copy(
+                idAnimalType = animalType
+            )
+        )
+    }
+
+    // Actualizar tipo de observacion
+    fun updateObservationType(observationType: Int) {
+        formEspeciesUiState = formEspeciesUiState.copy(
+            formsEspecieDetails = formEspeciesUiState.formsEspecieDetails.copy(
+                idObservType = observationType
+            )
+        )
+    }
+
+    // Actualizar cantidad
+    fun updateQuantity(quantity: Int) {
+        formEspeciesUiState = formEspeciesUiState.copy(
+            formsEspecieDetails = formEspeciesUiState.formsEspecieDetails.copy(
+                quantity = quantity
+            )
+        )
+    }
 }
 
 

@@ -252,7 +252,8 @@ data class FollowUpFormEntity(
     var idCoverage: Int, // Foreign Key
     var cropType: String = "",
     var idDisturbance: Int, // Foreign Key
-    var evidences: String
+    var evidences: String,
+    var observations: String = "" // <- AGREGO MARIA
 )
 
 @Entity(tableName = "coverage")
@@ -447,5 +448,7 @@ data class WeatherFormEntity(
     var maxHumidity: Double = 0.0, // decimal(2)
     var minTemperature: Double = 0.0, // decimal(2)
     var minHumidity: Double = 0.0, // decimal(2)
-    var streamMtLevel: Double = 0.0 // decimal(2)
+    var streamMtLevel: Double = 0.0, // decimal(2)
+    var evidences: String = "", // <- AGREGO MARIA
+    var observations: String = "" // <- AGREGO MARIA
 )
