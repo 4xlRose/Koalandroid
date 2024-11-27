@@ -51,6 +51,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.koadex.AppViewModelProvider
@@ -162,7 +163,7 @@ fun FormularioScreen(
         val green700 = colorResource(id = R.color.green_700)
         val (currentZone, setCurrentZone) = remember { mutableStateOf("") }
 
-        val plateText = remember { mutableStateOf("")}
+        val guayaPlateText = remember { mutableStateOf("")}
         val routeWidthText = remember { mutableStateOf("")}
         val targetDistanceText = remember { mutableStateOf("")}
         val lensHeightText = remember { mutableStateOf("")}
@@ -269,10 +270,10 @@ fun FormularioScreen(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 OutlinedTextField(
-                    value = plateText.value,
+                    value = guayaPlateText.value,
                     onValueChange = { newValue ->
                         if (newValue.isEmpty() || newValue.matches(Regex("^\\d*$"))) {
-                            plateText.value = newValue
+                            guayaPlateText.value = newValue
                             val guayaPlate = newValue.toIntOrNull() ?: 0
                             onFormValueChange(formUiState.formsRouteDetails.copy(guayaPlate = guayaPlate))
                         }
@@ -349,61 +350,28 @@ fun FormularioScreen(
 
                     )
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        Column(
-                            modifier = Modifier.weight(0.9f)
-                        ) {
-                            CheckboxItem(
-                                checked = checklist[0],
-                                onCheckedChange = { checklist[0] = it },
-                                text = stringResource(R.string.instalada),
-                                color = Color.Black // Color negro para el texto
-                            )
-                            CheckboxItem(
-                                checked = checklist[1],
-                                onCheckedChange = { checklist[1] = it },
-                                text = stringResource(R.string.programada),
-                                color = Color.Black // Color negro para el texto
-                            )
-                        }
+                    val checklistSelected = remember { mutableStateListOf<Int>() } // Índices seleccionados
 
-                        Column(
-                            modifier = Modifier.weight(0.8f)
-                        ) {
-                            CheckboxItem(
-                                checked = checklist[2],
-                                onCheckedChange = { checklist[2] = it },
-                                text = stringResource(R.string.memoria),
-                                color = Color.Black // Color negro para el texto
-                            )
-                            CheckboxItem(
-                                checked = checklist[3],
-                                onCheckedChange = { checklist[3] = it },
-                                text = stringResource(R.string.prendida),
-                                color = Color.Black // Color negro para el texto
-                            )
-                        }
-
-                        Column(
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            CheckboxItem(
-                                checked = checklist[4],
-                                onCheckedChange = { checklist[4] = it },
-                                text = stringResource(R.string.prueba_gateo),
-                                color = Color.Black // Color negro para el texto
-                            )
-                            CheckboxItem(
-                                checked = checklist[5],
-                                onCheckedChange = { checklist[5] = it },
-                                text = stringResource(R.string.letrero_camara),
-                                color = Color.Black // Color negro para el texto
-                            )
-                        }
-                    }
+                    ButtonChecklistWithColumns(
+                        selectedItems = checklistSelected,
+                        onItemSelected = { index ->
+                            if (checklistSelected.contains(index)) {
+                                checklistSelected.remove(index) // Deseleccionar si ya está seleccionado
+                            } else {
+                                checklistSelected.add(index) // Agregar al seleccionar
+                            }
+                        },
+                        buttonLabels = listOf(
+                            stringResource(R.string.instalada),
+                            stringResource(R.string.programada),
+                            stringResource(R.string.memoria),
+                            stringResource(R.string.prendida),
+                            stringResource(R.string.prueba_gateo),
+                            stringResource(R.string.letrero_camara)
+                        ),
+                        color = Color.Black, // Color de texto predeterminado
+                        selectedColor = Color(0xFF4E7029) // Color verde al seleccionar
+                    )
                 }
             }
             Spacer(modifier = Modifier.height(12.dp))
@@ -446,31 +414,97 @@ fun FormularioScreen(
 }
 
 @Composable
-fun CheckboxItem(
-    checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit,
+fun ButtonChecklistWithColumns(
+    selectedItems: MutableList<Int>, // Índices seleccionados
+    onItemSelected: (Int) -> Unit,
+    buttonLabels: List<String>, // Etiquetas de los botones
+    color: Color = Color.Black,
+    selectedColor: Color = Color(0xFF4E7029) // Color verde al seleccionar
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        val columnSize = buttonLabels.size / 3 + if (buttonLabels.size % 3 > 0) 1 else 0
+
+        // Primera columna
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            buttonLabels.take(columnSize).forEachIndexed { index, label ->
+                ChecklistButton(
+                    text = label,
+                    isSelected = selectedItems.contains(index),
+                    onClick = { onItemSelected(index) },
+                    color = color,
+                    selectedColor = selectedColor
+                )
+            }
+        }
+
+        // Segunda columna
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            buttonLabels.drop(columnSize).take(columnSize).forEachIndexed { index, label ->
+                ChecklistButton(
+                    text = label,
+                    isSelected = selectedItems.contains(index + columnSize),
+                    onClick = { onItemSelected(index + columnSize) },
+                    color = color,
+                    selectedColor = selectedColor
+                )
+            }
+        }
+
+        // Tercera columna
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            buttonLabels.drop(2 * columnSize).forEachIndexed { index, label ->
+                ChecklistButton(
+                    text = label,
+                    isSelected = selectedItems.contains(index + 2 * columnSize),
+                    onClick = { onItemSelected(index + 2 * columnSize) },
+                    color = color,
+                    selectedColor = selectedColor
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun ChecklistButton(
     text: String,
-    color: Color = Color.Black // Color por defecto negro
+    isSelected: Boolean,
+    onClick: () -> Unit,
+    color: Color,
+    selectedColor: Color
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 2.dp),
+            .padding(vertical = 2.dp)
+            .clickable(onClick = onClick), // Hacer clic en cualquier parte del Row
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Checkbox(
-            checked = checked,
-            onCheckedChange = onCheckedChange,
-            modifier = Modifier.size(20.dp),
-            colors = CheckboxDefaults.colors(
-                checkedColor = Color(0xFF4E7029)
-            )
+        Box(
+            modifier = Modifier
+                .size(25.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .background(if (isSelected) selectedColor else Color.White)
+                .border(1.dp, selectedColor, RoundedCornerShape(8.dp))
         )
+        Spacer(modifier = Modifier.width(8.dp)) // Espaciado entre botón y texto
+
         Text(
             text = text,
-            style = MaterialTheme.typography.bodySmall,
-            modifier = Modifier.padding(start = 4.dp),
-            color = Color.Black
+            color = if (isSelected) selectedColor else color,
+            style = MaterialTheme.typography.bodyMedium.copy(fontSize = 16.sp, fontWeight = FontWeight.Medium)
         )
     }
 }
