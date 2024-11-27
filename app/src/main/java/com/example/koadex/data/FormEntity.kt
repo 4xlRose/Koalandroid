@@ -128,21 +128,21 @@ data class FormStateEntity(
 data class WeatherEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    var weather: String = "",
+    var type: String = "",
 )
 
 @Entity(tableName = "season")
 data class SeasonEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    var season: String = "",
+    var type: String = "",
 )
 
 @Entity(tableName = "zone")
 data class ZoneEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    var zone: String = "",
+    var type: String = "",
 )
 
 
@@ -198,28 +198,28 @@ data class SpecieFormEntity(
 data class ZoneTypeEntity(
     @PrimaryKey
     val id: Int = 0,
-    var zoneType: String = "",
+    var typeName: String = "",
 )
 
 @Entity(tableName = "animal_type")
 data class AnimalTypeEntity(
     @PrimaryKey
     val id: Int = 0,
-    var animalType: String = "",
+    var typeName: String = "",
 )
 
 @Entity(tableName = "observation_type")
 data class ObservTypeEntity(
     @PrimaryKey
     val id: Int = 0,
-    var observType: String = "",
+    var typeName: String = "",
 )
 
 @Entity(tableName = "height_type")
 data class HeightTypeEntity(
     @PrimaryKey
     val id: Int = 0,
-    var heightType: String = "",
+    var typeName: String = "",
 )
 
 
@@ -260,14 +260,14 @@ data class FollowUpFormEntity(
 data class CoverageEntity(
     @PrimaryKey
     val id: Int = 0,
-    var coverage: String = "" //char(2)
+    var type: String = "" //char(2)
 )
 
 @Entity(tableName = "disturbance")
 data class DisturbanceEntity(
     @PrimaryKey
     val id: Int = 0,
-    var disturbance: String = ""
+    var type: String = ""
 )
 
 
@@ -339,14 +339,14 @@ data class MidQuadrantEntity(
 data class SubQuadrantEntity(
     @PrimaryKey
     val id: Int = 0,
-    var subQuadrant: String = ""
+    var quadrant: String = ""
 )
 
 @Entity(tableName = "habitat")
 data class HabitatEntity(
     @PrimaryKey
     val id: Int = 0,
-    var habitatType: String = ""
+    var type: String = ""
 )
 
 

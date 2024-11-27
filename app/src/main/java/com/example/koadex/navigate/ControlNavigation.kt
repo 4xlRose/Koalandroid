@@ -119,7 +119,7 @@ fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modi
             PerfilScreen(navController = navController, user = model.loggedUser)
         }
         composable("EditProfileScreen") {
-            EditProfileScreen(navController = navController, user = model.loggedUser, navModel = model)
+            EditProfileScreen(navController = navController, user = model.loggedUser)
         }
 
         //Tipos de formulario
