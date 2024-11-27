@@ -23,16 +23,16 @@ class FormsPredeterminedViewModel(private val formRepository: FormRepository) : 
     //Guardar el clima
     private suspend fun inicializarClimas() {
         val listaClimas = listOf(
-            WeatherEntity(1,"Soleado"),
-            WeatherEntity(2,"Nublado"),
-            WeatherEntity(3,"Lluvioso"))
+            WeatherEntity(1,"soleado"),
+            WeatherEntity(2,"nublado"),
+            WeatherEntity(3,"lluvioso"))
         formRepository.inserWeatherBegin(listaClimas)
     }
     private suspend fun inicializarEpocas() {
         val listaEpocas = listOf(
-            SeasonEntity(1,"Verano"),
+            SeasonEntity(1,"verano"),
             //SeasonEntity(2,"Primavera"),
-            SeasonEntity(3,"Invierno"),
+            SeasonEntity(3,"invierno"),
             //SeasonEntity(4,"Otoño")
             )
         formRepository.insertSeasonBegin(listaEpocas)

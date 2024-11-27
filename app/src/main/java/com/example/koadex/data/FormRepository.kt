@@ -44,10 +44,12 @@ interface FormRepository {
 
     //Clima
     fun getWeatherById(id: Int): Flow<WeatherEntity?>
+    fun getWeatherByName(name: String): Flow<WeatherEntity?>
     suspend fun inserWeatherBegin(weathers: List<WeatherEntity>)
 
     //Epoca
     fun getSeasonById(id: Int): Flow<SeasonEntity?>
+    fun getSeasonByName(name: String): Flow<SeasonEntity?>
     suspend fun insertSeasonBegin(seasons: List<SeasonEntity>)
 
     //Zona tipo
