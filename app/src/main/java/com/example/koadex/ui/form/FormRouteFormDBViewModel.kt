@@ -28,7 +28,6 @@ data class RouteFormUiState(
 
 data class RouteFormDetails(
     val id: Int = 0,
-    var idGeneralForm: Int = 0, // Foreign Key
     var idZoneType: Int = 0, // Foreign Key
     var idCamera: Int = 0, // Foreign Key
     var  guayaPlate: Int = 0,
@@ -41,7 +40,6 @@ data class RouteFormDetails(
 )
 
 fun RouteFormDetails.toEntity() : RouteFormEntity = RouteFormEntity(
-    idGeneralForm = idGeneralForm,
     idZoneType = idZoneType,
     idCamera = idCamera,
     guayaPlate = guayaPlate,

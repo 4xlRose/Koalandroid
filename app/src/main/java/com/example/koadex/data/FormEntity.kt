@@ -65,12 +65,12 @@ data class GeneralFormEntity(
     var idUser: Int, // Foreign Key
     var idWeather: Int, // Foreign Key
     var idSeason: Int, // Foreign Key
-    var place: String = ""
-    /*var idSpecieForm: Int, // Foreign Key
+    var place: String = "",
+    var idSpecieForm: Int, // Foreign Key
     var idFollowUpForm: Int, // Foreign Key
     var idQuadrantForm: Int, // Foreign Key
     var idRouteForm: Int, // Foreign Key
-    var idWeatherForm: Int // Foreign Key*/
+    var idWeatherForm: Int // Foreign Key
 )
 
 @Entity(tableName = "user"/*,
@@ -182,7 +182,6 @@ data class ZoneEntity(
 data class SpecieFormEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    var idGeneralForm: Int, // Foreign Key
     var transect: String = "",
     var idZoneType: Int, // Foreign Key
     var idAnimalType: Int, // Foreign Key
@@ -248,7 +247,6 @@ data class HeightTypeEntity(
 data class FollowUpFormEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    var idGeneralForm: Int, // Foreign Key
     var followUp: Boolean = false,
     var change: Boolean = false,
     var idCoverage: Int, // Foreign Key
@@ -308,7 +306,6 @@ data class DisturbanceEntity(
 data class QuadrantFormEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    var idGeneralForm: Int, // Foreign Key
     var idSuperQuadrant: Int, // Foreign Key
     var idMidQuadrant: Int, // Foreign Key
     var idSubQuadrant: Int, // Foreign Key
@@ -382,10 +379,9 @@ data class HabitatEntity(
 data class RouteFormEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    var idGeneralForm: Int, // Foreign Key
     var idZoneType: Int, // Foreign Key
     var idCamera: Int, // Foreign Key
-    var  guayaPlate: Int = 0,
+    var guayaPlate: Int = 0,
     var routeWidth: Int = 0, // decimal(2)
     var targetDistance: Int = 0, // decimal(2)
     var lensHeight: Int = 0, // decimal(2)
@@ -445,7 +441,6 @@ data class CheckEntity(
 data class WeatherFormEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    var idGeneralForm: Int, // Foreign Key
     var idZoneType: Int, // Foreign Key
     var rainfall: Double = 0.0, // decimal(2)
     var maxTemperature: Double = 0.0, // decimal(2)

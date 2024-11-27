@@ -31,7 +31,6 @@ data class QuadrantFormUiState(
 
 data class QuadrantFormDetails(
     val id: Int = 0,
-    var idGeneralForm: Int = 0, // Foreign Key
     var idSuperQuadrant: Int = 0, // Foreign Key
     var idMidQuadrant: Int = 0, // Foreign Key
     var idSubQuadrant: Int = 0, // Foreign Key
@@ -47,7 +46,6 @@ data class QuadrantFormDetails(
 )
 
 fun QuadrantFormDetails.toEntity() : QuadrantFormEntity = QuadrantFormEntity(
-    idGeneralForm = idGeneralForm,
     idSuperQuadrant = idSuperQuadrant,
     idMidQuadrant = idMidQuadrant,
     idSubQuadrant = idSubQuadrant,

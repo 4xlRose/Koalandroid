@@ -39,7 +39,6 @@ data class WeatherFormUiState(
 )
 data class WeatherFormDetails(
     val id: Int = 0,
-    var idGeneralForm: Int = 0, // Foreign Key
     var idZoneType: Int = 0, // Foreign Key
     var rainfall: Double = 0.0, // decimal(2)
     var maxTemperature: Double = 0.0, // decimal(2)
@@ -50,7 +49,6 @@ data class WeatherFormDetails(
 )
 
 fun WeatherFormDetails.toEntity() : WeatherFormEntity = WeatherFormEntity(
-    idGeneralForm = idGeneralForm,
     idZoneType = idZoneType,
     rainfall = rainfall,
     maxTemperature = maxTemperature,

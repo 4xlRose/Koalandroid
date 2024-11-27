@@ -111,7 +111,8 @@ fun Configuracion(
                 Alerta_cerrar_sesion(
                     showLogoutDialog = showLogoutDialog,
                     model = model,
-                    navController = navController)
+                    navController = navController
+                )
             }
         }
     }
@@ -234,7 +235,6 @@ private fun Preferencias_perfil(
             )
         )
     }
-
     // Editar perfil
     ProfileItem(
         icon = Icons.Default.Edit,
