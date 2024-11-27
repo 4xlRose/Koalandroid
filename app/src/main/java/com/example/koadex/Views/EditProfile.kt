@@ -92,12 +92,6 @@ fun EditProfileScreen(
         Spacer(modifier = Modifier.height(32.dp))
 
         val couroutineScope = rememberCoroutineScope()
-        val userUpdate = {
-            navModel.loggedUser = user
-            couroutineScope.launch {
-                navModel.updateUser(user)
-            }
-        }
 
         // Botón Guardar
         Button(
@@ -106,7 +100,9 @@ fun EditProfileScreen(
                 //user.email = email
                 //user.password = password
                 user.phone = phone
-                userUpdate()
+                couroutineScope.launch {
+                    navModel.updateUser(user)
+                }
                 navController.navigate("PerfilScreen")
                       },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4E7029)),

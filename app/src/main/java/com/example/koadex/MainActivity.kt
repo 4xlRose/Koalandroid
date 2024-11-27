@@ -3,8 +3,6 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -14,14 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import com.example.koadex.ui.theme.KoadexTheme
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.NavController
-import androidx.compose.material3.MaterialTheme
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.room.util.newStringBuilder
 import com.auth0.android.Auth0
 
 
@@ -31,7 +23,6 @@ class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
         account = Auth0.getInstance(
             "tplWesPliZAjIckkDPfCQETXZ9IDkJ8T",

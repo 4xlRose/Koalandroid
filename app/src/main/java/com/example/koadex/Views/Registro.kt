@@ -111,8 +111,7 @@ fun RegistroContenido(
                     .setScope("openid profile email")
                     .start(object : Callback<Credentials, AuthenticationException> {
                         override fun onSuccess(result: Credentials) {
-                            onSuccess(result)
-                            return
+                            println("Successfully registered ${result.user}")
                         }
 
                         override fun onFailure(error: AuthenticationException) {
