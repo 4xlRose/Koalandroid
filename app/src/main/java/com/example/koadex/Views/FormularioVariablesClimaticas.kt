@@ -422,3 +422,40 @@ fun ClimaInputForm(
 fun VariableClimaticasPreview(){
     FormularioVariablesClimaticas(navController = rememberNavController())
 }
+
+
+@Composable
+public fun Botones_capturaFVC(green700: Color) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Boton_seleccionar_archivoFVC(green700)
+        Boton_abrir_camaraFVC(green700)
+    }
+}
+
+@Composable
+public fun Boton_abrir_camaraFVC(green700: Color) {
+    Button(
+        onClick = { /* CameraPermision.value = true; */ isFileSelectedFVC.value = true },
+        colors = ButtonDefaults.buttonColors(containerColor = green700)
+    ) {
+        Icon(Icons.Default.Camera, contentDescription = "Tomar foto", tint = Color.White)
+        Spacer(modifier = Modifier.width(10.dp))
+        Text("Tomar foto", color = Color.White)
+    }
+}
+
+@Composable
+public fun Boton_seleccionar_archivoFVC(green700: Color) {
+    Button(
+        onClick = { /* Handle file selection */ isFileSelectedFVC.value = true},
+        colors = ButtonDefaults.buttonColors(containerColor = green700)
+    ) {
+        Icon(Icons.Default.FileOpen, contentDescription = "Seleccionar archivo", tint = Color.White)
+        Spacer(modifier = Modifier.width(10.dp))
+        Text("Elige archivo", color = Color.White)
+    }
+}
+

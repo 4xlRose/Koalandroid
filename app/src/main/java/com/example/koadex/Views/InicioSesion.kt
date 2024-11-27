@@ -2,8 +2,10 @@ package com.example.koadex.Views
 
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,11 +13,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -28,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -70,8 +77,7 @@ fun IniciarSesionFondo(navController: NavHostController,
                        model: NavigationModel,
                        modifier: Modifier = Modifier
 ) {
-    var loggedIn by remember { mutableStateOf(false) }
-    var credentials by remember { mutableStateOf<Credentials?>(null) }
+    val logged = remember { mutableStateOf(false) }
     val fondo = painterResource(R.drawable.login)
 
     Box (
@@ -84,16 +90,14 @@ fun IniciarSesionFondo(navController: NavHostController,
             modifier = Modifier
                 .fillMaxSize()
         )
-        if (loggedIn) {
-            Principal(navController, model.loggedUser)
-        } else {
+        if (!logged.value) {
             IniciarSesionLogInContenido(
                 navController = navController,
                 account = account,
                 model = model,
                 onLoginSuccess = {
-                    credentials = it
-                    loggedIn = true
+                    navController.navigate("Principal")
+                    logged.value = true
                 },
                 modifier = Modifier
             )
@@ -113,102 +117,113 @@ fun IniciarSesionLogInContenido(
     var password by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
     val green700 = colorResource(id = R.color.green_700)
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(start = 16.dp, top = 50.dp, end = 16.dp, bottom = 16.dp)
+    val green900 = colorResource(id = R.color.verde_1) // Assuming you have this color defined
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        //verticalArrangement = Arrangement.Center
     ) {
-        IconButton(
-            onClick = {
-                navController.navigate("InicioCarga")
-            },
-
+        Spacer(modifier = Modifier.height(40.dp))
+        // Boton para regresar
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            IconButton(
+                onClick = { navController.navigate("InicioCarga") },
+                modifier = Modifier.size(50.dp)
             ) {
-            Icon(
-                Icons.Filled.KeyboardArrowLeft, contentDescription = "Izquierda",
-                tint = Color.White,
-                modifier = Modifier
-                    .size(size = 50.dp)
-            )
+                Icon(
+                    Icons.Filled.KeyboardArrowLeft,
+                    contentDescription = "Regresar",
+                    tint = Color.White,
+                    modifier = Modifier.size(40.dp)
+                )
+            }
         }
-        Spacer(
-            modifier = modifier
-                .padding(50.dp)
-        )
-        Text(
-            text = stringResource(R.string.bienvenida),
-            fontSize = 40.sp,
-            color = Color.White,
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(
-            modifier = modifier
-                .padding(55.dp)
-        )
-        Text(
-            text = stringResource(R.string.iniciar_sesion2),
-            fontSize = 25.sp,
-            color = Color.Black,
-            fontWeight = FontWeight.Bold
-        )
-        OutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
-            label = {
-                Text(
-                    stringResource(R.string.email),
-                    color = Color.Black
-                )
-            },
-            modifier = modifier
-                .fillMaxWidth(),
 
-            )
-
-        OutlinedTextField(
-            value = password,
-            onValueChange = {
-                password = it
-            },
-            label = {
-                Text(
-                    stringResource(R.string.contrasena),
-                    color = Color.Black
-                )
-            },
-            visualTransformation = PasswordVisualTransformation(),
-            modifier = modifier
+        Column (
+            modifier = Modifier
                 .fillMaxWidth()
-        )
-        TextButton(
-            onClick = {
-                navController.navigate("OlvidoContrasena")
-            },
-            modifier = modifier
-                .align(Alignment.End),
-
-            ) {
+                .fillMaxSize()
+                .padding(horizontal = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ){
             Text(
-                text = stringResource(R.string.olvidaste_contrasena),
-                fontSize = 15.sp,
-                color = Color(0xff4e7029),
-                textAlign = TextAlign.End,
-                modifier = modifier
+                text = stringResource(R.string.iniciar_sesion2),
+                color = Color.Black,
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Left,
+                modifier = Modifier
                     .fillMaxWidth()
+                    .padding(bottom = 16.dp)
             )
-        }
-        // Mostrar mensaje de error si existe
-        if (errorMessage.isNotEmpty())
-            errorMessage?.let {
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(text = "Usuario o contraseña incorrectos", color = Color.Red)
 
-            } else {
-            Text(text = "                                ")
-        }
-        Column(modifier = Modifier
-            .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally) {
-            Button(
+            // Email TextField with Email Icon
+            OutlinedTextField(
+                value = email,
+                onValueChange = { email = it },
+                label = { Text("Correo electrónico") },
+                leadingIcon = {
+                    Icon(
+                        Icons.Filled.Email,
+                        contentDescription = "Email",
+                        tint = green700
+                    )
+                },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Password TextField with Lock Icon
+            OutlinedTextField(
+                value = password,
+                onValueChange = { password = it },
+                label = { Text("Contraseña") },
+                leadingIcon = {
+                    Icon(
+                        Icons.Filled.Lock,
+                        contentDescription = "Contraseña",
+                        tint = green700
+                    )
+                },
+                visualTransformation = PasswordVisualTransformation(),
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true
+            )
+
+            // Forgot Password Link
+            TextButton(
+                onClick = { navController.navigate("OlvidoContrasena") },
+                modifier = Modifier.align(Alignment.End)
+            ) {
+                Text(
+                    text = "¿Olvidaste tu contraseña?",
+                    color = green700,
+                    fontSize = 18.sp,
+                )
+            }
+
+            // Error Message
+            if (errorMessage.isNotEmpty()) {
+                Text(
+                    text = errorMessage,
+                    color = Color.Red,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Login Button with Elevated Style
+            ElevatedButton(
                 onClick = {
                     loginWithUsernamePassword(
                         account = account,
@@ -217,33 +232,48 @@ fun IniciarSesionLogInContenido(
                         password = password,
                         onSuccess = onLoginSuccess,
                         onError = { message ->
-                            errorMessage =
-                                message // Actualiza el mensaje de error si ocurre un problema
-                        })
+                            errorMessage = message
+                        }
+                    )
                 },
-                modifier = Modifier.padding(5.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = green700,contentColor = Color.White)
-                ,
+                colors = ButtonDefaults.elevatedButtonColors(
+                    containerColor = green700,
+                    contentColor = Color.White
+                ),
+                elevation = ButtonDefaults.elevatedButtonElevation(
+                    defaultElevation = 6.dp,
+                    pressedElevation = 2.dp
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
             ) {
                 Text(
-                    text = stringResource(R.string.entrar),
+                    text = "Iniciar Sesión",
                     fontWeight = FontWeight.Bold,
-                    color = Color.White
+                    fontSize = 18.sp
                 )
             }
-            Button(
-                onClick = {
-                    navController.navigate("Registro")
-                },
 
-                modifier = Modifier.padding(5.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = green700,contentColor = Color.White)
+            Spacer(modifier = Modifier.height(16.dp))
 
+            // Register Button with Outlined Style
+            OutlinedButton(
+                onClick = { navController.navigate("Registro") },
+                border = ButtonDefaults.outlinedButtonBorder.copy(
+                    brush = SolidColor(green900)
+                ),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = green900
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
             ) {
                 Text(
-                    text = stringResource(R.string.registrarse),
+                    text = "Registrarse",
                     fontWeight = FontWeight.Bold,
-                    color = Color.White
+                    fontSize = 18.sp
                 )
             }
         }
@@ -283,6 +313,9 @@ private fun loginWithUsernamePassword(
 
                 processUser(model.loggedUser.email)
                 println("Logged as " + model.loggedUser.email)
+
+                model.accessToken = result.accessToken
+
                 onSuccess(result)
             }
 

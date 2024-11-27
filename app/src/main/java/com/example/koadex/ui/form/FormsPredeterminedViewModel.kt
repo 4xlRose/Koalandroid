@@ -146,16 +146,12 @@ class FormsPredeterminedViewModel(private val formRepository: FormRepository) : 
 
     private suspend fun inicializarUsuariosPredeterminados() {
         val allUsers = formRepository.getAllUsers().first()
-        if (allUsers.isNotEmpty()) {
-            formRepository.deleteAllUsers()
+        if (allUsers.isEmpty()) {
             formRepository.insertUser(koalandroidUser)
-            formRepository.resetUserTable()
-            formRepository.deleteAllUsers()
-        }
+            formRepository.insertUser(siUser)
+            formRepository.insertUser(pepeUser)
 
-        formRepository.insertUser(koalandroidUser)
-        formRepository.insertUser(siUser)
-        formRepository.insertUser(pepeUser)
+        }
     }
 
     suspend fun inicializarTablasPredeterminadas() {
@@ -221,4 +217,3 @@ private val pepeUser = UserEntity(
     idZone = 0,
     profilePicture = R.drawable.profilepicture // Recurso de imagen predeterminado
 )
-

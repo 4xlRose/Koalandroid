@@ -72,7 +72,18 @@ fun Principal(
                     .fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
-                principalViewModel.Contador_formularios(user, formularioBase)
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                        .align(Alignment.Center),
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    onClick = {
+                        navController.navigate("Koadex")
+                    }
+                ) {
+                    principalViewModel.Contador_formularios(user, formularioBase)
+                }
             }
         }
     }

@@ -174,7 +174,7 @@ fun FormularioCuadranteScreen(
             horizontalAlignment = Alignment.Start
         ) {
 
-            Spacer(modifier = Modifier.height(30.dp))
+            Spacer(modifier = Modifier.height(40.dp))
 
             /*// Código
             OutlinedTextField(

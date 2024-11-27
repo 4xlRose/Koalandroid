@@ -179,7 +179,7 @@ fun FormularioSeguimientoScreen(
                         onClick = { onFormValueChange(formUiState.formsFollowUpDetails.copy(change = true)) }, // Marca el botón como seleccionado
                         border = BorderStroke(1.dp, Color.Gray),
                         colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = if (formUiState.formsFollowUpDetails.change) Color(0xFF4E7029) else Color.White,
+                            containerColor = if (formUiState.formsFollowUpDetails.change) Color(0xFF97B96E) else Color.White,
                             contentColor = if (formUiState.formsFollowUpDetails.change) Color.White else Color.Black
                         )
                     ) {
@@ -189,7 +189,7 @@ fun FormularioSeguimientoScreen(
                         onClick = { onFormValueChange(formUiState.formsFollowUpDetails.copy(change = false)) }, // Marca el botón como seleccionado
                         border = BorderStroke(1.dp, Color.Gray),
                         colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = if (!formUiState.formsFollowUpDetails.change) Color(0xFF4E7029) else Color.White,
+                            containerColor = if (!formUiState.formsFollowUpDetails.change) Color(0xFF97B96E) else Color.White,
                             contentColor = if (!formUiState.formsFollowUpDetails.change) Color.White else Color.Black
                         )
                     ) {

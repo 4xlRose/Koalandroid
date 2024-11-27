@@ -43,7 +43,7 @@ fun PerfilScreen(
         },
         bottomBar = {
             La_navegacion(navController, false, false, true)
-        }
+        },containerColor = Color.White
     ) { paddingValues ->
         Column(
             modifier = Modifier

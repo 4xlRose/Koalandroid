@@ -85,7 +85,12 @@ data class GeneralFormsDetails(
     var idUser: Int = 0, // Foreign Key
     var idWeather: Int = 0, // Foreign Key
     var idSeason: Int = 0, // Foreign Key
-    var place: String = ""
+    var place: String = "",
+    var idSpecieForm: Int = 0, // Foreign Key
+    var idFollowUpForm: Int = 0, // Foreign Key
+    var idQuadrantForm: Int = 0, // Foreign Key
+    var idRouteForm: Int = 0, // Foreign Key
+    var idWeatherForm: Int = 0 // Foreign Key
 )
 fun GeneralFormsDetails.toEntity() : GeneralFormEntity = GeneralFormEntity(
     date = date,
@@ -93,7 +98,12 @@ fun GeneralFormsDetails.toEntity() : GeneralFormEntity = GeneralFormEntity(
     idUser = idUser,
     idWeather = idWeather,
     idSeason = idSeason,
-    place = place
+    place = place,
+    idSpecieForm = idSpecieForm,
+    idFollowUpForm = idFollowUpForm,
+    idQuadrantForm = idQuadrantForm,
+    idRouteForm = idRouteForm,
+    idWeatherForm = idWeatherForm
 )
 
 

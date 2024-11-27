@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -57,8 +58,9 @@ fun OlvidoContrasena(navController: NavHostController, modifier: Modifier = Modi
         }
 
         Text(
-            text = "Olvidaste la contraseña?",
+            text = "¿Olvidaste la contraseña?",
             fontSize = 34.sp,
+            fontWeight = FontWeight.Bold,
             color = Color.White,
             modifier = Modifier
                 .align(Alignment.TopStart)

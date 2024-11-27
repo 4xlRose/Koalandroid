@@ -1,20 +1,15 @@
 package com.example.koadex.data
 
-import android.provider.Settings
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.example.koadex.clases.User
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
 
 @Dao
 interface FormDao {
-
     // Métodos de Lista de Formularios
     @Query("SELECT * FROM general_form")
     fun getAllForms(): Flow<List<GeneralFormEntity>>
@@ -27,6 +22,9 @@ interface FormDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertIntoListForms(listForms: List<GeneralFormEntity>)
+
+    @Delete()
+    suspend fun deleteForm(form: GeneralFormEntity)
 
 
     // Métodos de Formulario General

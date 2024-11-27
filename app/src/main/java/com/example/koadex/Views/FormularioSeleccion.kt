@@ -47,6 +47,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.font.FontWeight
+import com.example.koadex.data.UserEntity
 
 @RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,6 +55,7 @@ import androidx.compose.ui.text.font.FontWeight
 fun FormularioSeleccion(
     //activity: MainActivity,
     navController: NavHostController,
+    user: UserEntity
     //modifier: Modifier = Modifier,
     //viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
 
@@ -297,6 +299,7 @@ fun OptionButtonTwoIcons( //Botones con 2 iconos
     }
 }
 
+/*
 @RequiresApi(Build.VERSION_CODES.P)
 @Preview(device = "spec:width=800px,height=1340px,dpi=300")
 @Composable
@@ -305,3 +308,4 @@ fun PreviewFormularioSeleccion(){
         navController = rememberNavController())
 
 }
+*/
