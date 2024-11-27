@@ -1,6 +1,9 @@
 package com.example.koadex.Views
 
+import android.net.Uri
 import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -20,6 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
@@ -35,7 +39,10 @@ import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
 import com.example.koadex.clases.User
 import com.example.koadex.data.UserEntity
 import com.example.koadex.navigate.sampleUser
+import com.example.koadex.ui.form.FormFollowDBViewModel
 import com.example.koadex.ui.form.FormSpecieDBViewModel
+import com.example.koadex.ui.form.SpecieFormsDetails
+import com.example.koadex.ui.form.SpeciesFormUiState
 import com.example.koadex.ui.theme.KoadexTheme
 import kotlinx.coroutines.launch
 import java.io.File
@@ -66,14 +73,6 @@ fun FormularioEspecies(
         val green100 = colorResource(id = R.color.green_100)
         val green700 = colorResource(id = R.color.green_700)
 
-        var transectoNumber by remember { mutableStateOf(TextFieldValue()) }
-        var commonName by remember { mutableStateOf(TextFieldValue()) }
-        var scientificName by remember { mutableStateOf(TextFieldValue()) }
-        var individualsCount by remember { mutableStateOf<Int?>(1) }
-        var selectedAnimalType by remember { mutableStateOf<String?>(null) }
-        var selectedObservationType by remember { mutableStateOf<String?>(null) }
-        var observations by remember { mutableStateOf(TextFieldValue()) }
-        var numIndividuos by remember { mutableStateOf(1) }
 
         // ViewModel con las funciones
         val viewModelS = FomularioEspecies_ViewModel()
@@ -177,25 +176,16 @@ fun FormularioEspecies(
 
                     Spacer(modifier = Modifier.padding(vertical = 5.dp))
 
-                // Número de individuos
-                Text("Número de Individuos",
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.align(Alignment.Start),
-                    color = Color.Black)
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    IconButton(
-                        onClick = {
-                            //if (numIndividuos > 1) numIndividuos--
-                            viewModel.updateQuantity((formUiState.formsEspecieDetails.quantity - 1).coerceAtLeast(1)) }) {
-                        Icon(Icons.Filled.Remove, contentDescription = "Disminuir")
-                    }
-                    //Text(text = numIndividuos.toString(), style = MaterialTheme.typography.titleMedium, color = Color.Black)
-                    Text("${formUiState.formsEspecieDetails.quantity}")
-                    IconButton(
-                        onClick = { viewModel.updateQuantity(formUiState.formsEspecieDetails.quantity + 1) }
+                    // Número de individuos
+                    Text(
+                        "Número de Individuos",
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.align(Alignment.Start),
+                        color = Color.Black
+                    )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         IconButton(
                             onClick = {
@@ -235,7 +225,10 @@ fun FormularioEspecies(
                         modifier = Modifier.align(Alignment.Start),
                         color = Color.Black
                     )
-                    Botones_capturaFE(green700)
+                    Botones_capturaFE(activity,
+                        viewModel.formEspeciesUiState,
+                        viewModel::updateEspecieFormUiState,
+                        green700)
 
                     // Campo de observaciones
                     OutlinedTextField(
@@ -280,12 +273,17 @@ fun FormularioEspecies(
 }
 
 @Composable
-public fun Botones_capturaFE(green700: Color) {
+public fun Botones_capturaFE(
+    activtiy: MainActivity,
+    FormSpecieDetails: SpeciesFormUiState,
+    onFormUpdate: (SpecieFormsDetails) -> Unit,
+    green700: Color) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Boton_seleccionar_archivoFE(green700)
+        Boton_seleccionar_archivoFE(FormSpecieDetails,onFormUpdate,
+            green700)
         Boton_abrir_camaraFE(green700)
     }
 }
@@ -303,9 +301,26 @@ public fun Boton_abrir_camaraFE(green700: Color) {
 }
 
 @Composable
-public fun Boton_seleccionar_archivoFE(green700: Color) {
+public fun Boton_seleccionar_archivoFE(formUiState: SpeciesFormUiState,
+                                       onForm: (SpecieFormsDetails) -> Unit,
+                                       green700: Color) {
+    val context = LocalContext.current
+    val activityResultLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = { uri: Uri? ->
+            uri?.let {
+                // Convertir el URI en ByteArray
+                val byteArray = convertUriToByteArray(context, it)
+                onForm(formUiState.formsEspecieDetails.copy(evidences = byteArray))
+                // Hacer algo con el byteArray, como guardarlo en la base de datos
+                println("Imagen seleccionada, byteArray size: ${byteArray?.size}")
+            }
+        }
+    )
     Button(
-        onClick = { /* Handle file selection */ isFileSelectedFE.value = true},
+        onClick = {
+            activityResultLauncher.launch("image/*")
+            isFileSelectedFE.value = true},
         colors = ButtonDefaults.buttonColors(containerColor = green700)
     ) {
         Icon(Icons.Default.FileOpen, contentDescription = "Seleccionar archivo", tint = Color.White)

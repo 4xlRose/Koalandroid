@@ -137,7 +137,7 @@ fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modi
             FormularioFaunaBusquedaLibre(activity,navController = navController)
         }
         composable("FormularioCuadrante"){
-            FormularioCuadrante(activity,navController = navController)
+            FormularioCuadrante(activity, navController = navController,navModel = model)
         }
         composable("FormularioSeguimiento"){
             FormularioSeguimiento(activity,navController = navController)

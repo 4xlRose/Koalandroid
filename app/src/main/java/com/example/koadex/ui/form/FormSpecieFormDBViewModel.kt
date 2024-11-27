@@ -75,7 +75,7 @@ data class SpecieFormsDetails(
     var quantity: Int = 0,
     var idObservType: Int = 0,
     var idHeightType: Int = 0,
-    var evidences: ByteArray = byteArrayOf(),
+    var evidences: ByteArray? = byteArrayOf(),
     var observations: String = ""
 ) {
     override fun equals(other: Any?): Boolean {
