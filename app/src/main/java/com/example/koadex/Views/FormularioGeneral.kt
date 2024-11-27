@@ -25,7 +25,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -34,16 +33,15 @@ import androidx.compose.material3.OutlinedIconToggleButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -64,11 +62,11 @@ import com.example.koadex.R
 
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
+
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.rememberNavController
 import com.example.koadex.AppViewModelProvider
 
 /*
@@ -90,7 +88,6 @@ import com.example.koadex.ui.form.UserUiState
 // TEST
 import com.example.koadex.utils.DateValidator
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.stateIn
 
 import kotlinx.coroutines.launch
 
@@ -100,39 +97,74 @@ fun FormularioGeneral(
     navController: NavHostController,
     modifier: Modifier = Modifier,
     user: UserEntity,
+    savedId: Int = 0,
     viewModel: FormGeneralDBViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    viewModel.updateUserUiState(
-        viewModel.userUiState.userDetails.copy(
-            id = user.id,
-            name = user.name,
-            email = user.email,
-            password = user.password,
-            phone = user.phone,
-            startDate = user.startDate,
-            idZone = user.idZone,
-            uploadedForms = user.uploadedForms,
-            locallyStoredForms = user.locallyStoredForms,
-            posts = user.posts,
-            following = user.following,
-            followers = user.followers,
-            isloggedIn = user.isloggedIn,
-            profilePicture = user.profilePicture
+    LaunchedEffect(Unit) {
+        viewModel.updateUserUiState(
+            viewModel.userUiState.userDetails.copy(
+                id = user.id,
+                name = user.name,
+                email = user.email,
+                password = user.password,
+                phone = user.phone,
+                startDate = user.startDate,
+                idZone = user.idZone,
+                uploadedForms = user.uploadedForms,
+                locallyStoredForms = user.locallyStoredForms,
+                posts = user.posts,
+                following = user.following,
+                followers = user.followers,
+                isloggedIn = user.isloggedIn,
+                profilePicture = user.profilePicture
+            )
         )
-    )
-    val coroutineScope = rememberCoroutineScope()
+    }
+
+    val savedForm = viewModel.getFormById(savedId).collectAsState(initial = null).value
+    val editing = savedForm != null
+
+    LaunchedEffect(editing) {
+        if (savedForm != null) {
+            viewModel.updateGeneralFormUiState(
+                viewModel.formGeneralUiState.formsDetails.copy(
+                    id = savedForm.id,
+                    date = savedForm.date,
+                    hour = savedForm.hour,
+                    idUser = savedForm.idUser,
+                    idWeather = savedForm.idWeather,
+                    idSeason = savedForm.idSeason,
+                    place = savedForm.place,
+                    idSpecieForm = savedForm.idSpecieForm,
+                    idFollowUpForm = savedForm.idFollowUpForm,
+                    idQuadrantForm = savedForm.idQuadrantForm,
+                    idRouteForm = savedForm.idRouteForm,
+                    idWeatherForm = savedForm.idWeatherForm
+                )
+            )
+        }
+    }
+
+    val coroutineScope = viewModel.viewModelScope
 
     FormularioGeneralEntry(
         navController = navController,
         formUiState = viewModel.formGeneralUiState,
-        onFormValueChange = viewModel::updateGeneraFormUiState,
+        updateForm = viewModel::updateGeneralFormUiState,
         userUiState = viewModel.userUiState,
         onUserValueChange = viewModel::updateUserUiState,
+        getWeatherByName = viewModel::getWeatherByName,
+        getSeasonByName = viewModel::getSeasonByName,
         getWeatherById = viewModel::getWeatherById,
         getSeasonById = viewModel::getSeasonById,
         onSaveClick = {
             coroutineScope.launch {
-                viewModel.saveGeneralForm()
+                if (editing) {
+                    viewModel.editGeneralForm()
+                }
+                else {
+                    viewModel.saveGeneralForm()
+                }
 
                 viewModel.updateFormStateUiState(
                     formState = viewModel.formStateUiState.formStateDetails.copy(
@@ -140,13 +172,22 @@ fun FormularioGeneral(
                         idGeneralForm = viewModel.getLatestFormId()
                     )
                 )
-                viewModel.saveFormState()
 
-                viewModel.updateUserUiState(
-                    user = viewModel.userUiState.userDetails.copy(
-                        locallyStoredForms = user.locallyStoredForms + 1
+                if (editing){
+                    viewModel.editFormState()
+                }
+                else {
+                    viewModel.saveFormState()
+                }
+
+                if (!editing) {
+                    viewModel.updateUserUiState(
+                        user = viewModel.userUiState.userDetails.copy(
+                            locallyStoredForms = user.locallyStoredForms + 1
+                        )
                     )
-                )
+                }
+
                 viewModel.saveUser()
 
                 navController.navigate("TiposForms")
@@ -155,6 +196,7 @@ fun FormularioGeneral(
         onDateChange = { newDate ->
             //viewModel.formGeneralUiState.formsDetails.date = newDate
         },
+        editing = editing,
         modifier = modifier
     )
 }
@@ -164,13 +206,16 @@ fun FormularioGeneral(
 fun FormularioGeneralEntry(
     navController: NavHostController,
     formUiState: GeneralFormUiState,
-    onFormValueChange: (GeneralFormsDetails) -> Unit,
+    updateForm: (GeneralFormsDetails) -> Unit,
     userUiState: UserUiState,
     onUserValueChange: (UserDetails) -> Unit,
+    getWeatherByName: (String) -> Flow<WeatherEntity?>,
+    getSeasonByName: (String) -> Flow<SeasonEntity?>,
     getWeatherById: (Int) -> Flow<WeatherEntity?>,
     getSeasonById: (Int) -> Flow<SeasonEntity?>,
     onDateChange: (String) -> Unit,
     onSaveClick: () -> Unit,
+    editing: Boolean,
     modifier: Modifier
 ) {
 
@@ -225,10 +270,10 @@ fun FormularioGeneralEntry(
 
         FormInputForm(
             formDetails = formUiState.formsDetails,
-            onFormValueChange = onFormValueChange,
+            updateForm = updateForm,
             userDetails = userUiState.userDetails,
             onDateChange = { newDate ->
-                onFormValueChange(formUiState.formsDetails.copy(date = newDate))
+                updateForm(formUiState.formsDetails.copy(date = newDate))
             },
             modifier = Modifier
         )
@@ -247,41 +292,48 @@ fun FormularioGeneralEntry(
             )
         }
 
+
+        val savedWeather = getWeatherById(formUiState.formsDetails.idWeather).collectAsState(initial = null).value
+        var weather by remember { mutableStateOf("") }
+
+        if (savedWeather != null && editing) {
+            LaunchedEffect(Unit) {
+                weather = savedWeather.type
+            }
+        }
+
         Row(
             horizontalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 10.dp)
         ) {
-            val weatherID by remember { mutableIntStateOf(formUiState.formsDetails.idWeather) }
-            val weather = getWeatherById(weatherID).collectAsState(initial = null).value
+
+            val onWeatherChange = { newWeather: String ->
+                weather = newWeather
+            }
+
             val buttonSize = 80.dp
 
             // Weather buttons
             WeatherButton(
-                type = "soleado",
-                currentWeather = weather?.weather ?: "soleado",
-                onWeatherChange = {
-                    onFormValueChange(formUiState.formsDetails.copy(idWeather = weatherID))
-                },
+                type = "Soleado",
+                currentWeather = weather,
+                onWeatherChange = onWeatherChange,
                 buttonSize = buttonSize
             )
 
             WeatherButton(
-                type = "nublado",
-                currentWeather = weather?.weather ?: "nublado",
-                onWeatherChange = {
-                    onFormValueChange(formUiState.formsDetails.copy(idWeather = weatherID))
-                },
+                type = "Nublado",
+                currentWeather = weather,
+                onWeatherChange = onWeatherChange,
                 buttonSize = buttonSize
             )
 
             WeatherButton(
-                type = "lluvioso",
-                currentWeather = weather?.weather ?: "lluvioso",
-                onWeatherChange = {
-                    onFormValueChange(formUiState.formsDetails.copy(idWeather = weatherID))
-                },
+                type = "Lluvioso",
+                currentWeather = weather,
+                onWeatherChange = onWeatherChange,
                 buttonSize = buttonSize
             )
         }
@@ -299,30 +351,37 @@ fun FormularioGeneralEntry(
             )
         }
 
+        val savedSeason = getSeasonById(formUiState.formsDetails.idSeason).collectAsState(initial = null).value
+        var season by remember { mutableStateOf("") }
+
+        if (savedSeason != null && editing) {
+            LaunchedEffect(Unit) {
+                season = savedSeason.type
+            }
+        }
+
         Row(
             horizontalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier.fillMaxWidth()
         ) {
-            var seasonID by remember { mutableIntStateOf(formUiState.formsDetails.idSeason) }
-            val season = getSeasonById(seasonID).collectAsState(initial = null).value
             val buttonSize = 80.dp
+
+            val onSeasonChange = { newSeason: String ->
+                season = newSeason
+            }
 
             // Season buttons
             SeasonButton(
-                type = "verano",
-                currentSeason = season?.season ?: "verano",
-                onSeasonChange = {
-                    onFormValueChange(formUiState.formsDetails.copy(idSeason = seasonID))
-                },
+                type = "Verano",
+                currentSeason = season,
+                onSeasonChange = onSeasonChange,
                 buttonSize = buttonSize
             )
 
             SeasonButton(
-                type = "invierno",
-                currentSeason = season?.season ?: "invierno",
-                onSeasonChange = {
-                    onFormValueChange(formUiState.formsDetails.copy(idSeason = seasonID))
-                },
+                type = "Invierno",
+                currentSeason = season,
+                onSeasonChange = onSeasonChange,
                 buttonSize = buttonSize
             )
         }
@@ -334,6 +393,8 @@ fun FormularioGeneralEntry(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
+            val weatherId = getWeatherByName(weather).collectAsState(initial = null).value?.id
+            val seasonId = getSeasonByName(season).collectAsState(initial = null).value?.id
             Button(
                 shape = RoundedCornerShape(6.dp),
                 colors = ButtonDefaults.buttonColors(
@@ -343,6 +404,10 @@ fun FormularioGeneralEntry(
                     .padding(40.dp)
                     .fillMaxWidth(),
                 onClick = {
+                    updateForm(formUiState.formsDetails.copy(
+                        idWeather = weatherId ?: 0,
+                        idSeason = seasonId ?: 0
+                    ))
                     onSaveClick()
                 },
                 // enabled = formUiState.isEntryValid
@@ -357,7 +422,7 @@ fun FormularioGeneralEntry(
 @Composable
 fun FormInputForm(
     formDetails: GeneralFormsDetails,
-    onFormValueChange: (GeneralFormsDetails) -> Unit,
+    updateForm: (GeneralFormsDetails) -> Unit,
     userDetails: UserDetails,
     onDateChange: (String) -> Unit,
     modifier: Modifier,
@@ -453,6 +518,7 @@ fun FormInputForm(
     ) {
         LocalidadField(
             context = LocalContext.current,
+
             modifier = Modifier
                 .padding(10.dp)
                 .fillMaxWidth()
@@ -468,7 +534,7 @@ fun FormInputForm(
         OutlinedTextField(
             value = formDetails.hour,
             label = { Text("Hora", color = Color.DarkGray) },
-            onValueChange = { onFormValueChange(formDetails.copy(hour = it)) },
+            onValueChange = { updateForm(formDetails.copy(hour = it)) },
             modifier = Modifier
                 .padding(10.dp)
                 .fillMaxWidth()
@@ -492,7 +558,8 @@ fun WeatherButton(
         onCheckedChange = { onWeatherChange(type) },
         shape = RoundedCornerShape(12.dp),
         colors = IconButtonDefaults.iconToggleButtonColors(
-            containerColor = if (currentWeather == type) Color(0xFFCDE4B4) else Color.White
+            containerColor = Color.White,
+            checkedContainerColor = Color(0xFFCDE4B4)
         ),
         border = BorderStroke(
             width = 1.dp,
@@ -503,8 +570,8 @@ fun WeatherButton(
         Image(
             painter = painterResource(
                 when (type) {
-                    "soleado" -> R.drawable.soleado
-                    "nublado" -> R.drawable.nublado
+                    "Soleado" -> R.drawable.soleado
+                    "Nublado" -> R.drawable.nublado
                     else -> R.drawable.lluvioso
                 }
             ),
@@ -525,7 +592,8 @@ fun SeasonButton(
         onCheckedChange = { onSeasonChange(type) },
         shape = RoundedCornerShape(12.dp),
         colors = IconButtonDefaults.iconToggleButtonColors(
-            containerColor = if (currentSeason == type) Color(0xFFCDE4B4) else Color.White
+            containerColor = Color.White,
+            checkedContainerColor = Color(0xFFCDE4B4)
         ),
         border = BorderStroke(
             width = 1.dp,
@@ -536,7 +604,7 @@ fun SeasonButton(
         Image(
             painter = painterResource(
                 when (type) {
-                    "verano" -> R.drawable.verano
+                    "Verano" -> R.drawable.verano
                     else -> R.drawable.invierno
                 }
             ),

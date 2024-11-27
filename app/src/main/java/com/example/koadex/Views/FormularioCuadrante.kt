@@ -159,11 +159,22 @@ fun FormularioCuadranteScreen(
         val scrollState = rememberScrollState()
 
 
-        val plateText = remember { mutableStateOf("") }
-        val circumferenceText = remember { mutableStateOf("") }
-        val biomonitorMtSizeText = remember { mutableStateOf("") }
-        val distanceMtText = remember { mutableStateOf("") }
-        val heightMtText = remember { mutableStateOf("") }
+    val plateText = remember { mutableStateOf("")}
+    val circumferenceText = remember { mutableStateOf("")}
+    val biomonitorMtSizeText = remember { mutableStateOf("")}
+    val distanceMtText = remember { mutableStateOf("")}
+    val heightMtText = remember { mutableStateOf("")}
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFFFFFFF))
+            .padding(32.dp)
+            .background(Color.White)
+    ) {
+        Spacer(modifier = Modifier.height(15.dp))
+
+        // Contenido desplazable
 
         Column(
             modifier = Modifier
@@ -175,36 +186,25 @@ fun FormularioCuadranteScreen(
             Spacer(modifier = Modifier.height(15.dp))
 
             // Contenido desplazable
-
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color(0xFFFFFFFF))
-                    .padding(32.dp)
-                    .background(Color.White)
+                    .verticalScroll(scrollState),
+                horizontalAlignment = Alignment.Start
             ) {
-                Spacer(modifier = Modifier.height(15.dp))
-
-                // Contenido desplazable
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(scrollState),
-                    horizontalAlignment = Alignment.Start
-                ) {
 
 
-                    Spacer(modifier = Modifier.height(40.dp))
+                Spacer(modifier = Modifier.height(40.dp))
 
-                    // Código
-                    OutlinedTextField(
-                        value = codigo,
-                        onValueChange = { codigo = it },
-                        label = { Text("Código") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                // Código
+                OutlinedTextField(
+                    value = codigo,
+                    onValueChange = { codigo = it },
+                    label = { Text("Código") },
+                    modifier = Modifier.fillMaxWidth()
+                )
 
-                    /*// Código
+            /*// Código
             OutlinedTextField(
                 value = codigo,
                 onValueChange = { codigo = it },
@@ -215,253 +215,139 @@ fun FormularioCuadranteScreen(
             Spacer(modifier = Modifier.height(16.dp))*/
 
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(4.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(4.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    // CUADRANTE Y SUBCUADRANTE
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        // CUADRANTE Y SUBCUADRANTE
-                        Column(
-                            modifier = Modifier.weight(1f),
-                            horizontalAlignment = Alignment.CenterHorizontally
+                        Text(
+                            "Cuadrante",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = Color.Black
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        Row(
+                            horizontalArrangement = Arrangement.Start,
+                            modifier = Modifier.fillMaxWidth()
                         ) {
-                            Text(
-                                "Cuadrante",
-                                style = MaterialTheme.typography.titleMedium,
-                                color = Color.Black
+                            BotonCuadranteAB(
+                                text = "A",
+                                isSelected = formUiState.formsQuadrantDetails.idSuperQuadrant == 1,
+                                onClick = { onFormValueChange(formUiState.formsQuadrantDetails.copy(idSuperQuadrant = 1)) }
                             )
                             Spacer(modifier = Modifier.height(8.dp))
-
-                            Row(
-                                horizontalArrangement = Arrangement.Start,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                BotonCuadranteAB(
-                                    text = "A",
-                                    isSelected = formUiState.formsQuadrantDetails.idSuperQuadrant == 1,
-                                    onClick = {
-                                        onFormValueChange(
-                                            formUiState.formsQuadrantDetails.copy(
-                                                idSuperQuadrant = 1
-                                            )
-                                        )
-                                    }
-                                )
-                                Spacer(modifier = Modifier.height(8.dp))
-                                BotonCuadranteAB(
-                                    text = "B",
-                                    isSelected = formUiState.formsQuadrantDetails.idSuperQuadrant == 2,
-                                    onClick = {
-                                        onFormValueChange(
-                                            formUiState.formsQuadrantDetails.copy(
-                                                idSuperQuadrant = 2
-                                            )
-                                        )
-                                    }
-                                )
-
-                            }
-
-                            Spacer(modifier = Modifier.height(4.dp))
-
-                            // Subcuadrante
-                            Text(
-                                "Sub-Cuadrante",
-                                style = MaterialTheme.typography.titleMedium,
-                                color = Color.Black
+                            BotonCuadranteAB(
+                                text = "B",
+                                isSelected = formUiState.formsQuadrantDetails.idSuperQuadrant == 2,
+                                onClick = { onFormValueChange(formUiState.formsQuadrantDetails.copy(idSuperQuadrant = 2)) }
                             )
-                            //Spacer(modifier = Modifier.height(8.dp))
-                            Row(
-                                horizontalArrangement = Arrangement.SpaceEvenly,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
 
-                                BotonSubCuadrante(
-                                    text = "1",
-                                    isSelected = subCuadranteSeleccionado == "1",
-                                    onClick = { subCuadranteSeleccionado = "1" }
-                                )
-                                BotonSubCuadrante(
-                                    text = "2",
-                                    isSelected = subCuadranteSeleccionado == "2",
-                                    onClick = { subCuadranteSeleccionado = "2" }
-                                )
-                                BotonSubCuadrante(
-                                    text = "3",
-                                    isSelected = subCuadranteSeleccionado == "3",
-                                    onClick = { subCuadranteSeleccionado = "3" }
-                                )
-                                BotonSubCuadrante(
-                                    text = "4",
-                                    isSelected = subCuadranteSeleccionado == "4",
-                                    onClick = { subCuadranteSeleccionado = "4" }
-                                )
-                                //Spacer(modifier = Modifier.height(6.dp))
-
-                                BotonCuadranteCG(
-                                    text = "C",
-                                    isSelected = formUiState.formsQuadrantDetails.idMidQuadrant == 1,
-                                    onClick = {
-                                        onFormValueChange(
-                                            formUiState.formsQuadrantDetails.copy(
-                                                idMidQuadrant = 1
-                                            )
-                                        )
-                                    }
-                                )
-                                Spacer(modifier = Modifier.height(4.dp))
-                                BotonCuadranteCG(
-                                    text = "D",
-                                    isSelected = formUiState.formsQuadrantDetails.idMidQuadrant == 2,
-                                    onClick = {
-                                        onFormValueChange(
-                                            formUiState.formsQuadrantDetails.copy(
-                                                idMidQuadrant = 2
-                                            )
-                                        )
-                                    }
-                                )
-                                Spacer(modifier = Modifier.height(4.dp))
-                                BotonCuadranteCG(
-                                    text = "E",
-                                    isSelected = formUiState.formsQuadrantDetails.idMidQuadrant == 3,
-                                    onClick = {
-                                        onFormValueChange(
-                                            formUiState.formsQuadrantDetails.copy(
-                                                idMidQuadrant = 3
-                                            )
-                                        )
-                                    }
-                                )
-                                Spacer(modifier = Modifier.height(4.dp))
-                                BotonCuadranteCG(
-                                    text = "F",
-                                    isSelected = formUiState.formsQuadrantDetails.idMidQuadrant == 4,
-                                    onClick = {
-                                        onFormValueChange(
-                                            formUiState.formsQuadrantDetails.copy(
-                                                idMidQuadrant = 4
-                                            )
-                                        )
-                                    }
-                                )
-                                Spacer(modifier = Modifier.height(4.dp))
-                                BotonCuadranteCG(
-                                    text = "G",
-                                    isSelected = formUiState.formsQuadrantDetails.idMidQuadrant == 5,
-                                    onClick = {
-                                        onFormValueChange(
-                                            formUiState.formsQuadrantDetails.copy(
-                                                idMidQuadrant = 5
-                                            )
-                                        )
-                                    }
-
-                                )
-                            }
                         }
 
-                        // HABITOS DE CRECIMIENTO
-                        Column(
-                            modifier = Modifier.weight(1f),
-                            horizontalAlignment = Alignment.CenterHorizontally
+                        Spacer(modifier = Modifier.height(4.dp))
+
+                        // Subcuadrante
+                        Text(
+                            "Sub-Cuadrante",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = Color.Black
+                        )
+                        //Spacer(modifier = Modifier.height(8.dp))
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceEvenly,
+                            modifier = Modifier.fillMaxWidth()
                         ) {
 
                             BotonSubCuadrante(
                                 text = "1",
-                                isSelected = formUiState.formsQuadrantDetails.idSubQuadrant == 1,
-                                onClick = {
-                                    onFormValueChange(
-                                        formUiState.formsQuadrantDetails.copy(
-                                            idSubQuadrant = 1
-                                        )
-                                    )
-                                }
+                                isSelected = subCuadranteSeleccionado == "1",
+                                onClick = { subCuadranteSeleccionado = "1" }
                             )
                             BotonSubCuadrante(
                                 text = "2",
-                                isSelected = formUiState.formsQuadrantDetails.idSubQuadrant == 2,
-                                onClick = {
-                                    onFormValueChange(
-                                        formUiState.formsQuadrantDetails.copy(
-                                            idSubQuadrant = 2
-                                        )
-                                    )
-                                }
+                                isSelected = subCuadranteSeleccionado == "2",
+                                onClick = { subCuadranteSeleccionado = "2" }
                             )
                             BotonSubCuadrante(
                                 text = "3",
-                                isSelected = formUiState.formsQuadrantDetails.idSubQuadrant == 3,
-                                onClick = {
-                                    onFormValueChange(
-                                        formUiState.formsQuadrantDetails.copy(
-                                            idSubQuadrant = 3
-                                        )
-                                    )
-                                }
+                                isSelected = subCuadranteSeleccionado == "3",
+                                onClick = { subCuadranteSeleccionado = "3" }
                             )
                             BotonSubCuadrante(
                                 text = "4",
-                                isSelected = formUiState.formsQuadrantDetails.idSubQuadrant == 4,
-                                onClick = {
-                                    onFormValueChange(
-                                        formUiState.formsQuadrantDetails.copy(
-                                            idSubQuadrant = 4
-                                        )
-                                    )
-                                }
+                                isSelected = subCuadranteSeleccionado == "4",
+                                onClick = { subCuadranteSeleccionado = "4" }
+
+                            //Spacer(modifier = Modifier.height(6.dp))
+                            )
+                            BotonCuadranteCG(
+                                text = "C",
+                                isSelected = formUiState.formsQuadrantDetails.idMidQuadrant == 1,
+                                onClick = { onFormValueChange(formUiState.formsQuadrantDetails.copy(idMidQuadrant = 1)) }
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                            BotonCuadranteCG(
+                                text = "D",
+                                isSelected = formUiState.formsQuadrantDetails.idMidQuadrant == 2,
+                                onClick = { onFormValueChange(formUiState.formsQuadrantDetails.copy(idMidQuadrant = 2)) }
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                            BotonCuadranteCG(
+                                text = "E",
+                                isSelected = formUiState.formsQuadrantDetails.idMidQuadrant == 3,
+                                onClick = { onFormValueChange(formUiState.formsQuadrantDetails.copy(idMidQuadrant = 3)) }
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                            BotonCuadranteCG(
+                                text = "F",
+                                isSelected = formUiState.formsQuadrantDetails.idMidQuadrant == 4,
+                                onClick = { onFormValueChange(formUiState.formsQuadrantDetails.copy(idMidQuadrant = 4)) }
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                            BotonCuadranteCG(
+                                text = "G",
+                                isSelected = formUiState.formsQuadrantDetails.idMidQuadrant == 5,
+                                onClick = { onFormValueChange(formUiState.formsQuadrantDetails.copy(idMidQuadrant = 5)) }
 
                             )
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 4.dp),
-                                horizontalArrangement = Arrangement.SpaceEvenly,
-                            ) {
-                                Spacer(modifier = Modifier.height(16.dp))
-
-                                CrecimientoBoton(
-                                    icon = R.drawable.arbusto,
-                                    text = "Arbusto",
-                                    altura = "< 1mt",
-                                    isSelected = habitoCrecimientoSeleccionado == "Arbusto",
-                                    onClick = { habitoCrecimientoSeleccionado = "Arbusto" }
-                                )
-
-                                CrecimientoBoton(
-                                    icon = R.drawable.arbolito,
-                                    text = "Arbolito",
-                                    altura = "1-3 mt",
-                                    isSelected = habitoCrecimientoSeleccionado == "Arbolito",
-                                    onClick = { habitoCrecimientoSeleccionado = "Arbolito" }
-                                )
-
-                                CrecimientoBoton(
-                                    icon = R.drawable.arbol,
-                                    text = "Árbol",
-                                    altura = "> 3mt",
-                                    isSelected = habitoCrecimientoSeleccionado == "Árbol",
-                                    onClick = { habitoCrecimientoSeleccionado = "Árbol" }
-                                )
-                            }
                         }
                     }
-
 
                     // HABITOS DE CRECIMIENTO
                     Column(
                         modifier = Modifier.weight(1f),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Spacer(modifier = Modifier.height(30.dp)) // Me apoyo para centrar
-                        Text(
-                            "Hábito de crecimiento",
-                            style = MaterialTheme.typography.titleMedium,
-                            color = Color.Black
+
+                        BotonSubCuadrante(
+                            text = "1",
+                            isSelected = formUiState.formsQuadrantDetails.idSubQuadrant == 1,
+                            onClick = { onFormValueChange(formUiState.formsQuadrantDetails.copy(idSubQuadrant = 1)) }
+                        )
+                        BotonSubCuadrante(
+                            text = "2",
+                            isSelected = formUiState.formsQuadrantDetails.idSubQuadrant == 2,
+                            onClick = { onFormValueChange(formUiState.formsQuadrantDetails.copy(idSubQuadrant = 2)) }
+                        )
+                        BotonSubCuadrante(
+                            text = "3",
+                            isSelected = formUiState.formsQuadrantDetails.idSubQuadrant == 3,
+                            onClick = { onFormValueChange(formUiState.formsQuadrantDetails.copy(idSubQuadrant = 3)) }
+                        )
+                        BotonSubCuadrante(
+                            text = "4",
+                            isSelected = formUiState.formsQuadrantDetails.idSubQuadrant == 4,
+                            onClick = { onFormValueChange(formUiState.formsQuadrantDetails.copy(idSubQuadrant = 4)) }
+
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Row(
@@ -476,189 +362,186 @@ fun FormularioCuadranteScreen(
                                 icon = R.drawable.arbusto,
                                 text = "Arbusto",
                                 altura = "< 1mt",
-                                isSelected = formUiState.formsQuadrantDetails.idHabitat == 1,
-                                onClick = {
-                                    onFormValueChange(
-                                        formUiState.formsQuadrantDetails.copy(
-                                            idHabitat = 1
-                                        )
-                                    )
-                                }
+                                isSelected = habitoCrecimientoSeleccionado == "Arbusto",
+                                onClick = { habitoCrecimientoSeleccionado = "Arbusto" }
                             )
 
                             CrecimientoBoton(
                                 icon = R.drawable.arbolito,
                                 text = "Arbolito",
                                 altura = "1-3 mt",
-                                isSelected = formUiState.formsQuadrantDetails.idHabitat == 2,
-                                onClick = {
-                                    onFormValueChange(
-                                        formUiState.formsQuadrantDetails.copy(
-                                            idHabitat = 2
-                                        )
-                                    )
-                                }
+                                isSelected = habitoCrecimientoSeleccionado == "Arbolito",
+                                onClick = { habitoCrecimientoSeleccionado = "Arbolito" }
                             )
 
                             CrecimientoBoton(
                                 icon = R.drawable.arbol,
                                 text = "Árbol",
                                 altura = "> 3mt",
-                                isSelected = formUiState.formsQuadrantDetails.idHabitat == 3,
-                                onClick = {
-                                    onFormValueChange(
-                                        formUiState.formsQuadrantDetails.copy(
-                                            idHabitat = 3
-                                        )
-                                    )
-                                }
+                                isSelected = habitoCrecimientoSeleccionado == "Árbol",
+                                onClick = { habitoCrecimientoSeleccionado = "Árbol" }
                             )
                         }
                     }
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    OutlinedTextField(
-                        value = formUiState.formsQuadrantDetails.specieName,
-                        onValueChange = {
-                            onFormValueChange(
-                                formUiState.formsQuadrantDetails.copy(
-                                    specieName = it
-                                )
-                            )
-                        },
-                        label = { Text("Nombre Común", color = Color.DarkGray) }, //Especie
-                        modifier = Modifier.weight(1f)//.padding(start = 2.dp)
-                    )
-
-                    OutlinedTextField(
-                        value = formUiState.formsQuadrantDetails.scientificName,
-                        onValueChange = {
-                            onFormValueChange(
-                                formUiState.formsQuadrantDetails.copy(
-                                    scientificName = it
-                                )
-                            )
-                        },
-                        label = { Text("Nombre Científico") },
-                        modifier = Modifier.weight(1f)//.padding(end = 2.dp)
-                    )
                 }
+
+
+                // HABITOS DE CRECIMIENTO
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Spacer(modifier = Modifier.height(30.dp)) // Me apoyo para centrar
+                    Text("Hábito de crecimiento",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color.Black)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 4.dp),
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                    ) {
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        CrecimientoBoton(
+                            icon = R.drawable.arbusto,
+                            text = "Arbusto",
+                            altura = "< 1mt",
+                            isSelected = formUiState.formsQuadrantDetails.idHabitat == 1,
+                            onClick = { onFormValueChange(formUiState.formsQuadrantDetails.copy(idHabitat = 1)) }
+                        )
+
+                        CrecimientoBoton(
+                            icon = R.drawable.arbolito,
+                            text = "Arbolito",
+                            altura = "1-3 mt",
+                            isSelected = formUiState.formsQuadrantDetails.idHabitat == 2,
+                            onClick = { onFormValueChange(formUiState.formsQuadrantDetails.copy(idHabitat = 2)) }
+                        )
+
+                        CrecimientoBoton(
+                            icon = R.drawable.arbol,
+                            text = "Árbol",
+                            altura = "> 3mt",
+                            isSelected = formUiState.formsQuadrantDetails.idHabitat == 3,
+                            onClick = { onFormValueChange(formUiState.formsQuadrantDetails.copy(idHabitat = 3)) }
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                OutlinedTextField(
+                    value = formUiState.formsQuadrantDetails.specieName,
+                    onValueChange = { onFormValueChange(formUiState.formsQuadrantDetails.copy(specieName =  it)) },
+                    label = { Text("Nombre Común", color = Color.DarkGray) }, //Especie
+                    modifier = Modifier.weight(1f)//.padding(start = 2.dp)
+                )
+
+                OutlinedTextField(
+                    value = formUiState.formsQuadrantDetails.scientificName,
+                    onValueChange = { onFormValueChange(formUiState.formsQuadrantDetails.copy(scientificName = it)) },
+                    label = { Text("Nombre Científico") },
+                    modifier = Modifier.weight(1f)//.padding(end = 2.dp)
+                )
+            }
 
 
                 Spacer(modifier = Modifier.height(8.dp))
 
 
+            OutlinedTextField(
+                value = formUiState.formsQuadrantDetails.placa,
+                onValueChange = { onFormValueChange(formUiState.formsQuadrantDetails.copy(placa = it)) },
+
+                label = { Text("Placa") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(5.dp)
+            ) {
                 OutlinedTextField(
-                    value = plateText.value,
+                    value = circumferenceText.value,
                     onValueChange = { newValue ->
                         if (newValue.isEmpty() || newValue.matches(Regex("^\\d*$"))) {
-                            plateText.value = newValue
-                            val plate = newValue.toIntOrNull() ?: 0
-                            onFormValueChange(formUiState.formsQuadrantDetails.copy(placa = plate.toString()))
+                            circumferenceText.value = newValue
+                            val circumference = newValue.toIntOrNull() ?: 0
+                            onFormValueChange(formUiState.formsQuadrantDetails.copy(circumference = circumference))
                         }
                     },
-                    label = { Text("Placa") },
-                    modifier = Modifier.fillMaxWidth()
+                    label = { Text("Circunferencia(CL)") }, //en cm
+                    modifier = Modifier.weight(1f)//.padding(start = 2.dp)
                 )
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(5.dp)
-                ) {
-                    OutlinedTextField(
-                        value = circumferenceText.value,
-                        onValueChange = { newValue ->
-                            if (newValue.isEmpty() || newValue.matches(Regex("^\\d*$"))) {
-                                circumferenceText.value = newValue
-                                val circumference = newValue.toIntOrNull() ?: 0
-                                onFormValueChange(
-                                    formUiState.formsQuadrantDetails.copy(
-                                        circumference = circumference
-                                    )
-                                )
-                            }
-                        },
-                        label = { Text("Circunferencia(CL)") }, //en cm
-                        modifier = Modifier.weight(1f)//.padding(start = 2.dp)
-                    )
+                OutlinedTextField(
+                    value = distanceMtText.value,
+                    onValueChange = { newValue ->
+                        if (newValue.isEmpty() || newValue.matches(Regex("^\\d*$"))) {
+                            distanceMtText.value = newValue
+                            val distanceMt = newValue.toIntOrNull() ?: 0
+                            onFormValueChange(formUiState.formsQuadrantDetails.copy(distanceMt = distanceMt))
+                        }
+                    },
+                    label = { Text("Distancia en mt") },
+                    modifier = Modifier.weight(1f)//.padding(end = 2.dp)
 
-                    OutlinedTextField(
-                        value = distanceMtText.value,
-                        onValueChange = { newValue ->
-                            if (newValue.isEmpty() || newValue.matches(Regex("^\\d*$"))) {
-                                distanceMtText.value = newValue
-                                val distanceMt = newValue.toIntOrNull() ?: 0
-                                onFormValueChange(formUiState.formsQuadrantDetails.copy(distanceMt = distanceMt))
-                            }
-                        },
-                        label = { Text("Distancia en mt") },
-                        modifier = Modifier.weight(1f)//.padding(end = 2.dp)
+                )
+                Botones_capturaFC(green700)
 
-                    )
-                    Botones_capturaFC(green700)
-
-                    Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(5.dp)
-                    ) {
-                        OutlinedTextField(
-                            value = biomonitorMtSizeText.value,
-                            onValueChange = { newValue ->
-                                if (newValue.isEmpty() || newValue.matches(Regex("^\\d*$"))) {
-                                    biomonitorMtSizeText.value = newValue
-                                    val biomonitorMtSize = newValue.toIntOrNull() ?: 0
-                                    onFormValueChange(
-                                        formUiState.formsQuadrantDetails.copy(
-                                            biomonitorMtSize = biomonitorMtSize
-                                        )
-                                    )
-                                }
-                            },
-                            label = { Text("Estatura Biométrica") }, // en mt
-                            modifier = Modifier.weight(1f)//.padding(start = 2.dp)
-                        )
-                        OutlinedTextField(
-                            value = heightMtText.value,
-                            onValueChange = { newValue ->
-                                if (newValue.isEmpty() || newValue.matches(Regex("^\\d*$"))) {
-                                    heightMtText.value = newValue
-                                    val heightMt = newValue.toIntOrNull() ?: 0
-                                    onFormValueChange(formUiState.formsQuadrantDetails.copy(heightMt = heightMt))
-                                }
-                            },
-                            label = { Text("Altura en mt") },
-                            modifier = Modifier.weight(1f)//.padding(end = 2.dp)
-                        )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(5.dp)
+            ) {
+                OutlinedTextField(
+                    value = biomonitorMtSizeText.value,
+                    onValueChange = { newValue ->
+                        if (newValue.isEmpty() || newValue.matches(Regex("^\\d*$"))) {
+                            biomonitorMtSizeText.value = newValue
+                            val biomonitorMtSize = newValue.toIntOrNull() ?: 0
+                            onFormValueChange(formUiState.formsQuadrantDetails.copy(biomonitorMtSize = biomonitorMtSize))
+                        }
+                    },
+                    label = { Text("Estatura Biométrica") }, // en mt
+                    modifier = Modifier.weight(1f)//.padding(start = 2.dp)
+                )
+                OutlinedTextField(
+                    value = heightMtText.value,
+                    onValueChange = { newValue ->
+                        if (newValue.isEmpty() || newValue.matches(Regex("^\\d*$"))) {
+                            heightMtText.value = newValue
+                            val heightMt = newValue.toIntOrNull() ?: 0
+                            onFormValueChange(formUiState.formsQuadrantDetails.copy(heightMt = heightMt))
+                        }
+                    },
+                    label = { Text("Altura en mt") },
+                    modifier = Modifier.weight(1f)//.padding(end = 2.dp)
+                )
 
 
-                        // Observaciones
-                        OutlinedTextField(
-                            value = formUiState.formsQuadrantDetails.observations,
-                            onValueChange = {
-                                onFormValueChange(
-                                    formUiState.formsQuadrantDetails.copy(
-                                        observations = it
-                                    )
-                                )
-                            },
-                            label = { Text("Observaciones") },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(100.dp)
-                        )
+            // Observaciones
+            OutlinedTextField(
+                value = formUiState.formsQuadrantDetails.observations,
+                onValueChange = { onFormValueChange(formUiState.formsQuadrantDetails.copy(observations =  it)) },
+                label = { Text("Observaciones") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp)
+            )
 
-                        // Botones de acción
-                        viewModel.Atras_enviar(navController, green700)
+                // Botones de acción
+                viewModel.Atras_enviar(navController, green700)
 
 
-                        // Botones de acción
-                        viewModel.Atras_enviar(navController, green700)
+            // Botones de acción
+            viewModel.Atras_enviar(navController, green700)
 
-                        /*// Botón para guardar el formulario
+            /*// Botón para guardar el formulario
             Button(
                 onClick = {
                     onSaveClick()
@@ -670,243 +553,244 @@ fun FormularioCuadranteScreen(
                 Text("Guardar", color = Color.White)
             }*/
 
-                        Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(50.dp))
 
 
-                    }
-                }
             }
         }
     }
     }
+    }
+}
 
-        @Composable
-        fun BotonCuadranteAB(
-            text: String,
-            isSelected: Boolean,
-            onClick: () -> Unit
+
+
+@Composable
+fun BotonCuadranteAB(
+    text: String,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
+    OutlinedButton(
+        onClick = onClick,
+        modifier = Modifier
+            .height(60.dp)
+            .width(80.dp)
+            .padding(1.dp),
+        shape = RoundedCornerShape(12.dp),
+        border = BorderStroke(1.dp, if (isSelected) Color(0xFF97B96E) else Color.Gray),
+        colors = ButtonDefaults.outlinedButtonColors(
+            containerColor = if (isSelected) Color(0xFF97B96E) else Color.White // Cambia el color aquí
+        )
+    ) {
+        Text(
+            text = text,
+            color = if (isSelected) Color.White else Color.Black,
+            style = MaterialTheme.typography.bodyMedium
+        )
+    }
+}
+
+@Composable
+fun BotonCuadranteCG(
+    text: String,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
+    OutlinedButton(
+        onClick = onClick,
+        modifier = Modifier
+            .height(21.7.dp)
+            .width(45.dp)
+            .padding(1.dp),
+        shape = RoundedCornerShape(8.dp),
+        border = BorderStroke(0.7.dp, if (isSelected) Color(0xFF4E7029) else Color.Gray),
+        colors = ButtonDefaults.outlinedButtonColors(
+            containerColor = if (isSelected) Color(0xFF97B96E) else Color.White
+        ),
+        contentPadding = PaddingValues(1.dp)
+
+    ) {
+        Text(
+            text = text,
+            color = if (isSelected) Color.White else Color.Black,
+            fontSize = 10.sp,
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
+@Composable
+fun BotonSubCuadrante(
+    text: String,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
+    OutlinedButton(
+        onClick = onClick,
+        modifier = Modifier
+            .height(26.dp)
+            .width(40.dp)
+            .padding(1.dp),
+        shape = RoundedCornerShape(8.dp),
+        border = BorderStroke(1.dp, if (isSelected) Color(0xFF97B96E) else Color.Gray),
+        colors = ButtonDefaults.outlinedButtonColors(
+            containerColor = if (isSelected) Color(0xFF97B96E) else Color.White // Cambia el color aquí
+        ),
+        contentPadding = PaddingValues(2.dp)
+
+    ) {
+        Text(
+            text = text,
+            color = if (isSelected) Color.White else Color.Black,
+            style = MaterialTheme.typography.labelSmall,
+            modifier = Modifier.padding(2.dp)
+        )
+    }
+}
+
+@Composable
+fun CrecimientoBoton(
+    icon: Int,
+    text: String,
+    altura: String,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .width(50.dp)
+            .height(100.dp)
+            .clickable(onClick = onClick)
+            .padding(1.dp)
+            .background(
+                color = if (isSelected) Color(0xFF97B96E) else Color.White, // Cambia el fondo
+                shape = RoundedCornerShape(4.dp)
+            )
+            .border(
+                width = 1.dp,
+                color = if (isSelected) Color(0xFF97B96E) else Color.Gray, // Cambia el borde
+                shape = RoundedCornerShape(8.dp)
+            ),
+    ) {
+        Image(
+            painter = painterResource(id = icon),
+            contentDescription = text,
+            modifier = Modifier
+                .size(40.dp)
+                .padding(top = 2.dp)
+        )
+        Text(text, style = MaterialTheme.typography.bodySmall)
+        Text(altura, style = MaterialTheme.typography.bodySmall)
+    }
+
+}
+
+@Composable
+private fun Atras_enviar(
+    navController: NavController,
+    green700: Color
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Button(
+            onClick = { navController.popBackStack() },
+            modifier = Modifier.weight(1f),
+            colors = ButtonDefaults.buttonColors(containerColor = green700)
         ) {
-            OutlinedButton(
-                onClick = onClick,
-                modifier = Modifier
-                    .height(60.dp)
-                    .width(80.dp)
-                    .padding(1.dp),
-                shape = RoundedCornerShape(12.dp),
-                border = BorderStroke(1.dp, if (isSelected) Color(0xFF97B96E) else Color.Gray),
-                colors = ButtonDefaults.outlinedButtonColors(
-                    containerColor = if (isSelected) Color(0xFF97B96E) else Color.White // Cambia el color aquí
-                )
-            ) {
-                Text(
-                    text = text,
-                    color = if (isSelected) Color.White else Color.Black,
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
+            Text("ATRAS")
         }
-
-        @Composable
-        fun BotonCuadranteCG(
-            text: String,
-            isSelected: Boolean,
-            onClick: () -> Unit
+        Spacer(modifier = Modifier.width(8.dp))
+        Button(
+            onClick = { /* Handle form submission */ },
+            modifier = Modifier.weight(1f),
+            colors = ButtonDefaults.buttonColors(containerColor = green700)
         ) {
-            OutlinedButton(
-                onClick = onClick,
-                modifier = Modifier
-                    .height(21.7.dp)
-                    .width(45.dp)
-                    .padding(1.dp),
-                shape = RoundedCornerShape(8.dp),
-                border = BorderStroke(0.7.dp, if (isSelected) Color(0xFF4E7029) else Color.Gray),
-                colors = ButtonDefaults.outlinedButtonColors(
-                    containerColor = if (isSelected) Color(0xFF97B96E) else Color.White
-                ),
-                contentPadding = PaddingValues(1.dp)
-
-            ) {
-                Text(
-                    text = text,
-                    color = if (isSelected) Color.White else Color.Black,
-                    fontSize = 10.sp,
-                    textAlign = TextAlign.Center
-                )
-            }
+            Text("ENVIAR")
         }
+    }
 
-        @Composable
-        fun BotonSubCuadrante(
-            text: String,
-            isSelected: Boolean,
-            onClick: () -> Unit
-        ) {
-            OutlinedButton(
-                onClick = onClick,
-                modifier = Modifier
-                    .height(26.dp)
-                    .width(40.dp)
-                    .padding(1.dp),
-                shape = RoundedCornerShape(8.dp),
-                border = BorderStroke(1.dp, if (isSelected) Color(0xFF97B96E) else Color.Gray),
-                colors = ButtonDefaults.outlinedButtonColors(
-                    containerColor = if (isSelected) Color(0xFF97B96E) else Color.White // Cambia el color aquí
-                ),
-                contentPadding = PaddingValues(2.dp)
+}
 
-            ) {
-                Text(
-                    text = text,
-                    color = if (isSelected) Color.White else Color.Black,
-                    style = MaterialTheme.typography.labelSmall,
-                    modifier = Modifier.padding(2.dp)
-                )
-            }
-        }
 
-        @Composable
-        fun CrecimientoBoton(
-            icon: Int,
-            text: String,
-            altura: String,
-            isSelected: Boolean,
-            onClick: () -> Unit
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .width(50.dp)
-                    .height(100.dp)
-                    .clickable(onClick = onClick)
-                    .padding(1.dp)
-                    .background(
-                        color = if (isSelected) Color(0xFF97B96E) else Color.White, // Cambia el fondo
-                        shape = RoundedCornerShape(4.dp)
-                    )
-                    .border(
-                        width = 1.dp,
-                        color = if (isSelected) Color(0xFF97B96E) else Color.Gray, // Cambia el borde
-                        shape = RoundedCornerShape(8.dp)
-                    ),
-            ) {
-                Image(
-                    painter = painterResource(id = icon),
-                    contentDescription = text,
-                    modifier = Modifier
-                        .size(40.dp)
-                        .padding(top = 2.dp)
-                )
-                Text(text, style = MaterialTheme.typography.bodySmall)
-                Text(altura, style = MaterialTheme.typography.bodySmall)
-            }
-        }
+//////////////// PARA LOS BOTONES DE CAPTURAR //////////////////
+@Composable
+private fun Botones_captura(green700: Color) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Boton_seleccionar_archivo(green700)
+        Boton_abrir_camara(green700)
+    }
+}
 
-        @Composable
-        private fun Atras_enviar(
-            navController: NavController,
-            green700: Color
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Button(
-                    onClick = { navController.popBackStack() },
-                    modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.buttonColors(containerColor = green700)
-                ) {
-                    Text("ATRAS")
-                }
-                Spacer(modifier = Modifier.width(8.dp))
-                Button(
-                    onClick = { /* Handle form submission */ },
-                    modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.buttonColors(containerColor = green700)
-                ) {
-                    Text("ENVIAR")
-                }
-            }
-        }
+@Composable
+private fun Boton_abrir_camara(green700: Color) {
+    Button(
+        onClick = { /* Handle photo capture */ },
+        colors = ButtonDefaults.buttonColors(containerColor = green700)
+    ) {
+        Icon(Icons.Default.Camera, contentDescription = "Tomar foto")
+        Spacer(modifier = Modifier.width(10.dp))
+        Text("Tomar foto")
+    }
+}
 
-        //////////////// PARA LOS BOTONES DE CAPTURAR //////////////////
-        @Composable
-        private fun Botones_captura(green700: Color) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Boton_seleccionar_archivo(green700)
-                Boton_abrir_camara(green700)
-            }
-        }
+@Composable
+fun Boton_seleccionar_archivo(green700: Color) {
+    Button(
+        onClick = { /* Handle file selection */ },
+        colors = ButtonDefaults.buttonColors(containerColor = green700)
+    ) {
+        Icon(Icons.Default.FileOpen, contentDescription = "Seleccionar archivo")
+        Spacer(modifier = Modifier.width(10.dp))
+        Text("Elige archivo")
+    }
+}
 
-        @Composable
-        private fun Boton_abrir_camara(green700: Color) {
-            Button(
-                onClick = { /* Handle photo capture */ },
-                colors = ButtonDefaults.buttonColors(containerColor = green700)
-            ) {
-                Icon(Icons.Default.Camera, contentDescription = "Tomar foto")
-                Spacer(modifier = Modifier.width(10.dp))
-                Text("Tomar foto")
-            }
-        }
+@RequiresApi(Build.VERSION_CODES.P)
+//@Preview(device = "spec:width=800px,height=1340px,dpi=300")
+@Composable
+fun FormularioCuadrantePreview() {
+    FormularioCuadrante(activity = MainActivity(), navController = rememberNavController())
+}
 
-        @Composable
-        private fun Boton_seleccionar_archivo(green700: Color) {
-            Button(
-                onClick = { /* Handle file selection */ },
-                colors = ButtonDefaults.buttonColors(containerColor = green700)
-            ) {
-                Icon(Icons.Default.FileOpen, contentDescription = "Seleccionar archivo")
-                Spacer(modifier = Modifier.width(10.dp))
-                Text("Elige archivo")
-            }
-        }
+@Composable
+public fun Botones_capturaFC(green700: Color) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Boton_seleccionar_archivoFC(green700)
+        Boton_abrir_camaraFC(green700)
+    }
+}
 
-        @RequiresApi(Build.VERSION_CODES.P)
-        @Preview(device = "spec:width=800px,height=1340px,dpi=300")
-        @Composable
-        fun FormularioCuadrantePreview() {
-            FormularioCuadrante(activity = MainActivity(), navController = rememberNavController())
-        }
+@Composable
+public fun Boton_abrir_camaraFC(green700: Color) {
+    Button(
+        onClick = { CameraPermision.value = true; isFileSelectedFC.value = true },
+        colors = ButtonDefaults.buttonColors(containerColor = green700)
+    ) {
+        Icon(Icons.Default.Camera, contentDescription = "Tomar foto", tint = Color.White)
+        Spacer(modifier = Modifier.width(10.dp))
+        Text("Tomar foto", color = Color.White)
+    }
+}
 
-        @Composable
-        public fun Botones_capturaFC(green700: Color) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Boton_seleccionar_archivoFC(green700)
-                Boton_abrir_camaraFC(green700)
-            }
-        }
-
-        @Composable
-        public fun Boton_abrir_camaraFC(green700: Color) {
-            Button(
-                onClick = { CameraPermision.value = true; isFileSelectedFC.value = true },
-                colors = ButtonDefaults.buttonColors(containerColor = green700)
-            ) {
-                Icon(Icons.Default.Camera, contentDescription = "Tomar foto", tint = Color.White)
-                Spacer(modifier = Modifier.width(10.dp))
-                Text("Tomar foto", color = Color.White)
-            }
-        }
-
-        @Composable
-        public fun Boton_seleccionar_archivoFC(green700: Color) {
-            Button(
-                onClick = { /* Handle file selection */ isFileSelectedFC.value = true },
-                colors = ButtonDefaults.buttonColors(containerColor = green700)
-            ) {
-                Icon(
-                    Icons.Default.FileOpen,
-                    contentDescription = "Seleccionar archivo",
-                    tint = Color.White
-                )
-                Spacer(modifier = Modifier.width(10.dp))
-                Text("Elige archivo", color = Color.White)
-            }
-        }
+@Composable
+public fun Boton_seleccionar_archivoFC(green700: Color) {
+    Button(
+        onClick = { /* Handle file selection */ isFileSelectedFC.value = true},
+        colors = ButtonDefaults.buttonColors(containerColor = green700)
+    ) {
+        Icon(Icons.Default.FileOpen, contentDescription = "Seleccionar archivo", tint = Color.White)
+        Spacer(modifier = Modifier.width(10.dp))
+        Text("Elige archivo", color = Color.White)
+    }
+}

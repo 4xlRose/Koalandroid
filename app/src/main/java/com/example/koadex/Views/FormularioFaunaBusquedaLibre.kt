@@ -1,7 +1,11 @@
 package com.example.koadex.Views
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.net.Uri
 import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 
 import androidx.compose.foundation.background
@@ -19,7 +23,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -29,11 +32,25 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.FileOpen
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import com.example.koadex.AppViewModelProvider
 import com.example.koadex.MainActivity
 import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
 import com.example.koadex.ViewModels.FormularioFaunaBusquedaLibreViewModel
+import com.example.koadex.ui.form.BusquedaLibreDetails
+import com.example.koadex.ui.form.BusquedaUiState
+import com.example.koadex.ui.form.FormBusquedaLibreDBViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+
+import java.io.InputStream
+import kotlin.coroutines.coroutineContext
 
 
 val isFileSelectedFBL: MutableState<Boolean> = mutableStateOf(false)
@@ -42,11 +59,19 @@ val isFileSelectedFBL: MutableState<Boolean> = mutableStateOf(false)
 @SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FormularioFaunaBusquedaLibre(activity: MainActivity, navController: NavHostController, modifier: Modifier = Modifier) {
+fun FormularioFaunaBusquedaLibre(
+    activity: MainActivity, navController: NavHostController, modifier: Modifier = Modifier,
+    viewModelB: FormBusquedaLibreDBViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    viewModelb: FormularioFaunaBusquedaLibreViewModel = viewModel()) {
+
+    val onForm = viewModelB::updateBusquedaLibre
     if (CameraPermision.value) {
         CameraWindow(activity)
     } else {
-        var numIndividuos by remember { mutableStateOf(1) }
+
+        val formUi by viewModelb.uiState.collectAsState()
+
+        var numIndividuos by remember { formUi.entero } }
         var alturaObservacion by remember { mutableStateOf("") }
         var tipoAnimalSeleccionado by remember { mutableStateOf("") }
         var zonaSeleccionada by remember { mutableStateOf("") }
@@ -54,13 +79,11 @@ fun FormularioFaunaBusquedaLibre(activity: MainActivity, navController: NavHostC
 
         val isFileSelected: MutableState<Boolean> = mutableStateOf(false)
 
-
+        val coroutineScope = viewModelB.viewModelScope
         val FaunaBViewModel = FormularioFaunaBusquedaLibreViewModel()
         val viewModel = FomularioEspecies_ViewModel()
         val green700 = colorResource(id = R.color.green_700)
-        var nombreComun by remember { mutableStateOf("") } // Estado para Nombre Común
-        var nombreCientifico by remember { mutableStateOf("") } // Estado para Nombre Científico
-        var observaciones by remember { mutableStateOf("") } // Estado para Observaciones
+
 
         //Estado de scroll
         val scrollState = rememberScrollState()
@@ -99,25 +122,6 @@ fun FormularioFaunaBusquedaLibre(activity: MainActivity, navController: NavHostC
                     .background(Color(0xFFFFFFFF))
             ) {
                 // Barra superior
-                TopAppBar(
-                    title = {
-                        Text(
-                            "Formulario",
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold
-                        )
-                    },
-                    navigationIcon = {
-                        IconButton(onClick = { navController.navigate("TiposForms") }) {
-                            Icon(
-                                Icons.Filled.ArrowBack,
-                                contentDescription = "Atrás",
-                                tint = Color.White
-                            )
-                        }
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF4E7029))
-                )
 
                 // Contenido desplazable
                 Column(
@@ -156,6 +160,7 @@ fun FormularioFaunaBusquedaLibre(activity: MainActivity, navController: NavHostC
                             zonaSeleccionada == "Cultivos Permanentes",
                             R.drawable.ic_cultivospermanentes
                         ) { zonaSeleccionada = "Cultivos Permanentes" }
+                        onForm(viewModelB.busquedaUiState.busquedaDetails.copy(idZoneType = viewModelb.zonaNametoId(zonaSeleccionada)))
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -192,21 +197,22 @@ fun FormularioFaunaBusquedaLibre(activity: MainActivity, navController: NavHostC
                             tipoAnimalSeleccionado == "Insecto",
                             R.drawable.ic_insecto
                         ) { tipoAnimalSeleccionado = "Insecto" }
+                        onForm(viewModelB.busquedaUiState.busquedaDetails.copy(idAnimalType = viewModelb.animaltipoId(tipoAnimalSeleccionado)))
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
 
                     // Campos de texto
                     OutlinedTextField(
-                        value = nombreComun,
-                        onValueChange = { nombreComun = it }, // Actualizar el estado
+                        value = viewModelB.busquedaUiState.busquedaDetails.animalName,
+                        onValueChange = { onForm(viewModelB.busquedaUiState.busquedaDetails.copy(animalName = it)) }, // Actualizar el estado
                         label = { Text("Nombre Común", color = Color.DarkGray) },
                         modifier = Modifier.fillMaxWidth()
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     OutlinedTextField(
-                        value = nombreCientifico,
-                        onValueChange = { nombreCientifico = it }, // Actualizar el estado
+                        value = viewModelB.busquedaUiState.busquedaDetails.scientificName,
+                        onValueChange = { onForm(viewModelB.busquedaUiState.busquedaDetails.copy(scientificName = it))  }, // Actualizar el estado
                         label = { Text("Nombre Científico", color = Color.DarkGray) },
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -225,18 +231,20 @@ fun FormularioFaunaBusquedaLibre(activity: MainActivity, navController: NavHostC
                     ) {
                         IconButton(
                             onClick = {
-                                if (numIndividuos > 1) numIndividuos--
+                                viewModelb.enteroMenosUno()
                             }
                         ) {
                             Icon(Icons.Filled.Remove, contentDescription = "Disminuir")
                         }
                         Text(
-                            text = numIndividuos.toString(),
+                            text = viewModelb.entero.toString(),
                             style = MaterialTheme.typography.titleMedium
+
                         )
+                        onForm(viewModelB.busquedaUiState.busquedaDetails.copy(quantity = viewModelb.entero))
                         IconButton(
                             onClick = {
-                                numIndividuos++
+                                viewModelb.enteroMasUno()
                             }
                         ) {
                             Icon(Icons.Filled.Add, contentDescription = "Aumentar")
@@ -277,6 +285,7 @@ fun FormularioFaunaBusquedaLibre(activity: MainActivity, navController: NavHostC
                             tipoObservacionSeleccionada == "Les Dijeron",
                             R.drawable.ic_les_dijeron
                         ) { tipoObservacionSeleccionada = "Les Dijeron" }
+                        onForm(viewModelB.busquedaUiState.busquedaDetails.copy(idObservType = viewModelb.observacionNametoId(tipoObservacionSeleccionada)))
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -300,6 +309,7 @@ fun FormularioFaunaBusquedaLibre(activity: MainActivity, navController: NavHostC
                             ">3mt Alta",
                             alturaObservacion == ">3mt Alta"
                         ) { alturaObservacion = ">3mt Alta" }
+                        onForm(viewModelB.busquedaUiState.busquedaDetails.copy(idHeightType = viewModelb.alturaNametoId(alturaObservacion)))
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -312,9 +322,11 @@ fun FormularioFaunaBusquedaLibre(activity: MainActivity, navController: NavHostC
                         color = Color.Black
                     )
 
-                    Botones_capturaFBL(green700)
+                    Botones_capturaFBL(activity,
+                        viewModelB.busquedaUiState,
+                        viewModelB::updateBusquedaLibre,green700)
 
-                    viewModel.Botones_captura(green700)
+
 
 
 
@@ -322,8 +334,8 @@ fun FormularioFaunaBusquedaLibre(activity: MainActivity, navController: NavHostC
 
                     // Observaciones
                     OutlinedTextField(
-                        value = observaciones,
-                        onValueChange = { observaciones = it }, // Actualizar el estado
+                        value = viewModelB.busquedaUiState.busquedaDetails.observations,
+                        onValueChange = { onForm(viewModelB.busquedaUiState.busquedaDetails.copy(observations = it)) }, // Actualizar el estado
                         label = { Text("Observaciones", color = Color.DarkGray) },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -332,7 +344,8 @@ fun FormularioFaunaBusquedaLibre(activity: MainActivity, navController: NavHostC
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    viewModel.Atras_enviar(navController, green700)
+
+                    Atras_enviar(navController, viewModelB,coroutineScope,green700)
 
                     Spacer(modifier = Modifier.height(50.dp))
 
@@ -340,24 +353,62 @@ fun FormularioFaunaBusquedaLibre(activity: MainActivity, navController: NavHostC
             }
         }
     }
+
+
+@Composable
+public fun Atras_enviar(
+    navController: NavController,
+    viewModel: FormBusquedaLibreDBViewModel,
+    coroutineScope: CoroutineScope,
+    green700: Color
+) {
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Button(
+            onClick = { navController.popBackStack() },
+            modifier = Modifier.weight(1f),
+            colors = ButtonDefaults.buttonColors(containerColor = green700)
+        ) {
+            Text("ATRAS", color = Color.White)
+        }
+        Spacer(modifier = Modifier.width(8.dp))
+        Button(
+            onClick = {
+                coroutineScope.launch {
+                    viewModel.saveBusquedaLibre()
+                }
+            },
+            modifier = Modifier.weight(1f),
+            colors = ButtonDefaults.buttonColors(containerColor = green700),
+            enabled = isFileSelectedFBL.value
+        ) {
+            Text("ENVIAR", color = Color.White)
+        }
+    }
 }
 
-
-
 @RequiresApi(Build.VERSION_CODES.P)
-@Preview(device = "spec:width=800px,height=1340px,dpi=300")
+//@Preview(device = "spec:width=800px,height=1340px,dpi=300")
 @Composable
 fun FormularioFaunaBusquedaLibre() {
     FormularioFaunaBusquedaLibre(activity = MainActivity(), navController = rememberNavController(), modifier = Modifier)
 }
 
 @Composable
-fun Botones_capturaFBL(green700: Color) {
+fun Botones_capturaFBL(
+    activity: MainActivity,
+    busquedaDetails: BusquedaUiState,
+    onForm: (BusquedaLibreDetails) -> Unit,
+    green700: Color
+) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Boton_seleccionar_archivoFBL(green700)
+        Boton_seleccionar_archivoFBL(activity = activity,viewModel = FormularioFaunaBusquedaLibreViewModel(),busquedaDetails,onForm ,green700)
         Boton_abrir_camaraFBL(green700)
     }
 }
@@ -375,9 +426,30 @@ fun Boton_abrir_camaraFBL(green700: Color) {
 }
 
 @Composable
-fun Boton_seleccionar_archivoFBL(green700: Color) {
+fun Boton_seleccionar_archivoFBL(activity: MainActivity,
+                                 viewModel: FormularioFaunaBusquedaLibreViewModel,
+                                 busquedaDetails: BusquedaUiState,
+                                 onForm: (BusquedaLibreDetails) -> Unit,
+                                 green700: Color) {
+
+    val context = LocalContext.current
+    val activityResultLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = { uri: Uri? ->
+            uri?.let {
+                // Convertir el URI en ByteArray
+                val byteArray = convertUriToByteArray(context, it)
+                onForm(busquedaDetails.busquedaDetails.copy(evidences = byteArray))
+                // Hacer algo con el byteArray, como guardarlo en la base de datos
+                println("Imagen seleccionada, byteArray size: ${byteArray?.size}")
+            }
+        }
+    )
+
     Button(
-        onClick = { /* Handle file selection */ isFileSelectedFBL.value = true},
+        onClick = {
+            activityResultLauncher.launch("image/*")
+            isFileSelectedFBL.value = true},
         colors = ButtonDefaults.buttonColors(containerColor = green700)
     ) {
         Icon(Icons.Default.FileOpen, contentDescription = "Seleccionar archivo", tint = Color.White)
@@ -385,4 +457,20 @@ fun Boton_seleccionar_archivoFBL(green700: Color) {
         Text("Elige archivo", color = Color.White)
     }
 }
+
+fun convertUriToByteArray(context: Context, uri: Uri): ByteArray? {
+    var byteArray: ByteArray? = null
+    try {
+        val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
+        byteArray = inputStream?.readBytes()
+        inputStream?.close()
+    } catch (e: Exception) {
+        e.printStackTrace()  // Manejar el error si ocurre
+    }
+    return byteArray
+}
+
+
+
+
 

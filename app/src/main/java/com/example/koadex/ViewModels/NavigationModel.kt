@@ -1,6 +1,7 @@
 package com.example.koadex.ViewModels
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -17,6 +18,7 @@ import java.util.Date
 class NavigationModel(private val formRepository: FormRepository): ViewModel() {
     var loggedUser by mutableStateOf(sampleUser)
     var accessToken by mutableStateOf("")
+    var savedFormId by mutableIntStateOf(0)
 
     suspend fun insertUser(user: UserEntity) {
         formRepository.insertUser(user)

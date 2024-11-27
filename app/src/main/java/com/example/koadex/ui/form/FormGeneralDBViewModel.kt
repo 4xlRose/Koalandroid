@@ -1,8 +1,6 @@
 package com.example.koadex.ui.form
 
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -26,10 +24,18 @@ class FormGeneralDBViewModel (private val formRepository: FormRepository) : View
         return formRepository.getLatestFormId()
     }
 
-    fun updateGeneraFormUiState(formGeneral: GeneralFormsDetails) {
+    fun getFormById(id: Int): Flow<GeneralFormEntity?> {
+        return formRepository.getFormById(id)
+    }
+
+    fun updateGeneralFormUiState(formGeneral: GeneralFormsDetails) {
         formGeneralUiState = GeneralFormUiState(
             formsDetails = formGeneral
         )
+    }
+
+    suspend fun editGeneralForm() {
+        formRepository.updateGeneralForm(formGeneralUiState.formsDetails.toEntity())
     }
 
     suspend fun saveGeneralForm() {
@@ -61,13 +67,24 @@ class FormGeneralDBViewModel (private val formRepository: FormRepository) : View
         )
     }
 
+    suspend fun editFormState() {
+        formRepository.updateFormState(formStateUiState.formStateDetails.toEntity())
+    }
+
     suspend fun saveFormState() {
         formRepository.insertFormState(formStateUiState.formStateDetails.toEntity())
     }
 
 
+    // Clima y temporada
+    fun getWeatherByName(name: String): Flow<WeatherEntity?> {
+        return formRepository.getWeatherByName(name)
+    }
     fun getWeatherById(id: Int): Flow<WeatherEntity?> {
         return formRepository.getWeatherById(id)
+    }
+    fun getSeasonByName(name: String): Flow<SeasonEntity?> {
+        return formRepository.getSeasonByName(name)
     }
     fun getSeasonById(id: Int): Flow<SeasonEntity?> {
         return formRepository.getSeasonById(id)

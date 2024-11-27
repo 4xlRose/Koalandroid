@@ -1,9 +1,11 @@
 
 package com.example.koadex.data
 
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 interface FormRepository {
@@ -44,10 +46,12 @@ interface FormRepository {
 
     //Clima
     fun getWeatherById(id: Int): Flow<WeatherEntity?>
+    fun getWeatherByName(name: String): Flow<WeatherEntity?>
     suspend fun inserWeatherBegin(weathers: List<WeatherEntity>)
 
     //Epoca
     fun getSeasonById(id: Int): Flow<SeasonEntity?>
+    fun getSeasonByName(name: String): Flow<SeasonEntity?>
     suspend fun insertSeasonBegin(seasons: List<SeasonEntity>)
 
     //Zona tipo
@@ -116,4 +120,13 @@ interface FormRepository {
     suspend fun insertWeatherForm(form: WeatherFormEntity)
     suspend fun updateWeatherForm(form: WeatherFormEntity)
     suspend fun deleteWeatherForm(form: WeatherFormEntity)
+
+
+    suspend fun insertBusquedaLibre(form: BusquedaLibreEntity)
+    suspend fun deleteBusquedaLibre(form: BusquedaLibreEntity)
+    suspend fun updateBusquedaLibre(form: BusquedaLibreEntity)
+
+    suspend fun insertPuntoConteo(form: PuntoConteoEntity)
+    suspend fun updatePuntoConteo(form: PuntoConteoEntity)
+    suspend fun deletePuntoConteo(form: PuntoConteoEntity)
 }

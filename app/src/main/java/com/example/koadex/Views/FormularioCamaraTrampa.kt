@@ -56,11 +56,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.koadex.AppViewModelProvider
 import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
+import com.example.koadex.ViewModels.FormularioCamaraTrampaViewModel
 import com.example.koadex.ui.form.FormRouteFormDBViewModel
 import com.example.koadex.ui.form.RouteFormDetails
 import com.example.koadex.ui.form.RouteFormUiState
 import com.example.koadex.ui.principal.KoadexViewModel
+import com.example.koadex.utils.DateValidator
 import kotlinx.coroutines.launch
+import okhttp3.internal.threadName
 
 val isFileSelectedFCT: MutableState<Boolean> = mutableStateOf(false)
 var CameraPermision: MutableState<Boolean> = mutableStateOf(false)
@@ -129,6 +132,7 @@ fun FormularioScreen(
     formUiState: RouteFormUiState,
     onFormValueChange: (RouteFormDetails) -> Unit,
     onZoneIdChange: (Int) -> Unit,
+    viewModelCT: FormularioCamaraTrampaViewModel = viewModel(),
     onSaveClick: () -> Unit
 ) {
     if (CameraPermision.value) {
@@ -167,6 +171,23 @@ fun FormularioScreen(
         val routeWidthText = remember { mutableStateOf("")}
         val targetDistanceText = remember { mutableStateOf("")}
         val lensHeightText = remember { mutableStateOf("")}
+
+        // Variables para el TEST
+        val dateValidator = remember { DateValidator() }
+        val viewModelCT: FormularioCamaraTrampaViewModel = viewModel()
+        val dateText by viewModelCT.dateText
+        val dateError by viewModelCT.dateError
+
+        // Formatear la fecha a dd/mm/aa
+        fun formatFecha(input: String): String {
+            if (input.length == 6) {
+                val dia = input.substring(0, 2)
+                val mes = input.substring(2, 4)
+                val anio = input.substring(4, 6)
+                return "$dia/$mes/$anio"
+            }
+            return input
+        }
 
         Column(
             modifier = modifier
@@ -252,14 +273,14 @@ fun FormularioScreen(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 OutlinedTextField(
-                    value = nombreCamara,
-                    onValueChange = { nombreCamara = it },
+                    value = formUiState.formsRouteDetails.nameCamara,
+                    onValueChange = { onFormValueChange(formUiState.formsRouteDetails.copy(nameCamara = it)) },
                     label = { Text(stringResource(R.string.nombre_camara), color = Color.DarkGray) },
                     modifier = Modifier.weight(1f)
                 )
                 OutlinedTextField(
-                    value = placaCamara,
-                    onValueChange = { placaCamara = it },
+                    value = formUiState.formsRouteDetails.placaCamara,
+                    onValueChange = { onFormValueChange(formUiState.formsRouteDetails.copy(placaCamara = it)) },
                     label = { Text(stringResource(R.string.placa_camara), color = Color.DarkGray) },
                     modifier = Modifier.weight(1f)
                 )
@@ -278,6 +299,7 @@ fun FormularioScreen(
                             onFormValueChange(formUiState.formsRouteDetails.copy(guayaPlate = guayaPlate))
                         }
                     },
+                    label = { Text(stringResource(R.string.placa_guaya), color = Color.DarkGray) },
                     modifier = Modifier.weight(1f)
                 )
                 OutlinedTextField(
@@ -298,12 +320,17 @@ fun FormularioScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                OutlinedTextField(
-                    value = fecha,
-                    onValueChange = { fecha = it },
-                    label = { Text(stringResource(R.string.fecha), color = Color.DarkGray) },
+                DateField(
+                    dateText = formUiState.formsRouteDetails.fecha, // Estado global
+                    onDateChange = { input ->
+                        // Asegúrate de validar y actualizar el estado global
+                        onFormValueChange(formUiState.formsRouteDetails.copy(fecha = input))
+                    },
+                    error = dateError,
+                    stringResource(id = R.string.fecha),
                     modifier = Modifier.weight(1f)
                 )
+
                 OutlinedTextField(
                     value = targetDistanceText.value,
                     onValueChange = { newValue ->
@@ -331,7 +358,6 @@ fun FormularioScreen(
             }
 
             Spacer(modifier = Modifier.height(16.dp))
-            
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -356,9 +382,18 @@ fun FormularioScreen(
                         selectedItems = checklistSelected,
                         onItemSelected = { index ->
                             if (checklistSelected.contains(index)) {
-                                checklistSelected.remove(index) // Deseleccionar si ya está seleccionado
+                                checklistSelected.remove(index)
                             } else {
-                                checklistSelected.add(index) // Agregar al seleccionar
+                                checklistSelected.add(index)
+                            }
+
+                            when (index) {
+                                0 -> onFormValueChange(formUiState.formsRouteDetails.copy(instalada = if (checklistSelected.contains(index)) 1 else 0))
+                                1 -> onFormValueChange(formUiState.formsRouteDetails.copy(programa = if (checklistSelected.contains(index)) 2 else 0))
+                                2 -> onFormValueChange(formUiState.formsRouteDetails.copy(memoria = if (checklistSelected.contains(index)) 3 else 0))
+                                3 -> onFormValueChange(formUiState.formsRouteDetails.copy(prendida = if (checklistSelected.contains(index)) 4 else 0))
+                                4 -> onFormValueChange(formUiState.formsRouteDetails.copy(pruebaGateo = if (checklistSelected.contains(index)) 5 else 0))
+                                5 -> onFormValueChange(formUiState.formsRouteDetails.copy(letreroCamara = if (checklistSelected.contains(index)) 6 else 0))
                             }
                         },
                         buttonLabels = listOf(
@@ -369,8 +404,8 @@ fun FormularioScreen(
                             stringResource(R.string.prueba_gateo),
                             stringResource(R.string.letrero_camara)
                         ),
-                        color = Color.Black, // Color de texto predeterminado
-                        selectedColor = Color(0xFF4E7029) // Color verde al seleccionar
+                        color = Color.Black,
+                        selectedColor = Color(0xFF4E7029)
                     )
                 }
             }
@@ -587,6 +622,33 @@ fun EvidenciaItem(
 @Composable
 fun FormularioCamaraTrampaPreview() {
     FormularioCamaraTrampa(activity = MainActivity(), modifier = Modifier, navController = rememberNavController())
+}
+
+@Composable
+fun DateField(
+    dateText: String,
+    onDateChange: (String) -> Unit,
+    error: String?,
+    label: String,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier) {
+        OutlinedTextField(
+            value = dateText,
+            onValueChange = onDateChange,
+            label = { Text(label) },
+            isError = error != null,
+            modifier = Modifier.fillMaxWidth()
+        )
+        if (error != null) {
+            Text(
+                text = error,
+                color = Color.Red,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+            )
+        }
+    }
 }
 
 @Composable
