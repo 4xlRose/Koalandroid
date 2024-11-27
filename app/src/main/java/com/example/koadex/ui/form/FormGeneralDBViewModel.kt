@@ -66,11 +66,11 @@ class FormGeneralDBViewModel (private val formRepository: FormRepository) : View
     }
 
 
-    fun getWeatherById(id: Int): Flow<WeatherEntity?> {
-        return formRepository.getWeatherById(id)
+    fun getWeatherByName(name: String): Flow<WeatherEntity?> {
+        return formRepository.getWeatherByName(name)
     }
-    fun getSeasonById(id: Int): Flow<SeasonEntity?> {
-        return formRepository.getSeasonById(id)
+    fun getSeasonByName(name: String): Flow<SeasonEntity?> {
+        return formRepository.getSeasonByName(name)
     }
 }
 

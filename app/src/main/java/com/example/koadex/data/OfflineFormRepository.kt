@@ -34,10 +34,12 @@ class OfflineFormRepository (private val formDao: FormDao) : FormRepository {
 
     //Clima
     override fun getWeatherById(id: Int): Flow<WeatherEntity?> = formDao.getWeatherById(id)
+    override fun getWeatherByName(name: String): Flow<WeatherEntity?> = formDao.getWeatherByName(name)
     override suspend fun inserWeatherBegin(weathers: List<WeatherEntity>) = formDao.insertWeatherBegin(weathers)
 
     //Epoca
     override fun getSeasonById(id: Int): Flow<SeasonEntity?> = formDao.getSeasonById(id)
+    override fun getSeasonByName(name: String): Flow<SeasonEntity?> = formDao.getSeasonByName(name)
     override suspend fun insertSeasonBegin(seasons: List<SeasonEntity>) = formDao.insertSeasonBegin(seasons)
 
     //Zona tipo
@@ -114,7 +116,12 @@ class OfflineFormRepository (private val formDao: FormDao) : FormRepository {
     override suspend fun updateWeatherForm(form: WeatherFormEntity) = formDao.updateWeatherForm(form)
     override suspend fun deleteWeatherForm(form: WeatherFormEntity) = formDao.deleteWeatherForm(form)
 
-    //Punto de conteo
+    //Busqueda libre
+    override suspend fun insertBusquedaLibre(form: BusquedaLibreEntity) = formDao.insertBusquedaLibre(form)
+    override suspend fun deleteBusquedaLibre(form: BusquedaLibreEntity) = formDao.deleteBusquedaLibre(form)
+    override suspend fun updateBusquedaLibre(form: BusquedaLibreEntity) = formDao.updateBusquedaLibre(form)
+
+  //Punto de conteo
     override suspend fun insertPuntoConteo(form: PuntoConteoEntity) = formDao.insertPuntoConteo(form)
     override suspend fun updatePuntoConteo(form: PuntoConteoEntity) = formDao.updatePuntoConteo(form)
     override suspend fun deletePuntoConteo(form: PuntoConteoEntity) = formDao.deletePuntoConteo(form)

@@ -98,6 +98,9 @@ interface FormDao {
     @Query("SELECT * FROM weather WHERE id = :id")
     fun getWeatherById(id: Int): Flow<WeatherEntity?>
 
+    @Query("SELECT * FROM weather WHERE type = :name")
+    fun getWeatherByName(name: String): Flow<WeatherEntity?>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertWeatherBegin(weathers: List<WeatherEntity>)
 
@@ -105,6 +108,9 @@ interface FormDao {
     // Época
     @Query("SELECT * FROM season WHERE id = :id")
     fun getSeasonById(id: Int): Flow<SeasonEntity?>
+
+    @Query("SELECT * FROM season WHERE type = :name")
+    fun getSeasonByName(name: String): Flow<SeasonEntity?>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertSeasonBegin(seasons: List<SeasonEntity>)
@@ -243,6 +249,17 @@ interface FormDao {
 
     @Update
     suspend fun updateWeatherForm(form: WeatherFormEntity)
+
+    //Método de Formulario Busqueda libre
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertBusquedaLibre(form: BusquedaLibreEntity)
+
+    @Delete
+    suspend fun deleteBusquedaLibre(form: BusquedaLibreEntity)
+
+    @Update
+    suspend fun updateBusquedaLibre(form: BusquedaLibreEntity)
+
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertPuntoConteo(form: PuntoConteoEntity)

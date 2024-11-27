@@ -1,5 +1,7 @@
 package com.example.koadex.ViewModels
 
+import android.content.Context
+import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -17,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
+import java.io.InputStream
 
 class FormularioFaunaPuntoConteoViewModel: ViewModel() {
 
@@ -85,5 +88,17 @@ class FormularioFaunaPuntoConteoViewModel: ViewModel() {
                 .padding(4.dp)
                 .clickable(onClick = onClick)
         )
+    }
+
+    fun convertUriToByteArray(context: Context, uri: Uri): ByteArray? {
+        var byteArray: ByteArray? = null
+        try {
+            val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
+            byteArray = inputStream?.readBytes()
+            inputStream?.close()
+        } catch (e: Exception) {
+            e.printStackTrace()  // Manejar el error si ocurre
+        }
+        return byteArray
     }
 }

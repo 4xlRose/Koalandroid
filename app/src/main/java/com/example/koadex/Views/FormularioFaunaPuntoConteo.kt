@@ -1,5 +1,7 @@
 package com.example.koadex.Views
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -23,73 +25,78 @@ import com.example.koadex.R
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material.icons.filled.Camera
+import androidx.compose.material.icons.filled.FileOpen
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
+
+import com.example.koadex.MainActivity
+
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.koadex.AppViewModelProvider
+
 import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
 import com.example.koadex.ViewModels.FormularioFaunaBusquedaLibreViewModel
 import com.example.koadex.ViewModels.FormularioFaunaPuntoConteoViewModel
 import com.example.koadex.ui.form.FormPuntoConteoDBViewModel
 import kotlinx.coroutines.launch
+val isFileSelectedFPC: MutableState<Boolean> = mutableStateOf(false)
 
+@RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FormularioFaunaPuntoConteo(
-    navController: NavHostController,
+fun FormularioFaunaPuntoConteo(navController: NavHostController,
     modifier: Modifier = Modifier,
-    viewModel: FormPuntoConteoDBViewModel = viewModel(factory = AppViewModelProvider.Factory)
-) {
+    viewModel: FormPuntoConteoDBViewModel = viewModel(factory = AppViewModelProvider.Factory) {
+    if (CameraPermision.value) {
+        CameraWindow(activity)
+    } else {
+        var numIndividuos by remember { mutableStateOf(1) }
+        var alturaObservacion by remember { mutableStateOf("") }
+        var tipoAnimalSeleccionado by remember { mutableStateOf("") }
+        var zonaSeleccionada by remember { mutableStateOf("") }
+        var tipoObservacionSeleccionada by remember { mutableStateOf("") }
+        val actionButtonColors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4E7029))
+        val FaunaBViewModel = FormularioFaunaBusquedaLibreViewModel()
+        val viewModel = FomularioEspecies_ViewModel()
+        val green700 = colorResource(id = R.color.green_700)
+        var nombreComun by remember { mutableStateOf("") } // Estado para Nombre Común
+        var nombreCientifico by remember { mutableStateOf("") } // Estado para Nombre Científico
+        var observaciones by remember { mutableStateOf("") } // Estado para Observaciones
 
-    var numIndividuos by remember { mutableStateOf(1) }
-    var alturaObservacion by remember { mutableStateOf("") }
-    var tipoAnimalSeleccionado by remember { mutableStateOf("") }
-    var zonaSeleccionada by remember { mutableStateOf("") }
-    var tipoObservacionSeleccionada by remember { mutableStateOf("") }
-    val actionButtonColors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4E7029))
-    val FaunaPCViewModel = FormularioFaunaPuntoConteoViewModel()
-    val viewModelFE = FomularioEspecies_ViewModel()
-    val green700 = colorResource(id = R.color.green_700)
-    var nombreComun by remember { mutableStateOf("") } // Estado para Nombre Común
-    var nombreCientifico by remember { mutableStateOf("") } // Estado para Nombre Científico
-    var observaciones by remember { mutableStateOf("") } // Estado para Observaciones
 
+        //Estado de scroll
+        val scrollState = rememberScrollState()
+        
+        val coroutineScope = rememberCoroutineScope()
+        val puntoConteoUiState = viewModel.puntoConteoUiState
+        val puntoConteoDetails = puntoConteoUiState.puntoConteoDetails
 
-    //Estado de scroll
-    val scrollState = rememberScrollState()
-
-    val coroutineScope = rememberCoroutineScope()
-    val puntoConteoUiState = viewModel.puntoConteoUiState
-    val puntoConteoDetails = puntoConteoUiState.puntoConteoDetails
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFFFFFFF))
-    ) {
-        // Barra superior
-        TopAppBar(
-            title = { Text("Formulario",
-                color = Color.White,
-                fontWeight = FontWeight.Bold) },
-            navigationIcon = {
-                IconButton(onClick = { navController.navigate("TiposForms") }) {
-                    Icon(Icons.Filled.ArrowBack,
-                        contentDescription = "Atrás",
-                        tint = Color.White
-                    )
-                }
-            },
-            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF4E7029))
-        )
-
-        // Contenido desplazable
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(scrollState) // Habilitar scroll
-                .padding(horizontal = 32.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .background(Color(0xFFFFFFFF))
+        ) {
+            // Barra superior
+            TopAppBar(
+                title = { Text("Formulario",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold) },
+                navigationIcon = {
+                    IconButton(onClick = { navController.navigate("TiposForms") }) {
+                        Icon(Icons.Filled.ArrowBack,
+                            contentDescription = "Atrás",
+                            tint = Color.White
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF4E7029))
+            )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0xFFFFFFFF))
         ) {
             Spacer(modifier = Modifier.padding(vertical = 5.dp))
 
@@ -230,7 +237,6 @@ fun FormularioFaunaPuntoConteo(
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
 
             // Evidencias
             Text("Evidencias",
@@ -239,7 +245,8 @@ fun FormularioFaunaPuntoConteo(
                 color = Color.Black)
             viewModelFE.Botones_captura(green700)
 
-            Spacer(modifier = Modifier.height(16.dp))
+
+                    Spacer(modifier = Modifier.height(16.dp))
 
             // Observaciones
             OutlinedTextField(
@@ -253,10 +260,10 @@ fun FormularioFaunaPuntoConteo(
                     .height(100.dp)
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
-            //viewModelFE.Atras_enviar(navController, green700)
-
+            viewModelFE.Atras_enviar(navController, green700)
+/*
             // Botón para guardar el formulario
             Button(
                 onClick = {
@@ -271,14 +278,81 @@ fun FormularioFaunaPuntoConteo(
                 Text("Guardar", color = Color.White)
             }
 
-            Spacer(modifier = Modifier.height(50.dp))
+                    // Evidencias
+                    Text(
+                        "Evidencias",
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.align(Alignment.Start),
+                        color = Color.Black
+                    )
+                    Botones_capturaFPC(green700)
 
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // Observaciones
+                    OutlinedTextField(
+                        value = observaciones,
+                        onValueChange = { observaciones = it }, // Actualizar el estado
+                        label = { Text("Observaciones", color = Color.DarkGray) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(100.dp)
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    viewModel.Atras_enviar(navController, green700)
+*/
+                    Spacer(modifier = Modifier.height(50.dp))
+
+                }
+            }
         }
     }
 }
 
-@Preview(device = "spec:width=800px,height=1340px,dpi=300")
+
+@RequiresApi(Build.VERSION_CODES.P)
+//@Preview(device = "spec:width=800px,height=1340px,dpi=300")
 @Composable
 fun PreviewFormularioPuntoConteo() {
-    FormularioFaunaPuntoConteo(navController = rememberNavController(), modifier = Modifier)
+
+    FormularioFaunaPuntoConteo(activity = MainActivity(),navController = rememberNavController(), modifier = Modifier)
 }
+
+@Composable
+public fun Botones_capturaFPC(green700: Color) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Boton_seleccionar_archivoFPC(green700)
+        Boton_abrir_camaraFPC(green700)
+    }
+}
+
+@Composable
+public fun Boton_abrir_camaraFPC(green700: Color) {
+    Button(
+        onClick = { CameraPermision.value = true; isFileSelectedFPC.value = true },
+        colors = ButtonDefaults.buttonColors(containerColor = green700)
+    ) {
+        Icon(Icons.Default.Camera, contentDescription = "Tomar foto", tint = Color.White)
+        Spacer(modifier = Modifier.width(10.dp))
+        Text("Tomar foto", color = Color.White)
+    }
+}
+
+@Composable
+public fun Boton_seleccionar_archivoFPC(green700: Color) {
+    Button(
+        onClick = { /* Handle file selection */ isFileSelectedFPC.value = true},
+        colors = ButtonDefaults.buttonColors(containerColor = green700)
+    ) {
+        Icon(Icons.Default.FileOpen, contentDescription = "Seleccionar archivo", tint = Color.White)
+        Spacer(modifier = Modifier.width(10.dp))
+        Text("Elige archivo", color = Color.White)
+    }
+}
+

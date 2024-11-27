@@ -20,7 +20,6 @@ class FormPuntoConteoDBViewModel (private val formRepository: FormRepository) : 
     suspend fun savePuntoConteo() {
         formRepository.insertPuntoConteo(puntoConteoUiState.puntoConteoDetails.toEntity())
     }
-
 }
 
 data class PuntoConteoUiState(

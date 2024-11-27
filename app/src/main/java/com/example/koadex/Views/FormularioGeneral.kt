@@ -25,7 +25,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -34,16 +33,15 @@ import androidx.compose.material3.OutlinedIconToggleButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -54,12 +52,10 @@ import androidx.navigation.NavHostController
 import com.example.koadex.R
 
 
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.rememberNavController
 import com.example.koadex.AppViewModelProvider
 
 /*
@@ -80,8 +76,9 @@ import com.example.koadex.ui.form.UserUiState
 
 // TEST
 import com.example.koadex.utils.DateValidator
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.FlowCollector
 
 import kotlinx.coroutines.launch
 
@@ -111,16 +108,18 @@ fun FormularioGeneral(
             profilePicture = user.profilePicture
         )
     )
-    val coroutineScope = rememberCoroutineScope()
+
+    val coroutineScope = viewModel.viewModelScope
 
     FormularioGeneralEntry(
         navController = navController,
         formUiState = viewModel.formGeneralUiState,
-        onFormValueChange = viewModel::updateGeneraFormUiState,
+        updateForm = viewModel::updateGeneraFormUiState,
         userUiState = viewModel.userUiState,
         onUserValueChange = viewModel::updateUserUiState,
-        getWeatherById = viewModel::getWeatherById,
-        getSeasonById = viewModel::getSeasonById,
+        getWeatherByName = viewModel::getWeatherByName,
+        getSeasonByName = viewModel::getSeasonByName,
+        scope = viewModel.viewModelScope,
         onSaveClick = {
             coroutineScope.launch {
                 viewModel.saveGeneralForm()
@@ -155,11 +154,12 @@ fun FormularioGeneral(
 fun FormularioGeneralEntry(
     navController: NavHostController,
     formUiState: GeneralFormUiState,
-    onFormValueChange: (GeneralFormsDetails) -> Unit,
+    updateForm: (GeneralFormsDetails) -> Unit,
     userUiState: UserUiState,
     onUserValueChange: (UserDetails) -> Unit,
-    getWeatherById: (Int) -> Flow<WeatherEntity?>,
-    getSeasonById: (Int) -> Flow<SeasonEntity?>,
+    getWeatherByName: (String) -> Flow<WeatherEntity?>,
+    getSeasonByName: (String) -> Flow<SeasonEntity?>,
+    scope: CoroutineScope,
     onDateChange: (String) -> Unit,
     onSaveClick: () -> Unit,
     modifier: Modifier
@@ -216,10 +216,10 @@ fun FormularioGeneralEntry(
 
         FormInputForm(
             formDetails = formUiState.formsDetails,
-            onFormValueChange = onFormValueChange,
+            updateForm = updateForm,
             userDetails = userUiState.userDetails,
             onDateChange = { newDate ->
-                onFormValueChange(formUiState.formsDetails.copy(date = newDate))
+                updateForm(formUiState.formsDetails.copy(date = newDate))
             },
             modifier = Modifier
         )
@@ -244,35 +244,40 @@ fun FormularioGeneralEntry(
                 .fillMaxWidth()
                 .padding(top = 10.dp)
         ) {
-            val weatherID by remember { mutableIntStateOf(formUiState.formsDetails.idWeather) }
-            val weather = getWeatherById(weatherID).collectAsState(initial = null).value
+            var weather by remember { mutableStateOf("") }
+            var weatherID by remember { mutableIntStateOf(0) }
+
+            val onWeatherChange = { newWeather: String ->
+                weather = newWeather
+                scope.launch {
+                    getWeatherByName(newWeather).collect{
+                        weatherID = it?.id ?: 0
+                    }
+                }
+                updateForm(formUiState.formsDetails.copy(idWeather = weatherID))
+            }
+
             val buttonSize = 80.dp
 
             // Weather buttons
             WeatherButton(
                 type = "soleado",
-                currentWeather = weather?.weather ?: "soleado",
-                onWeatherChange = {
-                    onFormValueChange(formUiState.formsDetails.copy(idWeather = weatherID))
-                },
+                currentWeather = weather,
+                onWeatherChange = onWeatherChange,
                 buttonSize = buttonSize
             )
 
             WeatherButton(
                 type = "nublado",
-                currentWeather = weather?.weather ?: "nublado",
-                onWeatherChange = {
-                    onFormValueChange(formUiState.formsDetails.copy(idWeather = weatherID))
-                },
+                currentWeather = weather,
+                onWeatherChange = onWeatherChange,
                 buttonSize = buttonSize
             )
 
             WeatherButton(
                 type = "lluvioso",
-                currentWeather = weather?.weather ?: "lluvioso",
-                onWeatherChange = {
-                    onFormValueChange(formUiState.formsDetails.copy(idWeather = weatherID))
-                },
+                currentWeather = weather,
+                onWeatherChange = onWeatherChange,
                 buttonSize = buttonSize
             )
         }
@@ -294,26 +299,32 @@ fun FormularioGeneralEntry(
             horizontalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier.fillMaxWidth()
         ) {
-            var seasonID by remember { mutableIntStateOf(formUiState.formsDetails.idSeason) }
-            val season = getSeasonById(seasonID).collectAsState(initial = null).value
+            var season by remember { mutableStateOf("") }
+            var seasonID by remember { mutableIntStateOf(0) }
             val buttonSize = 80.dp
+
+            val onSeasonChange = { newSeason: String ->
+                season = newSeason
+                scope.launch {
+                    getSeasonByName(newSeason).collect {
+                        seasonID = it?.id ?: 0
+                    }
+                }
+                updateForm(formUiState.formsDetails.copy(idSeason = seasonID))
+            }
 
             // Season buttons
             SeasonButton(
                 type = "verano",
-                currentSeason = season?.season ?: "verano",
-                onSeasonChange = {
-                    onFormValueChange(formUiState.formsDetails.copy(idSeason = seasonID))
-                },
+                currentSeason = season,
+                onSeasonChange = onSeasonChange,
                 buttonSize = buttonSize
             )
 
             SeasonButton(
                 type = "invierno",
-                currentSeason = season?.season ?: "invierno",
-                onSeasonChange = {
-                    onFormValueChange(formUiState.formsDetails.copy(idSeason = seasonID))
-                },
+                currentSeason = season,
+                onSeasonChange = onSeasonChange,
                 buttonSize = buttonSize
             )
         }
@@ -348,7 +359,7 @@ fun FormularioGeneralEntry(
 @Composable
 fun FormInputForm(
     formDetails: GeneralFormsDetails,
-    onFormValueChange: (GeneralFormsDetails) -> Unit,
+    updateForm: (GeneralFormsDetails) -> Unit,
     userDetails: UserDetails,
     onDateChange: (String) -> Unit,
     modifier: Modifier,
@@ -445,7 +456,7 @@ fun FormInputForm(
         OutlinedTextField(
             value = formDetails.place,
             label = { Text("Localidad", color = Color.DarkGray) },
-            onValueChange = { onFormValueChange(formDetails.copy(place = it)) },
+            onValueChange = { updateForm(formDetails.copy(place = it)) },
             modifier = Modifier
                 .padding(10.dp)
                 .fillMaxWidth()
@@ -461,7 +472,7 @@ fun FormInputForm(
         OutlinedTextField(
             value = formDetails.hour,
             label = { Text("Hora", color = Color.DarkGray) },
-            onValueChange = { onFormValueChange(formDetails.copy(hour = it)) },
+            onValueChange = { updateForm(formDetails.copy(hour = it)) },
             modifier = Modifier
                 .padding(10.dp)
                 .fillMaxWidth()
@@ -485,7 +496,8 @@ fun WeatherButton(
         onCheckedChange = { onWeatherChange(type) },
         shape = RoundedCornerShape(12.dp),
         colors = IconButtonDefaults.iconToggleButtonColors(
-            containerColor = if (currentWeather == type) Color(0xFFCDE4B4) else Color.White
+            containerColor = Color.White,
+            checkedContainerColor = Color(0xFFCDE4B4)
         ),
         border = BorderStroke(
             width = 1.dp,
@@ -518,7 +530,8 @@ fun SeasonButton(
         onCheckedChange = { onSeasonChange(type) },
         shape = RoundedCornerShape(12.dp),
         colors = IconButtonDefaults.iconToggleButtonColors(
-            containerColor = if (currentSeason == type) Color(0xFFCDE4B4) else Color.White
+            containerColor = Color.White,
+            checkedContainerColor = Color(0xFFCDE4B4)
         ),
         border = BorderStroke(
             width = 1.dp,
