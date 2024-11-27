@@ -46,9 +46,43 @@ data class WeatherFormDetails(
     var minTemperature: Double = 0.0, // decimal(2)
     var minHumidity: Double = 0.0, // decimal(2)
     var streamMtLevel: Double = 0.0, // decimal(2)
-    var evidences: String = "", // <- AGREGO MARIA
+    var evidences:ByteArray = byteArrayOf(), // <- AGREGO MARIA
     var observations: String = "" // <- AGREGO MARIA
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as WeatherFormDetails
+
+        if (id != other.id) return false
+        if (idZoneType != other.idZoneType) return false
+        if (rainfall != other.rainfall) return false
+        if (maxTemperature != other.maxTemperature) return false
+        if (maxHumidity != other.maxHumidity) return false
+        if (minTemperature != other.minTemperature) return false
+        if (minHumidity != other.minHumidity) return false
+        if (streamMtLevel != other.streamMtLevel) return false
+        if (!evidences.contentEquals(other.evidences)) return false
+        if (observations != other.observations) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id
+        result = 31 * result + idZoneType
+        result = 31 * result + rainfall.hashCode()
+        result = 31 * result + maxTemperature.hashCode()
+        result = 31 * result + maxHumidity.hashCode()
+        result = 31 * result + minTemperature.hashCode()
+        result = 31 * result + minHumidity.hashCode()
+        result = 31 * result + streamMtLevel.hashCode()
+        result = 31 * result + evidences.contentHashCode()
+        result = 31 * result + observations.hashCode()
+        return result
+    }
+}
 
 fun WeatherFormDetails.toEntity() : WeatherFormEntity = WeatherFormEntity(
     idZoneType = idZoneType,

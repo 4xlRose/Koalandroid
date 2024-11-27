@@ -33,6 +33,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.koadex.AppViewModelProvider
+import com.example.koadex.MainActivity
 import com.example.koadex.R
 import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
 import com.example.koadex.ui.form.FollowUpFormDetails
@@ -48,7 +49,7 @@ val isFileSelectedFS: MutableState<Boolean> = mutableStateOf(false)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormularioSeguimiento(
-    //activity: MainActivity,
+    activity: MainActivity,
     navController: NavHostController,
     modifier: Modifier = Modifier,
     viewModel: FormFollowDBViewModel = viewModel(factory = AppViewModelProvider.Factory)
@@ -89,44 +90,58 @@ fun FormularioSeguimiento(
                     navController.navigate("TiposForms")
                 }
             },
+            activity = activity,
             modifier = Modifier.padding(paddingValues),
         )
     }
 }
-//@Preview(device = "spec:width=800px,height=1340px,dpi=300", showBackground = true)
+
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun FormularioSeguimientoScreen(
-    //activity: MainActivity,
+    activity: MainActivity,
     navController: NavHostController,
     modifier: Modifier = Modifier,
     formUiState: FollowUpFormUiState,
     onFormValueChange: (FollowUpFormDetails) -> Unit,
     onSaveClick: () -> Unit
 ) {
-    val scrollState = rememberScrollState()
-    // Estado para los botones seleccionados
-    /*val coberturaSeleccionada = remember { mutableStateOf(-1) }
+    if (CameraPermision.value) {
+        CameraWindow(activity)
+    } else {
+        val scrollState = rememberScrollState()
+        // Estado para los botones seleccionados
+        /*val coberturaSeleccionada = remember { mutableStateOf(-1) }
     val disturbioSeleccionado = remember { mutableStateOf(-1) }
     val seguimientoSeleccionado = remember { mutableStateOf(-1) } // Estado para los botones de Seguimiento
     val cambioSeleccionado = remember { mutableStateOf(-1) } // Estado para los botones de Cambió*/
-    val viewModel = FomularioEspecies_ViewModel()
-    val green700 = colorResource(id = R.color.green_700)
-    var codigo by remember { mutableStateOf("") } // Estado para Observaciones
-    var tipoCultivo by remember { mutableStateOf("") } // Estado para Observaciones
-    var observaciones by remember { mutableStateOf("") } // Estado para Observaciones
+        val viewModel = FomularioEspecies_ViewModel()
+        val green700 = colorResource(id = R.color.green_700)
+        var codigo by remember { mutableStateOf("") } // Estado para Observaciones
+        var tipoCultivo by remember { mutableStateOf("") } // Estado para Observaciones
+        var observaciones by remember { mutableStateOf("") } // Estado para Observaciones
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(32.dp)
-            .verticalScroll(rememberScrollState())
-            .background(Color.White)
-    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(32.dp)
+                .verticalScroll(rememberScrollState())
+                .background(Color.White)
+        ) {
 
-        Spacer(modifier = Modifier.height(60.dp))
+            Spacer(modifier = Modifier.height(60.dp))
 
-        // Campo de Código
+
+            // Campo de Código
+            OutlinedTextField(
+                value = codigo,
+                onValueChange = { codigo = it },
+                label = { Text("Código", color = Color.DarkGray) },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+
+        /*// Campo de Código
         OutlinedTextField(
             value = codigo,
             onValueChange = { codigo = it},
@@ -134,253 +149,362 @@ fun FormularioSeguimientoScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))*/
 
-        // SECCION SEGUIMIENTO Y CAMBIO
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 32.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("Seguimiento",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = Color.Black)
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    OutlinedButton(
-                        onClick = { onFormValueChange(formUiState.formsFollowUpDetails.copy(followUp = true)) }, // Marca el botón como seleccionado
-                        border = BorderStroke(1.dp, Color.Gray),
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = if (formUiState.formsFollowUpDetails.followUp) Color(0xFF97B96E) else Color.White,
-                            contentColor = if (formUiState.formsFollowUpDetails.followUp) Color.White else Color.Black
-                        )
-                    ) {
-                        Icon(Icons.Default.Check, contentDescription = "Check")
-                    }
-                    OutlinedButton(
-                        onClick = { onFormValueChange(formUiState.formsFollowUpDetails.copy(followUp = false)) }, // Marca el botón como seleccionado
-                        border = BorderStroke(1.dp, Color.Gray),
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = if (!formUiState.formsFollowUpDetails.followUp) Color(0xFF97B96E) else Color.White,
-                            contentColor = if (!formUiState.formsFollowUpDetails.followUp) Color.White else Color.Black
-                        )
-                    ) {
-                        Icon(Icons.Default.Close, contentDescription = "Close")
-                    }
-                }
-            }
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("Cambió",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = Color.Black)
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    OutlinedButton(
-                        onClick = { onFormValueChange(formUiState.formsFollowUpDetails.copy(change = true)) }, // Marca el botón como seleccionado
-                        border = BorderStroke(1.dp, Color.Gray),
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = if (formUiState.formsFollowUpDetails.change) Color(0xFF97B96E) else Color.White,
-                            contentColor = if (formUiState.formsFollowUpDetails.change) Color.White else Color.Black
-                        )
-                    ) {
-                        Icon(Icons.Default.Check, contentDescription = "Check")
-                    }
-                    OutlinedButton(
-                        onClick = { onFormValueChange(formUiState.formsFollowUpDetails.copy(change = false)) }, // Marca el botón como seleccionado
-                        border = BorderStroke(1.dp, Color.Gray),
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = if (!formUiState.formsFollowUpDetails.change) Color(0xFF97B96E) else Color.White,
-                            contentColor = if (!formUiState.formsFollowUpDetails.change) Color.White else Color.Black
-                        )
-                    ) {
-                        Icon(Icons.Default.Close, contentDescription = "Close")
-                    }
-                }
-            }
-        }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // SECCION COBERTURA
-        Text("Cobertura",
-            style = MaterialTheme.typography.titleMedium,
-            color = Color.Black)
-
-        Spacer(modifier = Modifier.height(10.dp))
-
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.width(IntrinsicSize.Min)
+            // SECCION SEGUIMIENTO Y CAMBIO
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 32.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                // Primera fila de botones de Cobertura
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    (1..5).forEach { index -> // Iterar por los botones de la fila
-                        CoberturaButton(
-                            index = index,
-                            icon = when (index) {
-                                1 -> R.drawable.bd_cobertura
-                                2 -> R.drawable.ra_cobertura
-                                3 -> R.drawable.rb_cobertura
-                                4 -> R.drawable.pa_cobertura
-                                else -> R.drawable.pl_cobertura
-                            },
-                            isSelected = formUiState.formsFollowUpDetails.idCoverage == index,
-                            onClick = { onFormValueChange(formUiState.formsFollowUpDetails.copy(idCoverage = index)) }
-                        )
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        "Seguimiento",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color.Black
+                    )
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        OutlinedButton(
+                            onClick = {
+                                onFormValueChange(
+                                    formUiState.formsFollowUpDetails.copy(
+                                        followUp = true
+                                    )
+                                )
+                            }, // Marca el botón como seleccionado
+                            border = BorderStroke(1.dp, Color.Gray),
+                            colors = ButtonDefaults.outlinedButtonColors(
+                                containerColor = if (formUiState.formsFollowUpDetails.followUp) Color(
+                                    0xFF97B96E
+                                ) else Color.White,
+                                contentColor = if (formUiState.formsFollowUpDetails.followUp) Color.White else Color.Black
+                            )
+                        ) {
+                            Icon(Icons.Default.Check, contentDescription = "Check")
+                        }
+                        OutlinedButton(
+                            onClick = {
+                                onFormValueChange(
+                                    formUiState.formsFollowUpDetails.copy(
+                                        followUp = false
+                                    )
+                                )
+                            }, // Marca el botón como seleccionado
+                            border = BorderStroke(1.dp, Color.Gray),
+                            colors = ButtonDefaults.outlinedButtonColors(
+                                containerColor = if (!formUiState.formsFollowUpDetails.followUp) Color(
+                                    0xFF97B96E
+                                ) else Color.White,
+                                contentColor = if (!formUiState.formsFollowUpDetails.followUp) Color.White else Color.Black
+                            )
+                        ) {
+                            Icon(Icons.Default.Close, contentDescription = "Close")
+                        }
                     }
                 }
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                // Segunda fila de botones de Cobertura
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    (6..10).forEach { index -> // Iterar por los botones de la fila
-                        CoberturaButton(
-                            index = index,
-                            icon = when (index) {
-                                6 -> R.drawable.cp_cobertura
-                                7 -> R.drawable.ct_cobertura
-                                8 -> R.drawable.vh_cobertura
-                                9 -> R.drawable.td_cobertura
-                                else -> R.drawable.if_cobertura
-                            },
-                            isSelected = formUiState.formsFollowUpDetails.idCoverage == index,
-                            onClick = { onFormValueChange(formUiState.formsFollowUpDetails.copy(idCoverage = index)) }
-                        )
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        "Cambió",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color.Black
+                    )
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        OutlinedButton(
+                            onClick = {
+                                onFormValueChange(
+                                    formUiState.formsFollowUpDetails.copy(
+                                        change = true
+                                    )
+                                )
+                            }, // Marca el botón como seleccionado
+                            border = BorderStroke(1.dp, Color.Gray),
+                            colors = ButtonDefaults.outlinedButtonColors(
+                                containerColor = if (formUiState.formsFollowUpDetails.change) Color(
+                                    0xFF97B96E
+                                ) else Color.White,
+                                contentColor = if (formUiState.formsFollowUpDetails.change) Color.White else Color.Black
+                            )
+                        ) {
+                            Icon(Icons.Default.Check, contentDescription = "Check")
+                        }
+                        OutlinedButton(
+                            onClick = {
+                                onFormValueChange(
+                                    formUiState.formsFollowUpDetails.copy(
+                                        change = false
+                                    )
+                                )
+                            }, // Marca el botón como seleccionado
+                            border = BorderStroke(1.dp, Color.Gray),
+                            colors = ButtonDefaults.outlinedButtonColors(
+                                containerColor = if (!formUiState.formsFollowUpDetails.change) Color(
+                                    0xFF97B96E
+                                ) else Color.White,
+                                contentColor = if (!formUiState.formsFollowUpDetails.change) Color.White else Color.Black
+                            )
+                        ) {
+                            Icon(Icons.Default.Close, contentDescription = "Close")
+                        }
                     }
                 }
             }
-        }
 
+            Spacer(modifier = Modifier.height(16.dp))
 
-        Spacer(modifier = Modifier.height(16.dp))
+            // SECCION COBERTURA
+            Text(
+                "Cobertura",
+                style = MaterialTheme.typography.titleMedium,
+                color = Color.Black
+            )
 
-        // CAMPO TIPO DE CULTIVO
-        OutlinedTextField(
-            value = formUiState.formsFollowUpDetails.cropType,
-            onValueChange = { onFormValueChange(formUiState.formsFollowUpDetails.copy(cropType = it)) },
-            label = { Text("Tipos de Cultivo", color = Color.DarkGray) },
-            modifier = Modifier.fillMaxWidth()
-        )
+            Spacer(modifier = Modifier.height(10.dp))
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // SECCION DISTURBIO
-        Text("Disturbio",
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(vertical = 8.dp),
-            color = Color.Black)
-
-        Spacer(modifier = Modifier.height(10.dp))
-
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
-        ){
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.width(IntrinsicSize.Min)
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
             ) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.width(IntrinsicSize.Min)
                 ) {
-                    DisturbioButton(
-                        icon = R.drawable.inundacion_1,
-                        text = "Inundación",
-                        isSelected = formUiState.formsFollowUpDetails.idDisturbance == 1,
-                        onClick = { onFormValueChange(formUiState.formsFollowUpDetails.copy(idDisturbance = 1)) }
-                    )
-                    DisturbioButton(
-                        icon = R.drawable.hoguera_1,
-                        text = "Quema",
-                        isSelected = formUiState.formsFollowUpDetails.idDisturbance == 2,
-                        onClick = { onFormValueChange(formUiState.formsFollowUpDetails.copy(idDisturbance = 2)) }
-                    )
-                    DisturbioButton(
-                        icon = R.drawable.tala_de_arboles_1,
-                        text = "Tala",
-                        isSelected = formUiState.formsFollowUpDetails.idDisturbance == 3,
-                        onClick = { onFormValueChange(formUiState.formsFollowUpDetails.copy(idDisturbance = 3)) }
-                    )
-                    DisturbioButton(
-                        icon = R.drawable.polvo_1,
-                        text = "Erosión",
-                        isSelected = formUiState.formsFollowUpDetails.idDisturbance == 4,
-                        onClick = { onFormValueChange(formUiState.formsFollowUpDetails.copy(idDisturbance = 4)) }
-                    )
-                }
+                    // Primera fila de botones de Cobertura
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        (1..5).forEach { index -> // Iterar por los botones de la fila
+                            CoberturaButton(
+                                index = index,
+                                icon = when (index) {
+                                    1 -> R.drawable.bd_cobertura
+                                    2 -> R.drawable.ra_cobertura
+                                    3 -> R.drawable.rb_cobertura
+                                    4 -> R.drawable.pa_cobertura
+                                    else -> R.drawable.pl_cobertura
+                                },
+                                isSelected = formUiState.formsFollowUpDetails.idCoverage == index,
+                                onClick = {
+                                    onFormValueChange(
+                                        formUiState.formsFollowUpDetails.copy(
+                                            idCoverage = index
+                                        )
+                                    )
+                                }
+                            )
+                        }
+                    }
 
-                Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
 
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
-                ) {
-                    DisturbioButton(
-                        icon = R.drawable.mineria_1,
-                        text = "Minería",
-                        isSelected = formUiState.formsFollowUpDetails.idDisturbance == 5,
-                        onClick = { onFormValueChange(formUiState.formsFollowUpDetails.copy(idDisturbance = 5)) }
-                    )
-                    DisturbioButton(
-                        icon = R.drawable.camino_1,
-                        text = "Carretera",
-                        isSelected = formUiState.formsFollowUpDetails.idDisturbance == 6,
-                        onClick = { onFormValueChange(formUiState.formsFollowUpDetails.copy(idDisturbance = 6)) }
-                    )
-                    DisturbioButton(
-                        icon = R.drawable.algas_marinas_1,
-                        text = "Plantas \nacuáticas",
-                        isSelected = formUiState.formsFollowUpDetails.idDisturbance == 7,
-                        onClick = { onFormValueChange(formUiState.formsFollowUpDetails.copy(idDisturbance = 7)) }
-                    )
-                    DisturbioButton(
-                        text = "Otro",
-                        isSelected = formUiState.formsFollowUpDetails.idDisturbance == 8,
-                        onClick = { onFormValueChange(formUiState.formsFollowUpDetails.copy(idDisturbance = 8)) }
-                    )
+                    // Segunda fila de botones de Cobertura
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        (6..10).forEach { index -> // Iterar por los botones de la fila
+                            CoberturaButton(
+                                index = index,
+                                icon = when (index) {
+                                    6 -> R.drawable.cp_cobertura
+                                    7 -> R.drawable.ct_cobertura
+                                    8 -> R.drawable.vh_cobertura
+                                    9 -> R.drawable.td_cobertura
+                                    else -> R.drawable.if_cobertura
+                                },
+                                isSelected = formUiState.formsFollowUpDetails.idCoverage == index,
+                                onClick = {
+                                    onFormValueChange(
+                                        formUiState.formsFollowUpDetails.copy(
+                                            idCoverage = index
+                                        )
+                                    )
+                                }
+                            )
+                        }
+                    }
                 }
             }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Sección de Evidencias
-        Text("Evidencias",
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.align(Alignment.Start),
-            color = Color.Black)
-        Botones_capturaFS(green700)
 
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-        // Observaciones
-        OutlinedTextField(
-            value = formUiState.formsFollowUpDetails.observations,
-            onValueChange = { onFormValueChange(formUiState.formsFollowUpDetails.copy(observations = it)) },
-            label = { Text("Observaciones", color = Color.DarkGray) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(100.dp)
-        )
+            // CAMPO TIPO DE CULTIVO
+            OutlinedTextField(
+                value = formUiState.formsFollowUpDetails.cropType,
+                onValueChange = { onFormValueChange(formUiState.formsFollowUpDetails.copy(cropType = it)) },
+                label = { Text("Tipos de Cultivo", color = Color.DarkGray) },
+                modifier = Modifier.fillMaxWidth()
+            )
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-        viewModel.Atras_enviar(navController, green700)
+            // SECCION DISTURBIO
+            Text(
+                "Disturbio",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(vertical = 8.dp),
+                color = Color.Black
+            )
 
-        /*// Submit button -PARA PRUEBAS-
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.width(IntrinsicSize.Min)
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+                    ) {
+                        DisturbioButton(
+                            icon = R.drawable.inundacion_1,
+                            text = "Inundación",
+                            isSelected = formUiState.formsFollowUpDetails.idDisturbance == 1,
+                            onClick = {
+                                onFormValueChange(
+                                    formUiState.formsFollowUpDetails.copy(
+                                        idDisturbance = 1
+                                    )
+                                )
+                            }
+                        )
+                        DisturbioButton(
+                            icon = R.drawable.hoguera_1,
+                            text = "Quema",
+                            isSelected = formUiState.formsFollowUpDetails.idDisturbance == 2,
+                            onClick = {
+                                onFormValueChange(
+                                    formUiState.formsFollowUpDetails.copy(
+                                        idDisturbance = 2
+                                    )
+                                )
+                            }
+                        )
+                        DisturbioButton(
+                            icon = R.drawable.tala_de_arboles_1,
+                            text = "Tala",
+                            isSelected = formUiState.formsFollowUpDetails.idDisturbance == 3,
+                            onClick = {
+                                onFormValueChange(
+                                    formUiState.formsFollowUpDetails.copy(
+                                        idDisturbance = 3
+                                    )
+                                )
+                            }
+                        )
+                        DisturbioButton(
+                            icon = R.drawable.polvo_1,
+                            text = "Erosión",
+                            isSelected = formUiState.formsFollowUpDetails.idDisturbance == 4,
+                            onClick = {
+                                onFormValueChange(
+                                    formUiState.formsFollowUpDetails.copy(
+                                        idDisturbance = 4
+                                    )
+                                )
+                            }
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+                    ) {
+                        DisturbioButton(
+                            icon = R.drawable.mineria_1,
+                            text = "Minería",
+                            isSelected = formUiState.formsFollowUpDetails.idDisturbance == 5,
+                            onClick = {
+                                onFormValueChange(
+                                    formUiState.formsFollowUpDetails.copy(
+                                        idDisturbance = 5
+                                    )
+                                )
+                            }
+                        )
+                        DisturbioButton(
+                            icon = R.drawable.camino_1,
+                            text = "Carretera",
+                            isSelected = formUiState.formsFollowUpDetails.idDisturbance == 6,
+                            onClick = {
+                                onFormValueChange(
+                                    formUiState.formsFollowUpDetails.copy(
+                                        idDisturbance = 6
+                                    )
+                                )
+                            }
+                        )
+                        DisturbioButton(
+                            icon = R.drawable.algas_marinas_1,
+                            text = "Plantas \nacuáticas",
+                            isSelected = formUiState.formsFollowUpDetails.idDisturbance == 7,
+                            onClick = {
+                                onFormValueChange(
+                                    formUiState.formsFollowUpDetails.copy(
+                                        idDisturbance = 7
+                                    )
+                                )
+                            }
+                        )
+                        DisturbioButton(
+                            text = "Otro",
+                            isSelected = formUiState.formsFollowUpDetails.idDisturbance == 8,
+                            onClick = {
+                                onFormValueChange(
+                                    formUiState.formsFollowUpDetails.copy(
+                                        idDisturbance = 8
+                                    )
+                                )
+                            }
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Sección de Evidencias
+            Text(
+                "Evidencias",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.align(Alignment.Start),
+                color = Color.Black
+            )
+            Botones_capturaFS(green700)
+
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Observaciones
+            OutlinedTextField(
+                value = formUiState.formsFollowUpDetails.observations,
+                onValueChange = {
+                    onFormValueChange(
+                        formUiState.formsFollowUpDetails.copy(
+                            observations = it
+                        )
+                    )
+                },
+                label = { Text("Observaciones", color = Color.DarkGray) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp)
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            viewModel.Atras_enviar(navController, green700)
+
+            /*// Submit button -PARA PRUEBAS-
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
@@ -403,8 +527,9 @@ fun FormularioSeguimientoScreen(
             }
         }*/
 
-        Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(50.dp))
 
+        }
     }
 }
 
@@ -495,7 +620,7 @@ fun DisturbioButton(
 @Composable
 fun PreviewFormularioSeguimiento(){
     FormularioSeguimiento(
-        //activity = MainActivity(),
+        activity = MainActivity(),
         navController = rememberNavController()
     )
 }
@@ -514,7 +639,7 @@ public fun Botones_capturaFS(green700: Color) {
 @Composable
 public fun Boton_abrir_camaraFS(green700: Color) {
     Button(
-        onClick = { /* Handle photo capture */ isFileSelectedFS.value = true },
+        onClick = { CameraPermision.value = true; isFileSelectedFS.value = true },
         colors = ButtonDefaults.buttonColors(containerColor = green700)
     ) {
         Icon(Icons.Default.Camera, contentDescription = "Tomar foto", tint = Color.White)

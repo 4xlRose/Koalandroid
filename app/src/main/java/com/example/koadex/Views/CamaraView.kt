@@ -35,10 +35,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.cameraexample.ViewModels.CameraViewModel
 import com.example.koadex.MainActivity
+import com.example.koadex.R
 
 
 @RequiresApi(Build.VERSION_CODES.P)
@@ -91,10 +93,10 @@ fun CameraWindow(activity: MainActivity) {
                 modifier = Modifier
                     .clip(RoundedCornerShape(14.dp))
                     .size(45.dp)
-                    .background(MaterialTheme.colorScheme.primary)
+                    .background(colorResource(id = R.color.green_700))
                     .clickable {
                         if ((activity as MainActivity).arePermissionsGranted()) {
-                            cameraViewModel.takePhoto2(
+                            cameraViewModel.takePhoto(
                                 context = activity,
                                 onImageSaved = { file ->
                                     // Manejar la imagen guardada (opcional)
@@ -113,7 +115,7 @@ fun CameraWindow(activity: MainActivity) {
                 Icon(
                     imageVector = Icons.Default.Done,
                     contentDescription = "Gallery",
-                    tint = MaterialTheme.colorScheme.onPrimary,
+                    tint = Color.White,
                     modifier = Modifier.size(26.dp)
                 )
             }
@@ -126,7 +128,7 @@ fun CameraWindow(activity: MainActivity) {
                 modifier = Modifier
                     .clip(CircleShape)
                     .size(60.dp)
-                    .background(MaterialTheme.colorScheme.primary)
+                    .background(colorResource(id = R.color.green_700))
                     .clickable {
                         if ((activity as MainActivity).arePermissionsGranted()) {
                             cameraViewModel.takePhoto(
@@ -147,7 +149,7 @@ fun CameraWindow(activity: MainActivity) {
                 Icon(
                     imageVector = Icons.Default.Camera,
                     contentDescription = "Take Photo",
-                    tint = MaterialTheme.colorScheme.onPrimary,
+                    tint = Color.White,
                     modifier = Modifier.size(26.dp)
                 )
             }
@@ -158,7 +160,7 @@ fun CameraWindow(activity: MainActivity) {
                 modifier = Modifier
                     .clip(RoundedCornerShape(14.dp))
                     .size(45.dp)
-                    .background(MaterialTheme.colorScheme.primary)
+                    .background(colorResource(id = R.color.green_700))
                     .clickable {
                         controller.cameraSelector =
                             if (controller.cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA) {
@@ -172,7 +174,7 @@ fun CameraWindow(activity: MainActivity) {
                 Icon(
                     imageVector = Icons.Default.SwitchCamera,
                     contentDescription = "Change Camera",
-                    tint = MaterialTheme.colorScheme.onPrimary,
+                    tint = Color.White,
                     modifier = Modifier.size(26.dp)
                 )
             }

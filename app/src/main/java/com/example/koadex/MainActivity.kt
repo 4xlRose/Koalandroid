@@ -35,6 +35,7 @@ class MainActivity : ComponentActivity() {
                 this, CAMERA_PERMISSION, 100
             )
         }
+        requestLocationPermission()
 
 
         enableEdgeToEdge()
@@ -67,8 +68,25 @@ class MainActivity : ComponentActivity() {
             Manifest.permission.CAMERA
         )
     }
-}
 
+    private fun requestLocationPermission() {
+        val permissions = arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED ||
+            ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(this, permissions, 100)
+        }
+    }
+}
 
 
 
