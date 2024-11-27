@@ -6,7 +6,8 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.example.koadex.R
 
-@Entity(tableName = "general_form"/*,
+@Entity(
+    tableName = "general_form"/*,
     foreignKeys = [
         ForeignKey(
             entity = UserEntity::class,
@@ -56,7 +57,8 @@ import com.example.koadex.R
             childColumns = ["idWeatherForm"],
             onDelete = ForeignKey.CASCADE
         ),
-    ]*/)
+    ]*/
+)
 data class GeneralFormEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
@@ -73,7 +75,8 @@ data class GeneralFormEntity(
     var idWeatherForm: Int // Foreign Key
 )
 
-@Entity(tableName = "user"/*,
+@Entity(
+    tableName = "user"/*,
     foreignKeys = [
         ForeignKey(
             entity = ZoneEntity::class,
@@ -81,7 +84,8 @@ data class GeneralFormEntity(
             childColumns = ["idZone"],
             onDelete = ForeignKey.CASCADE
         )
-    ]*/)
+    ]*/
+)
 data class UserEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
@@ -101,7 +105,8 @@ data class UserEntity(
     var profilePicture: Int = R.drawable.profilepicture
 )
 
-@Entity(tableName = "form_state"/*,
+@Entity(
+    tableName = "form_state"/*,
     foreignKeys = [
         ForeignKey(
             entity = UserEntity::class,
@@ -115,7 +120,8 @@ data class UserEntity(
             childColumns = ["idGeneralForm"],
             onDelete = ForeignKey.CASCADE
         )
-    ]*/)
+    ]*/
+)
 data class FormStateEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
@@ -128,25 +134,26 @@ data class FormStateEntity(
 data class WeatherEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    var weather: String = "",
+    var type: String = "",
 )
 
 @Entity(tableName = "season")
 data class SeasonEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    var season: String = "",
+    var type: String = "",
 )
 
 @Entity(tableName = "zone")
 data class ZoneEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    var zone: String = "",
+    var type: String = "",
 )
 
 
-@Entity(tableName = "specie_form"/*,
+@Entity(
+    tableName = "specie_form"/*,
     foreignKeys = [
         ForeignKey(
             entity = GeneralFormEntity::class,
@@ -178,7 +185,8 @@ data class ZoneEntity(
             childColumns = ["idHeightType"],
             onDelete = ForeignKey.CASCADE
         )
-    ]*/)
+    ]*/
+)
 data class SpecieFormEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
@@ -234,32 +242,33 @@ data class SpecieFormEntity(
 data class ZoneTypeEntity(
     @PrimaryKey
     val id: Int = 0,
-    var zoneType: String = "",
+    var typeName: String = "",
 )
 
 @Entity(tableName = "animal_type")
 data class AnimalTypeEntity(
     @PrimaryKey
     val id: Int = 0,
-    var animalType: String = "",
+    var typeName: String = "",
 )
 
 @Entity(tableName = "observation_type")
 data class ObservTypeEntity(
     @PrimaryKey
     val id: Int = 0,
-    var observType: String = "",
+    var typeName: String = "",
 )
 
 @Entity(tableName = "height_type")
 data class HeightTypeEntity(
     @PrimaryKey
     val id: Int = 0,
-    var heightType: String = "",
+    var typeName: String = "",
 )
 
 
-@Entity(tableName = "follow_up_form"/*,
+@Entity(
+    tableName = "follow_up_form"/*,
     foreignKeys = [
         ForeignKey(
             entity = GeneralFormEntity::class,
@@ -279,7 +288,8 @@ data class HeightTypeEntity(
             childColumns = ["idDisturbance"],
             onDelete = ForeignKey.CASCADE
         )
-    ]*/)
+    ]*/
+)
 data class FollowUpFormEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
@@ -326,18 +336,19 @@ data class FollowUpFormEntity(
 data class CoverageEntity(
     @PrimaryKey
     val id: Int = 0,
-    var coverage: String = "" //char(2)
+    var type: String = "" //char(2)
 )
 
 @Entity(tableName = "disturbance")
 data class DisturbanceEntity(
     @PrimaryKey
     val id: Int = 0,
-    var disturbance: String = ""
+    var type: String = ""
 )
 
 
-@Entity(tableName = "quadrant_form"/*,
+@Entity(
+    tableName = "quadrant_form"/*,
     foreignKeys = [
         ForeignKey(
             entity = GeneralFormEntity::class,
@@ -369,7 +380,8 @@ data class DisturbanceEntity(
             childColumns = ["idHabitat"],
             onDelete = ForeignKey.CASCADE
         )
-    ]*/)
+    ]*/
+)
 data class QuadrantFormEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
@@ -378,14 +390,14 @@ data class QuadrantFormEntity(
     var idSubQuadrant: Int, // Foreign Key
     var specieName: String = "",
     var scientificName: String = "",
-    var placa  : String = "",
+    var placa: String = "",
     var idHabitat: Int, // Foreign Key
     var circumference: Int = 0, // decimal(2)
     var biomonitorMtSize: Int = 0, // decimal(2)
     var distanceMt: Int = 0, // decimal(2)
     var observations: String = "",
     var heightMt: Int = 0, // decimal(2)
-    var evidences: ByteArray = byteArrayOf()
+    var evidences: ByteArray? = byteArrayOf()
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -448,18 +460,19 @@ data class MidQuadrantEntity(
 data class SubQuadrantEntity(
     @PrimaryKey
     val id: Int = 0,
-    var subQuadrant: String = ""
+    var quadrant: String = ""
 )
 
 @Entity(tableName = "habitat")
 data class HabitatEntity(
     @PrimaryKey
     val id: Int = 0,
-    var habitatType: String = ""
+    var type: String = ""
 )
 
 
-@Entity(tableName = "route_form"/*,
+@Entity(
+    tableName = "route_form"/*,
     foreignKeys = [
         ForeignKey(
             entity = GeneralFormEntity::class,
@@ -485,7 +498,8 @@ data class HabitatEntity(
             childColumns = ["idCheckList"],
             onDelete = ForeignKey.CASCADE
         )
-    ]*/)
+    ]*/
+)
 data class RouteFormEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
@@ -504,7 +518,7 @@ data class RouteFormEntity(
     var targetDistance: Int = 0, // decimal(2)
     var lensHeight: Int = 0, // decimal(2)
     var idCheckList: Int, // Foreign Key
-    var evidences: ByteArray = byteArrayOf(),
+    var evidences: ByteArray? = byteArrayOf(),
     var observations: String = ""
 ) {
     override fun equals(other: Any?): Boolean {
@@ -567,7 +581,8 @@ data class CameraEntity(
     var instalationDate: String = ""
 )
 
-@Entity(tableName = "check_list"/*,
+@Entity(
+    tableName = "check_list"/*,
     foreignKeys = [
         ForeignKey(
             entity = CheckEntity::class,
@@ -575,7 +590,8 @@ data class CameraEntity(
             childColumns = ["idCheck"],
             onDelete = ForeignKey.CASCADE
         )
-    ]*/)
+    ]*/
+)
 data class CheckListEntity(
     @PrimaryKey
     val id: Int = 0,
@@ -591,7 +607,8 @@ data class CheckEntity(
 )
 
 
-@Entity(tableName = "weather_form"/*,
+@Entity(
+    tableName = "weather_form"/*,
     foreignKeys = [
         ForeignKey(
             entity = GeneralFormEntity::class,
@@ -605,7 +622,8 @@ data class CheckEntity(
             childColumns = ["idZoneType"],
             onDelete = ForeignKey.CASCADE
         )
-    ]*/)
+    ]*/
+)
 data class WeatherFormEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
@@ -616,7 +634,7 @@ data class WeatherFormEntity(
     var minTemperature: Double = 0.0, // decimal(2)
     var minHumidity: Double = 0.0, // decimal(2)
     var streamMtLevel: Double = 0.0, // decimal(2)
-    var evidences: ByteArray = byteArrayOf(),
+    var evidences: ByteArray? = byteArrayOf(),
     var observations: String = ""
 ) {
     override fun equals(other: Any?): Boolean {
@@ -653,6 +671,7 @@ data class WeatherFormEntity(
         return result
     }
 }
+
 @Entity(tableName = "punto_conteo")
 data class PuntoConteoEntity(
     @PrimaryKey(autoGenerate = true)
@@ -664,7 +683,7 @@ data class PuntoConteoEntity(
     var quantity: Int = 0,
     var idObservType: Int, // Foreign Key
     var idHeightType: Int, // Foreign Key
-    var evidences: ByteArray = byteArrayOf(),
+    var evidences: ByteArray? = byteArrayOf(),
     var observations: String
 ) {
     override fun equals(other: Any?): Boolean {
@@ -701,6 +720,7 @@ data class PuntoConteoEntity(
         return result
     }
 }
+
 @Entity(tableName = "busqueda_libre")
 data class BusquedaLibreEntity(
     @PrimaryKey(autoGenerate = true)
@@ -712,7 +732,7 @@ data class BusquedaLibreEntity(
     var quantity: Int = 0,
     var idObservType: Int, // Foreign Key
     var idHeightType: Int, // Foreign Key
-    var evidences: ByteArray = byteArrayOf(),
+    var evidences: ByteArray? = byteArrayOf(),
     var observations: String
 ) {
     override fun equals(other: Any?): Boolean {

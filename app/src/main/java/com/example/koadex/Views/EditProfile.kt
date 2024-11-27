@@ -21,8 +21,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.koadex.AppViewModelProvider
 import com.example.koadex.ViewModels.NavigationModel
 import com.example.koadex.ViewModels.PerfilScreenViewModel
 import com.example.koadex.data.UserEntity
@@ -33,12 +36,9 @@ import kotlinx.coroutines.launch
 fun EditProfileScreen(
     navController: NavHostController,
     user: UserEntity,
-    navModel: NavigationModel,
+    model: PerfilScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
     modifier: Modifier = Modifier
 ) {
-
-    val model = PerfilScreenViewModel()
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -91,7 +91,7 @@ fun EditProfileScreen(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        val couroutineScope = rememberCoroutineScope()
+        val couroutineScope = model.viewModelScope
 
         // Botón Guardar
         Button(
@@ -101,7 +101,8 @@ fun EditProfileScreen(
                 //user.password = password
                 user.phone = phone
                 couroutineScope.launch {
-                    navModel.updateUser(user)
+                    println("Updating user: $user")
+                    model.updateUser(user)
                 }
                 navController.navigate("PerfilScreen")
                       },

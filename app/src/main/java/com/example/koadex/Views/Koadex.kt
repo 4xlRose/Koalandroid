@@ -15,8 +15,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -48,7 +46,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -68,21 +65,17 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.zIndex
 import androidx.navigation.compose.rememberNavController
 import com.example.koadex.AppViewModelProvider
-import com.example.koadex.clases.User
 import com.example.koadex.data.FormStateEntity
 import com.example.koadex.data.GeneralFormEntity
 import com.example.koadex.data.UserEntity
 import com.example.koadex.navigate.sampleUser
-import com.example.koadex.ui.principal.KoadexGeneralUiState
 import com.example.koadex.ui.principal.KoadexViewModel
-import kotlinx.coroutines.launch
 
 /*
 @Preview(showBackground = true, showSystemUi = true)
@@ -191,7 +184,7 @@ fun KoadexPantalla(
     navController: NavHostController,
     user: UserEntity
 ) {
-    val koadexGeneralUiState by viewModel.koadexGeneralUiState.collectAsState()
+    val koadexGeneralUiState by viewModel.getAllForms.collectAsState()
     val userList by viewModel.getAllUsers.collectAsState(initial = null)
     val formStates by viewModel.getAllFormStates.collectAsState(initial = null)
 
@@ -205,7 +198,7 @@ fun KoadexPantalla(
         KoadexContenido(
             //formList = koadexUiState.koadexList,
             userList = userList,
-            user = user,
+            currentUser = user,
             formStates = formStates,
             General_formList = koadexGeneralUiState.koadexGeneralList,
             navController = navController,
@@ -223,7 +216,7 @@ fun KoadexContenido(
     General_formList: List<GeneralFormEntity> = listOf(),
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    user: UserEntity,
+    currentUser: UserEntity,
     viewModel: KoadexViewModel
 ) {
     Column (
@@ -231,7 +224,7 @@ fun KoadexContenido(
             //.padding(bottom = 24.dp)
     ){
         var selected by remember { mutableStateOf("Todos") }
-        var forms_number : Int = General_formList.size
+        val forms_number : Int = General_formList.size
 
         Spacer(modifier = Modifier.height(110.dp))
         //Text(user.name, fontSize = 30.sp, fontWeight = FontWeight.Bold)
@@ -255,6 +248,7 @@ fun KoadexContenido(
                     filter = selected,
                     new_formList = General_formList,
                     userList = userList,
+                    currentUser = currentUser,
                     formStates = formStates,
                     viewModel = viewModel
                 )
@@ -411,6 +405,7 @@ private fun Filtro_seleccion(selected: String): String {
 fun FormList(
     //formList: List<GeneralFormEntity>,
     userList: List<UserEntity>?,
+    currentUser: UserEntity,
     formStates: List<FormStateEntity>?,
     filter: String = "Todos",
     new_formList: List<GeneralFormEntity> = listOf(),
@@ -434,6 +429,7 @@ fun FormList(
             FormInfo(
                 new_form = item,
                 user = user,
+                loggedUser = currentUser,
                 cardShowing = cardShowing,
                 viewModel = viewModel
             )
@@ -441,50 +437,39 @@ fun FormList(
     }
 }
 
-/*Hugo
-@Composable
-fun FormInfo(
-    form: GeneralFormEntity,
-    user: UserEntity?,
-    cardShowing: Boolean,
-    modifier: Modifier = Modifier
-) {
-    if(cardShowing) {
-*/
 
 @Composable
 fun FormInfo(
     //form_old: FormEntity,
     new_form: GeneralFormEntity,
     user: UserEntity? = sampleUser,
+    loggedUser: UserEntity,
     modifier: Modifier = Modifier,
     cardShowing: Boolean,
     viewModel: KoadexViewModel
 ) {
-
-    val koadexGeneralUiState by viewModel.koadexGeneralUiState.collectAsState()
-
-    val UserUIState by viewModel.getUserById(user?.id ?: 0).collectAsState(initial = null)
-
-
     val showDeleteWarning = remember { mutableStateOf(false) }
-    val deleteform = remember { mutableStateOf(false) }
 
     if (cardShowing) {
         var isExpanded by remember { mutableStateOf(false) }
         val form = new_form
 
+        val stateFlow = viewModel.getFormStateByFormId(form.id)
+        val state = stateFlow.collectAsState(initial = null).value?.isUploaded
+
         if (showDeleteWarning.value == true) {
-            val coroutineScope = rememberCoroutineScope()
             deleteFormWarning(
                 onConfirmDelete = {
-                    coroutineScope.launch {
-                        koadexGeneralUiState.deleteForm(form)
-                        isExpanded = !isExpanded
-
+                    if (state == true) {
+                        user?.uploadedForms = user?.uploadedForms?.minus(1) ?: 0
                     }
+                    else {
+                        user?.locallyStoredForms = user?.locallyStoredForms?.minus(1) ?: 0
+                    }
+                    viewModel.updateUser(user ?: sampleUser)
+                    viewModel.deleteForm(form)
+                    isExpanded = !isExpanded
                     showDeleteWarning.value = false
-
                 },
                 onDismiss = {
                     showDeleteWarning.value = false
@@ -514,9 +499,6 @@ fun FormInfo(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            //Hugo
-                            //text = "ID: ${form.id}",
-
                             text = "ID: ${form.id}",
                             color = colorResource(R.color.green_100),
                             fontWeight = FontWeight.Bold,
@@ -553,31 +535,31 @@ fun FormInfo(
                                 }
                             }
                             // Botones de edición y eliminación
-
-                            IconButton( // Borrar
-                                onClick = {
-                                    showDeleteWarning.value = true
-
-                                },
-                                modifier = Modifier.size(29.dp)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Delete,
-                                    contentDescription = "Borrar",
-                                    tint = Color.White,
-                                    modifier = Modifier.size(20.dp)
-                                )
-                            }
-                            IconButton( // Editar
-                                onClick = { /* Acción de edición */ },
-                                modifier = Modifier.size(29.dp)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Edit,
-                                    contentDescription = "Editar",
-                                    tint = Color.White,
-                                    modifier = Modifier.size(20.dp)
-                                )
+                            if (form.idUser == loggedUser.id) {
+                                IconButton( // Borrar
+                                    onClick = {
+                                        showDeleteWarning.value = true
+                                    },
+                                    modifier = Modifier.size(29.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Delete,
+                                        contentDescription = "Borrar",
+                                        tint = Color.White,
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                }
+                                IconButton( // Editar
+                                    onClick = { /* Acción de edición */ },
+                                    modifier = Modifier.size(29.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Edit,
+                                        contentDescription = "Editar",
+                                        tint = Color.White,
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                }
                             }
                         }
                     }
@@ -683,8 +665,8 @@ fun resumen_Formulario(
                 modifier = Modifier.padding(vertical = 8.dp)
             )
 
-            val season = model.getSeasonById(form.idSeason).collectAsState(initial = null).value?.season ?: "Sin registro de temporada"
-            val weather = model.getWeatherById(form.idWeather).collectAsState(initial = null).value?.weather ?: "Sin registro de clima"
+            val season = model.getSeasonById(form.idSeason).collectAsState(initial = null).value?.type ?: "Sin registro de temporada"
+            val weather = model.getWeatherById(form.idWeather).collectAsState(initial = null).value?.type ?: "Sin registro de clima"
 
             ResumenItem("Temporada:", season)
             ResumenItem("Clima:", weather)

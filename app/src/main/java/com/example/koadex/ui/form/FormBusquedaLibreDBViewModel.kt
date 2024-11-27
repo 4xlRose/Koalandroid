@@ -12,10 +12,14 @@ class FormBusquedaLibreDBViewModel (private val formRepository: FormRepository) 
     var busquedaUiState by mutableStateOf(BusquedaUiState())
         private  set
 
-    fun updatePuntoConteoUiState(busqueda: BusquedaLibreDetails) {
+    fun updateBusquedaLibre(busqueda: BusquedaLibreDetails) {
         busquedaUiState = BusquedaUiState(
             busquedaDetails = busqueda
         )
+    }
+
+    suspend fun saveBusquedaLibre() {
+        formRepository.insertBusquedaLibre(busquedaUiState.busquedaDetails.toEntity())
     }
 
 }
@@ -32,7 +36,7 @@ data class BusquedaLibreDetails(
     var quantity: Int = 0,
     var idObservType: Int = 0, // Foreign Key
     var idHeightType: Int = 0, // Foreign Key
-    var evidences: ByteArray = byteArrayOf(),
+    var evidences: ByteArray? = byteArrayOf(),
     var observations: String = ""
 ) {
     override fun equals(other: Any?): Boolean {
