@@ -48,6 +48,7 @@ junitKtx = "1.2.1"
 
 uiTestAndroid = "1.7.4"
 compilercommon = "3.2.0-alpha11"
+playServicesLocation = "21.3.0"
 
 
 [libraries]
@@ -109,6 +110,7 @@ core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "coreKtxV
 androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
 androidx-ui-test-android = { group = "androidx.compose.ui", name = "ui-test-android", version.ref = "uiTestAndroid" }
 androidx-compilercommon = { group = "androidx.databinding", name = "compilerCommon", version.ref = "compilercommon" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 
 
 [plugins]

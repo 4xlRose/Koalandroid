@@ -5,6 +5,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.MutableState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
@@ -31,17 +32,20 @@ import androidx.compose.material.icons.filled.FileOpen
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
-
 import com.example.koadex.MainActivity
-
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.koadex.AppViewModelProvider
-
 import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
 import com.example.koadex.ViewModels.FormularioFaunaBusquedaLibreViewModel
 import com.example.koadex.ViewModels.FormularioFaunaPuntoConteoViewModel
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.material.icons.filled.Camera
+import androidx.compose.material.icons.filled.FileOpen
+import androidx.compose.material.icons.filled.ArrowBack
+
 import com.example.koadex.ui.form.FormPuntoConteoDBViewModel
 import kotlinx.coroutines.launch
+
 val isFileSelectedFPC: MutableState<Boolean> = mutableStateOf(false)
 
 @RequiresApi(Build.VERSION_CODES.P)
@@ -313,7 +317,8 @@ fun FormularioFaunaPuntoConteo(
             }
         }
     }
-
+}
+    }
 
 
 @RequiresApi(Build.VERSION_CODES.P)
@@ -351,7 +356,7 @@ public fun Boton_abrir_camaraFPC(green700: Color) {
 @Composable
 public fun Boton_seleccionar_archivoFPC(green700: Color) {
     Button(
-        onClick = { /* Handle file selection */ isFileSelectedFPC.value = true},
+        onClick = { /* Handle file selection */ isFileSelectedFPC.value = true },
         colors = ButtonDefaults.buttonColors(containerColor = green700)
     ) {
         Icon(Icons.Default.FileOpen, contentDescription = "Seleccionar archivo", tint = Color.White)
@@ -359,4 +364,3 @@ public fun Boton_seleccionar_archivoFPC(green700: Color) {
         Text("Elige archivo", color = Color.White)
     }
 }
-
