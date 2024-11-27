@@ -177,25 +177,16 @@ fun FormularioEspecies(
 
                     Spacer(modifier = Modifier.padding(vertical = 5.dp))
 
-                // Número de individuos
-                Text("Número de Individuos",
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.align(Alignment.Start),
-                    color = Color.Black)
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    IconButton(
-                        onClick = {
-                            //if (numIndividuos > 1) numIndividuos--
-                            viewModel.updateQuantity((formUiState.formsEspecieDetails.quantity - 1).coerceAtLeast(1)) }) {
-                        Icon(Icons.Filled.Remove, contentDescription = "Disminuir")
-                    }
-                    //Text(text = numIndividuos.toString(), style = MaterialTheme.typography.titleMedium, color = Color.Black)
-                    Text("${formUiState.formsEspecieDetails.quantity}")
-                    IconButton(
-                        onClick = { viewModel.updateQuantity(formUiState.formsEspecieDetails.quantity + 1) }
+                    // Número de individuos
+                    Text(
+                        "Número de Individuos",
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.align(Alignment.Start),
+                        color = Color.Black
+                    )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         IconButton(
                             onClick = {
@@ -208,71 +199,88 @@ fun FormularioEspecies(
                             }) {
                             Icon(Icons.Filled.Remove, contentDescription = "Disminuir")
                         }
-                        //Text(text = numIndividuos.toString(), style = MaterialTheme.typography.titleMedium)
+                        //Text(text = numIndividuos.toString(), style = MaterialTheme.typography.titleMedium, color = Color.Black)
                         Text("${formUiState.formsEspecieDetails.quantity}")
                         IconButton(
                             onClick = { viewModel.updateQuantity(formUiState.formsEspecieDetails.quantity + 1) }
                         ) {
-                            Icon(Icons.Filled.Add, contentDescription = "Aumentar")
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.padding(vertical = 5.dp))
-
-                    viewModelS.Tipo_observacion(
-                        selectedObservationType = formUiState.formsEspecieDetails.idObservType, // El ID del tipo de observación actual
-                        onObservationTypeSelected = { observationType ->
-                            viewModel.updateObservationType(observationType) // Actualiza en el ViewModel
-                        },
-                        green100 = green100,
-                        green700 = green700
-                    )
-
-                    Spacer(modifier = Modifier.padding(vertical = 5.dp))
-
-                    Text(
-                        "Evidencias", style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.align(Alignment.Start),
-                        color = Color.Black
-                    )
-                    Botones_capturaFE(green700)
-
-                    // Campo de observaciones
-                    OutlinedTextField(
-                        value = formUiState.formsEspecieDetails.observations,
-                        onValueChange = { observations ->
-                            viewModel.updateEspecieFormUiState(
-                                formUiState.formsEspecieDetails.copy(
-                                    observations = observations
-                                )
-                            )
-                        },
-                        label = { Text("Observaciones", color = Color.DarkGray) },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(100.dp)
-                    )
-
-                    Spacer(modifier = Modifier.padding(vertical = 10.dp))
-
-                    //viewModelS.Atras_enviar(navController, green700)
-
-                    // Botón para guardar el formulario
-                    Button(
-                        onClick = {
-                            coroutineScope.launch {
-                                viewModel.saveEspecieForm()
-                                navController.popBackStack() // Navegar hacia atrás despues de guardar
+                            IconButton(
+                                onClick = {
+                                    //if (numIndividuos > 1) numIndividuos--
+                                    viewModel.updateQuantity(
+                                        (formUiState.formsEspecieDetails.quantity - 1).coerceAtLeast(
+                                            1
+                                        )
+                                    )
+                                }) {
+                                Icon(Icons.Filled.Remove, contentDescription = "Disminuir")
                             }
-                        },
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4E7029))
-                    ) {
-                        Text("Guardar", color = Color.White)
+                            //Text(text = numIndividuos.toString(), style = MaterialTheme.typography.titleMedium)
+                            Text("${formUiState.formsEspecieDetails.quantity}")
+                            IconButton(
+                                onClick = { viewModel.updateQuantity(formUiState.formsEspecieDetails.quantity + 1) }
+                            ) {
+                                Icon(Icons.Filled.Add, contentDescription = "Aumentar")
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.padding(vertical = 5.dp))
+
+                        viewModelS.Tipo_observacion(
+                            selectedObservationType = formUiState.formsEspecieDetails.idObservType, // El ID del tipo de observación actual
+                            onObservationTypeSelected = { observationType ->
+                                viewModel.updateObservationType(observationType) // Actualiza en el ViewModel
+                            },
+                            green100 = green100,
+                            green700 = green700
+                        )
+
+                        Spacer(modifier = Modifier.padding(vertical = 5.dp))
+
+                        Text(
+                            "Evidencias", style = MaterialTheme.typography.titleMedium,
+                            //modifier = Modifier.align(Alignment.Start),
+                            color = Color.Black
+                        )
+                        Botones_capturaFE(green700)
+
+                        // Campo de observaciones
+                        OutlinedTextField(
+                            value = formUiState.formsEspecieDetails.observations,
+                            onValueChange = { observations ->
+                                viewModel.updateEspecieFormUiState(
+                                    formUiState.formsEspecieDetails.copy(
+                                        observations = observations
+                                    )
+                                )
+                            },
+                            label = { Text("Observaciones", color = Color.DarkGray) },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(100.dp)
+                        )
+
+                        Spacer(modifier = Modifier.padding(vertical = 10.dp))
+
+                        //viewModelS.Atras_enviar(navController, green700)
+
+                        // Botón para guardar el formulario
+                        Button(
+                            onClick = {
+                                coroutineScope.launch {
+                                    viewModel.saveEspecieForm()
+                                    navController.popBackStack() // Navegar hacia atrás despues de guardar
+                                }
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4E7029))
+                        ) {
+                            Text("Guardar", color = Color.White)
+                        }
+
+                        Spacer(modifier = Modifier.height(50.dp))
+
                     }
-
-                    Spacer(modifier = Modifier.height(50.dp))
-
                 }
             }
         }

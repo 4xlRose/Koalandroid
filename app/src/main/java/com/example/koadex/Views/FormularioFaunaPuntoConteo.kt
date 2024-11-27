@@ -5,7 +5,6 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.MutableState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
@@ -55,10 +54,13 @@ val isFileSelectedFPC: MutableState<Boolean> = mutableStateOf(false)
 fun FormularioFaunaPuntoConteo(
     activity: MainActivity,navController: NavHostController,
     modifier: Modifier = Modifier,
-    viewModelPC: FormPuntoConteoDBViewModel = viewModel(factory = AppViewModelProvider.Factory)) {
+    viewModelPC: FormPuntoConteoDBViewModel = viewModel(factory = AppViewModelProvider.Factory)
+)
+{
     if (CameraPermision.value) {
         CameraWindow(activity)
-    } else {
+    } else
+    {
         var numIndividuos by remember { mutableStateOf(1) }
         var alturaObservacion by remember { mutableStateOf("") }
         var tipoAnimalSeleccionado by remember { mutableStateOf("") }
@@ -104,7 +106,8 @@ fun FormularioFaunaPuntoConteo(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color(0xFFFFFFFF))
-        ) {
+        )
+        {
             Spacer(modifier = Modifier.padding(vertical = 5.dp))
 
             // Zona
@@ -313,12 +316,11 @@ fun FormularioFaunaPuntoConteo(
 */
                     Spacer(modifier = Modifier.height(50.dp))
 
-                }
-            }
+        }
         }
     }
 }
-    }
+
 
 
 @RequiresApi(Build.VERSION_CODES.P)
