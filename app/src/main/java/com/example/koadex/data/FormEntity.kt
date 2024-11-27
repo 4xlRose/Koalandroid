@@ -1,5 +1,6 @@
 package com.example.koadex.data
 
+import android.graphics.Bitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.room.Entity
 import androidx.room.ForeignKey

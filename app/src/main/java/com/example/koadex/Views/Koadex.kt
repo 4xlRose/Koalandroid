@@ -73,9 +73,14 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.compose.rememberNavController
 import com.example.koadex.AppViewModelProvider
 import com.example.koadex.ViewModels.NavigationModel
+import com.example.koadex.data.FollowUpFormEntity
 import com.example.koadex.data.FormStateEntity
 import com.example.koadex.data.GeneralFormEntity
+import com.example.koadex.data.QuadrantFormEntity
+import com.example.koadex.data.RouteFormEntity
+import com.example.koadex.data.SpecieFormEntity
 import com.example.koadex.data.UserEntity
+import com.example.koadex.data.WeatherFormEntity
 import com.example.koadex.navigate.sampleUser
 import com.example.koadex.ui.principal.KoadexViewModel
 
@@ -653,6 +658,70 @@ fun resumen_Formulario(
     form: GeneralFormEntity,
     model: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
+
+    // valores de prueba
+    var SpecireFormEntity = SpecieFormEntity(
+        id = 1,
+        transect = "Transecto 1",
+        idZoneType = 1,
+        idAnimalType = 1,
+        animalName = "León",
+        scientificName = "Panthera leo",
+        quantity = 10,
+        idObservType = 1,
+        idHeightType = 1,
+        evidences = "",
+        observations = "Observaciones"
+    )
+    var FollowUpFormEntity = FollowUpFormEntity(
+        id = 1,
+        followUp = true,
+        change = true,
+        idCoverage = 1,
+        cropType = "Tipo de cultivo",
+        idDisturbance = 1,
+        evidences = "Evidencias",
+        observations = "Observaciones"
+    )
+    var QuadrantFormEntity = QuadrantFormEntity (
+        id = 1,
+        idSuperQuadrant = 1,
+        idMidQuadrant = 1,
+        idSubQuadrant = 1,
+        specieName = "Nombre de la especie",
+        scientificName = "Nombre científico",
+        idHabitat = 1,
+        circumference = 10,
+        biomonitorMtSize = 10,
+        distanceMt = 10,
+        observations = "Observaciones",
+        heightMt = 10,
+        evidences = "Evidencias"
+    )
+    var RouteFormEntity = RouteFormEntity (
+        id = 1,
+        idZoneType = 1,
+        idCamera = 1,
+        guayaPlate = 1,
+        routeWidth = 10,
+        targetDistance = 10,
+        lensHeight = 10,
+        idCheckList = 1,
+        evidences = "Evidencias",
+        observations = "Observaciones"
+    )
+    var WeatherFormEntity = WeatherFormEntity (
+        id = 1,
+        idZoneType = 1,
+        rainfall = 1.5,
+        maxTemperature = 25.0,
+        maxHumidity = 80.0,
+        minTemperature = 18.0,
+        minHumidity = 60.0,
+        streamMtLevel = 1.0,
+        evidences = "Evidencias",
+        observations = "Observaciones"
+    )
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -695,9 +764,35 @@ fun resumen_Formulario(
                 ResumenItem("Clima:", it.type)
             }
 
+            ResumenItem("Lugar:", form.place)
             ResumenItem("Fecha:", form.date)
             ResumenItem("Hora:", form.hour)
-            ResumenItem("Ubicación:", form.place)
+
+            Divider(
+                color = colorResource(R.color.green_100),
+                thickness = 1.dp,
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
+            if(form.idSpecieForm == 0){
+                var form_detail = SpecireFormEntity
+                show_resumen_especies(form_detail)
+            }
+            if(form.idFollowUpForm != 0){
+                var form_detail = FollowUpFormEntity
+                show_resumen_seguimiento(form_detail)
+            }
+            if(form.idQuadrantForm != 0){
+                var form_detail = QuadrantFormEntity
+                show_resumen_cuadrantes(form_detail)
+            }
+            if(form.idRouteForm != 0){
+                var form_detail = RouteFormEntity
+                show_resumen_ruta(form_detail)
+            }
+            if(form.idWeatherForm != 0){
+                var form_detail = WeatherFormEntity
+                show_resumen_clima(form_detail)
+            }
         }
     }
 }
@@ -938,4 +1033,144 @@ private fun MenuOption(
         onClick = onClick,
         modifier = Modifier.padding(horizontal = 8.dp)
     )
+}
+
+/*
+* Funciones para mostrar el detalle de los formularios
+*/
+@Composable
+fun show_resumen_especies(form_detail: SpecieFormEntity) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(
+            text = "Detalles de Especies",
+            color = Color.White,
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp
+        )
+
+        Divider(
+            color = colorResource(R.color.green_100),
+            thickness = 1.dp,
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
+
+        ResumenItem("Transecto:", form_detail.transect)
+        ResumenItem("Nombre Animal:", form_detail.animalName)
+        ResumenItem("Nombre Científico:", form_detail.scientificName)
+        ResumenItem("Cantidad:", form_detail.quantity.toString())
+
+        if (form_detail.observations.isNotBlank()) {
+            ResumenItem("Observaciones:", form_detail.observations)
+        }
+    }
+}
+
+@Composable
+fun show_resumen_seguimiento(form_detail: FollowUpFormEntity) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(
+            text = "Detalles de Seguimiento",
+            color = Color.White,
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp
+        )
+
+        Divider(
+            color = colorResource(R.color.green_100),
+            thickness = 1.dp,
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
+
+        ResumenItem("Seguimiento:", if (form_detail.followUp) "Sí" else "No")
+        ResumenItem("Cambio:", if (form_detail.change) "Sí" else "No")
+        ResumenItem("Tipo de Cultivo:", form_detail.cropType)
+
+        if (form_detail.observations.isNotBlank()) {
+            ResumenItem("Observaciones:", form_detail.observations)
+        }
+    }
+}
+
+@Composable
+fun show_resumen_cuadrantes(form_detail: QuadrantFormEntity) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(
+            text = "Detalles de Cuadrantes",
+            color = Color.White,
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp
+        )
+
+        Divider(
+            color = colorResource(R.color.green_100),
+            thickness = 1.dp,
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
+
+        ResumenItem("Nombre Especie:", form_detail.specieName)
+        ResumenItem("Nombre Científico:", form_detail.scientificName)
+        ResumenItem("Circunferencia:", "${form_detail.circumference} m")
+        ResumenItem("Distancia:", "${form_detail.distanceMt} m")
+        ResumenItem("Altura:", "${form_detail.heightMt} m")
+
+        if (form_detail.observations.isNotBlank()) {
+            ResumenItem("Observaciones:", form_detail.observations)
+        }
+    }
+}
+
+@Composable
+fun show_resumen_ruta(form_detail: RouteFormEntity) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(
+            text = "Detalles de Ruta",
+            color = Color.White,
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp
+        )
+
+        Divider(
+            color = colorResource(R.color.green_100),
+            thickness = 1.dp,
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
+
+        ResumenItem("Placa Guaya:", form_detail.guayaPlate.toString())
+        ResumenItem("Ancho de Ruta:", "${form_detail.routeWidth} m")
+        ResumenItem("Distancia Objetivo:", "${form_detail.targetDistance} m")
+        ResumenItem("Altura de Lente:", "${form_detail.lensHeight} m")
+
+        if (form_detail.observations.isNotBlank()) {
+            ResumenItem("Observaciones:", form_detail.observations)
+        }
+    }
+}
+
+@Composable
+fun show_resumen_clima(form_detail: WeatherFormEntity) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(
+            text = "Detalles de Clima",
+            color = Color.White,
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp
+        )
+
+        Divider(
+            color = colorResource(R.color.green_100),
+            thickness = 1.dp,
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
+
+        ResumenItem("Precipitación:", "${form_detail.rainfall} mm")
+        ResumenItem("Temperatura Máxima:", "${form_detail.maxTemperature}°C")
+        ResumenItem("Temperatura Mínima:", "${form_detail.minTemperature}°C")
+        ResumenItem("Humedad Máxima:", "${form_detail.maxHumidity}%")
+        ResumenItem("Humedad Mínima:", "${form_detail.minHumidity}%")
+        ResumenItem("Nivel de Corriente:", "${form_detail.streamMtLevel} m")
+
+        if (form_detail.observations.isNotBlank()) {
+            ResumenItem("Observaciones:", form_detail.observations)
+        }
+    }
 }
