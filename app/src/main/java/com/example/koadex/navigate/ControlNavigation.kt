@@ -83,8 +83,8 @@ fun Navigation(activity: MainActivity, account: Auth0, modifier: Modifier = Modi
     val navController = rememberNavController()
     val model: NavigationModel = viewModel(factory = AppViewModelProvider.Factory)
 
-    NavHost(navController = navController, startDestination = "Principal") {
-    //NavHost(navController = navController, startDestination = "InicioCarga") {
+    //NavHost(navController = navController, startDestination = "Principal") {
+    NavHost(navController = navController, startDestination = "InicioCarga") {
         composable("InicioCarga") {
             InicioCarga(navController = navController)
         }
