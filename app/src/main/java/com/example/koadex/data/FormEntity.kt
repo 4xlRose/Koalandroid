@@ -196,7 +196,7 @@ data class SpecieFormEntity(
     var quantity: Int = 0,
     var idObservType: Int, // Foreign Key
     var idHeightType: Int, // Foreign Key
-    var evidences: ByteArray = byteArrayOf(),
+    var evidences: ByteArray? = byteArrayOf(),
     var observations: String
 ) {
     override fun equals(other: Any?): Boolean {

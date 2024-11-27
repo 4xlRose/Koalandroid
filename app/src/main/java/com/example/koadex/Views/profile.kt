@@ -26,10 +26,9 @@ import com.example.koadex.navigate.sampleUser
 fun PerfilScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    user: UserEntity
+    user: UserEntity,
+    ProfileViewModel: PerfilScreenViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-
-    val ProfileViewModel: PerfilScreenViewModel = viewModel(factory = AppViewModelProvider.Factory)
 
     Scaffold(
         topBar = {

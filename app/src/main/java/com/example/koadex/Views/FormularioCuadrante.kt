@@ -56,6 +56,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.koadex.MainActivity
 import com.example.koadex.R
 import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
 import com.example.koadex.ViewModels.NavigationModel
@@ -67,9 +68,10 @@ val isFileSelectedFC: MutableState<Boolean> = mutableStateOf(false)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormularioCuadrante(
-    //activity: MainActivity,
+    activity: MainActivity,
     navModel: NavigationModel,
-    navController: NavHostController,
+    navController: NavController,
+
     //modifier: Modifier = Modifier,
     //viewModel: KoadexViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
@@ -97,10 +99,10 @@ fun FormularioCuadrante(
         }
     ) { paddingValues ->
         FormularioCuadranteScreen(
-            /*activity = activity,*/
-            modifier = Modifier.padding(paddingValues),
-            navController = navController,
-            navModel = navModel
+            activity = activity,
+        modifier = Modifier.padding(paddingValues),
+        navController = navController,
+        navModel = navModel
         )
     }
 }
@@ -110,7 +112,8 @@ fun FormularioCuadranteScreen(
     /*activity: MainActivity,*/
     modifier: Modifier = Modifier,
     navModel: NavigationModel,
-    navController: NavHostController
+    navController: NavController
+
 ) {
     var codigo by remember { mutableStateOf("") }
     var nombreComun by remember { mutableStateOf("") }
@@ -423,7 +426,7 @@ fun FormularioCuadranteScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             // Botones de acción
-            viewModel.Atras_enviar(navController, green700, navModel)
+            viewModel.Atras_enviar(navController, green700)
 
             Spacer(modifier = Modifier.height(50.dp))
 

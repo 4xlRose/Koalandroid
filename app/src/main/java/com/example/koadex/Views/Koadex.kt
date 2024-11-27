@@ -671,6 +671,7 @@ fun resumen_Formulario(
         quantity = 10,
         idObservType = 1,
         idHeightType = 1,
+        evidences = byteArrayOf(),
         observations = "Observaciones"
     )
     var FollowUpFormEntity = FollowUpFormEntity(
@@ -680,6 +681,7 @@ fun resumen_Formulario(
         idCoverage = 1,
         cropType = "Tipo de cultivo",
         idDisturbance = 1,
+        evidences = byteArrayOf(),
         observations = "Observaciones"
     )
     var QuadrantFormEntity = QuadrantFormEntity (
@@ -695,15 +697,21 @@ fun resumen_Formulario(
         distanceMt = 10,
         observations = "Observaciones",
         heightMt = 10,
+        evidences = byteArrayOf()
+
     )
     var RouteFormEntity = RouteFormEntity (
         id = 1,
         idZoneType = 1,
+        nameCamara = "1",
+
         guayaPlate = 1,
         routeWidth = 10,
         targetDistance = 10,
         lensHeight = 10,
         idCheckList = 1,
+        evidences =byteArrayOf(),
+
         observations = "Observaciones"
     )
     var WeatherFormEntity = WeatherFormEntity (
@@ -715,6 +723,8 @@ fun resumen_Formulario(
         minTemperature = 18.0,
         minHumidity = 60.0,
         streamMtLevel = 1.0,
+        evidences = byteArrayOf(),
+
         observations = "Observaciones"
     )
     Card(
