@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 
 class FormularioFaunaPuntoConteoViewModel: ViewModel() {
+
     @Composable
     public fun AlturaButton(text: String, isSelected: Boolean, onClick: () -> Unit) {
         Text(

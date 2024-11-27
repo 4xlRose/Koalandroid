@@ -32,7 +32,6 @@ import com.example.koadex.ViewModels.FomularioEspecies_ViewModel
 import com.example.koadex.clases.User
 import com.example.koadex.data.UserEntity
 import com.example.koadex.navigate.sampleUser
-import com.example.koadex.ui.form.FormFollowDBViewModel
 import com.example.koadex.ui.form.FormSpecieDBViewModel
 import com.example.koadex.ui.theme.KoadexTheme
 import kotlinx.coroutines.launch
@@ -167,7 +166,7 @@ fun FormularioEspecies(
                             viewModel.updateQuantity((formUiState.formsEspecieDetails.quantity - 1).coerceAtLeast(1)) }) {
                         Icon(Icons.Filled.Remove, contentDescription = "Disminuir")
                     }
-                    //Text(text = numIndividuos.toString(), style = MaterialTheme.typography.titleMedium)
+                    //Text(text = numIndividuos.toString(), style = MaterialTheme.typography.titleMedium, color = Color.Black)
                     Text("${formUiState.formsEspecieDetails.quantity}")
                     IconButton(
                         onClick = { viewModel.updateQuantity(formUiState.formsEspecieDetails.quantity + 1) }

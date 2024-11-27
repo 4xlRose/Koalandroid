@@ -493,7 +493,7 @@ data class RouteFormEntity(
     var nameCamara: String = "",
     var placaCamara: String = "",
     var guayaPlate: Int = 0,
-    var fecha: Int = 0,
+    var fecha: String = "",
     var instalada: Int = 0,
     var memoria: Int = 0,
     var pruebaGateo: Int = 0,

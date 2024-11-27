@@ -18,7 +18,7 @@ import androidx.room.RoomDatabase
     PuntoConteoEntity::class,BusquedaLibreEntity::class
 ],
 
-    version = 13,
+    version = 14,
     exportSchema = false
 )
 abstract class FormDatabase : RoomDatabase() {

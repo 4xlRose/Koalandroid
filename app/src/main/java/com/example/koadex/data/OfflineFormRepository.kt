@@ -113,5 +113,10 @@ class OfflineFormRepository (private val formDao: FormDao) : FormRepository {
     override suspend fun insertWeatherForm(form: WeatherFormEntity) = formDao.insertWeatherForm(form)
     override suspend fun updateWeatherForm(form: WeatherFormEntity) = formDao.updateWeatherForm(form)
     override suspend fun deleteWeatherForm(form: WeatherFormEntity) = formDao.deleteWeatherForm(form)
+
+    //Punto de conteo
+    override suspend fun insertPuntoConteo(form: PuntoConteoEntity) = formDao.insertPuntoConteo(form)
+    override suspend fun updatePuntoConteo(form: PuntoConteoEntity) = formDao.updatePuntoConteo(form)
+    override suspend fun deletePuntoConteo(form: PuntoConteoEntity) = formDao.deletePuntoConteo(form)
 }
 

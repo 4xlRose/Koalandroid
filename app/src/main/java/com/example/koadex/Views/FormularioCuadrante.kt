@@ -379,14 +379,8 @@ fun FormularioCuadranteScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             OutlinedTextField(
-                value = plateText.value,
-                onValueChange = { newValue ->
-                    if (newValue.isEmpty() || newValue.matches(Regex("^\\d*$"))) {
-                        plateText.value = newValue
-                        val plate = newValue.toIntOrNull() ?: 0
-                        onFormValueChange(formUiState.formsQuadrantDetails.copy(plate = plate))
-                    }
-                },
+                value = formUiState.formsQuadrantDetails.placa,
+                onValueChange = { onFormValueChange(formUiState.formsQuadrantDetails.copy(placa = it)) },
                 label = { Text("Placa") },
                 modifier = Modifier.fillMaxWidth()
             )

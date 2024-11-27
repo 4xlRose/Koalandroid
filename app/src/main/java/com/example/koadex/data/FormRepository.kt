@@ -116,4 +116,8 @@ interface FormRepository {
     suspend fun insertWeatherForm(form: WeatherFormEntity)
     suspend fun updateWeatherForm(form: WeatherFormEntity)
     suspend fun deleteWeatherForm(form: WeatherFormEntity)
+
+    suspend fun insertPuntoConteo(form: PuntoConteoEntity)
+    suspend fun updatePuntoConteo(form: PuntoConteoEntity)
+    suspend fun deletePuntoConteo(form: PuntoConteoEntity)
 }
