@@ -20,8 +20,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Camera
-import androidx.compose.material.icons.filled.FileOpen
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -34,7 +32,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -68,7 +65,6 @@ import com.example.koadex.ui.form.WeatherFormDetails
 import com.example.koadex.ui.form.WeatherFormUiState
 import kotlinx.coroutines.flow.Flow
 
-val isFileSelectedFVC: MutableState<Boolean> = mutableStateOf(false)
 
 @RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -407,7 +403,7 @@ fun ClimaInputForm(
             enabled = enabled
         )
         Text("Evidencias", style = MaterialTheme.typography.titleMedium)
-        Botones_capturaFVC(green700)
+        viewModel.Botones_captura(green700)
 
         // Observaciones
         OutlinedTextField(
@@ -426,6 +422,7 @@ fun ClimaInputForm(
 fun VariableClimaticasPreview(){
     FormularioVariablesClimaticas(navController = rememberNavController())
 }
+
 
 @Composable
 public fun Botones_capturaFVC(green700: Color) {
@@ -461,3 +458,4 @@ public fun Boton_seleccionar_archivoFVC(green700: Color) {
         Text("Elige archivo", color = Color.White)
     }
 }
+

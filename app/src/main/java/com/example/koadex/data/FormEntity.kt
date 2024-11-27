@@ -378,6 +378,7 @@ data class QuadrantFormEntity(
     var idSubQuadrant: Int, // Foreign Key
     var specieName: String = "",
     var scientificName: String = "",
+    var placa  : String = "",
     var idHabitat: Int, // Foreign Key
     var circumference: Int = 0, // decimal(2)
     var biomonitorMtSize: Int = 0, // decimal(2)
@@ -398,6 +399,7 @@ data class QuadrantFormEntity(
         if (idSubQuadrant != other.idSubQuadrant) return false
         if (specieName != other.specieName) return false
         if (scientificName != other.scientificName) return false
+        if (placa != other.placa) return false
         if (idHabitat != other.idHabitat) return false
         if (circumference != other.circumference) return false
         if (biomonitorMtSize != other.biomonitorMtSize) return false
@@ -416,6 +418,7 @@ data class QuadrantFormEntity(
         result = 31 * result + idSubQuadrant
         result = 31 * result + specieName.hashCode()
         result = 31 * result + scientificName.hashCode()
+        result = 31 * result + placa.hashCode()
         result = 31 * result + idHabitat
         result = 31 * result + circumference
         result = 31 * result + biomonitorMtSize
